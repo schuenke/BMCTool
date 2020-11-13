@@ -25,6 +25,7 @@ class Params:
         self.m_vec = None
         self.offsets = None
         self.m0_scan = None
+        self.set_options()
 
     def set_water_pool(self,
                        r1: float = None,
