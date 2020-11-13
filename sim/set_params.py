@@ -23,7 +23,7 @@ def check_values(val_dict: dict,
                  config: dict,
                  invalid: list,
                  dict_key: str = None,
-                 reference_config='dictionary/param_configs/lib/valid_params.yaml') \
+                 reference_config:str = None) \
         -> [dict, list]:
     """
     checking and correcting the nested dictionaries from the loaded configuration for definition errors
@@ -34,6 +34,9 @@ def check_values(val_dict: dict,
     :param reference_config: path of reference config that includes are valid config entries
     :return (config, invalid): the corrected data and list of invalid definitions
     """
+    if reference_config is None:
+        reference_config = path.join(path.dirname(__file__),
+                                     '../', 'dictionary', 'param_configs', 'lib', 'valid_params.yaml')
     valids = load_config(reference_config)
     valid_num = valids['valid_num']
     valid_str = valids['valid_str']
@@ -145,7 +148,7 @@ def check_necessary(config: dict,
 
 
 def check_params(config: dict,
-                 reference_config: str = 'dictionary/param_configs/lib/valid_params.yaml') \
+                 reference_config: str = None) \
         -> dict:
     """
     checking and correcting the loaded parameters
@@ -153,6 +156,9 @@ def check_params(config: dict,
     :param reference_config: path to the reference file containing valid params
     :return config: corrected (or unchanged) data
     """
+    if reference_config is None:
+        reference_config = path.join(path.dirname(__file__),
+                                     '../', 'dictionary', 'param_configs', 'lib', 'valid_params.yaml')
     invalid = []
     valids = load_config(reference_config)
     valid = valids['valid_first']
