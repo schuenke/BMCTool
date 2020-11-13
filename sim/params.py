@@ -47,6 +47,20 @@ class Params:
         self.mz_loc += 2
         return water_pool
 
+    def update_water_pool(self, water_dict: dict = {}) -> dict:
+        """
+        Updates water settings
+        :param water_dict: dict with items that should be updated
+        :return:
+        """
+        option_names = ['r1', 'r2', 'f']
+        if not all(name in option_names for name in water_dict):
+            raise AttributeError('Unknown option name. Update aborted!')
+
+        water_pool = {k: v for k, v in water_dict.items()}
+        self.water_pool.update(water_pool)
+        return water_pool
+
     def set_cest_pool(self,
                       r1: float = None,
                       r2: float = None,
@@ -69,6 +83,27 @@ class Params:
         cest_pool = {'r1': r1, 'r2': r2, 'k': k, 'f': f, 'dw': dw}
         self.cest_pools.append(cest_pool)
         self.mz_loc += 2
+        return cest_pool
+
+    def update_cest_pool(self, pool_num: int = 1, cest_dict: dict = {}) -> dict:
+        """
+        Updates mt pool values
+        :param pool_num: number of the CEST pool that should be changed
+        :param mt_dict: dict with items that should be updated
+        :return:
+        """
+        try:
+            old_dict = self.cest_pools[pool_num]
+        except IndexError:
+            print(f"CEST pool # {pool_num} doesn't exist. No parameters have been changed.")
+            return
+
+        option_names = ['r1', 'r2', 'k', 'f', 'dw']
+        if not all(name in option_names for name in cest_dict):
+            raise AttributeError('Unknown option name. Update aborted!')
+
+        cest_pool = {k: v for k, v in cest_dict.items()}
+        self.cest_pools[pool_num].update(cest_pool)
         return cest_pool
 
     def set_mt_pool(self,
@@ -96,6 +131,20 @@ class Params:
         self.mt_pool.update(mt_pool)
         return mt_pool
 
+    def update_mt_pool(self, mt_dict: dict = {}) -> dict:
+        """
+        Updates mt pool values
+        :param mt_dict: dict with items that should be updated
+        :return:
+        """
+        option_names = ['r1', 'r2', 'k', 'f', 'dw', 'lineshape']
+        if not all(name in option_names for name in mt_dict):
+            raise AttributeError('Unknown option name. Update aborted!')
+
+        mt_pool = {k: v for k, v in mt_dict.items()}
+        self.mt_pool.update(mt_pool)
+        return mt_pool
+
     def set_scanner(self,
                     b0: float = None,
                     gamma: float = None,
@@ -119,7 +168,7 @@ class Params:
 
     def update_scanner(self, scanner_dict: dict = {}) -> dict:
         """
-        Setting additional options
+        Updates scanner values
         :param scanner_dict: dict with items that should be updated
         :return:
         """
@@ -157,7 +206,7 @@ class Params:
 
     def update_options(self, options_dict: dict = {}) -> dict:
         """
-        Setting additional options
+        Updates additional options
         :param options_dict: dict with items that should be updated
         :return:
         """
