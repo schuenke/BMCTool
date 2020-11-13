@@ -14,10 +14,9 @@ from pypulseq.Sequence.sequence import Sequence
 from pypulseq.make_adc import make_adc
 from pypulseq.make_delay import make_delay
 from pypulseq.make_trap_pulse import make_trapezoid
-from pypulseq.make_gauss_pulse import make_gauss_pulse
 from pypulseq.make_block_pulse import make_block_pulse
 from pypulseq.opts import Opts
-from utils.seq.conversion import convert_seq_12_to_pseudo_13
+from sim.utils.seq import convert_seq_12_to_pseudo_13
 
 seq = Sequence()
 

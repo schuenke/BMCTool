@@ -3,8 +3,8 @@ params.py
     Class definition to store simulation parameters
 """
 import numpy as np
-from utils.sim.util import check_m0_scan, get_offsets
-from utils.seq.read import read_any_version
+from sim.utils import check_m0_scan, get_offsets
+from sim.utils.seq import read_any_version
 
 
 class Params:
@@ -107,7 +107,7 @@ class Params:
         :param gamma: gyromagnetic ratio [rad/uT]
         :param b0_inhom: field ihnomogeneity [ppm]
         :param rel_b1: relative B1 field
-        :return: dictionary containing the parameter values
+        :return: library containing the parameter values
         """
         if None in [b0, gamma, b0_inhom, rel_b1]:
             raise ValueError('Not enough parameters given for scanner definition.')

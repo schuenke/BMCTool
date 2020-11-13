@@ -4,13 +4,13 @@ simulate.py
     You can adapt parameters in param_configs.py or use a standard CEST setting as defined in standard_cest_params.py.
 """
 from sim.bmc_tool import BMCTool
-from utils.sim.eval import plot_z
+from sim.utils import plot_z
 from sim.set_params import load_params
 
 # set necessary file paths:
-sample_file = 'dictionary/param_configs/sample_params.yaml'
-experimental_file = 'dictionary/param_configs/experimental_params.yaml'
-seq_file = 'dictionary/sequences/examples/example_test.seq'
+sample_file = 'library/param_configs/sample_params.yaml'
+experimental_file = 'library/param_configs/experimental_params.yaml'
+seq_file = 'library/sequences/examples/example_test.seq'
 
 # load config files and print settings
 sim_params = load_params(sample_file, experimental_file)

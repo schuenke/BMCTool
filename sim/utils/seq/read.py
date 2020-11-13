@@ -2,7 +2,6 @@
 read.py
     Functions for reading single entries from seq files.
 """
-from utils.seq.conversion import *
 from pypulseq.Sequence.sequence import Sequence
 from os import remove
 

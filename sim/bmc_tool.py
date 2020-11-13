@@ -8,7 +8,7 @@ import math
 from tqdm import tqdm
 
 from sim.params import Params
-from utils.sim.util import check_m0_scan, get_offsets
+from sim.utils import check_m0_scan, get_offsets
 from pypulseq.Sequence.sequence import Sequence
 from pypulseq.Sequence.read_seq import __strip_line as strip_line
 

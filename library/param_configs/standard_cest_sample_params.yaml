@@ -32,7 +32,7 @@ mt_pool: {
 }
 
 # CEST pool parameters
-# dictionary with entries sorted by a pool name
+# library with entries sorted by a pool name
 # to simulate without CEST pools set cest_pool: None or omit
 # To set r1 equal to water pool r1, set to r1: 'auto' or omit
 cest_pool: {

@@ -3,13 +3,13 @@ WASABI_sim.py
     Script to run a WASABI simulation using the BMCTool.
 """
 from sim.bmc_tool import BMCTool
-from utils.sim.eval import plot_z
+from sim.utils import plot_z
 from sim.set_params import load_params
 
 # set WASABI seq and config files
-sample_file = '../dictionary/param_configs/wasabi_sample_params.yaml'
-experimental_file = '../dictionary/param_configs/wasabi_experimental_params.yaml'
-seq_file = '../dictionary/sequences/examples/example_wasabi.seq'
+sample_file = '../library/param_configs/wasabi_sample_params.yaml'
+experimental_file = '../library/param_configs/wasabi_experimental_params.yaml'
+seq_file = '../library/sequences/examples/example_wasabi.seq'
 
 # load config files and print settings
 sim_params = load_params(sample_file, experimental_file)

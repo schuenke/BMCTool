@@ -1,10 +1,12 @@
 """
-Script to output a seq file for a continuous wave (cw) CEST simulation.
+Script to output a seq file for a WASABI protocol for simultaneous mapping of B0 and B1 according to:
+Schuenke et al. Simultaneous mapping of water shift and B1 (WASABI)-Application to field-Inhomogeneity correction of
+CEST MRI data. Magnetic Resonance in Medicine, 77(2), 571–580. https://doi.org/10.1002/mrm.26133
 parameter settings:
      pulse shape = block
-     B1 = 2.22 uT
+     B1 = 3.75 uT (@ 3T; in general 1.25 uT multiplied by field strength)
      n = 1
-     t_p = 5000 ms
+     t_p = 5 ms (@ 3T; in general 15 ms devided by field strength)
      T_rec = 2/12 s (saturated/M0)
 """
 
@@ -14,26 +16,25 @@ from pypulseq.Sequence.sequence import Sequence
 from pypulseq.make_adc import make_adc
 from pypulseq.make_delay import make_delay
 from pypulseq.make_trap_pulse import make_trapezoid
-from pypulseq.make_gauss_pulse import make_gauss_pulse
 from pypulseq.make_block_pulse import make_block_pulse
 from pypulseq.opts import Opts
-from utils.seq.conversion import convert_seq_12_to_pseudo_13
+from sim.utils.seq import convert_seq_12_to_pseudo_13
 
 seq = Sequence()
 
-offset_range = 10  # [ppm]
-num_offsets = 41  # number of measurements (not including M0)
+offset_range = 2  # [ppm]
+num_offsets = 31  # number of measurements (not including M0)
 run_m0_scan = True  # if you want an M0 scan at the beginning
 t_rec = 2  # recovery time between scans [s]
 m0_t_rec = 12  # recovery time before m0 scan [s]
-sat_b1 = 2.22  # mean sat pulse b1 [uT]
-t_p = 5  # sat pulse duration [s]
+sat_b1 = 3.75  # mean sat pulse b1 [uT]
+t_p = 0.005  # sat pulse duration [s]
 t_d = 0  # delay between pulses [s]
 n_pulses = 1  # number of sat pulses per measurement
 b0 = 3  # B0 [T]
-spoiling = 0  # 0=no spoiling, 1=before readout, Gradient in x,y,z
+spoiling = 1  # 0=no spoiling, 1=before readout, Gradient in x,y,z
 
-seq_filename = 'example_cw.seq'  # filename
+seq_filename = 'example_wasabi.seq'  # filename
 
 # scanner limits
 sys = Opts(max_grad=40, grad_unit='mT/m', max_slew=130, slew_unit='T/m/s', rf_ringdown_time=30e-6, rf_dead_time=100e-6,
@@ -86,6 +87,5 @@ seq.set_definition('run_m0_scan', str(run_m0_scan))
 # seq.plot()
 print(seq.shape_library)
 seq.write(seq_filename)
-
 # convert to pseudo version 1.3
 convert_seq_12_to_pseudo_13(seq_filename)

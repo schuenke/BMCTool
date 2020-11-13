@@ -27,16 +27,16 @@ def check_values(val_dict: dict,
         -> [dict, list]:
     """
     checking and correcting the nested dictionaries from the loaded configuration for definition errors
-    :param val_dict: dictionary containing values to check
+    :param val_dict: library containing values to check
     :param config: data loaded from config files
     :param invalid: list to save invalid definitions in
-    :param dict_key: key to save the value in the right place in the parent dictionary
+    :param dict_key: key to save the value in the right place in the parent library
     :param reference_config: path of reference config that includes are valid config entries
     :return (config, invalid): the corrected data and list of invalid definitions
     """
     if reference_config is None:
         reference_config = path.join(path.dirname(__file__),
-                                     '../', 'dictionary', 'param_configs', 'lib', 'valid_params.yaml')
+                                     '../', 'library', 'param_configs', 'lib', 'valid_params.yaml')
     valids = load_config(reference_config)
     valid_num = valids['valid_num']
     valid_str = valids['valid_str']
@@ -106,10 +106,10 @@ def check_cest_values(val_dict: dict,
         -> [dict, list]:
     """
     checking and correcting cest pool values loaded configuration for definition errors
-    :param val_dict: dictionary containing values to check
+    :param val_dict: library containing values to check
     :param config: data loaded from config files
     :param invalid: list to save invalid definitions in
-    :param dict_key: key to save the value in the right place in theparent dictionary
+    :param dict_key: key to save the value in the right place in theparent library
     :return (config, invalid): the corrected data and list of invalid definitions
     """
     if 'cest_pools' in config.keys():
@@ -158,7 +158,7 @@ def check_params(config: dict,
     """
     if reference_config is None:
         reference_config = path.join(path.dirname(__file__),
-                                     '../', 'dictionary', 'param_configs', 'lib', 'valid_params.yaml')
+                                     '../', 'library', 'param_configs', 'lib', 'valid_params.yaml')
     invalid = []
     valids = load_config(reference_config)
     valid = valids['valid_first']
