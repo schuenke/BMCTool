@@ -1,5 +1,5 @@
 """
-util.py
+utils.py
     Useful additional functions
 """
 import numpy as np

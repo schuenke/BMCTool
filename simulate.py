@@ -4,7 +4,7 @@ simulate.py
     You can adapt parameters in param_configs.py or use a standard CEST setting as defined in standard_cest_params.py.
 """
 from sim.bmc_tool import BMCTool
-from sim.utils import plot_z
+from sim.utils.eval import plot_z
 from sim.set_params import load_params
 
 # set necessary file paths:

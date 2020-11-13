@@ -3,8 +3,8 @@ params.py
     Class definition to store simulation parameters
 """
 import numpy as np
-from sim.utils import check_m0_scan, get_offsets
-from sim.utils.seq import read_any_version
+from sim.utils.utils import check_m0_scan, get_offsets
+from sim.utils.seq.read import read_any_version
 
 
 class Params:
