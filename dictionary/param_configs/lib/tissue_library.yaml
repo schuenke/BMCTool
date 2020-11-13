@@ -1,0 +1,49 @@
+## T1 and T2 literature values
+
+# gray matter
+gm: {
+  3: {
+    T1: 1.3,  # source pulseq-cest
+    T2: 80e-3  # source pulseq-cest
+  },
+  7: {
+    T1: 1.67,  # source pulseq-cest
+    T2: 43e-3  # source pulseq-cest
+  },
+  9: {
+    T1: 2,  # source pulseq-cest
+    T2: 35e-3  # source pulseq-cest
+  }
+}
+
+# white matter
+wm: {
+  3: {
+    T1: 0.8,  # source PMID: 10232510
+    T2: 110e-3  # source PMID: 10232510
+  },
+  7: {
+    T1: 1.1,  # estimated, mixed sources
+    T2: 60e-3  # estimated, mixed sources
+  },
+  9: {
+    T1: None,  #TODO?
+    T2: None  #TODO?
+  }
+}
+
+# cerebro-spinal fluid
+csf: {
+  3: {
+    T1: 4.1,  # estimated PMID: 31179645
+    T2: 2  # source PMID: 28782676
+  },
+  7: {
+    T1: 4.4,  # source PMID: 17260370
+    T2: 0.9  # source PMID: 28782676
+  },
+  9: {
+    T1: None,  #TODO?
+    T2: None  #TODO?
+  }
+}

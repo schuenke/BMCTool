@@ -1,0 +1,53 @@
+## Parameter settings for standard CEST parameters for the simulation:
+#    Example for a Z-spectrum for gray matter at 3T with
+#        - 2 CEST pools
+#        - a Lorentzian shaped MT pool
+# CEST pools according to https://doi.org/10.1016/j.neuroimage.2017.04.045
+#
+# Parameters:
+# f: proton fraction (relative) (float)
+# r1: inverse relaxation time R1 = 1/T1 [Hz] (float)
+# r2 inverse relaxation time R2 = 1/T2 [Hz] (float)
+# dw: chemical shift from water [ppm] (float)
+# k: exchange rate [Hz] (float)
+# lineshape: lineshape of the MT Pool as 'Lorentzian', 'SuperLorentzian' or 'None' (str)
+
+# water properties
+water_pool: {
+  f: 1,
+  r1: 1 / 1.3,
+  r2: 1 / 75e-3
+}
+
+# MT pool
+# To set r1 equal to water pool r1, omit
+# to exclude MT pool set mt_pool: None or omit
+mt_pool: {
+  f: 0.05,
+  r1: 1 / 1.3,
+  r2: 1e5,
+  k: 23,
+  dw: -2,
+  lineshape: 'SuperLorentzian'
+}
+
+# CEST pool parameters
+# dictionary with entries sorted by a pool name
+# to simulate without CEST pools set cest_pool: None or omit
+# To set r1 equal to water pool r1, set to r1: 'auto' or omit
+cest_pool: {
+  'Amide': {
+    f: 72e-3/111,
+    r1: 1 / 1.3,
+    r2: 1/100e-3,
+    k: 30,
+    dw: 3.5
+  },
+  'Creatine': {
+    f: 20e-3/111,
+    r1: 1 / 1.3,
+    r2: 1/100e-3,
+    k: 1100,
+    dw: 2
+  }
+}
