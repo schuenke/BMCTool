@@ -47,17 +47,20 @@ class Params:
         self.mz_loc += 2
         return water_pool
 
-    def update_water_pool(self, water_dict: dict = {}) -> dict:
+    def update_water_pool(self, **kwargs) -> dict:
         """
-        Updates water settings
-        :param water_dict: dict with items that should be updated
-        :return:
+        Updates water settings (kwargs: r1, r2, f)
+        kwargs: parameter to update the water pool with, from r1, r2, f
+        :param r1: relaxation rate R1 = 1/ T1 [Hz]
+        :param r2: relaxation rate R2 = 1/T2 [Hz]
+        :param f: proton fraction (default = 1)
+        :return: dict containing the new water_pool settings
         """
         option_names = ['r1', 'r2', 'f']
-        if not all(name in option_names for name in water_dict):
+        if not all(name in option_names for name in kwargs.keys()):
             raise AttributeError('Unknown option name. Update aborted!')
 
-        water_pool = {k: v for k, v in water_dict.items()}
+        water_pool = {k: v for k, v in kwargs.items()}
         self.water_pool.update(water_pool)
         return water_pool
 
@@ -85,25 +88,30 @@ class Params:
         self.mz_loc += 2
         return cest_pool
 
-    def update_cest_pool(self, pool_num: int = 1, cest_dict: dict = {}) -> dict:
+    def update_cest_pool(self, pool_idx: int = 0, **kwargs) -> dict:
         """
-        Updates mt pool values
+        Updates CEST pool values (kwargs: r1, r2, k, f, dw)
         :param pool_num: number of the CEST pool that should be changed
-        :param mt_dict: dict with items that should be updated
-        :return:
+        :param kwargs: parameter(s) to update the defined CEST pool with, from r1, r2, k, f, dw
+        :param r1: relaxation rate R1 = 1/ T1 [Hz]
+        :param k: exchange rate [Hz]
+        :param r2: relaxation rate R2 = 1/T2 [Hz]
+        :param f: proton fraction (default = 1)
+        :param dw: chemical shift from water [ppm]
+        :return: dict of the new CEST pool parameters
         """
         try:
-            old_dict = self.cest_pools[pool_num]
+            old_dict = self.cest_pools[pool_idx]
         except IndexError:
-            print(f"CEST pool # {pool_num} doesn't exist. No parameters have been changed.")
+            print(f"CEST pool # {pool_idx} doesn't exist. No parameters have been changed.")
             return
 
         option_names = ['r1', 'r2', 'k', 'f', 'dw']
-        if not all(name in option_names for name in cest_dict):
+        if not all(name in option_names for name in kwargs):
             raise AttributeError('Unknown option name. Update aborted!')
 
-        cest_pool = {k: v for k, v in cest_dict.items()}
-        self.cest_pools[pool_num].update(cest_pool)
+        cest_pool = {k: v for k, v in kwargs.items()}
+        self.cest_pools[pool_idx].update(cest_pool)
         return cest_pool
 
     def set_mt_pool(self,
@@ -122,7 +130,7 @@ class Params:
         :param f: proton fraction
         :param dw: chemical shift from water [ppm]
         :param lineshape: shape of MT pool ("Lorentzian", "SuperLorentzian" or "None")
-        :return:
+        :return: dict containing MT pool parameters
         """
         if None in [r1, r2, k, f, dw, lineshape]:
             raise ValueError('Not enough parameters given for MT pool definition.')
@@ -131,17 +139,23 @@ class Params:
         self.mt_pool.update(mt_pool)
         return mt_pool
 
-    def update_mt_pool(self, mt_dict: dict = {}) -> dict:
+    def update_mt_pool(self, **kwargs) -> dict:
         """
-        Updates mt pool values
-        :param mt_dict: dict with items that should be updated
-        :return:
+        Updates mt pool values (kwargs: r1, r2, k, f, dw)
+        :param kwargs: parameter(s) to update the MT pool with, from r1, r2, k, f, dw
+        :param r1: relaxation rate R1 = 1/ T1 [Hz]
+        :param r2: relaxation rate R2 = 1/ T2 [Hz]
+        :param k: exchange rate [Hz]
+        :param f: proton fraction
+        :param dw: chemical shift from water [ppm]
+        :param lineshape: shape of MT pool ("Lorentzian", "SuperLorentzian" or "None")
+        :return: dict containing the new MT pool parameters
         """
         option_names = ['r1', 'r2', 'k', 'f', 'dw', 'lineshape']
-        if not all(name in option_names for name in mt_dict):
+        if not all(name in option_names for name in kwargs):
             raise AttributeError('Unknown option name. Update aborted!')
 
-        mt_pool = {k: v for k, v in mt_dict.items()}
+        mt_pool = {k: v for k, v in kwargs.items()}
         self.mt_pool.update(mt_pool)
         return mt_pool
 
@@ -157,7 +171,7 @@ class Params:
         :param gamma: gyromagnetic ratio [rad/uT]
         :param b0_inhom: field ihnomogeneity [ppm]
         :param rel_b1: relative B1 field
-        :return: library containing the parameter values
+        :return: dict containing the parameter values
         """
         if None in [b0, gamma, b0_inhom, rel_b1]:
             raise ValueError('Not enough parameters given for scanner definition.')
@@ -166,26 +180,34 @@ class Params:
         self.scanner.update(scanner)
         return scanner
 
-    def update_scanner(self, scanner_dict: dict = {}) -> dict:
+    def update_scanner(self, **kwargs) -> dict:
         """
-        Updates scanner values
-        :param scanner_dict: dict with items that should be updated
-        :return:
+        Updates scanner values (kwargs: b0, gamma, b0_inhom, rel_b1)
+        :param kwargs: parameters to update the scanner options with from b0, gamma, b0_inhom, rel_b1
+        :param b0: field strength [T]
+        :param gamma: gyromagnetic ratio [rad/uT]
+        :param b0_inhom: field ihnomogeneity [ppm]
+        :param rel_b1: relative B1 field
+        :return: dict containing the new parameter values
         """
         option_names = ['b0', 'gamma', 'b0_inhom', 'rel_b1']
-        if not all(name in option_names for name in scanner_dict):
+        if not all(name in option_names for name in kwargs):
             raise AttributeError('Unknown option name. Update aborted!')
 
-        scanner = {k: v for k, v in scanner_dict.items()}
+        scanner = {k: v for k, v in kwargs.items()}
         self.scanner.update(scanner)
         return scanner
+
+    def _check_reset_init_mag(self):
+        if not self.options['reset_init_mag']:
+            self.options['par_calc'] = False
 
     def set_options(self,
                     verbose: bool = False,
                     reset_init_mag: bool = True,
                     scale: float = 1.0,
                     max_pulse_samples: int = 500,
-                    par_calc: bool = False) \
+                    par_calc: bool = True) \
             -> dict:
         """
         Setting additional options
@@ -194,7 +216,7 @@ class Params:
         :param scale: scaling factor for the magnetization after reset (if reset_init_mag = True)
         :param max_pulse_samples: max number of samples for shaped pulses
         :param par_calc: toggles parallel calculation (BMCTool only)
-        :return:
+        :return: dict containing option parameters
         """
         options = {'verbose': verbose,
                    'reset_init_mag': reset_init_mag,
@@ -202,21 +224,29 @@ class Params:
                    'max_pulse_samples': max_pulse_samples,
                    'par_calc': par_calc}
         self.options.update(options)
+        self._check_reset_init_mag()
         return options
 
-    def update_options(self, options_dict: dict = {}) -> dict:
+    def update_options(self, **kwargs) -> dict:
         """
-        Updates additional options
-        :param options_dict: dict with items that should be updated
-        :return:
+        Updates additional options (kwargs: verbose, reset_init_mag, scale, max_pulse_samples, par_calc)
+        :param kwargs: parameters to update the options with from verbose, reset_init_mag, scale, max_pulse_samples,
+                    par_calc
+        :param verbose: Verbose output
+        :param reset_init_mag: true if magnetization should be set to self.m_vec after each ADC
+        :param scale: scaling factor for the magnetization after reset (if reset_init_mag = True)
+        :param max_pulse_samples: max number of samples for shaped pulses
+        :param par_calc: toggles parallel calculation (BMCTool only)
+        :return: dict containing the new option parameters
         """
         option_names = ['verbose', 'reset_init_mag', 'scale', 'max_pulse_samples', 'par_calc']
 
-        if not all(name in option_names for name in options_dict):
+        if not all(name in option_names for name in kwargs):
             raise AttributeError('Unknown option name. Update aborted!')
 
-        options = {k: v for k, v in options_dict.items()}
+        options = {k: v for k, v in kwargs.items()}
         self.options.update(options)
+        self._check_reset_init_mag()
         return options
 
     def set_m_vec(self) -> np.array:
