@@ -199,8 +199,9 @@ class Params:
         return scanner
 
     def _check_reset_init_mag(self):
-        if not self.options['reset_init_mag']:
+        if not self.options['reset_init_mag'] and self.options['par_calc']:
             self.options['par_calc'] = False
+            print(f"Option 'par_calc = True' not available for 'reset_init_mag = True'. Changed to 'par_calc = False'.")
 
     def set_options(self,
                     verbose: bool = False,
