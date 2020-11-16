@@ -187,8 +187,6 @@ class Params:
         return scanner
 
     def _check_reset_init_mag(self):
-        print(f"reset mag = {self.options['reset_init_mag']}")
-        print(f"par_calc = {self.options['par_calc']}")
         if not self.options['reset_init_mag'] and self.options['par_calc']:
             print(f"'par_calc = True' not available for 'reset_init_mag = False'. Changed 'par_calc' to 'False'.")
             self.options['par_calc'] = False
