@@ -28,8 +28,8 @@ class Params:
         self.set_options()
 
     def set_water_pool(self,
-                       r1: float = None,
-                       r2: float = None,
+                       r1: float,
+                       r2: float,
                        f: float = 1) \
             -> dict:
         """
@@ -39,9 +39,6 @@ class Params:
         :param f: proton fraction (default = 1)
         :return: dict of water pool parameters
         """
-        if None in [r1, r2]:
-            raise ValueError('Not enough parameters given for water pool definition.')
-
         water_pool = {'r1': r1, 'r2': r2, 'f': f}
         self.water_pool = water_pool
         self.mz_loc += 2
@@ -65,11 +62,11 @@ class Params:
         return water_pool
 
     def set_cest_pool(self,
-                      r1: float = None,
-                      r2: float = None,
-                      k: int = None,
-                      f: float = None,
-                      dw: float = None) \
+                      r1: float,
+                      r2: float,
+                      k: int,
+                      f: float,
+                      dw: float) \
             -> dict:
         """
         defines a CEST pool for simulation
@@ -80,9 +77,6 @@ class Params:
         :param dw: chemical shift from water [ppm]
         :return: dict of CEST pool parameters
         """
-        if None in [r1, r2, k, f, dw]:
-            raise ValueError('Not enough parameters given for CEST pool definition.')
-
         cest_pool = {'r1': r1, 'r2': r2, 'k': k, 'f': f, 'dw': dw}
         self.cest_pools.append(cest_pool)
         self.mz_loc += 2
@@ -115,12 +109,12 @@ class Params:
         return cest_pool
 
     def set_mt_pool(self,
-                    r1: float = None,
-                    r2: float = None,
-                    k: int = None,
-                    f: float = None,
-                    dw: int = None,
-                    lineshape: str = None) \
+                    r1: float,
+                    r2: float,
+                    k: int,
+                    f: float,
+                    dw: int,
+                    lineshape: str) \
             -> dict:
         """
         defines an MT pool for simulation
@@ -132,9 +126,6 @@ class Params:
         :param lineshape: shape of MT pool ("Lorentzian", "SuperLorentzian" or "None")
         :return: dict containing MT pool parameters
         """
-        if None in [r1, r2, k, f, dw, lineshape]:
-            raise ValueError('Not enough parameters given for MT pool definition.')
-
         mt_pool = {'r1': r1, 'r2': r2, 'k': k, 'f': f, 'dw': dw, 'lineshape': lineshape}
         self.mt_pool.update(mt_pool)
         return mt_pool
@@ -160,10 +151,10 @@ class Params:
         return mt_pool
 
     def set_scanner(self,
-                    b0: float = None,
-                    gamma: float = None,
-                    b0_inhom: float = None,
-                    rel_b1: float = None) \
+                    b0: float,
+                    gamma: float,
+                    b0_inhom: float,
+                    rel_b1: float) \
             -> dict:
         """
         Sets the scanner values
@@ -173,9 +164,6 @@ class Params:
         :param rel_b1: relative B1 field
         :return: dict containing the parameter values
         """
-        if None in [b0, gamma, b0_inhom, rel_b1]:
-            raise ValueError('Not enough parameters given for scanner definition.')
-
         scanner = {'b0': b0, 'gamma': gamma, 'b0_inhomogeneity': b0_inhom, 'rel_b1': rel_b1}
         self.scanner.update(scanner)
         return scanner
