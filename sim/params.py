@@ -91,7 +91,7 @@ class Params:
     def update_cest_pool(self, pool_idx: int = 0, **kwargs) -> dict:
         """
         Updates CEST pool values (kwargs: r1, r2, k, f, dw)
-        :param pool_num: number of the CEST pool that should be changed
+        :param pool_idx: index of the CEST pool that should be changed
         :param kwargs: parameter(s) to update the defined CEST pool with, from r1, r2, k, f, dw
         :param r1: relaxation rate R1 = 1/ T1 [Hz]
         :param k: exchange rate [Hz]
@@ -101,7 +101,7 @@ class Params:
         :return: dict of the new CEST pool parameters
         """
         try:
-            old_dict = self.cest_pools[pool_idx]
+            self.cest_pools[pool_idx]
         except IndexError:
             print(f"CEST pool # {pool_idx} doesn't exist. No parameters have been changed.")
             return
@@ -183,7 +183,7 @@ class Params:
     def update_scanner(self, **kwargs) -> dict:
         """
         Updates scanner values (kwargs: b0, gamma, b0_inhom, rel_b1)
-        :param kwargs: parameters to update the scanner options with from b0, gamma, b0_inhom, rel_b1
+        :param kwargs: parameters to update the scanner options with, from b0, gamma, b0_inhom, rel_b1
         :param b0: field strength [T]
         :param gamma: gyromagnetic ratio [rad/uT]
         :param b0_inhom: field ihnomogeneity [ppm]
@@ -199,9 +199,11 @@ class Params:
         return scanner
 
     def _check_reset_init_mag(self):
+        print(f"reset mag = {self.options['reset_init_mag']}")
+        print(f"par_calc = {self.options['par_calc']}")
         if not self.options['reset_init_mag'] and self.options['par_calc']:
+            print(f"'par_calc = True' not available for 'reset_init_mag = False'. Changed 'par_calc' to 'False'.")
             self.options['par_calc'] = False
-            print(f"Option 'par_calc = True' not available for 'reset_init_mag = True'. Changed to 'par_calc = False'.")
 
     def set_options(self,
                     verbose: bool = False,

@@ -18,12 +18,11 @@ class BlochMcConnellSolver:
     Solver class for Bloch-McConnell equations.
     :param params: Params object including all experimental and sample settings.
     :param n_offsets: number of frequency offsets
-    :param par_calc: true, if all offsets should be calculated in parallel (instead of sequentially)
     """
-    def __init__(self, params: Params, n_offsets: int, par_calc: bool = False):
+    def __init__(self, params: Params, n_offsets: int):
         self.params = params
         self.n_offsets = n_offsets
-        self.par_calc = par_calc
+        self.par_calc = params.options['par_calc']
         self.first_dim = 1
         self.n_pools = len(params.cest_pools)
         self.is_mt_active = bool(params.mt_pool)
@@ -322,7 +321,7 @@ class BMCTool:
     def __init__(self, params: Params, seq_file: str):
         self.params = params
         self.seq_file = seq_file
-        self.par_calc = False
+        self.par_calc = params.options['par_calc']
         self.run_m0_scan = None
         self.offsets_ppm = None
         self.bm_solver = None
@@ -369,14 +368,13 @@ class BMCTool:
 
         return amp_, ph_, dtp_, delay_after_pulse
 
-    def run(self, par_calc=False):
+    def run(self):
         """
         Creates BMC equation solver and starts the simulation process.
-        :param par_calc: bool that decides which solver (sequential or parallel) is called
         """
-        self.par_calc = par_calc
-        self.bm_solver = BlochMcConnellSolver(params=self.params, n_offsets=self.n_offsets, par_calc=self.par_calc)
-        if par_calc:
+        self.par_calc = self.params.options['par_calc']
+        self.bm_solver = BlochMcConnellSolver(params=self.params, n_offsets=self.n_offsets)
+        if self.par_calc:
             self.run_parallel()
         else:
             self.run_sequential()
@@ -385,7 +383,6 @@ class BMCTool:
         """
         Performs parallel simulation of all offsets.
         """
-        self.par_calc = True
         if not self.params.options['reset_init_mag']:
             raise Exception("Parallel computation not possible for 'reset_init_mag = True'.\n"
                             "Please switch 'reset_init_mag' to 'False' or change to sequential computation.")
