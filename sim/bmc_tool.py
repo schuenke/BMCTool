@@ -598,4 +598,4 @@ class BMCTool:
         else:
             mz = self.m_out[self.params.mz_loc, :]
 
-        return self.offsets_ppm, mz
+        return self.offsets_ppm, np.abs(mz)
