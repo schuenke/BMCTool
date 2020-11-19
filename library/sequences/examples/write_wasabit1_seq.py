@@ -35,7 +35,7 @@ b0 = 3  # B0 [T]
 spoiling = 1  # 0=no spoiling, 1=before readout, Gradient in x,y,z
 spoil_delay = 1e-3
 
-seq_filename = '../../../../../seq_misc/writeSeq/sequences/WASABI.seq'  # filename
+seq_filename = 'WASABI.seq'  # filename
 
 # scanner limits
 sys = Opts(max_grad=40, grad_unit='mT/m', max_slew=130, slew_unit='T/m/s', rf_ringdown_time=30e-6, rf_dead_time=100e-6,
