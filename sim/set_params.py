@@ -5,9 +5,10 @@ set_params.py
 from os import path
 import yaml
 from sim.params import Params
+from pathlib import Path
 
 
-def load_config(*args: str) -> dict:
+def load_config(*args: (str, Path)) -> dict:
     """
     Load config yaml files from path.
     :param args: path(s) of the file(s) containing configuration parameters
@@ -23,7 +24,7 @@ def check_values(val_dict: dict,
                  config: dict,
                  invalid: list,
                  dict_key: str = None,
-                 reference_config:str = None) \
+                 reference_config: (str, Path) = None) \
         -> [dict, list]:
     """
     checking and correcting the nested dictionaries from the loaded configuration for definition errors
@@ -148,7 +149,7 @@ def check_necessary(config: dict,
 
 
 def check_params(config: dict,
-                 reference_config: str = None) \
+                 reference_config: (str, Path) = None) \
         -> dict:
     """
     checking and correcting the loaded parameters
@@ -204,8 +205,8 @@ def pprint_dict(dictionary: dict):
         print(k, ':', v)
 
 
-def load_params(sample_filepath: str,
-                experimental_filepath: str) \
+def load_params(sample_filepath: (str, Path),
+                experimental_filepath: (str, Path)) \
         -> Params:
     """
     Load parameters into simulation parameter object
@@ -216,8 +217,11 @@ def load_params(sample_filepath: str,
     config = load_config(sample_filepath, experimental_filepath)
     # check parameters for missing, typos, wrong assignments
     config = check_params(config)
-    config['sample_params'] = sample_filepath[:-5]
-    config['experimental_params'] = experimental_filepath[:-5]
+    for filepath in ['sample_filepath', 'experimental_filepath']:
+        if type(eval(filepath)) != str and isinstance(eval(filepath), Path):
+            config[filepath] = filepath.name
+        else:
+            config[filepath] = Path(eval(filepath)).name
 
     # instantiate class to store the parameters
     sp = Params()

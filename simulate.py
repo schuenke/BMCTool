@@ -10,7 +10,7 @@ from sim.set_params import load_params
 # set necessary file paths:
 sample_file = 'library/param_configs/sample_params.yaml'
 experimental_file = 'library/param_configs/experimental_params.yaml'
-seq_file = 'library/sequences/examples/example_test.seq'
+seq_file = 'library/sequences/examples/external_t1rho.seq'
 
 # load config files and print settings
 sim_params = load_params(sample_file, experimental_file)
@@ -22,3 +22,5 @@ Sim.run()
 # extract and plot z-spectrum
 offsets, mz = Sim.get_zspec()
 fig = plot_z(mz=mz, offsets=offsets, plot_mtr_asym=True)
+
+
