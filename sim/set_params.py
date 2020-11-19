@@ -205,24 +205,22 @@ def pprint_dict(dictionary: dict):
         print(k, ':', v)
 
 
-def load_params(sample_filepath: (str, Path),
-                experimental_filepath: (str, Path)) \
+def load_params(*filepaths: (str, Path)) \
         -> Params:
     """
     Load parameters into simulation parameter object
-    :param sample_filepath: path for the file containing sample parameters
-    :param experimental_filepath: path for the file containing experimental parameters
+    :param filepaths: Path(s) to the file(s) containing simulation parameters. You have to define at least one file.
     """
+    if not filepaths:
+        raise ValueError('You need to define at least one filepath to configure the parameters.')
+    paths = [Path(filepath) for filepath in filepaths]
+    if False in [p.exists() for p in paths]:
+        raise ValueError('args need to be of type str or Path to define filepath(s) to at least one config file.')
     # load the configurations from the files
-    config = load_config(sample_filepath, experimental_filepath)
+    config = load_config(*paths)
     # check parameters for missing, typos, wrong assignments
     config = check_params(config)
-    for filepath in ['sample_filepath', 'experimental_filepath']:
-        if type(eval(filepath)) != str and isinstance(eval(filepath), Path):
-            config[filepath] = filepath.name
-        else:
-            config[filepath] = Path(eval(filepath)).name
-
+    config['filepaths'] = [p.name for p in paths]
     # instantiate class to store the parameters
     sp = Params()
 
