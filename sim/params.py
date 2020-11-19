@@ -153,18 +153,18 @@ class Params:
     def set_scanner(self,
                     b0: float,
                     gamma: float,
-                    b0_inhomogeneity: float,
+                    b0_inhom: float,
                     rel_b1: float) \
             -> dict:
         """
         Sets the scanner values
         :param b0: field strength [T]
         :param gamma: gyromagnetic ratio [rad/uT]
-        :param b0_inhomogeneity: field ihnomogeneity [ppm]
+        :param b0_inhom: field ihnomogeneity [ppm]
         :param rel_b1: relative B1 field
         :return: dict containing the parameter values
         """
-        scanner = {'b0': b0, 'gamma': gamma, 'b0_inhomogeneity': b0_inhomogeneity, 'rel_b1': rel_b1}
+        scanner = {'b0': b0, 'gamma': gamma, 'b0_inhomogeneity': b0_inhom, 'rel_b1': rel_b1}
         self.scanner.update(scanner)
         return scanner
 
@@ -178,6 +178,7 @@ class Params:
         :param rel_b1: relative B1 field
         :return: dict containing the new parameter values
         """
+        kwargs = {('b0_inhomogeneity' if k == 'b0_inhom' else k): v for k, v in kwargs.items()}
         option_names = ['b0', 'gamma', 'b0_inhomogeneity', 'rel_b1']
         if not all(name in option_names for name in kwargs):
             raise AttributeError('Unknown option name. Update aborted!')
