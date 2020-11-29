@@ -389,6 +389,8 @@ class BMCTool:
 
         seq_file = open(self.seq_file, 'r')
         event_table = dict()
+        adc_count = 0
+        m0_event_count = 0
         while True:
             line = strip_line(seq_file)
             if line == -1:
@@ -403,11 +405,12 @@ class BMCTool:
                 self.run_m0_scan = True if line == 'True' else False
 
             elif line == '[BLOCKS]':
-                adc_count = 0
                 line = strip_line(seq_file)
 
                 while line != '' and line != ' ' and line != '#':
                     block_events = np.fromstring(line, dtype=int, sep=' ')
+                    if adc_count == 0 and self.run_m0_scan:
+                        m0_event_count += 1  # count number of events before 1st adc
                     if block_events[6]:
                         adc_count += 1
                     event_table[block_events[0]] = block_events[1:]
@@ -419,9 +422,8 @@ class BMCTool:
         n_total = len(self.seq.block_events)
         idx_start = 0
         if self.run_m0_scan:
-            # TODO: get number of events including 1st ADC instead of hard coding the number
-            n_total -= 2  # subtract m0 events (delay and ADC) if run_m0_scan is True
-            idx_start += 2
+            n_total -= m0_event_count  # subtract m0 events if run_m0_scan is True
+            idx_start += m0_event_count
 
         # get number of blocks per offsets
         n_ = n_total/self.n_offsets
