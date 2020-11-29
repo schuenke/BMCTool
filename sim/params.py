@@ -197,7 +197,7 @@ class Params:
                     reset_init_mag: bool = True,
                     scale: float = 1.0,
                     max_pulse_samples: int = 500,
-                    par_calc: bool = True) \
+                    par_calc: bool = False) \
             -> dict:
         """
         Setting additional options
