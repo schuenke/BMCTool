@@ -36,8 +36,7 @@ def check_values(val_dict: dict,
     :return (config, invalid): the corrected data and list of invalid definitions
     """
     if reference_config is None:
-        reference_config = path.join(path.dirname(__file__),
-                                     '../', 'library', 'param_configs', 'lib', 'valid_params.yaml')
+        reference_config = Path(path.dirname(__file__)).parent / 'library' / 'maintenance' / 'valid_params.yaml'
     valids = load_config(reference_config)
     valid_num = valids['valid_num']
     valid_str = valids['valid_str']
@@ -158,8 +157,7 @@ def check_params(config: dict,
     :return config: corrected (or unchanged) data
     """
     if reference_config is None:
-        reference_config = path.join(path.dirname(__file__),
-                                     '../', 'library', 'param_configs', 'lib', 'valid_params.yaml')
+        reference_config = Path(path.dirname(__file__)).parent / 'library' / 'maintenance' / 'valid_params.yaml'
     invalid = []
     valids = load_config(reference_config)
     valid = valids['valid_first']
