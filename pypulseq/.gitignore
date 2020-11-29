@@ -106,5 +106,5 @@ venv.bak/
 # Seq files
 *.seq
 
-# PyCharm param_configs folder
+# PyCharm sim-library folder
 \.idea/
