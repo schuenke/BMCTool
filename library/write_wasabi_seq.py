@@ -86,17 +86,14 @@ seq = Sequence()
 
 # run m0 scan with or without the defined offset
 if run_m0_scan:
-    if m0_offset:  # new style (m0 will be handled in loop below)
-        offsets_ppm = np.concatenate(([m0_offset], offsets_ppm))
-    else:  # old style
-        seq.add_block(m0_delay)
-        seq.add_block(pseudo_adc)
+    seq.add_block(m0_delay)
+    seq.add_block(pseudo_adc)
 
 offsets = offsets_ppm * sys.gamma * 1e-6 * b0  # convert from ppm to rad
 
 for offset in offsets:
     # add magnetization recover delay
-    if run_m0_scan and offset == offsets[0]:
+    if abs(offset) > 295:
         seq.add_block(m0_delay)
     else:
         seq.add_block(trec_delay)
