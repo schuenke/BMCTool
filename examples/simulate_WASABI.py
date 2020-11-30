@@ -1,5 +1,5 @@
 """
-simulate_T1prep_HSsat.py
+simulate_WASABI.py
     Script to run the BMCTool simulation for WASABI sequence.
 """
 from sim.bmc_tool import BMCTool
