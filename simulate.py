@@ -8,12 +8,11 @@ from sim.utils.eval import plot_z
 from sim.set_params import load_params
 
 # set necessary file paths:
-sample_file = 'library/param_configs/sample_params.yaml'
-experimental_file = 'library/param_configs/experimental_params.yaml'
-seq_file = 'library/sequences/examples/external_t1rho.seq'
+config_file = 'library/sim-library/config_wasabi.yaml'
+seq_file = 'library/seq-library/T1prep_HSsat.seq'
 
-# load config files and print settings
-sim_params = load_params(sample_file, experimental_file)
+# load config file(s)
+sim_params = load_params(config_file)
 
 # create BMCToll object and run simulation
 Sim = BMCTool(sim_params, seq_file)
@@ -21,6 +20,4 @@ Sim.run()
 
 # extract and plot z-spectrum
 offsets, mz = Sim.get_zspec()
-fig = plot_z(mz=mz, offsets=offsets, plot_mtr_asym=True)
-
-
+fig = plot_z(mz=mz, offsets=offsets, invert_ax=True, plot_mtr_asym=True)

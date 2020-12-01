@@ -18,6 +18,7 @@ def calc_mtr_asym(z: np.ndarray) -> np.ndarray:
 
 def plot_z(mz: np.array,
            offsets: np.array = None,
+           invert_ax: bool = True,
            plot_mtr_asym: bool = False,
            title: str = None) \
         -> Figure:
@@ -25,7 +26,8 @@ def plot_z(mz: np.array,
     initiating calculations and plotting functions
     :param mz: magnetization vector
     :param offsets: offsets to plot the magnetization on
-    :param plot_mtr_asym: boolean wether MTRasym should be plotted as well
+    :param invert_ax: boolean to invert x-axis
+    :param plot_mtr_asym: boolean to enable/disable plotting of MTRasym
     :param title: optional title for the plot
     """
     if offsets is None:
@@ -35,11 +37,12 @@ def plot_z(mz: np.array,
         title = 'Z-Spec'
 
     fig, ax1 = plt.subplots()
-    ax1.set_ylim([0, 1])
+    ax1.set_ylim([0, 1.05])
     ax1.set_ylabel('Z', color='b')
     ax1.set_xlabel('Offsets')
     plt.plot(offsets, mz, '.--', label='$Z$', color='b')
-    plt.gca().invert_xaxis()
+    if invert_ax:
+        plt.gca().invert_xaxis()
     ax1.tick_params(axis='y', labelcolor='b')
 
     if plot_mtr_asym:
