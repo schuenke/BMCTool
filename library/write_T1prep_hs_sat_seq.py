@@ -19,7 +19,7 @@ from sim.utils.seq.make_hypsec_half_passage_rf import make_hypsec_half_passage_r
 # ========
 
 # seq-file name
-seq_filename = 'T1prep_HSsat.seq'
+seq_filename = 'T1_prep_HSsat.seq'
 
 # plot preparation block?
 plot_sequence = True
@@ -33,7 +33,7 @@ TI_times = np.array([10, 6, 5, 4, 3, 2.5, 2, 1.5, 1, 0.9, 0.8, 0.7, 0.6, 0.5, 0.
 # settings of adiabatic hyperbolic secant (hs) preparation pulse(s)
 b1 = 20  # HS pulse amplitude [µT]
 t_p_hs = 8e-3  # HS pulse duration [s]
-n_hs_pulses = 3  # number of (HS pulse + spoiler) blocks
+n_hs_pulses = 1  # number of (HS pulse + spoiler) blocks
 
 # settings for simulation tools
 run_m0_scan = False  # for compatibility
@@ -69,7 +69,7 @@ hs_pulse = make_hypsec_half_passage_rf(amp=b1, system=sys)
 pseudo_adc = make_adc(num_samples=1, duration=1e-3)  # (not played out; just used to split measurements)
 
 # DELAYS
-initial_delay = make_delay(1e-3)
+initial_delay = make_delay(100e-3)
 post_spoil_delay = make_delay(50e-6)
 
 # Sequence object
