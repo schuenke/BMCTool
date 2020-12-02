@@ -168,6 +168,8 @@ def check_params(config: dict,
         necessary_w = valids['necessary_w']
     else:
         necessary_w = None
+    if 'b0_inhomogeneity' in config.keys():
+        config['b0_inhom'] = config.pop('b0_inhomogeneity')
     check_necessary(config=config, necessary=necessary, necessary_w=necessary_w)
     config_dicts = {ck: cv for ck, cv in config.items() if type(cv) is dict}
     config_lists = {ck: cv for ck, cv in config.items() if type(cv) is list}
