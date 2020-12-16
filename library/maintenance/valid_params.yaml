@@ -3,7 +3,7 @@
 ##### DO NOT CHANGE THIS FILE UNLESS YOU KNOW WHAT YOU ARE DOING #####
 
 # valid first order parameters
-valid_first: [ 'water_pool', 'mt_pool', 'cest_pool', 'cest_pools', 'b0', 'gamma', 'b0_inhom', 'b0_inhomogeneity'],
+valid_first: [ 'water_pool', 'mt_pool', 'cest_pool', 'cest_pools', 'b0', 'gamma', 'b0_inhom', 'b0_inhomogeneity',
                 'rel_b1', 'scale', 'reset_init_mag', 'max_pulse_samples', 'par_calc', 'verbose' ]
 
 # valid parameters in first and second order of the dicts, sorted by type
