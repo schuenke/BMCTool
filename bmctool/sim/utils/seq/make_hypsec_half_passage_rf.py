@@ -4,7 +4,7 @@ make_hypsec_half_passage.py
 """
 import numpy as np
 from types import SimpleNamespace
-from pypulseq.opts import Opts
+from bmctool.pypulseq.opts import Opts
 
 
 def calculate_amplitude(t: np.ndarray,

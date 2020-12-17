@@ -2,7 +2,7 @@
 read.py
     Functions for reading single entries from seq files.
 """
-from pypulseq.Sequence.sequence import Sequence
+from bmctool.pypulseq.Sequence.sequence import Sequence
 from os import remove
 
 

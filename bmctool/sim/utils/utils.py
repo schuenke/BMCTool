@@ -3,7 +3,7 @@ utils.py
     Useful additional functions
 """
 import numpy as np
-from pypulseq.Sequence.sequence import Sequence
+from bmctool.pypulseq.Sequence.sequence import Sequence
 
 
 def get_noise_params(mean: float = None,

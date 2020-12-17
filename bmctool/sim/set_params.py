@@ -4,7 +4,7 @@ set_params.py
 """
 from os import path
 import yaml
-from sim.params import Params
+from bmctool.sim.params import Params
 from pathlib import Path
 
 
@@ -158,6 +158,7 @@ def check_params(config: dict,
     """
     if reference_config is None:
         reference_config = Path(path.dirname(__file__)).parent / 'library' / 'maintenance' / 'valid_params.yaml'
+        print(reference_config)
     invalid = []
     valids = load_config(reference_config)
     valid = valids['valid_first']
