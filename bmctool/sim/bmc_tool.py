@@ -7,10 +7,13 @@ import numpy as np
 import math
 from tqdm import tqdm
 
+from pypulseq.Sequence.sequence import Sequence
+from pypulseq.Sequence.read_seq import __strip_line as strip_line
+
 from bmctool.sim.params import Params
 from bmctool.sim.utils.utils import check_m0_scan, get_offsets
-from bmctool.pypulseq.Sequence.sequence import Sequence
-from bmctool.pypulseq.Sequence.read_seq import __strip_line as strip_line
+from bmctool.sim.utils.seq.read import read_any_version
+
 
 
 class BlochMcConnellSolver:
@@ -326,8 +329,7 @@ class BMCTool:
         self.offsets_ppm = None
         self.bm_solver = None
 
-        self.seq = Sequence()
-        self.seq.read(seq_file)
+        self.seq = read_any_version(seq_file, dev_version=True)
 
         self.n_offsets = self.seq.definitions['offsets_ppm'].size
         self.n_total_offsets = self.n_offsets
