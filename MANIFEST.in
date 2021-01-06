@@ -8,4 +8,6 @@ include bmctool/library/seq-library/WASABI.seq
 recursive-include bmctool *.md
 
 # Exclude pulseq-cest-library
-prune bmctool/library/pulseq-cest-library
+recursive-exclude bmctool/library/ *.py
+recursive-exclude examples *
+recursive-exclude bmctool/library/pulseq-cest-library *

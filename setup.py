@@ -13,7 +13,6 @@ setup(
     long_description_content_type="text/markdown",
     url='https://github.com/schuenke/BMCTool',
     install_requires=[
-        'numpy',
         'matplotlib',
         'tqdm',
         'PyYAML',
