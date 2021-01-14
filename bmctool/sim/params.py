@@ -2,6 +2,7 @@
 params.py
     Class definition to store simulation parameters
 """
+
 import numpy as np
 from bmctool.sim.utils.utils import check_m0_scan, get_offsets
 from bmctool.sim.utils.seq.read import read_any_version
@@ -205,7 +206,7 @@ class Params:
         :param reset_init_mag: true if magnetization should be set to self.m_vec after each ADC
         :param scale: scaling factor for the magnetization after reset (if reset_init_mag = True)
         :param max_pulse_samples: max number of samples for shaped pulses
-        :param par_calc: toggles parallel calculation (BMCTool only)
+        :param par_calc: toggles parallel calculation (bmctool only)
         :return: dict containing option parameters
         """
         options = {'verbose': verbose,
@@ -226,7 +227,7 @@ class Params:
         :param reset_init_mag: true if magnetization should be set to self.m_vec after each ADC
         :param scale: scaling factor for the magnetization after reset (if reset_init_mag = True)
         :param max_pulse_samples: max number of samples for shaped pulses
-        :param par_calc: toggles parallel calculation (BMCTool only)
+        :param par_calc: toggles parallel calculation (bmctool only)
         :return: dict containing the new option parameters
         """
         option_names = ['verbose', 'reset_init_mag', 'scale', 'max_pulse_samples', 'par_calc']

@@ -2,6 +2,7 @@
 conversion.py
     Functions to convert between different versions of seq files.
 """
+
 from tempfile import mkstemp
 from shutil import move, copymode
 from os import fdopen, remove
@@ -50,13 +51,11 @@ def convert_seq_12_to_pseudo_13(file_path: str):
 
 
 def convert_seq_13_to_12(file_path: str,
-                         dev_version: bool = False,
                          temp: bool = False) \
         -> str:
     """
     Converts (pseudo) version 1.3 seq-files to version 1.2 seq-files.
     :param file_path: path to the sequence file that should be converted
-    :param dev_version: convert to dev-branch version 1.2
     :param temp: toggle temporary conversion. Default False: the file is converted in place. If True: a temporary
                 converted file is written and its path is returned
     :return path: if temp=True, this function returns the path to the converted file. The deletion needs to be handled
@@ -77,21 +76,15 @@ def convert_seq_13_to_12(file_path: str,
                         raise Exception(f'Version of seq-file (v. 1.{int(line[len("minor "):])}) '
                                         f'differs from expected version 1.3. Conversion aborted!')
                 elif all(x in line for x in ['RF', 'GX', 'GY', 'GZ', 'ADC', 'EXT']):
-                    if dev_version:
-                        new_file.write(line)  # keep 'EXT' entry
-                    else:
-                        new_file.write(line.replace('EXT', ''))
+                    new_file.write(line.replace('EXT', ''))
                 elif line.startswith('[BLOCKS]'):
                     new_file.write(line)
                     in_blocks = True
                 else:
                     if in_blocks and line.strip() != '' and len(line.strip().split()) == 8:
-                        if dev_version:
-                            new_file.write(line)  # keep 'EXT' entry
-                        else:
-                            block_list = line.strip().split()[:-1]  # remove last entry
-                            block_list.append('\n')  # append line ending
-                            new_file.write(' '.join([f'{x:>3}' for x in block_list]))
+                        block_list = line.strip().split()[:-1]  # remove last entry
+                        block_list.append('\n')  # append line ending
+                        new_file.write(' '.join([f'{x:>3}' for x in block_list]))
                     else:
                         new_file.write(line)
                         in_blocks = False
