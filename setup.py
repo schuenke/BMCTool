@@ -8,7 +8,7 @@ setup(
     author='Patrick Schuenke',
     author_email='patrick.schuenke@ptb.de',
     version='0.1.0',
-    description='A python tool perform Bloch-McConnell (BMC) simulations.',
+    description='A python tool to perform Bloch-McConnell (BMC) simulations.',
     long_description=long_description,
     long_description_content_type="text/markdown",
     url='https://github.com/schuenke/BMCTool',
@@ -16,7 +16,7 @@ setup(
         'matplotlib',
         'tqdm',
         'PyYAML',
-        'pypulseq @ git+https://github.com/imr-framework/pypulseq.git@dev'
+        'pypulseq==1.2.0.post4',
     ],
     keywords='MRI, Bloch, CEST, simulations',
     packages=find_packages(),
