@@ -1,0 +1,25 @@
+## List of valid parameter settings and their types
+
+##### DO NOT CHANGE THIS FILE UNLESS YOU KNOW WHAT YOU ARE DOING #####
+
+# valid first order parameters
+valid_first: [ 'water_pool', 'mt_pool', 'cest_pool', 'cest_pools', 'b0', 'gamma', 'b0_inhom', 'b0_inhomogeneity',
+                'rel_b1', 'scale', 'reset_init_mag', 'max_pulse_samples', 'par_calc', 'verbose' ]
+
+# valid parameters in first and second order of the dicts, sorted by type
+valid_str: ['lineshape', 'seq_file']
+
+valid_num: ['f', 'r1', 'r2', 'k', 'dw', 'b0', 'gamma', 'b0_inhom', 'rel_b1', 'scale', 'max_pulse_samples']
+
+valid_bool: ['reset_init_mag', 'verbose', 'par_calc', 'lineshape']
+
+valid_dict: ['cest_pool', 'cest_pools', 'water_pool', 'mt_pool']
+
+valid_list: []
+
+# valid lineshapes
+valid_lineshapes: ['Lorentzian', 'SuperLorentzian', None]
+
+# necessary parameters
+necessary: ['water_pool', 'b0', 'gamma']
+necessary_w: ['r1', 'r2']

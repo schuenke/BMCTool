@@ -1,0 +1,13 @@
+# MANIFEST.in
+include bmctool/setup.py
+include bmctool/library/maintenance/valid_params.yaml
+include bmctool/library/sim-library/config_wasabi.yaml
+include bmctool/library/seq-library/WASABI.seq
+
+# Include all markdown files
+recursive-include bmctool *.md
+
+# Exclude pulseq-cest-library
+recursive-exclude bmctool/library/ *.py
+recursive-exclude examples *
+recursive-exclude bmctool/library/pulseq-cest-library *
