@@ -10,7 +10,6 @@ from tqdm import tqdm
 from pypulseq.Sequence.read_seq import __strip_line as strip_line
 
 from bmctool.sim.params import Params
-from bmctool.sim.utils.utils import check_m0_scan, get_offsets
 from bmctool.sim.utils.seq.read import read_any_version
 
 
@@ -313,7 +312,7 @@ class BlochMcConnellSolver:
             return mt_line
 
 
-class bmctool:
+class BMCTool:
     """
     Bloch-McConnell (BMC) simulation tool.
     :param params: Params object including all experimental and sample settings.
@@ -324,18 +323,23 @@ class bmctool:
         self.seq_file = seq_file
         self.par_calc = params.options['par_calc']
         self.run_m0_scan = None
-        self.offsets_ppm = None
         self.bm_solver = None
 
         self.seq = read_any_version(seq_file)
 
-        self.n_offsets = self.seq.definitions['offsets_ppm'].size
-        self.n_total_offsets = self.n_offsets
-        if self.seq.definitions['run_m0_scan'][0] == 'True':
-            self.n_total_offsets += 1
+        self.offsets_ppm = np.array(self.seq.definitions['offsets_ppm'])
+        self.n_offsets = self.offsets_ppm.size
+
+        if 'num_meas' in self.seq.definitions:
+            self.n_measure = int(self.seq.definitions['num_meas'])
+        else:
+            self.n_measure = self.n_offsets
+            if 'run_m0_scan' in self.seq.definitions:
+                if 1 in self.seq.definitions['run_m0_scan'] or 'True' in self.seq.definitions['run_m0_scan']:
+                    self.n_measure += 1
 
         self.m_init = params.m_vec.copy()
-        self.m_out = np.zeros([self.m_init.shape[0], self.n_total_offsets])
+        self.m_out = np.zeros([self.m_init.shape[0], self.n_measure])
 
     def prep_rf_simulation(self, block):
         """
@@ -383,92 +387,108 @@ class bmctool:
         """
         Performs parallel simulation of all offsets.
         """
+
         if not self.params.options['reset_init_mag']:
-            raise Exception("Parallel computation not possible for 'reset_init_mag = True'.\n"
-                            "Please switch 'reset_init_mag' to 'False' or change to sequential computation.")
+            raise Exception("Parallel computation not possible for 'reset_init_mag = False'.\n"
+                            "Please switch 'reset_init_mag' to 'True' or change to sequential computation.")
 
-        seq_file = open(self.seq_file, 'r')
-        event_table = dict()
-        adc_count = 0
+        # get dict with block events
+        block_events = self.seq.block_events
+
+        # counter for even blocks related to an unsaturated M0 scan
         m0_event_count = 0
-        while True:
-            line = strip_line(seq_file)
-            if line == -1:
-                break
 
-            elif line.startswith('offsets_ppm'):
-                line = line[len('offsets_ppm'):]  # remove the prefix
-                self.offsets_ppm = np.fromstring(line, dtype=float, sep=' ')  # convert remaining str to numpy array
+        # some preparations for cases with a leading unsaturated M0 scan
+        if self.n_offsets != self.n_measure:
+            if self.n_offsets == self.n_measure - 1:
+                print(f"Number of measurements is exactly 1 larger than number of offsets. Continue with parallel "
+                      f"computation assuming 1 leading unsaturated M0 scan.\nIf this is not correct, please restart "
+                      f"the simulation with 'parc_calc = False' to switch to a sequential computation!")
 
-            elif line.startswith('run_m0_scan'):
-                line = line[len('run_m0_scan')+1:]  # remove the prefix
-                self.run_m0_scan = True if line == 'True' else False
+                # set flag for unsaturated M0 scan
+                self.run_m0_scan = True
 
-            elif line == '[BLOCKS]':
-                line = strip_line(seq_file)
+                # create list with m0 block events
+                m0_block_events = []
 
-                while line != '' and line != ' ' and line != '#':
-                    block_events = np.fromstring(line, dtype=int, sep=' ')
-                    if adc_count == 0 and self.run_m0_scan:
-                        m0_event_count += 1  # count number of events before 1st adc
-                    if block_events[6]:
-                        adc_count += 1
-                    event_table[block_events[0]] = block_events[1:]
+                # get event dict and number of events before the ADC event of the unsaturated M0 scan
+                seq_file = open(self.seq_file, 'r')
+                while True:
                     line = strip_line(seq_file)
-            else:
-                pass
+                    if line == -1:
+                        break
 
-        # get total number of event blocks excluding m0 events
-        n_total = len(self.seq.block_events)
-        idx_start = 0
-        if self.run_m0_scan:
-            n_total -= m0_event_count  # subtract m0 events if run_m0_scan is True
-            idx_start += m0_event_count
+                    elif line == '[BLOCKS]':
+                        line = strip_line(seq_file)
+
+                        while line != '' and line != ' ' and line != '#':
+                            block_event = np.fromstring(line, dtype=int, sep=' ')
+                            m0_event_count += 1  # count number of events before 1st adc
+                            m0_block_events.append(block_event)
+                            if block_event[6]:
+                                break
+                            else:
+                                line = strip_line(seq_file)
+                    else:
+                        pass
+            else:
+                raise Exception(f"Number of measurements and number of offsets differ by more than 1. Such a case is "
+                                f"not suitable for parallelized computation. \nPlease switch to sequential "
+                                f"computation by changing the 'par_calc' option from 'True' to 'False'.")
+
+        # calculate number of event blocks EXCLUDING all m0 events
+        n_block_events = len(block_events) - m0_event_count
 
         # get number of blocks per offsets
-        n_ = n_total/self.n_offsets
+        n_ = n_block_events / self.n_offsets
         if not n_.is_integer():
-            raise Exception('Calculated number of blocks per offset is not an integer. Aborting parallel computation.')
+            raise Exception(f"Calculated number of block events per offset ({n_block_events}/{self.n_offsets} = {n_}) "
+                            f"is not an integer. Aborting parallel computation.")
         else:
             n_ = int(n_)
 
-        # get dict with all events for the 1st offset. This will be applied (with adjusted rf freq) to all offsets.
-        event_table_single_offset = {k: event_table[k] for k in list(event_table)[idx_start:idx_start+n_]}
+        # get dict with all block events of 1st offset. This will be applied (w. adjusted freq) to all offsets.
+        event_table_single_offset = {k: block_events[k] for k in list(block_events)[m0_event_count:m0_event_count + n_]}
 
         # extract the offsets in rad from rf library
-        events_hz = [self.seq.rf_library.data[k][4] for k in list(self.seq.rf_library.data)]
-        events_ph = [self.seq.rf_library.data[k][5] for k in list(self.seq.rf_library.data)]
+        events_freq = [self.seq.rf_library.data[k][4] for k in list(self.seq.rf_library.data)]
+        events_phase = [self.seq.rf_library.data[k][5] for k in list(self.seq.rf_library.data)]
 
-        # check if 0 ppm is in the events. As it only appears once (independent of number of pulses per saturation
-        # train), the entry/event has to be inserted until the number of entries matches the number of entries at the
-        # other offsets.
-        if 0.0 in events_hz:
-            n_rf_per_offset = (len(events_hz)-1)/(self.n_offsets-1)
+        # check if 0 ppm is in the events. As all rf events with freq = 0 ppm have the same phase value of 0,
+        # independent of the number of pulses per saturation train only one single rf block event appears. For the
+        # parallel computation, this event has to be duplicated and inserted into the event block dict until the
+        # number of entries matches the number of entries at the other offsets.
+        if 0.0 in events_freq:
+            n_rf_per_offset = (len(events_freq) - 1) / (self.n_offsets - 1)
             if n_rf_per_offset.is_integer():
                 n_rf_per_offset = int(n_rf_per_offset)
             else:
-                raise Exception('Unexpected number of block events. The current scenario is probably not suitable for '
-                                'the parallel computation in the current form')
+                raise Exception(
+                    'Unexpected number of block events. The current scenario is probably not suitable for '
+                    'the parallel computation in the current form')
 
-            idx_zero = events_hz.index(0.0)
-            events_hz[idx_zero:idx_zero] = [0.0] * (n_rf_per_offset-1)
-            events_ph[idx_zero:idx_zero] = [events_hz[idx_zero]] * (n_rf_per_offset-1)
+            idx_zero = events_freq.index(0.0)
+            events_freq[idx_zero:idx_zero] = [0.0] * (n_rf_per_offset - 1)
+            events_phase[idx_zero:idx_zero] = [events_freq[idx_zero]] * (n_rf_per_offset - 1)
 
         else:
-            n_rf_per_offset = len(events_hz)/self.n_offsets
+            n_rf_per_offset = len(events_freq) / self.n_offsets
             if n_rf_per_offset.is_integer():
                 n_rf_per_offset = int(n_rf_per_offset)
             else:
-                raise Exception('Unexpected number of block events. The current scenario is probably not suitable for '
-                                'the parallel computation in the current form')
+                raise Exception(
+                    'Unexpected number of block events. The current scenario is probably not suitable for '
+                    'the parallel computation in the current form')
 
-        offsets_hz = np.unique(events_hz)
+        # double check that the number of rf block events with a unique frequency matches the number of offsets
+        offsets_hz = np.unique(events_freq)
         if len(offsets_hz) != len(self.offsets_ppm):
-            raise Exception(f"Number of offsets from seq-file definitions ({len(self.offsets_ppm)}) don't match the "
-                            f"number of unique offsets ({len(offsets_hz)}) extracted from seq-file rf library.")
+            raise Exception(
+                f"Number of offsets from seq-file definitions ({len(self.offsets_ppm)}) don't match the "
+                f"number of unique offsets ({len(offsets_hz)}) extracted from seq-file rf library.")
 
         # reshape phase events
-        ph_offset = np.array(events_ph).reshape(self.n_offsets, n_rf_per_offset)
+        ph_offset = np.array(events_phase).reshape(self.n_offsets, n_rf_per_offset)
 
         # reshape magnetization vector
         M_ = np.repeat(self.m_init[np.newaxis, :, np.newaxis], self.n_offsets, axis=0)
@@ -476,13 +496,14 @@ class bmctool:
         # handle m0 scan separately
         if self.run_m0_scan:
             m0 = M_.copy()
-            m0_block = self.seq.get_block(1)  # TODO: read index from events instead of hard coding it
-            if hasattr(m0_block, 'delay') and hasattr(m0_block.delay, 'delay'):
-                m0_delay = float(m0_block.delay.delay)
-                self.bm_solver.update_matrix(rf_amp=0.0,
-                                             rf_phase=np.zeros(self.n_offsets),
-                                             rf_freq=np.zeros(self.n_offsets))
-                m0 = self.bm_solver.solve_equation(mag=m0, dtp=m0_delay)
+            for m0_event in m0_block_events:
+                m0_block = self.seq.get_block(m0_event[0])
+                if hasattr(m0_block, 'delay') and hasattr(m0_block.delay, 'delay'):
+                    m0_delay = float(m0_block.delay.delay)
+                    self.bm_solver.update_matrix(rf_amp=0.0,
+                                                 rf_phase=np.zeros(self.n_offsets),
+                                                 rf_freq=np.zeros(self.n_offsets))
+                    m0 = self.bm_solver.solve_equation(mag=m0, dtp=m0_delay)
 
         # perform parallel computation
         rf_count = 0
@@ -524,13 +545,14 @@ class bmctool:
                                                  rf_freq=np.zeros(self.n_offsets))
                     M_ = self.bm_solver.solve_equation(mag=M_, dtp=delay_after_pulse)
 
-                phase_degree = dtp_*amp_.size * 360 * np.array(offsets_hz)
-                phase_degree = np.mod(phase_degree, np.ones_like(phase_degree)*360)  # this is x % 360 for an array
+                phase_degree = dtp_ * amp_.size * 360 * np.array(offsets_hz)
+                phase_degree = np.mod(phase_degree,
+                                      np.ones_like(phase_degree) * 360)  # this is x % 360 for an array
                 accum_phase = accum_phase + (phase_degree / 180 * np.pi)
                 rf_count += 1
 
             elif hasattr(block, 'gx') and hasattr(block, 'gy') and hasattr(block, 'gz'):
-                M_[:, 0:(len(self.params.cest_pools)+1)*2] = 0.0  # assume complete spoiling
+                M_[:, 0:(len(self.params.cest_pools) + 1) * 2] = 0.0  # assume complete spoiling
             else:
                 pass
 
@@ -538,8 +560,9 @@ class bmctool:
         """
         Performs sequential simulation of all offsets.
         """
-        self.run_m0_scan = check_m0_scan(self.seq)
-        self.offsets_ppm = get_offsets(self.seq)
+        if self.n_offsets != self.n_measure:
+            self.run_m0_scan = True
+
         current_adc = 0
         accum_phase = 0
         M_ = self.m_init[np.newaxis, :, np.newaxis]
@@ -550,7 +573,6 @@ class bmctool:
         for n_sample in loop:
             block = self.seq.get_block(n_sample)
             if hasattr(block, 'adc'):
-                # print(f'Simulating block {n_sample} / {len(self.seq.block_events) + 1} (ADC)')
                 self.m_out[:, current_adc] = np.squeeze(M_)  # write current mag in output array
                 accum_phase = 0
                 current_adc += 1
@@ -558,12 +580,10 @@ class bmctool:
                     M_ = self.m_init[np.newaxis, :, np.newaxis]
 
             elif hasattr(block, 'gx') and hasattr(block, 'gy') and hasattr(block, 'gz'):
-                # print(f'Simulating block {n_sample} / {len(self.seq.block_events) + 1} (SPOILER)')
                 for j in range((len(self.params.cest_pools) + 1) * 2):
                     M_[0, j, 0] = 0.0  # assume complete spoiling
 
             elif hasattr(block, 'rf'):
-                # print(f'Simulating block {n_sample} / {len(self.seq.block_events) + 1} (RF PULSE)')
                 amp_, ph_, dtp_, delay_after_pulse = self.prep_rf_simulation(block)
                 for i in range(amp_.size):
                     self.bm_solver.update_matrix(rf_amp=amp_[i],
@@ -580,7 +600,6 @@ class bmctool:
                 accum_phase += phase_degree / 180 * np.pi
 
             elif hasattr(block, 'delay') and hasattr(block.delay, 'delay'):
-                # print(f'Simulating block {n_sample} / {len(self.seq.block_events) + 1} (DELAY)')
                 delay = float(block.delay.delay)
                 self.bm_solver.update_matrix(0, 0, 0)
                 M_ = self.bm_solver.solve_equation(mag=M_, dtp=delay)
@@ -599,5 +618,8 @@ class bmctool:
             mz = m_/m0
         else:
             mz = self.m_out[self.params.mz_loc, :]
+
+        if self.offsets_ppm.size != mz.size:
+            self.offsets_ppm = np.arange(0, mz.size)
 
         return self.offsets_ppm, np.abs(mz)
