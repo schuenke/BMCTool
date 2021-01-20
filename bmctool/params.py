@@ -2,9 +2,7 @@
 params.py
     Class definition to store simulation parameters
 """
-
 import numpy as np
-from bmctool.sim.utils.seq.read import read_any_version
 
 
 class Params:
