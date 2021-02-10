@@ -4,7 +4,7 @@ set_params.py
 """
 from os import path
 import yaml
-from bmctool.sim.params import Params
+from bmctool.params import Params
 from pathlib import Path
 
 
@@ -36,7 +36,7 @@ def check_values(val_dict: dict,
     :return (config, invalid): the corrected data and list of invalid definitions
     """
     if reference_config is None:
-        reference_config = Path(path.dirname(__file__)).parent / 'library' / 'maintenance' / 'valid_params.yaml'
+        reference_config = Path(path.dirname(__file__)) / 'library' / 'maintenance' / 'valid_params.yaml'
     valids = load_config(reference_config)
     valid_num = valids['valid_num']
     valid_str = valids['valid_str']
@@ -157,8 +157,7 @@ def check_params(config: dict,
     :return config: corrected (or unchanged) data
     """
     if reference_config is None:
-        reference_config = Path(path.dirname(__file__)).parent / 'library' / 'maintenance' / 'valid_params.yaml'
-        print(reference_config)
+        reference_config = Path(path.dirname(__file__)) / 'library' / 'maintenance' / 'valid_params.yaml'
     invalid = []
     valids = load_config(reference_config)
     valid = valids['valid_first']
@@ -195,15 +194,6 @@ def check_params(config: dict,
         raise AssertionError('Check parameter configuration files! \n '
                              'Invalid: ' + ''.join(str(i) + ', ' for i in invalid[:-1]) + str(invalid[-1]))
     return config
-
-
-def pprint_dict(dictionary: dict):
-    """
-    readable printing of dictionaries
-    :param dictionary: dict to print
-    """
-    for k, v in dictionary.items():
-        print(k, ':', v)
 
 
 def load_params(*filepaths: (str, Path)) \

@@ -2,10 +2,7 @@
 params.py
     Class definition to store simulation parameters
 """
-
 import numpy as np
-from bmctool.sim.utils.utils import check_m0_scan, get_offsets
-from bmctool.sim.utils.seq.read import read_any_version
 
 
 class Params:
@@ -206,7 +203,7 @@ class Params:
         :param reset_init_mag: true if magnetization should be set to self.m_vec after each ADC
         :param scale: scaling factor for the magnetization after reset (if reset_init_mag = True)
         :param max_pulse_samples: max number of samples for shaped pulses
-        :param par_calc: toggles parallel calculation (bmctool only)
+        :param par_calc: toggles parallel calculation (BMCTool only)
         :return: dict containing option parameters
         """
         options = {'verbose': verbose,
@@ -227,7 +224,7 @@ class Params:
         :param reset_init_mag: true if magnetization should be set to self.m_vec after each ADC
         :param scale: scaling factor for the magnetization after reset (if reset_init_mag = True)
         :param max_pulse_samples: max number of samples for shaped pulses
-        :param par_calc: toggles parallel calculation (bmctool only)
+        :param par_calc: toggles parallel calculation (BMCTool only)
         :return: dict containing the new option parameters
         """
         option_names = ['verbose', 'reset_init_mag', 'scale', 'max_pulse_samples', 'par_calc']
@@ -281,21 +278,3 @@ class Params:
         print("\t MT pool:\n", self.mt_pool)
         print("\t Scanner:\n", self.scanner)
         print("\t Options:\n", self.options)
-
-    def set_definitions(self, seq_file: str) -> [np.ndarray, bool]:
-        """
-        saves the definitions from the sequence file to the Params object
-        :param seq_file: path to the sequence file
-        :return (offsets, m0_scan): the offsets and m0_scan values defined in the sequence file
-        """
-        seq = read_any_version(seq_file)
-        self.offsets = get_offsets(seq)
-        self.m0_scan = check_m0_scan(seq)
-        return self.offsets, self.m0_scan
-
-    def get_num_adc_events(self) -> int:
-        """
-        :return num_adc_events: number of ADC events based on the number of offsets
-        """
-        num_adc_events = len(self.offsets)
-        return num_adc_events

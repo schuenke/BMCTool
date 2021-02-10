@@ -2,14 +2,15 @@
 read.py
     Functions for reading single entries from seq files.
 """
-
 from os import remove
+from pathlib import Path
 from pypulseq.Sequence.sequence import Sequence
-from bmctool.sim.utils.seq.conversion import convert_seq_13_to_12
+from bmctool.utils.seq.conversion import convert_seq_13_to_12
 
 
-def get_minor_version(seq_file: str) -> int:
+def get_minor_version(seq_file: (str, Path)) -> int:
     """
+    Reads minor version from a seq file.
     :param seq_file: path to the sequence file to read into the Sequence object
     :return version: version from the sequence file
     """
@@ -19,11 +20,11 @@ def get_minor_version(seq_file: str) -> int:
                 return int(line[len('minor '):])
 
 
-def read_any_version(seq_file: str,
+def read_any_version(seq_file: (str, Path),
                      seq: Sequence = None) \
         -> Sequence:
     """
-    reading a sequence file of any version
+    Reads a sequence file (seq_file) independent of the (py)pulseq version.
     :param seq_file: path to the sequence file to read into the Sequence object
     :param seq: the sequence to read the seq file into. If not provided, a new Sequence object is instantiated
     :return seq: Sequence object
