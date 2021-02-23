@@ -7,7 +7,7 @@ setup(
     name='BMCTool',
     author='Patrick Schuenke',
     author_email='patrick.schuenke@ptb.de',
-    version='0.2.0',
+    version='0.2.2',
     description='A python tool to perform Bloch-McConnell (BMC) simulations.',
     long_description=long_description,
     long_description_content_type="text/markdown",

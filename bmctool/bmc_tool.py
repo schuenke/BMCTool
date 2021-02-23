@@ -253,6 +253,9 @@ class BMCTool:
                 rf_count += 1
 
             elif hasattr(block, 'gx') and hasattr(block, 'gy') and hasattr(block, 'gz'):
+                dur_ = float(block.gx.rise_time + block.gx.flat_time + block.gx.fall_time)
+                self.bm_solver.update_matrix(0, 0, 0)
+                M_ = self.bm_solver.solve_equation(mag=M_, dtp=dur_)
                 M_[:, 0:(len(self.params.cest_pools) + 1) * 2] = 0.0  # assume complete spoiling
             else:
                 pass
@@ -281,6 +284,9 @@ class BMCTool:
                     M_ = self.m_init[np.newaxis, :, np.newaxis]
 
             elif hasattr(block, 'gx') and hasattr(block, 'gy') and hasattr(block, 'gz'):
+                dur_ = float(block.gx.rise_time + block.gx.flat_time + block.gx.fall_time)
+                self.bm_solver.update_matrix(0, 0, 0)
+                M_ = self.bm_solver.solve_equation(mag=M_, dtp=dur_)
                 for j in range((len(self.params.cest_pools) + 1) * 2):
                     M_[0, j, 0] = 0.0  # assume complete spoiling
 
@@ -308,9 +314,10 @@ class BMCTool:
             else:  # single gradient -> simulated as delay
                 pass
 
-    def get_zspec(self):
+    def get_zspec(self, return_abs: bool = True):
         """
         Calculates/extracts the water z-spectrum.
+        :param return_abs: if True, returns np.abs() of z-magnetization (mz)
         :return: offsets in ppm (type: np.ndarray), z-spec (type: np.ndarray)
         """
         if self.run_m0_scan:
@@ -323,4 +330,9 @@ class BMCTool:
         if self.offsets_ppm.size != mz.size:
             self.offsets_ppm = np.arange(0, mz.size)
 
-        return self.offsets_ppm, np.abs(mz)
+        if return_abs:
+            mz = np.abs(mz)
+        else:
+            mz = np.array(mz)
+
+        return self.offsets_ppm, mz
