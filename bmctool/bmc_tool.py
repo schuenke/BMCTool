@@ -253,6 +253,9 @@ class BMCTool:
                 rf_count += 1
 
             elif hasattr(block, 'gx') and hasattr(block, 'gy') and hasattr(block, 'gz'):
+                dur_ = float(block.gx.rise_time + block.gx.flat_time + block.gx.fall_time)
+                self.bm_solver.update_matrix(0, 0, 0)
+                M_ = self.bm_solver.solve_equation(mag=M_, dtp=dur_)
                 M_[:, 0:(len(self.params.cest_pools) + 1) * 2] = 0.0  # assume complete spoiling
             else:
                 pass
@@ -281,6 +284,9 @@ class BMCTool:
                     M_ = self.m_init[np.newaxis, :, np.newaxis]
 
             elif hasattr(block, 'gx') and hasattr(block, 'gy') and hasattr(block, 'gz'):
+                dur_ = float(block.gx.rise_time + block.gx.flat_time + block.gx.fall_time)
+                self.bm_solver.update_matrix(0, 0, 0)
+                M_ = self.bm_solver.solve_equation(mag=M_, dtp=dur_)
                 for j in range((len(self.params.cest_pools) + 1) * 2):
                     M_[0, j, 0] = 0.0  # assume complete spoiling
 
