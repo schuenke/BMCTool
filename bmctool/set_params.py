@@ -69,6 +69,11 @@ def check_values(val_dict: dict,
                                 str(v) + ' value from ' + k + ' in ' + dict_key + ' should be a numerical type.')
                         else:
                             invalid.append(str(v) + ' value from ' + k + ' should be a numerical type.')
+            if dict_key == 'water_pool':
+                if k == 't1':
+                    config[dict_key]['r1'] = 1/config[dict_key].pop(k)
+                elif k == 't2':
+                    config[dict_key]['r2'] = 1/config[dict_key].pop(k)
         elif k in valid_bool:
             if type(v) is not bool:
                 if v in ['true', 'True', 'TRUE', 'yes', 'Yes', 'yes', 1]:
@@ -139,9 +144,9 @@ def check_necessary(config: dict,
         raise AssertionError('The following parameters have to be defined: ' + ''.join(m + ', ' for m in missing[:-1])
                              + missing[-1])
     if necessary_w:
-        for n in necessary_w:
-            if n not in config['water_pool'].keys():
-                missing.append(n)
+        for i in range(2):
+            if necessary_w[0][i] not in config['water_pool'].keys() and necessary_w[1][i] not in config['water_pool'].keys():
+                missing.append('t' + str(i+1) + ' or r' + str(i+1))
     if missing:
         raise AssertionError('The following water_pool parameters have to be defined: ' +
                              ''.join(m + ', ' for m in missing[:-1]) + missing[-1])

@@ -18,7 +18,7 @@ def simulate(config_file: (str, Path) = None, seq_file: (str, Path) = None):
     """
 
     if config_file is None:
-        config_file = Path(path.dirname(__file__)) / 'library' / 'sim-library' / 'config_wasabi.yaml'
+        config_file = Path(path.dirname(__file__)) / 'library' / 'sim-library' / 'config_wasabiti.yaml'
 
     if seq_file is None:
         seq_file = Path(path.dirname(__file__)) / 'library' / 'seq-library' / 'WASABI.seq'

@@ -9,7 +9,7 @@ valid_first: [ 'water_pool', 'mt_pool', 'cest_pool', 'cest_pools', 'b0', 'gamma'
 # valid parameters in first and second order of the dicts, sorted by type
 valid_str: ['lineshape', 'seq_file']
 
-valid_num: ['f', 'r1', 'r2', 'k', 'dw', 'b0', 'gamma', 'b0_inhom', 'rel_b1', 'scale', 'max_pulse_samples']
+valid_num: ['f', 'r1', 'r2', 't1', 't2', 'k', 'dw', 'b0', 'gamma', 'b0_inhom', 'rel_b1', 'scale', 'max_pulse_samples']
 
 valid_bool: ['reset_init_mag', 'verbose', 'par_calc', 'lineshape']
 
@@ -22,4 +22,4 @@ valid_lineshapes: ['Lorentzian', 'SuperLorentzian', None]
 
 # necessary parameters
 necessary: ['water_pool', 'b0', 'gamma']
-necessary_w: ['r1', 'r2']
+necessary_w: [['r1', 'r2'], ['t1', 't2']]  # either R or T
