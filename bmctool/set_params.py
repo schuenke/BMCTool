@@ -69,11 +69,10 @@ def check_values(val_dict: dict,
                                 str(v) + ' value from ' + k + ' in ' + dict_key + ' should be a numerical type.')
                         else:
                             invalid.append(str(v) + ' value from ' + k + ' should be a numerical type.')
-            if dict_key == 'water_pool':
-                if k == 't1':
-                    config[dict_key]['r1'] = 1/config[dict_key].pop(k)
-                elif k == 't2':
-                    config[dict_key]['r2'] = 1/config[dict_key].pop(k)
+            if k == 't1':
+                config[dict_key]['r1'] = 1/config[dict_key].pop(k)
+            elif k == 't2':
+                config[dict_key]['r2'] = 1/config[dict_key].pop(k)
         elif k in valid_bool:
             if type(v) is not bool:
                 if v in ['true', 'True', 'TRUE', 'yes', 'Yes', 'yes', 1]:
