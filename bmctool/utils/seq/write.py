@@ -1,5 +1,6 @@
 """
-    write_seq.py
+write.py
+    Auxiliary functions for writing seq files.
 """
 import math
 from os import fdopen, remove

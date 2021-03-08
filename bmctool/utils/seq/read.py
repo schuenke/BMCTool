@@ -1,6 +1,6 @@
 """
 read.py
-    Functions for reading single entries from seq files.
+    Auxiliary functions for reading of seq files and seq file entries.
 """
 from os import remove
 from pathlib import Path
