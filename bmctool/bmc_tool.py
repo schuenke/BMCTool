@@ -147,7 +147,7 @@ class BMCTool:
                             f"is not an integer. Aborting parallel computation.")
         n_: int = int(n_)
 
-        # get dict with all block events of 1st offset. This will be applied (w. adjusted freq) to all offsets.
+        # get dict with all block events of 2nd offset. This will be applied (w. adjusted freq) to all offsets.
         event_table_single_offset = {k: block_events[k] for k in list(block_events)[m0_event_count+n_:m0_event_count+2*n_]}
 
         # extract the offsets in rad from rf library
