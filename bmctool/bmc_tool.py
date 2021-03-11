@@ -137,7 +137,7 @@ class BMCTool:
                                 f"not suitable for parallelized computation. \nPlease switch to sequential "
                                 f"computation by changing the 'par_calc' option from 'True' to 'False'.")
 
-        # calculate number of event blocks EXCLUDING all m0 events
+        # calculate number of event blocks EXCLUDING all unsaturated m0 events
         n_block_events = len(block_events) - m0_event_count
 
         # get number of blocks per offsets
@@ -145,18 +145,17 @@ class BMCTool:
         if not n_.is_integer():
             raise Exception(f"Calculated number of block events per offset ({n_block_events}/{self.n_offsets} = {n_}) "
                             f"is not an integer. Aborting parallel computation.")
-        else:
-            n_ = int(n_)
+        n_: int = int(n_)
 
-        # get dict with all block events of 1st offset. This will be applied (w. adjusted freq) to all offsets.
-        event_table_single_offset = {k: block_events[k] for k in list(block_events)[m0_event_count:m0_event_count + n_]}
+        # get dict with all block events of 2nd offset. This will be applied (w. adjusted freq) to all offsets.
+        event_table_single_offset = {k: block_events[k] for k in list(block_events)[m0_event_count+n_:m0_event_count+2*n_]}
 
         # extract the offsets in rad from rf library
         events_freq = [self.seq.rf_library.data[k][4] for k in list(self.seq.rf_library.data)]
         events_phase = [self.seq.rf_library.data[k][5] for k in list(self.seq.rf_library.data)]
 
-        # check if 0 ppm is in the events. As all rf events with freq = 0 ppm have the same phase value of 0,
-        # independent of the number of pulses per saturation train only one single rf block event appears. For the
+        # check if 0 ppm is in the events. Because all rf events with freq = 0 ppm have the same phase value of 0
+        # (independent of the number of pulses per saturation train), only one single rf block event appears. For the
         # parallel computation, this event has to be duplicated and inserted into the event block dict until the
         # number of entries matches the number of entries at the other offsets.
         if 0.0 in events_freq:
@@ -168,9 +167,10 @@ class BMCTool:
                     'Unexpected number of block events. The current scenario is probably not suitable for '
                     'the parallel computation in the current form')
 
-            idx_zero = events_freq.index(0.0)
-            events_freq[idx_zero:idx_zero] = [0.0] * (n_rf_per_offset - 1)
-            events_phase[idx_zero:idx_zero] = [events_freq[idx_zero]] * (n_rf_per_offset - 1)
+            if n_rf_per_offset > 1:
+                idx_zero = events_freq.index(0.0)
+                events_freq[idx_zero:idx_zero] = [0.0] * (n_rf_per_offset - 1)
+                events_phase[idx_zero:idx_zero] = [events_freq[idx_zero]] * (n_rf_per_offset - 1)
 
         else:
             n_rf_per_offset = len(events_freq) / self.n_offsets
@@ -254,7 +254,9 @@ class BMCTool:
 
             elif hasattr(block, 'gx') and hasattr(block, 'gy') and hasattr(block, 'gz'):
                 dur_ = float(block.gx.rise_time + block.gx.flat_time + block.gx.fall_time)
-                self.bm_solver.update_matrix(0, 0, 0)
+                self.bm_solver.update_matrix(rf_amp=0.0,
+                                             rf_phase=np.zeros(self.n_offsets),
+                                             rf_freq=np.zeros(self.n_offsets))
                 M_ = self.bm_solver.solve_equation(mag=M_, dtp=dur_)
                 M_[:, 0:(len(self.params.cest_pools) + 1) * 2] = 0.0  # assume complete spoiling
             else:
