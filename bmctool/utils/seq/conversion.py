@@ -2,10 +2,10 @@
 conversion.py
     Functions to convert between different versions of seq files.
 """
-
 from tempfile import mkstemp
 from shutil import move, copymode
 from os import fdopen, remove
+from pypulseq.Sequence.sequence import Sequence
 
 
 def convert_seq_12_to_pseudo_13(file_path: str):
@@ -13,6 +13,11 @@ def convert_seq_12_to_pseudo_13(file_path: str):
     Converts version 1.2 seq-files to pseudo version 1.3 seq-files.
     :param file_path: path to the sequence file that should be converted
     """
+
+    seq = Sequence()
+    seq.read(file_path)
+    n_rf = len(seq.block_events)
+    n_digits = [len(str(n_rf)), 2, 2, 3, 3, 3, 2, 2]
 
     # create a temp file
     tmp, abs_path = mkstemp()
@@ -28,7 +33,10 @@ def convert_seq_12_to_pseudo_13(file_path: str):
                         raise Exception(f'Version of seq-file (v. 1.{int(line[len("minor "):])}) '
                                         f'differs from expected version 1.2. Conversion aborted!')
                 elif all(x in line for x in ['RF', 'GX', 'GY', 'GZ', 'ADC']):
-                    new_file.write(''.join([line.strip(), ' EXT\n']))
+                    if 'EXT' in line:
+                        new_file.write(line)
+                    else:
+                        new_file.write(''.join([line.strip(), ' EXT\n']))
                 elif line.startswith('[BLOCKS]'):
                     new_file.write(line)
                     in_blocks = True
@@ -36,8 +44,7 @@ def convert_seq_12_to_pseudo_13(file_path: str):
                     if in_blocks and line.strip() != '' and len(line.strip().split()) == 7:
                         block_list = line.strip().split()
                         block_list.append('0')  # add pseudo EXT entry
-                        block_list.append('\n')  # append line ending
-                        new_file.write(' '.join([f'{x:>3}' for x in block_list]))
+                        new_file.write(' '.join([f'{x:>{n_digits[n]}}' for n, x in enumerate(block_list)]) + '\n')
                     else:
                         new_file.write(line)
                         in_blocks = False
