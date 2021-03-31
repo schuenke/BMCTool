@@ -41,7 +41,7 @@ When no *.seq and *.yaml files are defined, the simulation uses the [WASABI.seq]
 and [config_wasabi.yaml](bmctool/library/sim-library/config_wasabi.yaml) example files. The generated plot should look
 like this:
 
-![](https://raw.githubusercontent.com/schuenke/BMCTool/adapt_new_seq/examples/example_wasabi_spectrum.png "Example WASABI spectrum")
+![](https://raw.githubusercontent.com/schuenke/BMCTool/master/examples/example_wasabi_spectrum.png "Example WASABI spectrum")
 
 
 
