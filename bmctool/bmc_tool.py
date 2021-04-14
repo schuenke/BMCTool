@@ -28,15 +28,15 @@ class BMCTool:
 
         self.seq = read_any_version(seq_file)
 
-        self.offsets_ppm = np.array(self.seq.definitions['offsets_ppm'])
+        self.offsets_ppm = np.array(self.seq.dict_definitions['offsets_ppm'])
         self.n_offsets = self.offsets_ppm.size
 
-        if 'num_meas' in self.seq.definitions:
-            self.n_measure = int(self.seq.definitions['num_meas'])
+        if 'num_meas' in self.seq.dict_definitions:
+            self.n_measure = int(self.seq.dict_definitions['num_meas'])
         else:
             self.n_measure = self.n_offsets
-            if 'run_m0_scan' in self.seq.definitions:
-                if 1 in self.seq.definitions['run_m0_scan'] or 'True' in self.seq.definitions['run_m0_scan']:
+            if 'run_m0_scan' in self.seq.dict_definitions:
+                if 1 in self.seq.dict_definitions['run_m0_scan'] or 'True' in self.seq.dict_definitions['run_m0_scan']:
                     self.n_measure += 1
 
         self.m_init = params.m_vec.copy()
@@ -273,9 +273,9 @@ class BMCTool:
         accum_phase = 0
         M_ = self.m_init[np.newaxis, :, np.newaxis]
         if self.params.options['verbose']:
-            loop = tqdm(range(1, len(self.seq.block_events)+1))
+            loop = tqdm(range(1, len(self.seq.dict_block_events)+1))
         else:
-            loop = range(1, len(self.seq.block_events)+1)
+            loop = range(1, len(self.seq.dict_block_events)+1)
         for n_sample in loop:
             block = self.seq.get_block(n_sample)
             if hasattr(block, 'adc'):

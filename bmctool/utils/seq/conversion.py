@@ -5,19 +5,19 @@ conversion.py
 from tempfile import mkstemp
 from shutil import move, copymode
 from os import fdopen, remove
-from pypulseq.Sequence.sequence import Sequence
 
 
-def convert_seq_12_to_pseudo_13(file_path: str):
+def convert_seq_12_to_13(file_path: str,
+                         temp: bool = False) \
+        -> str:
     """
-    Converts version 1.2 seq-files to pseudo version 1.3 seq-files.
+    Converts version 1.2 seq-files to version 1.3 seq-files.
     :param file_path: path to the sequence file that should be converted
+    :param temp: toggle temporary conversion. Default False: the file is converted in place. If True: a temporary
+                converted file is written and its path is returned
+    :return path: if temp=True, this function returns the path to the converted file. The deletion needs to be handled
+                independently after usage
     """
-
-    seq = Sequence()
-    seq.read(file_path)
-    n_rf = len(seq.block_events)
-    n_digits = [len(str(n_rf)), 2, 2, 3, 3, 3, 2, 2]
 
     # create a temp file
     tmp, abs_path = mkstemp()
@@ -44,24 +44,27 @@ def convert_seq_12_to_pseudo_13(file_path: str):
                     if in_blocks and line.strip() != '' and len(line.strip().split()) == 7:
                         block_list = line.strip().split()
                         block_list.append('0')  # add pseudo EXT entry
-                        new_file.write(' '.join([f'{x:>{n_digits[n]}}' for n, x in enumerate(block_list)]) + '\n')
+                        new_file.write(' '.join([f'{x:>3}' for x in block_list]))
                     else:
                         new_file.write(line)
                         in_blocks = False
 
-    # copy permissions from old file to new file
-    copymode(file_path, abs_path)
-    # remove old file
-    remove(file_path)
-    # move new file
-    move(abs_path, file_path)
+    if temp:
+        return abs_path
+    else:
+        # copy permissions from old file to new file
+        copymode(file_path, abs_path)
+        # remove old file
+        remove(file_path)
+        # move new file
+        move(abs_path, file_path)
 
 
 def convert_seq_13_to_12(file_path: str,
                          temp: bool = False) \
         -> str:
     """
-    Converts (pseudo) version 1.3 seq-files to version 1.2 seq-files.
+    Converts version 1.3 seq-files to version 1.2 seq-files.
     :param file_path: path to the sequence file that should be converted
     :param temp: toggle temporary conversion. Default False: the file is converted in place. If True: a temporary
                 converted file is written and its path is returned
