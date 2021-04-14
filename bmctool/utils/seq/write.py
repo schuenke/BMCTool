@@ -10,7 +10,8 @@ from datetime import datetime
 from pathlib import Path
 import numpy as np
 from pypulseq.Sequence.sequence import Sequence
-from bmctool.utils.seq.conversion import convert_seq_12_to_pseudo_13
+from bmctool.utils.seq.conversion import convert_seq_12_to_13
+from bmctool.utils.seq.read import get_minor_version
 
 
 def round_number(number, significant_digits):
@@ -137,6 +138,7 @@ def write_seq(seq: Sequence,
     # insert header
     insert_seq_file_header(filepath=filename, author=author)
 
-    # convert to pseudo 1.3 version
-    if convert_to_1_3:
-        convert_seq_12_to_pseudo_13(filename)
+    # convert to pypulseq version 1.3
+    version = get_minor_version(filename)
+    if convert_to_1_3 and version < 3:
+        convert_seq_12_to_13(filename)

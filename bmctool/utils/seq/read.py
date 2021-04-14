@@ -2,10 +2,8 @@
 read.py
     Auxiliary functions for reading of seq files and seq file entries.
 """
-from os import remove
 from pathlib import Path
 from pypulseq.Sequence.sequence import Sequence
-from bmctool.utils.seq.conversion import convert_seq_13_to_12
 
 
 def get_minor_version(seq_file: (str, Path)) -> int:
@@ -32,12 +30,8 @@ def read_any_version(seq_file: (str, Path),
     version = get_minor_version(seq_file)
     if not seq:
         seq = Sequence()
-    if version == 2:
+    if version in [2, 3]:
         seq.read(seq_file)
-    elif version == 3:
-        tmp_file = convert_seq_13_to_12(seq_file, temp=True)
-        seq.read(tmp_file)
-        remove(tmp_file)
     else:
         raise ValueError('Version', version, 'can not be converted.')
     return seq

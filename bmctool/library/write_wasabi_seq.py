@@ -12,46 +12,45 @@ parameter settings:
 
 import os
 import numpy as np
-from datetime import date
 from pypulseq.Sequence.sequence import Sequence
 from pypulseq.make_adc import make_adc
 from pypulseq.make_delay import make_delay
 from pypulseq.make_trap_pulse import make_trapezoid
 from pypulseq.make_block_pulse import make_block_pulse
+
 from pypulseq.opts import Opts
-from sim.utils.seq.conversion import convert_seq_12_to_pseudo_13
+from bmctool.utils.seq.write import write_seq
 
-# ========
-# SETTINGS
-# ========
+# get id of generation file
+seqid = os.path.splitext(os.path.basename(__file__))[0]
 
-# seq-file name
-seq_filename = 'WASABI.seq'
+# general settings
+author = 'Patrick Schuenke'
+plot_sequence = False  # plot preparation block?
+convert_to_1_3 = True  # convert seq-file to a pseudo version 1.3 file?
 
-# plot preparation block?
-plot_sequence = True
+# sequence definitions (everything in seq_defs will be written to definitions of the .seq-file)
+seq_defs:dict = {}
+seq_defs['b1cwpe'] = 3.7  # B1 amplitude [µT]
+seq_defs['b0'] = 3  # B0 [T]
+seq_defs['n_pulses'] = 1  # number of pulses  #
+seq_defs['tp'] = 5e-3  # pulse duration [s]
+seq_defs['trec'] = 3  # recovery time [s]
+seq_defs['trec_m0'] = 12  # recovery time before M0 [s]
+seq_defs['m0_offset'] = -300  # m0 offset [ppm]
+seq_defs['offsets_ppm'] = np.append(seq_defs['m0_offset'], np.linspace(-2, 2, 31))  # offset vector [ppm]
 
-# convert seq-file to a pseudo version 1.3 file?
-convert_to_1_3 = True
+seq_defs['num_meas'] = seq_defs['offsets_ppm'].size  # number of repetition
+seq_defs['tsat'] = seq_defs['tp']  # saturation time [s]
+seq_defs['seq_id_string'] = seqid  # unique seq id
 
-# offset settings
-offset_range = 2  # [ppm]
-num_offsets = 31  # number of measurements (not including M0)
-offsets_ppm = np.linspace(-offset_range, offset_range, num_offsets)
+seq_filename = seq_defs['seq_id_string'] + '.seq'
 
-run_m0_scan = True  # if you want an M0 scan at the beginning
-m0_offset = False  # ppm
-
-# sequence settings
-t_rec = 2  # recovery time between scans [s]
-m0_t_rec = 12  # recovery time before m0 scan [s]
-b1 = 3.75  # mean sat pulse amp [uT]
-t_p = 0.005  # sat pulse duration [s]
-
-# scanner settings
-b0 = 3  # B0 [T]
+# scanner limits
 sys = Opts(max_grad=40, grad_unit='mT/m', max_slew=130, slew_unit='T/m/s',
            rf_ringdown_time=30e-6, rf_dead_time=100e-6, rf_raster_time=1e-6)
+
+gamma_hz = 42.5764
 
 # ===========
 # PREPARATION
@@ -60,22 +59,21 @@ sys = Opts(max_grad=40, grad_unit='mT/m', max_slew=130, slew_unit='T/m/s',
 # spoiler
 spoil_amp = 0.8 * sys.max_grad  # Hz/m
 rise_time = 1.0e-3  # spoiler rise time in seconds
-spoil_dur = 5.5e-3  # complete spoiler duration in seconds
+spoil_dur = 6.5e-3  # complete spoiler duration in seconds
 
 gx_spoil, gy_spoil, gz_spoil = [make_trapezoid(channel=c, system=sys, amplitude=spoil_amp, duration=spoil_dur,
                                                rise_time=rise_time) for c in ['x', 'y', 'z']]
 
 # RF pulses
-flip_angle_wasabi = b1 * sys.gamma * 1e-6 * 2 * np.pi * t_p
-rf_wasabi, _ = make_block_pulse(flip_angle=flip_angle_wasabi, duration=t_p, system=sys)
+flip_angle_sat = seq_defs['b1cwpe'] * gamma_hz * 2 * np.pi * seq_defs['tp']
+rf_pulse, _ = make_block_pulse(flip_angle=flip_angle_sat, duration=seq_defs['tp'], system=sys)
 
 # ADC events
 pseudo_adc = make_adc(num_samples=1, duration=1e-3)  # (not played out; just used to split measurements)
 
 # DELAYS
-post_spoil_delay = make_delay(50e-6)
-trec_delay = make_delay(t_rec)
-m0_delay = make_delay(m0_t_rec)
+trec_delay = make_delay(seq_defs['trec'])
+m0_delay = make_delay(seq_defs['trec_m0'])
 
 # Sequence object
 seq = Sequence()
@@ -84,46 +82,34 @@ seq = Sequence()
 # RUN
 # ===
 
-# run m0 scan with or without the defined offset
-if run_m0_scan:
-    seq.add_block(m0_delay)
-    seq.add_block(pseudo_adc)
+offsets_hz = seq_defs['offsets_ppm'] * gamma_hz * seq_defs['b0']  # convert from ppm to Hz
 
-offsets = offsets_ppm * sys.gamma * 1e-6 * b0  # convert from ppm to rad
+for m, offset in enumerate(offsets_hz):
+    # print progress/offset
+    print(f' {m + 1} / {len(offsets_hz)} : offset {offset}')
 
-for offset in offsets:
-    # add magnetization recover delay
-    if abs(offset) > 295:
-        seq.add_block(m0_delay)
+    # add delay
+    if offset == seq_defs['m0_offset'] * gamma_hz * seq_defs['b0']:
+        if seq_defs['trec_m0'] > 0:
+            seq.add_block(m0_delay)
     else:
-        seq.add_block(trec_delay)
+        if seq_defs['trec'] > 0:
+            seq.add_block(trec_delay)
 
-    # update frequency offset of WASABI pulse and add the rf block
-    rf_wasabi.freq_offset = offset
-    seq.add_block(rf_wasabi)
+    # set wasabi pulse
+    rf_pulse.freq_offset = offset
+    seq.add_block(rf_pulse)
 
-    # add spoiler and post-spoiling delay
     seq.add_block(gx_spoil, gy_spoil, gz_spoil)
-    seq.add_block(post_spoil_delay)
-
-    # add pseudo adc
     seq.add_block(pseudo_adc)
 
-# add definitions to seq-file
-seq.set_definition('offsets_ppm', offsets_ppm)  # required
-seq.set_definition('run_m0_scan', str(run_m0_scan))  # required
-seq.set_definition('seq_name', seq_filename)
-seq.set_definition('date', date.today().strftime('%Y-%m-%d'))
+write_seq(seq=seq,
+          seq_defs=seq_defs,
+          filename=seqid+'_py.seq',
+          author=author,
+          use_matlab_names=True,
+          convert_to_1_3=convert_to_1_3)
 
 # plot the sequence
 if plot_sequence:
-    seq.plot()
-print(seq.shape_library)
-
-# write seq-file
-seq_file_path = os.path.join('seq-library', seq_filename)
-seq.write(seq_file_path)
-
-# convert to pseudo version 1.3
-if convert_to_1_3:
-    convert_seq_12_to_pseudo_13(seq_file_path)
+    seq.plot(time_range=[0, seq_defs['trec_m0']+seq_defs['tsat']])  # to plot all offsets, remove time_range argument
