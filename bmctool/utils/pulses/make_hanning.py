@@ -42,7 +42,7 @@ def make_gauss_hanning(flip_angle: float,
     :param system: system limits of the MR scanner
     """
 
-    rf_pulse, _, _ = make_gauss_pulse(flip_angle=flip_angle, duration=pulse_duration, system=system, phase_offset=0)
+    rf_pulse = make_gauss_pulse(flip_angle=flip_angle, duration=pulse_duration, system=system, phase_offset=0)
     # n_signal = np.sum(np.abs(rf_pulse.signal) > 0)
     n_signal = rf_pulse.signal.size
     # hanning_shape = hanning(n_signal + 2)
