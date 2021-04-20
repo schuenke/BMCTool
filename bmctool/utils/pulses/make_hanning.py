@@ -49,5 +49,5 @@ def make_gauss_hanning(flip_angle: float,
     hanning_shape = hanning(n_signal)
     # rf_pulse.signal[:n_signal] = hanning_shape[1:-1] / np.trapz(rf_pulse.t[:n_signal], hanning_shape[1:-1]) * \
     #                              (flip_angle / (2 * np.pi))
-    rf_pulse.signal = hanning_shape / np.trapz(rf_pulse.t, hanning_shape) * (flip_angle / (2 * np.pi))
+    rf_pulse.signal = hanning_shape / np.trapz(hanning_shape, x=rf_pulse.t) * (flip_angle / (2 * np.pi))
     return rf_pulse
