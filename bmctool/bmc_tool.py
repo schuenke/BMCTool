@@ -98,7 +98,7 @@ class BMCTool:
                             "Please switch 'reset_init_mag' to 'True' or change to sequential computation.")
 
         # get dict with block events
-        block_events = self.seq.block_events
+        block_events = self.seq.dict_block_events
 
         # counter for even blocks related to an unsaturated M0 scan
         m0_event_count = 0
