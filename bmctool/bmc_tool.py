@@ -18,11 +18,15 @@ class BMCTool:
     Bloch-McConnell (BMC) simulation tool.
     :param params: Params object including all experimental and sample settings.
     :param seq_file: path of the *.seq file
+    :param verbose: bool to deactivate print commands
     """
-    def __init__(self, params: Params, seq_file: (str, Path)):
+    def __init__(self, params: Params,
+                 seq_file: (str, Path),
+                 verbose: bool = True):
         self.params = params
         self.seq_file = seq_file
         self.par_calc = params.options['par_calc']
+        self.verbose = verbose
         self.run_m0_scan = None
         self.bm_solver = None
 
@@ -94,7 +98,7 @@ class BMCTool:
                             "Please switch 'reset_init_mag' to 'True' or change to sequential computation.")
 
         # get dict with block events
-        block_events = self.seq.block_events
+        block_events = self.seq.dict_block_events
 
         # counter for even blocks related to an unsaturated M0 scan
         m0_event_count = 0
@@ -102,9 +106,10 @@ class BMCTool:
         # some preparations for cases with a leading unsaturated M0 scan
         if self.n_offsets != self.n_measure:
             if self.n_offsets == self.n_measure - 1:
-                print(f"Number of measurements is exactly 1 larger than number of offsets. Continue with parallel "
-                      f"computation assuming 1 leading unsaturated M0 scan.\nIf this is not correct, please restart "
-                      f"the simulation with 'parc_calc = False' to switch to a sequential computation!")
+                if self.verbose:
+                    print(f"Number of measurements is exactly 1 larger than number of offsets. Continue with parallel "
+                          f"computation assuming 1 leading unsaturated M0 scan.\nIf this is not correct, please restart "
+                          f"the simulation with 'parc_calc = False' to switch to a sequential computation!")
 
                 # set flag for unsaturated M0 scan
                 self.run_m0_scan = True

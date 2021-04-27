@@ -32,7 +32,11 @@ def simulate(config_file: (str, Path) = None, seq_file: (str, Path) = None):
 
     # extract and plot z-spectrum
     offsets, mz = sim.get_zspec()
-    fig = plot_z(mz=mz, offsets=offsets, invert_ax=True, plot_mtr_asym=False, title='Example WASABI spectrum')
+    fig = plot_z(mz=mz,
+                 offsets=offsets,
+                 invert_ax=True,
+                 plot_mtr_asym=False,
+                 title='Example WASABI spectrum')
 
 
 if __name__ == '__main__':

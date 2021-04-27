@@ -105,7 +105,7 @@ def make_hsexp(amp: float = 1.0,
     # create pypulseq rf pulse object
     signal = w1 * np.exp(1j * dphase)  # create complex array with amp and phase
     flip_angle = gamma_hz * 2 * np.pi
-    hsexp, _ = create_arbitrary_pulse_with_phase(signal=signal, flip_angle=flip_angle, system=system)
+    hsexp = create_arbitrary_pulse_with_phase(signal=signal, flip_angle=flip_angle, system=system)
 
     return hsexp
 

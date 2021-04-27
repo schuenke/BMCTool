@@ -42,4 +42,4 @@ def create_arbitrary_pulse_with_phase(signal: np.ndarray,
         rf.t = np.concatenate((rf.t, rf.t[-1] + t_fill))
         rf.signal = np.concatenate((rf.signal, np.zeros(len(t_fill))))
 
-    return rf, None
+    return rf
