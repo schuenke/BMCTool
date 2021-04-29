@@ -66,5 +66,5 @@ def make_hypsec_half_passage_rf(amp: float,
     phase = calculate_phase(frequency=freq, duration=pulse_duration, samples=samples)
     signal = np.multiply(w1, np.exp(1j * phase))
     flip_angle = amp * 1e-6 * system.gamma * 2 * np.pi  # factor 1e-6 converts from µT to T
-    hs_half_passage, _ = create_arbitrary_pulse_with_phase(signal=signal, flip_angle=flip_angle, system=system)
+    hs_half_passage = create_arbitrary_pulse_with_phase(signal=signal, flip_angle=flip_angle, system=system)
     return hs_half_passage
