@@ -21,7 +21,7 @@ def get_offsets(seq: Sequence = None,
         raise ValueError('You need to pass either the sequence filename or the Sequence object.')
     if not seq:
         seq = read_any_version(seq_file=seq_file)
-    offsets = seq.definitions['offsets_ppm']
+    offsets = seq.dict_definitions['offsets_ppm']
     return offsets
 
 
