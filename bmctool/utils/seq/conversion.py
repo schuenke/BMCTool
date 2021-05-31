@@ -4,10 +4,12 @@ conversion.py
 """
 from tempfile import mkstemp
 from shutil import move, copymode
+from typing import Union
+from pathlib import Path
 from os import fdopen, remove
 
 
-def convert_seq_12_to_13(file_path: str,
+def convert_seq_12_to_13(file_path: Union[str, Path],
                          temp: bool = False) \
         -> str:
     """
@@ -60,7 +62,7 @@ def convert_seq_12_to_13(file_path: str,
         move(abs_path, file_path)
 
 
-def convert_seq_13_to_12(file_path: str,
+def convert_seq_13_to_12(file_path: Union[str, Path],
                          temp: bool = False) \
         -> str:
     """

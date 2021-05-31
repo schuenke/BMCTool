@@ -2,13 +2,14 @@
 set_params.py
     Functions to load the parameters for the simulation from the config files.
 """
-from os import path
+import numpy as np
 import yaml
+from typing import Union
 from bmctool.params import Params
 from pathlib import Path
 
 
-def load_config(*args: (str, Path)) -> dict:
+def load_config(*args: Union[str, Path]) -> dict:
     """
     Load config yaml files from path.
     :param args: path(s) of the file(s) containing configuration parameters
@@ -24,7 +25,7 @@ def check_values(val_dict: dict,
                  config: dict,
                  invalid: list,
                  dict_key: str = None,
-                 reference_config: (str, Path) = None) \
+                 reference_config: Union[str, Path] = None) \
         -> [dict, list]:
     """
     checking and correcting the nested dictionaries from the loaded configuration for definition errors
@@ -36,7 +37,7 @@ def check_values(val_dict: dict,
     :return (config, invalid): the corrected data and list of invalid definitions
     """
     if reference_config is None:
-        reference_config = Path(path.dirname(__file__)) / 'library' / 'maintenance' / 'valid_params.yaml'
+        reference_config = Path(__file__).parent / 'library' / 'maintenance' / 'valid_params.yaml'
     valids = load_config(reference_config)
     valid_num = valids['valid_num']
     valid_str = valids['valid_str']
@@ -91,7 +92,7 @@ def check_values(val_dict: dict,
                     else:
                         invalid.append(str(v) + ' value from ' + k + ' should be of type bool.')
         if k == 'seq_file':
-            if not path.exists(v):
+            if not Path(v).exists():
                 invalid.append('Seq_file leads to an invalid path.')
         if k == 'lineshape':
             if v not in valid_lineshapes:
@@ -152,7 +153,7 @@ def check_necessary(config: dict,
 
 
 def check_params(config: dict,
-                 reference_config: (str, Path) = None) \
+                 reference_config: Union[str, Path] = None) \
         -> dict:
     """
     checking and correcting the loaded parameters
@@ -161,7 +162,7 @@ def check_params(config: dict,
     :return config: corrected (or unchanged) data
     """
     if reference_config is None:
-        reference_config = Path(path.dirname(__file__)) / 'library' / 'maintenance' / 'valid_params.yaml'
+        reference_config = Path(__file__).parent / 'library' / 'maintenance' / 'valid_params.yaml'
     invalid = []
     valids = load_config(reference_config)
     valid = valids['valid_first']
@@ -200,7 +201,7 @@ def check_params(config: dict,
     return config
 
 
-def load_params(*filepaths: (str, Path)) \
+def load_params(*filepaths: Union[str, Path]) \
         -> Params:
     """
     Load parameters into simulation parameter object
@@ -210,7 +211,8 @@ def load_params(*filepaths: (str, Path)) \
         raise ValueError('You need to define at least one filepath to configure the parameters.')
     paths = [Path(filepath) for filepath in filepaths]
     if False in [p.exists() for p in paths]:
-        raise ValueError('args need to be of type str or Path to define filepath(s) to at least one config file.')
+        idx = np.where(np.array([p.exists() for p in paths]) == False)[0]
+        raise FileExistsError(f'The following file(s) do not exist: \n {[str(paths[pos]) for pos in idx]}.')
     # load the configurations from the files
     config = load_config(*paths)
     # check parameters for missing, typos, wrong assignments

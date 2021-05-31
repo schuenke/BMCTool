@@ -70,7 +70,7 @@ def get_offsets(seq: Sequence = None,
     return offsets
 
 
-def get_num_adc_events(seq_file: str) -> int:
+def get_num_adc_events(seq_file: Union[str, Path]) -> int:
     """
     Reads number of ADC events in a sequence file
     :param seq_file: sequence file to read the num_adc_events from

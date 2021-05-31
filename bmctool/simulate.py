@@ -3,14 +3,14 @@ simulate.py
     Script to run the BMCTool simulation based on a seq-file and a *.yaml config file.
 """
 
-from os import path
+from typing import Union
 from pathlib import Path
 from bmctool.bmc_tool import BMCTool
 from bmctool.utils.eval import plot_z
 from bmctool.set_params import load_params
 
 
-def simulate(config_file: (str, Path) = None, seq_file: (str, Path) = None):
+def simulate(config_file: Union[str, Path] = None, seq_file: Union[str, Path] = None):
     """
     Function to run the BMCTool simulation based on a seq-file and a *.yaml config file..
     :param config_file: Path of the config file (can be of type str or Path)
@@ -18,10 +18,10 @@ def simulate(config_file: (str, Path) = None, seq_file: (str, Path) = None):
     """
 
     if config_file is None:
-        config_file = Path(path.dirname(__file__)) / 'library' / 'sim-library' / 'config_wasabi.yaml'
+        config_file = Path(__file__).parent / 'library' / 'sim-library' / 'config_wasabi.yaml'
 
     if seq_file is None:
-        seq_file = Path(path.dirname(__file__)) / 'library' / 'seq-library' / 'WASABI.seq'
+        seq_file = Path(__file__).parent / 'library' / 'seq-library' / 'WASABI.seq'
 
     # load config file(s)
     sim_params = load_params(config_file)

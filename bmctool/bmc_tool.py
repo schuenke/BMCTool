@@ -3,6 +3,7 @@ bmc_tool.py
     Tool to solve the Bloch-McConnell (BMC) equations using a (parallelized) eigenwert ansatz.
 """
 import numpy as np
+from typing import Union
 from pathlib import Path
 from tqdm import tqdm
 
@@ -21,7 +22,7 @@ class BMCTool:
     :param verbose: bool to deactivate print commands
     """
     def __init__(self, params: Params,
-                 seq_file: (str, Path),
+                 seq_file: Union[str, Path],
                  verbose: bool = True):
         self.params = params
         self.seq_file = seq_file
@@ -81,7 +82,6 @@ class BMCTool:
         """
         Creates BlochMcConnellSolver object and starts either the parallelized or the sequential simulation process.
         """
-        self.par_calc = self.params.options['par_calc']
         self.bm_solver = BlochMcConnellSolver(params=self.params, n_offsets=self.n_offsets)
         if self.par_calc:
             self.run_parallel()
@@ -117,7 +117,8 @@ class BMCTool:
                 # create list with m0 block events
                 m0_block_events = []
 
-                # get event dict and number of events before the ADC event of the unsaturated M0 scan
+                # get event dict and number of events before the ADC event of the unsaturated M0 scan. Reading these
+                # information directly from the seq-file is much faster than using the pypulseq Sequence.read() method.
                 seq_file = open(self.seq_file, 'r')
                 while True:
                     line = strip_line(seq_file)
@@ -152,7 +153,10 @@ class BMCTool:
                             f"is not an integer. Aborting parallel computation.")
         n_: int = int(n_)
 
-        # get dict with all block events of 2nd offset. This will be applied (w. adjusted freq) to all offsets.
+        # get dict with all block events of 2nd offset. This will be applied (with adjusted freq) to all offsets. The
+        # 2nd offset (and not the 1st) is used because the 1st one is often a saturated M0 scan (e.g. at -300 ppm) with
+        # a longer preceding recovery time. However, assuming that the block events of the 2nd offset can be applied to
+        # all other offsets is a very strong assumption. Please be sure that you are aware of this when using par_calc.
         event_table_single_offset = {k: block_events[k] for k in list(block_events)[m0_event_count+n_:m0_event_count+2*n_]}
 
         # extract the offsets in rad from rf library
