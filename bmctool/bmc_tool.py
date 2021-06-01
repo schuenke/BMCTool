@@ -54,8 +54,8 @@ class BMCTool:
         :return: amplitude, phase, duration and after_pulse_delay for given rf event
         """
         max_pulse_samples = self.params.options['max_pulse_samples']
-        amp = np.real(block.rf.signal)
-        ph = np.imag(block.rf.signal)
+        amp = np.abs(block.rf.signal)
+        ph = np.angle(block.rf.signal)
         rf_length = amp.size
         dtp = 1e-6
 
