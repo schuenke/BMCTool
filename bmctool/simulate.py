@@ -49,10 +49,17 @@ def simulate(config_file: Union[str, Path],
 
 
 def sim_example():
+    """
+    Function to run an example WASABI simulation.
+    """
     seq_file = Path(__file__).parent / 'library' / 'seq-library' / 'WASABI.seq'
     config_file = Path(__file__).parent / 'library' / 'sim-library' / 'config_wasabi.yaml'
 
     simulate(config_file=config_file,
-                   seq_file=seq_file,
-                   show_plot=True,
-                   title='WASABI example spectrum')
+             seq_file=seq_file,
+             show_plot=True,
+             title='WASABI example spectrum')
+
+
+if __name__ == '__main__':
+    sim_example()
