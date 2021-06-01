@@ -52,7 +52,7 @@ def sim_example():
     seq_file = Path(__file__).parent / 'library' / 'seq-library' / 'WASABI.seq'
     config_file = Path(__file__).parent / 'library' / 'sim-library' / 'config_wasabi.yaml'
 
-    sim = simulate(config_file=config_file,
+    simulate(config_file=config_file,
                    seq_file=seq_file,
                    show_plot=True,
                    title='WASABI example spectrum')
