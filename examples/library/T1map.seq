@@ -4,12 +4,12 @@
 # Created for Pulseq-CEST
 # https://pulseq-cest.github.io/
 # Created by: Patrick Schuenke
-# Created at: 26-Apr-2021 12:34:18
+# Created at: 01-Jun-2021 11:04:22
 
 [VERSION]
 major 1
 minor 3
-revision 1
+revision 1post1
 
 [DEFINITIONS]
 B1cwpe 20 
@@ -18,7 +18,7 @@ Trec 1
 n_pulses 3 
 num_meas 18 
 offsets_ppm 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
-seq_id_string T1map_001_3HypSec 
+seq_id_string T1map 
 tp 0.008 
 
 # Format of blocks:
