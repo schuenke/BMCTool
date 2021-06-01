@@ -30,7 +30,9 @@ def plot_z(mz: np.array,
            offsets: np.array = None,
            invert_ax: bool = True,
            plot_mtr_asym: bool = False,
-           title: str = None) \
+           title: str = None,
+           x_label: str = 'offset',
+           y_label:str = 'normalized signal') \
         -> Figure:
     """
     initiating calculations and plotting functions
@@ -39,6 +41,8 @@ def plot_z(mz: np.array,
     :param invert_ax: boolean to invert x-axis
     :param plot_mtr_asym: boolean to enable/disable plotting of MTRasym
     :param title: optional title for the plot
+    :param x_label: label of x-axis
+    :param y_label: label of y-axis
     """
     if offsets is None:
         offsets = range(len(mz))
@@ -47,9 +51,9 @@ def plot_z(mz: np.array,
         title = 'Z-Spec'
 
     fig, ax1 = plt.subplots()
-    ax1.set_ylim([round(min(mz) - 0.05, 1), round(max(mz) + 0.05, 1)])
-    ax1.set_ylabel('normalized signal', color='b')
-    ax1.set_xlabel('offset')
+    ax1.set_ylim([round(min(mz) - 0.05, 2), round(max(mz) + 0.05, 2)])
+    ax1.set_ylabel(y_label, color='b')
+    ax1.set_xlabel(x_label)
     plt.plot(offsets, mz, '.--', label='$Z$', color='b')
     if invert_ax:
         plt.gca().invert_xaxis()
