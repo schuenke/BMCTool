@@ -23,7 +23,8 @@ class BMCTool:
     """
     def __init__(self, params: Params,
                  seq_file: Union[str, Path],
-                 verbose: bool = True):
+                 verbose: bool = True,
+                 **kwargs):
         self.params = params
         self.seq_file = seq_file
         self.par_calc = params.options['par_calc']
@@ -219,7 +220,7 @@ class BMCTool:
         rf_count = 0
         accum_phase = np.zeros(self.n_offsets)
 
-        if self.params.options['verbose']:
+        if self.verbose:
             loop = tqdm(event_table_single_offset)
         else:
             loop = event_table_single_offset
@@ -281,8 +282,8 @@ class BMCTool:
         current_adc = 0
         accum_phase = 0
         M_ = self.m_init[np.newaxis, :, np.newaxis]
-        if self.params.options['verbose']:
-            loop = tqdm(range(1, len(self.seq.dict_block_events)+1))
+        if self.verbose:
+            loop = tqdm(range(1, len(self.seq.dict_block_events)+1), desc='BMCTool simulation')
         else:
             loop = range(1, len(self.seq.dict_block_events)+1)
         for n_sample in loop:
