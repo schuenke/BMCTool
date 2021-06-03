@@ -35,14 +35,14 @@ def simulate(config_file: Union[str, Path],
     sim.run()
 
     if show_plot:
-        if 'x' in kwargs:
-            x = kwargs.pop('x')
-            _, y = sim.get_zspec()
+        if 'offsets' in kwargs:
+            offsets = kwargs.pop('offsets')
+            _, mz = sim.get_zspec()
         else:
-            x, y = sim.get_zspec()
+            offsets, mz = sim.get_zspec()
 
-        plot_z(y=y,
-               x=x,
+        plot_z(mz=mz,
+               offsets=offsets,
                **kwargs)
 
     return sim
