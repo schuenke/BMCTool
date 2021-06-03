@@ -2,16 +2,21 @@
 conversion.py
     Functions to convert between different versions of seq files.
 """
+import deprecation
 from tempfile import mkstemp
 from shutil import move, copymode
 from typing import Union
 from pathlib import Path
 from os import fdopen, remove
+from bmctool.utils.seq.read import get_minor_version
 
 
+@deprecation.deprecated(deprecated_in='0.4.0',
+                        removed_in='1.0',
+                        details="Function not needed after release of pypulseq 1.3.1.")
 def convert_seq_12_to_13(file_path: Union[str, Path],
                          temp: bool = False) \
-        -> str:
+        -> Union[str, Path, None]:
     """
     Converts version 1.2 seq-files to version 1.3 seq-files.
     :param file_path: path to the sequence file that should be converted
@@ -20,6 +25,13 @@ def convert_seq_12_to_13(file_path: Union[str, Path],
     :return path: if temp=True, this function returns the path to the converted file. The deletion needs to be handled
                 independently after usage
     """
+
+    version = get_minor_version(file_path)
+    if version == 3:
+        if temp:
+            return file_path
+        else:
+            return
 
     # create a temp file
     tmp, abs_path = mkstemp()
@@ -62,6 +74,9 @@ def convert_seq_12_to_13(file_path: Union[str, Path],
         move(abs_path, file_path)
 
 
+@deprecation.deprecated(deprecated_in='0.4.0',
+                        removed_in='1.0',
+                        details="Function not needed after release of pypulseq 1.3.1.")
 def convert_seq_13_to_12(file_path: Union[str, Path],
                          temp: bool = False) \
         -> str:

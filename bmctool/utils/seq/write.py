@@ -119,8 +119,8 @@ def write_seq(seq: Sequence,
               seq_defs: dict,
               filename: Union[str, Path],
               author: str,
-              use_matlab_names: bool,
-              convert_to_1_3: bool):
+              use_matlab_names: bool = True,
+              convert_to_1_3: bool = False):
     """
     Writes the seq-file according to given arguments
     :param seq: pypulseq Sequence object
@@ -141,5 +141,5 @@ def write_seq(seq: Sequence,
 
     # convert to pypulseq version 1.3
     version = get_minor_version(filename)
-    if convert_to_1_3 and version < 3:
+    if convert_to_1_3:
         convert_seq_12_to_13(filename)
