@@ -17,7 +17,7 @@ sim = simulate(config_file=config_file,
                seq_file=seq_file,
                show_plot=True,
                verbose=True,
-               x=TI,
+               offsets=TI,
                x_label='TI [s]',
                invert_ax=False,
                title='Example T1 saturation recovery curve')

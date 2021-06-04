@@ -48,7 +48,8 @@ and a sequence file (in the *seq* format), which defines the events to be simula
 [example seq-file](bmctool/library/seq-library/WASABI.seq) and an 
 [example yaml file](bmctool/library/sim-library/config_wasabi.yaml) can be found in the [library](bmctool/library) 
 subfolder. For more information about config and sequence files and about the 
-[pulseq-cest-library](library/pulseq-cest-library), where we share these files, please read the **Pulseq-CEST Library** section below.
+[pulseq-cest-library](library/pulseq-cest-library), where both types of files are shared, please read the 
+**Pulseq-CEST Library** section below.
 
 If you created your own files or downloaded them from the [pulseq-cest-library](library/pulseq-cest-library), you can
 start the simulation by running the following code:
@@ -58,8 +59,13 @@ config_path = '<path_to_your_config>'  # can be a str or a Path
 seq_path = '<path_to_your_sequence>'  # can be a str or a Path
 sim = simulate(config_file=config_path, seq_file=seq_path, show_plot=True)
 ```
+The simulate function accepts several additional keyword arguments (**kwargs), that allow to adjust the plot.
+These are for example _normalize_ (bool: toggle normalization), _norm_threshold_ (value/list/array: threshold for
+normalization offsets), _offsets_ (list/array: manually defined x-values), _invert_ax_ (bool: toggle invert ax), 
+_plot_mtr_asym_ (bool:toggle plot MTR_asym) and _title_, _x_label_, _y_label_ to control the lables.
 
-The [BMCTool GitHub repository](https://github.com/schuenke/BMCTool) contains some further pre-defined examples .
+The [BMCTool GitHub repository](https://github.com/schuenke/BMCTool) contains some further pre-defined examples in the
+[examples folder](examples).
 
 ## Pulseq-CEST Project
 The BMCTool was developed in parallel to the [pulseq-cest project](https://pulseq-cest.github.io/) that aims to provide
