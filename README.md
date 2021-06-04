@@ -64,8 +64,10 @@ These are for example _normalize_ (bool: toggle normalization), _norm_threshold_
 normalization offsets), _offsets_ (list/array: manually defined x-values), _invert_ax_ (bool: toggle invert ax), 
 _plot_mtr_asym_ (bool:toggle plot MTR_asym) and _title_, _x_label_, _y_label_ to control the lables.
 
-The [BMCTool GitHub repository](https://github.com/schuenke/BMCTool) contains some further pre-defined examples in the
-[examples folder](examples).
+The [examples folder](examples) in the [BMCTool GitHub repository](https://github.com/schuenke/BMCTool) contains some 
+further simulation examples as well as an example script to create your own _WASABI.seq_ file. _Please note that this
+file will include an additional normalization offset at -300 ppm. To use this for normalization in the simulation,
+simply add the kewword argument ``normalize=True`` to the simulate function._ 
 
 ## Pulseq-CEST Project
 The BMCTool was developed in parallel to the [pulseq-cest project](https://pulseq-cest.github.io/) that aims to provide

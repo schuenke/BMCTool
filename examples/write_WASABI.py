@@ -10,7 +10,6 @@ parameter settings:
      T_rec = 2/12 s (saturated/M0)
 """
 
-import os
 import numpy as np
 from pypulseq.Sequence.sequence import Sequence
 from pypulseq.make_adc import make_adc
@@ -21,13 +20,10 @@ from pypulseq.make_block_pulse import make_block_pulse
 from pypulseq.opts import Opts
 from bmctool.utils.seq.write import write_seq
 
-# get id of generation file
-seqid = os.path.splitext(os.path.basename(__file__))[0]
-
 # general settings
+seqid = 'WASABI'
 author = 'Patrick Schuenke'
-plot_sequence = False  # plot preparation block?
-convert_to_1_3 = True  # convert seq-file to a pseudo version 1.3 file?
+plot_sequence = True  # plot preparation block?
 
 # sequence definitions (everything in seq_defs will be written to definitions of the .seq-file)
 seq_defs:dict = {}
@@ -66,7 +62,7 @@ gx_spoil, gy_spoil, gz_spoil = [make_trapezoid(channel=c, system=sys, amplitude=
 
 # RF pulses
 flip_angle_sat = seq_defs['b1cwpe'] * gamma_hz * 2 * np.pi * seq_defs['tp']
-rf_pulse, _ = make_block_pulse(flip_angle=flip_angle_sat, duration=seq_defs['tp'], system=sys)
+rf_pulse = make_block_pulse(flip_angle=flip_angle_sat, duration=seq_defs['tp'], system=sys)
 
 # ADC events
 pseudo_adc = make_adc(num_samples=1, duration=1e-3)  # (not played out; just used to split measurements)
@@ -105,11 +101,10 @@ for m, offset in enumerate(offsets_hz):
 
 write_seq(seq=seq,
           seq_defs=seq_defs,
-          filename=seqid+'_py.seq',
+          filename=seqid+'.seq',
           author=author,
-          use_matlab_names=True,
-          convert_to_1_3=convert_to_1_3)
+          use_matlab_names=True)
 
 # plot the sequence
 if plot_sequence:
-    seq.plot(time_range=[0, seq_defs['trec_m0']+seq_defs['tsat']])  # to plot all offsets, remove time_range argument
+    seq.plot()
