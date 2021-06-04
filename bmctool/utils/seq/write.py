@@ -8,6 +8,7 @@ from shutil import move, copymode
 from tempfile import mkstemp
 from datetime import datetime
 from pathlib import Path
+from typing import  Union
 import numpy as np
 from pypulseq.Sequence.sequence import Sequence
 from bmctool.utils.seq.conversion import convert_seq_12_to_13
@@ -27,7 +28,7 @@ def round_number(number, significant_digits):
         return 0
 
 
-def insert_seq_file_header(filepath: (Path, str),
+def insert_seq_file_header(filepath: Union[str, Path],
                            author: str):
     """
     Inserts header information into seq-file
@@ -116,10 +117,10 @@ def write_seq_defs(seq: Sequence,
 
 def write_seq(seq: Sequence,
               seq_defs: dict,
-              filename: (Path, str),
+              filename: Union[str, Path],
               author: str,
-              use_matlab_names: bool,
-              convert_to_1_3: bool):
+              use_matlab_names: bool = True,
+              convert_to_1_3: bool = False):
     """
     Writes the seq-file according to given arguments
     :param seq: pypulseq Sequence object
@@ -140,5 +141,5 @@ def write_seq(seq: Sequence,
 
     # convert to pypulseq version 1.3
     version = get_minor_version(filename)
-    if convert_to_1_3 and version < 3:
+    if convert_to_1_3:
         convert_seq_12_to_13(filename)

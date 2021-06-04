@@ -2,11 +2,12 @@
 read.py
     Auxiliary functions for reading of seq files and seq file entries.
 """
+from typing import Union
 from pathlib import Path
 from pypulseq.Sequence.sequence import Sequence
 
 
-def get_minor_version(seq_file: (str, Path)) -> int:
+def get_minor_version(seq_file: Union[str, Path]) -> int:
     """
     Reads minor version from a seq file.
     :param seq_file: path to the sequence file to read into the Sequence object
@@ -18,7 +19,7 @@ def get_minor_version(seq_file: (str, Path)) -> int:
                 return int(line[len('minor '):])
 
 
-def read_any_version(seq_file: (str, Path),
+def read_any_version(seq_file: Union[str, Path],
                      seq: Sequence = None) \
         -> Sequence:
     """

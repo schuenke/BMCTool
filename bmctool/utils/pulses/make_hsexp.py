@@ -60,6 +60,8 @@ def make_hsexp(amp: float = 1.0,
     :param bandwidth: bandwidth of hyperbolic secant pulse [Hz]
     :param t_window: pulse_duration of window function
     :param ef: dimensionless parameter to control steepness of the exponential curve
+    :param tip_down: flag to switch between tip down (True) and tip up (False) pulses
+    :param pos_offset: flag to switch between positive (True) and negative (False) offsets
     :param system: system limits of the MR scanner
     :param gamma_hz: gyromagnetic ratio [Hz]
     """

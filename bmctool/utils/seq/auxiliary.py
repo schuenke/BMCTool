@@ -3,11 +3,56 @@ auxiliary.py
     Auxiliary functions for seq files.
 """
 import numpy as np
+import deprecation
+from typing import Any, Union
+from pathlib import Path
 from pypulseq.Sequence.sequence import Sequence
 from pypulseq.Sequence.read_seq import __strip_line as strip_line
+from pypulseq.Sequence.read_seq import __read_definitions as read_definitions
 from bmctool.utils.seq.read import read_any_version
 
 
+def get_definitions(seq_file: Union[str, Path] = None) \
+        -> dict:
+    """
+    Reads all definitions directly from a seq-file.
+    :param seq_file: sequence file to read the definitions from
+    :return: dictionary with all definitions
+    """
+    with open(seq_file, 'r') as seq:
+        while True:
+            line = strip_line(seq)
+            if line == -1:
+                break
+            elif line == '[DEFINITIONS]':
+                dict_definitions = read_definitions(seq)
+            else:
+                pass
+
+    return dict_definitions
+
+
+def get_definition(seq_file: Union[str, Path] = None,
+                   key: str = None) \
+        -> Any:
+    """
+    Reads a single definition directly from a seq-file.
+    :param seq_file: sequence file to read the definition from
+    :param key: name of the dict entry of interest
+    :return: dictionary entry for 'name'
+    """
+    dict_definitions = get_definitions(seq_file)
+    if key in dict_definitions:
+        value = dict_definitions[key]
+    else:
+        raise AttributeError(f'No definition called {key} in seq-file {seq_file}.')
+
+    return value
+
+
+@deprecation.deprecated(deprecated_in='0.3.2',
+                        removed_in='1.0',
+                        details="Use get_definition() function instead.")
 def get_offsets(seq: Sequence = None,
                 seq_file: str = None) \
         -> list:
@@ -21,11 +66,11 @@ def get_offsets(seq: Sequence = None,
         raise ValueError('You need to pass either the sequence filename or the Sequence object.')
     if not seq:
         seq = read_any_version(seq_file=seq_file)
-    offsets = seq.definitions['offsets_ppm']
+    offsets = seq.dict_definitions['offsets_ppm']
     return offsets
 
 
-def get_num_adc_events(seq_file: str) -> int:
+def get_num_adc_events(seq_file: Union[str, Path]) -> int:
     """
     Reads number of ADC events in a sequence file
     :param seq_file: sequence file to read the num_adc_events from

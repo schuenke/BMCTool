@@ -37,6 +37,5 @@ rel_b1: 1
 # max_pulse_samples: maximum number of samples for each shaped rf pulse, default is 500 (int)
 verbose: False
 reset_init_mag: True
-scale: 0.0
+scale: 0.5
 max_pulse_samples: 300
-par_calc: False
