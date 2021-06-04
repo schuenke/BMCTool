@@ -51,8 +51,8 @@ subfolder. For more information about config and sequence files and about the
 [pulseq-cest-library](library/pulseq-cest-library), where both types of files are shared, please read the 
 **Pulseq-CEST Library** section below.
 
-If you created your own files or downloaded them from the [pulseq-cest-library](library/pulseq-cest-library), you can
-start the simulation by running the following code:
+If you created your own files or downloaded them from the [pulseq-cest-library](https://github.com/kherz/pulseq-cest-library), 
+you can start the simulation by running the following code:
 ```python
 from bmctool.simulate import simulate
 config_path = '<path_to_your_config>'  # can be a str or a Path
@@ -80,7 +80,7 @@ recommend checking out the [pulseq-cest implementations](https://pulseq-cest.git
 
 ### Pulseq-CEST Library
 You will find several pre-defined and approved CEST pre-saturation schemes and simulation configs in the 
-[pulseq-cest-library GitHub repository](library/pulseq-cest-library). You can clone the library using 
+[pulseq-cest-library GitHub repository](https://github.com/kherz/pulseq-cest-library). You can clone the library using 
 
 ``
 git clone https://github.com/kherz/pulseq-cest-library.git
