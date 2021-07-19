@@ -48,6 +48,8 @@ class BMCTool:
         self.m_init = params.m_vec.copy()
         self.m_out = np.zeros([self.m_init.shape[0], self.n_measure])
 
+        self.bm_solver = BlochMcConnellSolver(params=self.params, n_offsets=self.n_offsets)
+
     def prep_rf_simulation(self, block):
         """
         Resamples the amplitude and phase of given rf event.
@@ -79,11 +81,18 @@ class BMCTool:
 
         return amp_, ph_, dtp_, delay_after_pulse
 
+    def update_params(self,
+                      params: Params,):
+        """
+        Update BlochMcConnellSolver
+        """
+        self.params = params
+        self.bm_solver.update_params(params)
+
     def run(self):
         """
         Creates BlochMcConnellSolver object and starts either the parallelized or the sequential simulation process.
         """
-        self.bm_solver = BlochMcConnellSolver(params=self.params, n_offsets=self.n_offsets)
         if self.par_calc:
             self.run_parallel()
         else:

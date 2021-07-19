@@ -21,11 +21,10 @@ class BlochMcConnellSolver:
         self.n_pools = len(params.cest_pools)
         self.is_mt_active = bool(params.mt_pool)
         self.size = params.m_vec.size
-        self.w0 = params.scanner['b0'] * params.scanner['gamma']
-        self.dw0 = self.w0 * params.scanner['b0_inhomogeneity']
+        self.w0 = None
+        self.dw0 = None
 
-        self._init_matrix_a()
-        self._init_vector_c()
+        self.update_params(params)
 
     def _init_matrix_a(self):
         """
@@ -100,6 +99,16 @@ class BlochMcConnellSolver:
         # if parallel computation is activated, repeat matrix C n_offsets times along axis 0
         if self.par_calc:
             self.C = np.repeat(self.C, self.n_offsets, axis=0)
+
+    def update_params(self, params: Params):
+        """
+        Updates matrix self.A according to given Params object.
+        """
+        self.params = params
+        self.w0 = params.scanner['b0'] * params.scanner['gamma']
+        self.dw0 = self.w0 * params.scanner['b0_inhomogeneity']
+        self._init_matrix_a()
+        self._init_vector_c()
 
     def update_matrix(self, rf_amp: float, rf_phase: np.ndarray, rf_freq: np.ndarray):
         """
