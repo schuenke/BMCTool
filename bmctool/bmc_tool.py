@@ -4,6 +4,7 @@ bmc_tool.py
 """
 import numpy as np
 from typing import Union
+from types import SimpleNamespace
 from pathlib import Path
 from tqdm import tqdm
 
@@ -12,6 +13,39 @@ from pypulseq.Sequence.read_seq import __strip_line as strip_line
 from bmctool.params import Params
 from bmctool.bmc_solver import BlochMcConnellSolver
 from bmctool.utils.seq.read import read_any_version
+
+
+def prep_rf_simulation(block: SimpleNamespace,
+                       max_pulse_samples: int):
+    """
+    Resamples the amplitude and phase of given rf event.
+    :param block: rf event / block event
+    :param max_pulse_samples: maximum number of samples used to model the rf event
+    :return: amplitude, phase, duration and after_pulse_delay for given rf event
+    """
+    amp = np.abs(block.rf.signal)
+    ph = np.angle(block.rf.signal)
+    rf_length = amp.size
+    dtp = 1e-6
+
+    idx = np.argwhere(amp > 1E-6)
+    amp = amp[idx]
+    ph = ph[idx]
+    delay_after_pulse = (rf_length - idx.size) * dtp
+    n_unique = max(np.unique(amp).size, np.unique(ph).size)
+    if n_unique == 1:
+        amp_ = amp[0]
+        ph_ = ph[0]
+        dtp_ = dtp * amp.size
+    elif n_unique > max_pulse_samples:
+        sample_factor = int(np.ceil(amp.size / max_pulse_samples))
+        amp_ = amp[::sample_factor]
+        ph_ = ph[::sample_factor]
+        dtp_ = dtp * sample_factor
+    else:
+        raise Exception('Case with 1 < unique samples < max_pulse_samples not implemented yet. Sorry :(')
+
+    return amp_, ph_, dtp_, delay_after_pulse
 
 
 class BMCTool:
@@ -50,48 +84,17 @@ class BMCTool:
 
         self.bm_solver = BlochMcConnellSolver(params=self.params, n_offsets=self.n_offsets)
 
-    def prep_rf_simulation(self, block):
-        """
-        Resamples the amplitude and phase of given rf event.
-        :param block: rf event (block event)
-        :return: amplitude, phase, duration and after_pulse_delay for given rf event
-        """
-        max_pulse_samples = self.params.options['max_pulse_samples']
-        amp = np.abs(block.rf.signal)
-        ph = np.angle(block.rf.signal)
-        rf_length = amp.size
-        dtp = 1e-6
-
-        idx = np.argwhere(amp > 1E-6)
-        amp = amp[idx]
-        ph = ph[idx]
-        delay_after_pulse = (rf_length - idx.size) * dtp
-        n_unique = max(np.unique(amp).size, np.unique(ph).size)
-        if n_unique == 1:
-            amp_ = amp[0]
-            ph_ = ph[0]
-            dtp_ = dtp * amp.size
-        elif n_unique > max_pulse_samples:
-            sample_factor = int(np.ceil(amp.size / max_pulse_samples))
-            amp_ = amp[::sample_factor]
-            ph_ = ph[::sample_factor]
-            dtp_ = dtp * sample_factor
-        else:
-            raise Exception('Case with 1 < unique samples < max_pulse_samples not implemented yet. Sorry :(')
-
-        return amp_, ph_, dtp_, delay_after_pulse
-
     def update_params(self,
                       params: Params,):
         """
-        Update BlochMcConnellSolver
+        Update Params object and BlochMcConnellSolver.
         """
         self.params = params
         self.bm_solver.update_params(params)
 
     def run(self):
         """
-        Creates BlochMcConnellSolver object and starts either the parallelized or the sequential simulation process.
+        Start either parallelized or the sequential simulation process.
         """
         if self.par_calc:
             self.run_parallel()
@@ -100,7 +103,7 @@ class BMCTool:
 
     def run_parallel(self):
         """
-        Performs parallel simulation of all offsets.
+        Performs simulation of all block events for all offsets in parallel.
         """
 
         if not self.params.options['reset_init_mag']:
@@ -251,9 +254,9 @@ class BMCTool:
                 M_ = self.bm_solver.solve_equation(mag=M_, dtp=dtp_)
 
             elif hasattr(block, 'rf'):
-                amp_, ph_, dtp_, delay_after_pulse = self.prep_rf_simulation(block)
+                amp_, ph_, dtp_, delay_after_pulse = prep_rf_simulation(block, self.params.options['max_pulse_samples'])
                 for i in range(amp_.size):
-                    ph_i = ph_[i] + ph_offset[:, rf_count] - accum_phase
+                    ph_i = -ph_[i] + ph_offset[:, rf_count] - accum_phase
                     self.bm_solver.update_matrix(rf_amp=amp_[i],
                                                  rf_phase=ph_i,
                                                  rf_freq=np.array(offsets_hz))
@@ -283,7 +286,7 @@ class BMCTool:
 
     def run_sequential(self):
         """
-        Performs sequential simulation of all offsets.
+        Performs simulation of all block events for all offsets sequentially.
         """
         if self.n_offsets != self.n_measure:
             self.run_m0_scan = True
@@ -312,10 +315,10 @@ class BMCTool:
                     M_[0, j, 0] = 0.0  # assume complete spoiling
 
             elif hasattr(block, 'rf'):
-                amp_, ph_, dtp_, delay_after_pulse = self.prep_rf_simulation(block)
+                amp_, ph_, dtp_, delay_after_pulse = prep_rf_simulation(block, self.params.options['max_pulse_samples'])
                 for i in range(amp_.size):
                     self.bm_solver.update_matrix(rf_amp=amp_[i],
-                                                 rf_phase=ph_[i] + block.rf.phase_offset - accum_phase,
+                                                 rf_phase=-ph_[i] + block.rf.phase_offset - accum_phase,
                                                  rf_freq=block.rf.freq_offset)
                     M_ = self.bm_solver.solve_equation(mag=M_, dtp=dtp_)
 

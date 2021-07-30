@@ -121,8 +121,8 @@ class BlochMcConnellSolver:
         n_p = self.n_pools
 
         # set dw0 due to b0_inhomogeneity
-        self.A[:, 0, 1 + n_p] = [-self.dw0] * j
-        self.A[:, 1 + n_p, 0] = [self.dw0] * j
+        self.A[:, 0, 1 + n_p] = [self.dw0] * j
+        self.A[:, 1 + n_p, 0] = [-self.dw0] * j
 
         # calculate omega_1
         rf_amp_2pi = rf_amp * 2 * np.pi * self.params.scanner['rel_b1']
@@ -146,14 +146,14 @@ class BlochMcConnellSolver:
 
         # set off-resonance terms for water pool
         rf_freq_2pi = rf_freq * 2 * np.pi
-        self.A[:, 0, 1 + n_p] -= rf_freq_2pi
-        self.A[:, 1 + n_p, 0] += rf_freq_2pi
+        self.A[:, 0, 1 + n_p] += rf_freq_2pi
+        self.A[:, 1 + n_p, 0] -= rf_freq_2pi
 
         # set off-resonance terms for cest pools
         for i in range(1, n_p + 1):
             dwi = self.params.cest_pools[i - 1]['dw'] * self.w0 - (rf_freq_2pi + self.dw0)
-            self.A[:, i, i + n_p + 1] = dwi
-            self.A[:, i + n_p + 1, i] = -dwi
+            self.A[:, i, i + n_p + 1] = -dwi
+            self.A[:, i + n_p + 1, i] = dwi
 
         # mt_pool
         if self.is_mt_active:
