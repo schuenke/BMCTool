@@ -2,6 +2,7 @@
 set_params.py
     Functions to load the parameters for the simulation from the config files.
 """
+import copy
 import numpy as np
 import yaml
 from typing import Union
@@ -44,6 +45,7 @@ def check_values(val_dict: dict,
     valid_bool = valids['valid_bool']
     valid_dict = valids['valid_dict']
     valid_lineshapes = valids['valid_lineshapes']
+    val_dict = copy.deepcopy(val_dict)  # create a deep copy of val_dict before iterating over it
     for k, v in val_dict.items():
         if k not in valid_num + valid_str + valid_bool:
             if dict_key:
