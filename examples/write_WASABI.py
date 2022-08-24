@@ -4,20 +4,20 @@ Schuenke et al. Simultaneous mapping of water shift and B1 (WASABI)-Application 
 CEST MRI data. Magnetic Resonance in Medicine, 77(2), 571–580. https://doi.org/10.1002/mrm.26133
 parameter settings:
      pulse shape = block
-     B1 = 3.75 uT (@ 3T; in general 1.25 uT multiplied by field strength)
+     B1 = 3.70 uT
      n = 1
-     t_p = 5 ms (@ 3T; in general 15 ms devided by field strength)
-     T_rec = 2/12 s (saturated/M0)
+     t_p = 5 ms
+     T_rec = 3/12 s (saturated/M0)
 """
 
 import numpy as np
-from pypulseq.Sequence.sequence import Sequence
-from pypulseq.make_adc import make_adc
-from pypulseq.make_delay import make_delay
-from pypulseq.make_trap_pulse import make_trapezoid
-from pypulseq.make_block_pulse import make_block_pulse
+from pypulseq import Opts
+from pypulseq import Sequence
+from pypulseq import make_adc
+from pypulseq import make_block_pulse
+from pypulseq import make_delay
+from pypulseq import make_trapezoid
 
-from pypulseq.opts import Opts
 from bmctool.utils.seq.write import write_seq
 
 # general settings
@@ -26,7 +26,7 @@ author = 'Patrick Schuenke'
 plot_sequence = True  # plot preparation block?
 
 # sequence definitions (everything in seq_defs will be written to definitions of the .seq-file)
-seq_defs:dict = {}
+seq_defs: dict = {}
 seq_defs['b1cwpe'] = 3.7  # B1 amplitude [µT]
 seq_defs['b0'] = 3  # B0 [T]
 seq_defs['n_pulses'] = 1  # number of pulses  #
@@ -101,7 +101,7 @@ for m, offset in enumerate(offsets_hz):
 
 write_seq(seq=seq,
           seq_defs=seq_defs,
-          filename=seqid+'.seq',
+          filename=seqid + '.seq',
           author=author,
           use_matlab_names=True)
 

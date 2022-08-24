@@ -14,5 +14,6 @@ sim = simulate(config_file=config_file,
                seq_file=seq_file,
                show_plot=True,
                verbose=False,
-               title='Example WASABI spectrum')
+               title='Example WASABI spectrum',
+               normalize=True)
 
