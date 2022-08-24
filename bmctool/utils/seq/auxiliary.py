@@ -2,13 +2,15 @@
 auxiliary.py
     Auxiliary functions for seq files.
 """
-import numpy as np
-import deprecation
-from typing import Any, Union
 from pathlib import Path
-from pypulseq.Sequence.sequence import Sequence
-from pypulseq.Sequence.read_seq import __strip_line as strip_line
+from typing import Any, Union
+
+import deprecation
+import numpy as np
+from pypulseq import Sequence
 from pypulseq.Sequence.read_seq import __read_definitions as read_definitions
+from pypulseq.Sequence.read_seq import __strip_line as strip_line
+
 from bmctool.utils.seq.read import read_any_version
 
 

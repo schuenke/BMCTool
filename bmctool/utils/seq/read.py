@@ -2,10 +2,11 @@
 read.py
     Auxiliary functions for reading of seq files and seq file entries.
 """
-import deprecation
-from typing import Union
 from pathlib import Path
-from pypulseq.Sequence.sequence import Sequence
+from typing import Union
+
+import deprecation
+from pypulseq import Sequence
 
 
 @deprecation.deprecated(deprecated_in='0.4.1',

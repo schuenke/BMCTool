@@ -9,6 +9,7 @@ class Params:
     """
     Class to store simulation parameters
     """
+
     def __init__(self, set_defaults: bool = False):
         """
         :param set_defaults: if True, class initializes with parameters for a standard APT weightedCEST simulation of
@@ -25,11 +26,7 @@ class Params:
         self.m0_scan = None
         self.set_options()
 
-    def set_water_pool(self,
-                       r1: float,
-                       r2: float,
-                       f: float = 1) \
-            -> dict:
+    def set_water_pool(self, r1: float, r2: float, f: float = 1) -> dict:
         """
         defining the water pool for simulation
         :param r1: relaxation rate R1 = 1/ T1 [Hz]
@@ -59,13 +56,7 @@ class Params:
         self.water_pool.update(water_pool)
         return water_pool
 
-    def set_cest_pool(self,
-                      r1: float,
-                      r2: float,
-                      k: int,
-                      f: float,
-                      dw: float) \
-            -> dict:
+    def set_cest_pool(self, r1: float, r2: float, k: int, f: float, dw: float) -> dict:
         """
         defines a CEST pool for simulation
         :param r1: relaxation rate R1 = 1/T1 [Hz]
@@ -106,14 +97,7 @@ class Params:
         self.cest_pools[pool_idx].update(cest_pool)
         return cest_pool
 
-    def set_mt_pool(self,
-                    r1: float,
-                    r2: float,
-                    k: int,
-                    f: float,
-                    dw: int,
-                    lineshape: str) \
-            -> dict:
+    def set_mt_pool(self, r1: float, r2: float, k: int, f: float, dw: int, lineshape: str) -> dict:
         """
         defines an MT pool for simulation
         :param r1: relaxation rate R1 = 1/ T1 [Hz]
@@ -148,12 +132,7 @@ class Params:
         self.mt_pool.update(mt_pool)
         return mt_pool
 
-    def set_scanner(self,
-                    b0: float,
-                    gamma: float,
-                    b0_inhom: float,
-                    rel_b1: float) \
-            -> dict:
+    def set_scanner(self, b0: float, gamma: float, b0_inhom: float, rel_b1: float) -> dict:
         """
         Sets the scanner values
         :param b0: field strength [T]
@@ -190,13 +169,8 @@ class Params:
             print(f"'par_calc = True' not available for 'reset_init_mag = False'. Changed 'par_calc' to 'False'.")
             self.options['par_calc'] = False
 
-    def set_options(self,
-                    verbose: bool = False,
-                    reset_init_mag: bool = True,
-                    scale: float = 1.0,
-                    max_pulse_samples: int = 500,
-                    par_calc: bool = False) \
-            -> dict:
+    def set_options(self, verbose: bool = False, reset_init_mag: bool = True, scale: float = 1.0,
+                    max_pulse_samples: int = 500, par_calc: bool = False) -> dict:
         """
         Setting additional options
         :param verbose: Verbose output
@@ -206,11 +180,8 @@ class Params:
         :param par_calc: toggles parallel calculation (BMCTool only)
         :return: dict containing option parameters
         """
-        options = {'verbose': verbose,
-                   'reset_init_mag': reset_init_mag,
-                   'scale': scale,
-                   'max_pulse_samples': max_pulse_samples,
-                   'par_calc': par_calc}
+        options = {'verbose': verbose, 'reset_init_mag': reset_init_mag, 'scale': scale,
+                   'max_pulse_samples': max_pulse_samples, 'par_calc': par_calc}
         self.options.update(options)
         self._check_reset_init_mag()
         return options

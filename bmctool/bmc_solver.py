@@ -3,7 +3,9 @@ bmc_solver.py
     Includes BlochMcConnellSolver class.
 """
 import math
+
 import numpy as np
+
 from bmctool.params import Params
 
 
@@ -13,6 +15,7 @@ class BlochMcConnellSolver:
     :param params: Params object including all experimental and sample settings.
     :param n_offsets: number of frequency offsets
     """
+
     def __init__(self, params: Params, n_offsets: int):
         self.params = params
         self.n_offsets = n_offsets
@@ -177,7 +180,7 @@ class BlochMcConnellSolver:
 
         _, inf_exp = math.frexp(np.linalg.norm(a_t, ord=np.inf))
         j = max(0, inf_exp)
-        a_t = a_t * (1/pow(2, j))
+        a_t = a_t * (1 / pow(2, j))
 
         x = a_t.copy()
         c = 0.5
@@ -186,7 +189,7 @@ class BlochMcConnellSolver:
         n = n + c * a_t
 
         p = True
-        for k in range(2, q+1):
+        for k in range(2, q + 1):
             c = c * (q - k + 1) / (k * (2 * q - k + 1))
             x = np.dot(a_t, x)
             c_x = c * x
@@ -198,7 +201,7 @@ class BlochMcConnellSolver:
             p = not p
 
         f = np.dot(np.linalg.pinv(d), n)
-        for k in range(1, j+1):
+        for k in range(1, j + 1):
             f = np.dot(f, f)
         mag_ = np.dot(f, (mag_ + a_inv_t)) - a_inv_t
         return mag_[np.newaxis, :, np.newaxis]

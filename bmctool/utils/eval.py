@@ -2,9 +2,10 @@
 eval.py
     Tool independent functions for plotting and calculations
 """
-import numpy as np
-import matplotlib.pyplot as plt
 from typing import Union, Tuple
+
+import matplotlib.pyplot as plt
+import numpy as np
 from matplotlib.figure import Figure
 
 
@@ -31,7 +32,7 @@ def normalize_data(mz: np.ndarray,
                    offsets: np.ndarray,
                    threshold: Union[int, float, list, np.ndarray],
                    **kwargs) \
-            -> Tuple[np.ndarray, np.ndarray]:
+        -> Tuple[np.ndarray, np.ndarray]:
     """
     Normalizes given data by the mean of values corresponding to offsets exceeding the given threshold.
     :param mz: y-values

@@ -3,11 +3,13 @@ set_params.py
     Functions to load the parameters for the simulation from the config files.
 """
 import copy
+from pathlib import Path
+from typing import Union
+
 import numpy as np
 import yaml
-from typing import Union
+
 from bmctool.params import Params
-from pathlib import Path
 
 
 def load_config(*args: Union[str, Path]) -> dict:
@@ -73,9 +75,9 @@ def check_values(val_dict: dict,
                         else:
                             invalid.append(str(v) + ' value from ' + k + ' should be a numerical type.')
             if k == 't1':
-                config[dict_key]['r1'] = 1/config[dict_key].pop(k)
+                config[dict_key]['r1'] = 1 / config[dict_key].pop(k)
             elif k == 't2':
-                config[dict_key]['r2'] = 1/config[dict_key].pop(k)
+                config[dict_key]['r2'] = 1 / config[dict_key].pop(k)
         elif k in valid_bool:
             if type(v) is not bool:
                 if v in ['true', 'True', 'TRUE', 'yes', 'Yes', 'yes', 1]:
@@ -147,8 +149,9 @@ def check_necessary(config: dict,
                              + missing[-1])
     if necessary_w:
         for i in range(2):
-            if necessary_w[0][i] not in config['water_pool'].keys() and necessary_w[1][i] not in config['water_pool'].keys():
-                missing.append('t' + str(i+1) + ' or r' + str(i+1))
+            if necessary_w[0][i] not in config['water_pool'].keys() and necessary_w[1][i] not in config[
+                'water_pool'].keys():
+                missing.append('t' + str(i + 1) + ' or r' + str(i + 1))
     if missing:
         raise AssertionError('The following water_pool parameters have to be defined: ' +
                              ''.join(m + ', ' for m in missing[:-1]) + missing[-1])
