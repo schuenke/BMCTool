@@ -2,17 +2,17 @@
 bmc_tool.py
     Tool to solve the Bloch-McConnell (BMC) equations using a (parallelized) eigenwert ansatz.
 """
-import numpy as np
-from typing import Union
-from types import SimpleNamespace
 from pathlib import Path
+from types import SimpleNamespace
+from typing import Union
+
+import numpy as np
+from pypulseq import Sequence
+from pypulseq.Sequence.read_seq import __strip_line as strip_line
 from tqdm import tqdm
 
-from pypulseq.Sequence.read_seq import __strip_line as strip_line
-
-from bmctool.params import Params
 from bmctool.bmc_solver import BlochMcConnellSolver
-from bmctool.utils.seq.read import read_any_version
+from bmctool.params import Params
 
 
 def prep_rf_simulation(block: SimpleNamespace,
@@ -25,13 +25,13 @@ def prep_rf_simulation(block: SimpleNamespace,
     """
     amp = np.abs(block.rf.signal)
     ph = np.angle(block.rf.signal)
-    rf_length = amp.size
-    dtp = 1e-6
+    rf_length = block.rf.shape_dur
+    dtp = rf_length / max(amp.size, ph.size)
 
     idx = np.argwhere(amp > 1E-6)
     amp = amp[idx]
     ph = ph[idx]
-    delay_after_pulse = (rf_length - idx.size) * dtp
+    delay_after_pulse = block.block_duration - block.rf.shape_dur
     n_unique = max(np.unique(amp).size, np.unique(ph).size)
     if n_unique == 1:
         amp_ = amp[0]
@@ -55,6 +55,7 @@ class BMCTool:
     :param seq_file: path of the *.seq file
     :param verbose: bool to deactivate print commands
     """
+
     def __init__(self, params: Params,
                  seq_file: Union[str, Path],
                  verbose: bool = True,
@@ -66,17 +67,18 @@ class BMCTool:
         self.run_m0_scan = None
         self.bm_solver = None
 
-        self.seq = read_any_version(seq_file)
+        self.seq = Sequence()
+        self.seq.read(seq_file)
 
-        self.offsets_ppm = np.array(self.seq.dict_definitions['offsets_ppm'])
+        self.offsets_ppm = np.array(self.seq.definitions['offsets_ppm'])
         self.n_offsets = self.offsets_ppm.size
 
-        if 'num_meas' in self.seq.dict_definitions:
-            self.n_measure = int(self.seq.dict_definitions['num_meas'])
+        if 'num_meas' in self.seq.definitions:
+            self.n_measure = int(self.seq.definitions['num_meas'])
         else:
             self.n_measure = self.n_offsets
-            if 'run_m0_scan' in self.seq.dict_definitions:
-                if 1 in self.seq.dict_definitions['run_m0_scan'] or 'True' in self.seq.dict_definitions['run_m0_scan']:
+            if 'run_m0_scan' in self.seq.definitions:
+                if 1 in self.seq.definitions['run_m0_scan'] or 'True' in self.seq.definitions['run_m0_scan']:
                     self.n_measure += 1
 
         self.m_init = params.m_vec.copy()
@@ -85,7 +87,7 @@ class BMCTool:
         self.bm_solver = BlochMcConnellSolver(params=self.params, n_offsets=self.n_offsets)
 
     def update_params(self,
-                      params: Params,):
+                      params: Params, ):
         """
         Update Params object and BlochMcConnellSolver.
         """
@@ -97,8 +99,12 @@ class BMCTool:
         Start either parallelized or the sequential simulation process.
         """
         if self.par_calc:
+            if self.verbose:
+                print(f'\n-> Starting parallel simulation...')
             self.run_parallel()
         else:
+            if self.verbose:
+                print(f'\n-> Starting sequential simulation...')
             self.run_sequential()
 
     def run_parallel(self):
@@ -111,9 +117,9 @@ class BMCTool:
                             "Please switch 'reset_init_mag' to 'True' or change to sequential computation.")
 
         # get dict with block events
-        block_events = self.seq.dict_block_events
+        block_events = self.seq.block_events
 
-        # counter for even blocks related to an unsaturated M0 scan
+        # counter for event blocks related to an unsaturated M0 scan
         m0_event_count = 0
 
         # some preparations for cases with a leading unsaturated M0 scan
@@ -170,11 +176,12 @@ class BMCTool:
         # 2nd offset (and not the 1st) is used because the 1st one is often a saturated M0 scan (e.g. at -300 ppm) with
         # a longer preceding recovery time. However, assuming that the block events of the 2nd offset can be applied to
         # all other offsets is a very strong assumption. Please be sure that you are aware of this when using par_calc.
-        event_table_single_offset = {k: block_events[k] for k in list(block_events)[m0_event_count+n_:m0_event_count+2*n_]}
+        event_table_single_offset = {k: block_events[k] for k in
+                                     list(block_events)[m0_event_count + n_:m0_event_count + 2 * n_]}
 
         # extract the offsets in rad from rf library
-        events_freq = [self.seq.rf_library.data[k][4] for k in list(self.seq.rf_library.data)]
-        events_phase = [self.seq.rf_library.data[k][5] for k in list(self.seq.rf_library.data)]
+        events_freq = [self.seq.rf_library.data[k][5] for k in list(self.seq.rf_library.data)]
+        events_phase = [self.seq.rf_library.data[k][6] for k in list(self.seq.rf_library.data)]
 
         # check if 0 ppm is in the events. Because all rf events with freq = 0 ppm have the same phase value of 0
         # (independent of the number of pulses per saturation train), only one single rf block event appears. For the
@@ -233,27 +240,22 @@ class BMCTool:
         accum_phase = np.zeros(self.n_offsets)
 
         if self.verbose:
-            loop = tqdm(event_table_single_offset)
+            loop_block_events = tqdm(event_table_single_offset)
         else:
-            loop = event_table_single_offset
+            loop_block_events = event_table_single_offset
 
-        for x in loop:
-            block = self.seq.get_block(x)
+        for block_event in loop_block_events:
+            block = self.seq.get_block(block_event)
 
-            if hasattr(block, 'adc'):
+            # pseudo ADC event
+            if block.adc is not None:
                 m_out = np.swapaxes(np.squeeze(M_), 0, 1)
                 if self.run_m0_scan:
                     m_out = np.concatenate((m0[0], m_out), axis=1)
                 self.m_out = m_out
 
-            elif hasattr(block, 'delay') and hasattr(block.delay, 'delay'):
-                dtp_ = float(block.delay.delay)
-                self.bm_solver.update_matrix(rf_amp=0.0,
-                                             rf_phase=np.zeros(self.n_offsets),
-                                             rf_freq=np.zeros(self.n_offsets))
-                M_ = self.bm_solver.solve_equation(mag=M_, dtp=dtp_)
-
-            elif hasattr(block, 'rf'):
+            # RF pulse
+            elif hasattr(block, 'rf') and block.rf is not None:
                 amp_, ph_, dtp_, delay_after_pulse = prep_rf_simulation(block, self.params.options['max_pulse_samples'])
                 for i in range(amp_.size):
                     ph_i = -ph_[i] + ph_offset[:, rf_count] - accum_phase
@@ -274,15 +276,35 @@ class BMCTool:
                 accum_phase = accum_phase + (phase_degree / 180 * np.pi)
                 rf_count += 1
 
-            elif hasattr(block, 'gx') and hasattr(block, 'gy') and hasattr(block, 'gz'):
-                dur_ = float(block.gx.rise_time + block.gx.flat_time + block.gx.fall_time)
+            # spoiler gradients in x,y,z
+            elif all(b is not None for b in [block.gx, block.gy, block.gz]):
+                dur_ = block.block_duration
                 self.bm_solver.update_matrix(rf_amp=0.0,
                                              rf_phase=np.zeros(self.n_offsets),
                                              rf_freq=np.zeros(self.n_offsets))
                 M_ = self.bm_solver.solve_equation(mag=M_, dtp=dur_)
                 M_[:, 0:(len(self.params.cest_pools) + 1) * 2] = 0.0  # assume complete spoiling
+
+            # spoiler gradient in z only
+            elif block.gz is not None:
+                dur_ = block.block_duration
+                self.bm_solver.update_matrix(rf_amp=0.0,
+                                             rf_phase=np.zeros(self.n_offsets),
+                                             rf_freq=np.zeros(self.n_offsets))
+                M_ = self.bm_solver.solve_equation(mag=M_, dtp=dur_)
+                M_[:, 0:(len(self.params.cest_pools) + 1) * 2] = 0.0  # assume complete spoiling
+
+            # delay or gradient(s) in x and/or y --> handle as delay
+            elif hasattr(block, 'block_duration') and block.block_duration != '0':
+                delay = block.block_duration
+                self.bm_solver.update_matrix(rf_amp=0.0,
+                                             rf_phase=np.zeros(self.n_offsets),
+                                             rf_freq=np.zeros(self.n_offsets))
+                M_ = self.bm_solver.solve_equation(mag=M_, dtp=delay)
+
+            # this should not happen
             else:
-                pass
+                raise Exception('Unknown case')
 
     def run_sequential(self):
         """
@@ -295,26 +317,23 @@ class BMCTool:
         accum_phase = 0
         M_ = self.m_init[np.newaxis, :, np.newaxis]
         if self.verbose:
-            loop = tqdm(range(1, len(self.seq.dict_block_events)+1), desc='BMCTool simulation')
+            loop_block_events = tqdm(range(1, len(self.seq.block_events) + 1), desc='BMCTool simulation')
         else:
-            loop = range(1, len(self.seq.dict_block_events)+1)
-        for n_sample in loop:
-            block = self.seq.get_block(n_sample)
-            if hasattr(block, 'adc'):
+            loop_block_events = range(1, len(self.seq.block_events) + 1)
+
+        for block_event in loop_block_events:
+            block = self.seq.get_block(block_event)
+
+            # pseudo ADC event
+            if block.adc is not None:
                 self.m_out[:, current_adc] = np.squeeze(M_)  # write current mag in output array
                 accum_phase = 0
                 current_adc += 1
                 if current_adc <= self.n_offsets and self.params.options['reset_init_mag']:
                     M_ = self.m_init[np.newaxis, :, np.newaxis]
 
-            elif hasattr(block, 'gx') and hasattr(block, 'gy') and hasattr(block, 'gz'):
-                dur_ = float(block.gx.rise_time + block.gx.flat_time + block.gx.fall_time)
-                self.bm_solver.update_matrix(0, 0, 0)
-                M_ = self.bm_solver.solve_equation(mag=M_, dtp=dur_)
-                for j in range((len(self.params.cest_pools) + 1) * 2):
-                    M_[0, j, 0] = 0.0  # assume complete spoiling
-
-            elif hasattr(block, 'rf'):
+            # RF pulse
+            elif block.rf is not None:
                 amp_, ph_, dtp_, delay_after_pulse = prep_rf_simulation(block, self.params.options['max_pulse_samples'])
                 for i in range(amp_.size):
                     self.bm_solver.update_matrix(rf_amp=amp_[i],
@@ -330,13 +349,31 @@ class BMCTool:
                 phase_degree %= 360
                 accum_phase += phase_degree / 180 * np.pi
 
-            elif hasattr(block, 'delay') and hasattr(block.delay, 'delay'):
-                delay = float(block.delay.delay)
+            # spoiler gradients in x,y,z
+            elif all(b is not None for b in [block.gx, block.gy, block.gz]):
+                dur_ = block.block_duration
+                self.bm_solver.update_matrix(0, 0, 0)
+                M_ = self.bm_solver.solve_equation(mag=M_, dtp=dur_)
+                for j in range((len(self.params.cest_pools) + 1) * 2):
+                    M_[0, j, 0] = 0.0  # assume complete spoiling
+
+            # spoiler gradient in z only
+            elif block.gz is not None:
+                dur_ = block.block_duration
+                self.bm_solver.update_matrix(0, 0, 0)
+                M_ = self.bm_solver.solve_equation(mag=M_, dtp=dur_)
+                for j in range((len(self.params.cest_pools) + 1) * 2):
+                    M_[0, j, 0] = 0.0  # assume complete spoiling
+
+            # delay or gradient(s) in x and/or y --> handle as delay
+            elif hasattr(block, 'block_duration') and block.block_duration != '0':
+                delay = block.block_duration
                 self.bm_solver.update_matrix(0, 0, 0)
                 M_ = self.bm_solver.solve_equation(mag=M_, dtp=delay)
 
-            else:  # single gradient -> simulated as delay
-                pass
+            # this should not happen
+            else:
+                raise Exception('Unknown case')
 
     def get_zspec(self, return_abs: bool = True):
         """
@@ -347,7 +384,7 @@ class BMCTool:
         if self.run_m0_scan:
             m0 = self.m_out[self.params.mz_loc, 0]
             m_ = self.m_out[self.params.mz_loc, 1:]
-            mz = m_/m0
+            mz = m_ / m0
         else:
             mz = self.m_out[self.params.mz_loc, :]
 
