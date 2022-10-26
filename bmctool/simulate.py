@@ -3,11 +3,12 @@ simulate.py
     Script to run the BMCTool simulation based on a seq-file and a *.yaml config file.
 """
 
-from typing import Union
 from pathlib import Path
+from typing import Union
+
 from bmctool.bmc_tool import BMCTool
-from bmctool.utils.eval import plot_z
 from bmctool.set_params import load_params
+from bmctool.utils.eval import plot_z
 
 
 def simulate(config_file: Union[str, Path],
@@ -58,7 +59,8 @@ def sim_example():
     simulate(config_file=config_file,
              seq_file=seq_file,
              show_plot=True,
-             title='WASABI example spectrum')
+             title='WASABI example spectrum',
+             normalize=True)
 
 
 if __name__ == '__main__':

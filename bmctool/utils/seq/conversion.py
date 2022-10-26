@@ -2,12 +2,14 @@
 conversion.py
     Functions to convert between different versions of seq files.
 """
-import deprecation
-from tempfile import mkstemp
-from shutil import move, copymode
-from typing import Union
-from pathlib import Path
 from os import fdopen, remove
+from pathlib import Path
+from shutil import move, copymode
+from tempfile import mkstemp
+from typing import Union
+
+import deprecation
+
 from bmctool.utils.seq.read import get_minor_version
 
 

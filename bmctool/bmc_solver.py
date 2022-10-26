@@ -3,7 +3,9 @@ bmc_solver.py
     Includes BlochMcConnellSolver class.
 """
 import math
+
 import numpy as np
+
 from bmctool.params import Params
 
 
@@ -13,6 +15,7 @@ class BlochMcConnellSolver:
     :param params: Params object including all experimental and sample settings.
     :param n_offsets: number of frequency offsets
     """
+
     def __init__(self, params: Params, n_offsets: int):
         self.params = params
         self.n_offsets = n_offsets
@@ -21,11 +24,10 @@ class BlochMcConnellSolver:
         self.n_pools = len(params.cest_pools)
         self.is_mt_active = bool(params.mt_pool)
         self.size = params.m_vec.size
-        self.w0 = params.scanner['b0'] * params.scanner['gamma']
-        self.dw0 = self.w0 * params.scanner['b0_inhomogeneity']
+        self.w0 = None
+        self.dw0 = None
 
-        self._init_matrix_a()
-        self._init_vector_c()
+        self.update_params(params)
 
     def _init_matrix_a(self):
         """
@@ -101,6 +103,16 @@ class BlochMcConnellSolver:
         if self.par_calc:
             self.C = np.repeat(self.C, self.n_offsets, axis=0)
 
+    def update_params(self, params: Params):
+        """
+        Updates matrix self.A according to given Params object.
+        """
+        self.params = params
+        self.w0 = params.scanner['b0'] * params.scanner['gamma']
+        self.dw0 = self.w0 * params.scanner['b0_inhomogeneity']
+        self._init_matrix_a()
+        self._init_vector_c()
+
     def update_matrix(self, rf_amp: float, rf_phase: np.ndarray, rf_freq: np.ndarray):
         """
         Updates matrix self.A according to given parameters.
@@ -112,8 +124,8 @@ class BlochMcConnellSolver:
         n_p = self.n_pools
 
         # set dw0 due to b0_inhomogeneity
-        self.A[:, 0, 1 + n_p] = [-self.dw0] * j
-        self.A[:, 1 + n_p, 0] = [self.dw0] * j
+        self.A[:, 0, 1 + n_p] = [self.dw0] * j
+        self.A[:, 1 + n_p, 0] = [-self.dw0] * j
 
         # calculate omega_1
         rf_amp_2pi = rf_amp * 2 * np.pi * self.params.scanner['rel_b1']
@@ -137,14 +149,14 @@ class BlochMcConnellSolver:
 
         # set off-resonance terms for water pool
         rf_freq_2pi = rf_freq * 2 * np.pi
-        self.A[:, 0, 1 + n_p] -= rf_freq_2pi
-        self.A[:, 1 + n_p, 0] += rf_freq_2pi
+        self.A[:, 0, 1 + n_p] += rf_freq_2pi
+        self.A[:, 1 + n_p, 0] -= rf_freq_2pi
 
         # set off-resonance terms for cest pools
         for i in range(1, n_p + 1):
             dwi = self.params.cest_pools[i - 1]['dw'] * self.w0 - (rf_freq_2pi + self.dw0)
-            self.A[:, i, i + n_p + 1] = dwi
-            self.A[:, i + n_p + 1, i] = -dwi
+            self.A[:, i, i + n_p + 1] = -dwi
+            self.A[:, i + n_p + 1, i] = dwi
 
         # mt_pool
         if self.is_mt_active:
@@ -168,7 +180,7 @@ class BlochMcConnellSolver:
 
         _, inf_exp = math.frexp(np.linalg.norm(a_t, ord=np.inf))
         j = max(0, inf_exp)
-        a_t = a_t * (1/pow(2, j))
+        a_t = a_t * (1 / pow(2, j))
 
         x = a_t.copy()
         c = 0.5
@@ -177,7 +189,7 @@ class BlochMcConnellSolver:
         n = n + c * a_t
 
         p = True
-        for k in range(2, q+1):
+        for k in range(2, q + 1):
             c = c * (q - k + 1) / (k * (2 * q - k + 1))
             x = np.dot(a_t, x)
             c_x = c * x
@@ -189,7 +201,7 @@ class BlochMcConnellSolver:
             p = not p
 
         f = np.dot(np.linalg.pinv(d), n)
-        for k in range(1, j+1):
+        for k in range(1, j + 1):
             f = np.dot(f, f)
         mag_ = np.dot(f, (mag_ + a_inv_t)) - a_inv_t
         return mag_[np.newaxis, :, np.newaxis]

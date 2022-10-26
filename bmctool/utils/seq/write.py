@@ -3,16 +3,17 @@ write.py
     Auxiliary functions for writing seq files.
 """
 import math
+from datetime import datetime
 from os import fdopen, remove
+from pathlib import Path
 from shutil import move, copymode
 from tempfile import mkstemp
-from datetime import datetime
-from pathlib import Path
-from typing import  Union
+from typing import Union
+
 import numpy as np
 from pypulseq.Sequence.sequence import Sequence
+
 from bmctool.utils.seq.conversion import convert_seq_12_to_13
-from bmctool.utils.seq.read import get_minor_version
 
 
 def round_number(number, significant_digits):
@@ -110,7 +111,7 @@ def write_seq_defs(seq: Sequence,
             v = str(round_number(v, 6))
         else:
             v = str(v)
-        seq.set_definition(key=k, val=v)
+        seq.set_definition(key=k, value=v)
 
     return seq
 
@@ -140,6 +141,5 @@ def write_seq(seq: Sequence,
     insert_seq_file_header(filepath=filename, author=author)
 
     # convert to pypulseq version 1.3
-    version = get_minor_version(filename)
     if convert_to_1_3:
         convert_seq_12_to_13(filename)

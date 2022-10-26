@@ -2,11 +2,16 @@
 read.py
     Auxiliary functions for reading of seq files and seq file entries.
 """
-from typing import Union
 from pathlib import Path
-from pypulseq.Sequence.sequence import Sequence
+from typing import Union
+
+import deprecation
+from pypulseq import Sequence
 
 
+@deprecation.deprecated(deprecated_in='0.4.1',
+                        removed_in='1.0',
+                        details="Function not needed for pypulseq >= 1.3.1")
 def get_minor_version(seq_file: Union[str, Path]) -> int:
     """
     Reads minor version from a seq file.
@@ -19,6 +24,9 @@ def get_minor_version(seq_file: Union[str, Path]) -> int:
                 return int(line[len('minor '):])
 
 
+@deprecation.deprecated(deprecated_in='0.4.1',
+                        removed_in='1.0',
+                        details="Function not needed for pypulseq >= 1.3.1")
 def read_any_version(seq_file: Union[str, Path],
                      seq: Sequence = None) \
         -> Sequence:
