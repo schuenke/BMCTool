@@ -4,7 +4,7 @@ set_params.py
 """
 import copy
 from pathlib import Path
-from typing import Union
+from typing import Tuple, Union
 
 import numpy as np
 import yaml
@@ -29,7 +29,7 @@ def check_values(val_dict: dict,
                  invalid: list,
                  dict_key: str = None,
                  reference_config: Union[str, Path] = None) \
-        -> [dict, list]:
+        -> Tuple[dict, list]:
     """
     checking and correcting the nested dictionaries from the loaded configuration for definition errors
     :param val_dict: library containing values to check
@@ -112,7 +112,7 @@ def check_cest_values(val_dict: dict,
                       config: dict,
                       invalid: list,
                       dict_key: str) \
-        -> [dict, list]:
+        -> Tuple[dict, list]:
     """
     checking and correcting cest pool values loaded configuration for definition errors
     :param val_dict: library containing values to check
