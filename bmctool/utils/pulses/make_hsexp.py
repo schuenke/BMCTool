@@ -3,12 +3,14 @@ make_hsexp.py
     Function to create all possible HSExp pulses (tip-down/tip-up & pos/neg offset)
 """
 
-import numpy as np
 from types import SimpleNamespace
-from pypulseq.opts import Opts
+
+import numpy as np
+from pypulseq import Opts
+
+from bmctool.utils.pulses.calculate_phase import calculate_phase
 from bmctool.utils.pulses.create_arbitrary_pulse_with_phase import create_arbitrary_pulse_with_phase
 from bmctool.utils.pulses.make_hypsec_half_passage import calculate_amplitude as hypsec_amp
-from bmctool.utils.pulses.calculate_phase import calculate_phase
 
 
 def calculate_window_modulation(t: np.ndarray,

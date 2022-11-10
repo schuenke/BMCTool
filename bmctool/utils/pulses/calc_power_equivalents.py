@@ -2,14 +2,15 @@
     calc_power_equivalents.py
 """
 
-import numpy as np
 from types import SimpleNamespace
+
+import numpy as np
 
 
 def calc_power_equivalent(rf_pulse: SimpleNamespace,
                           tp: float,
                           td: float,
-                          gamma_hz: float = 42.5764)\
+                          gamma_hz: float = 42.5764) \
         -> np.ndarray:
     """
     Calculates the continuous wave power equivalent for a given rf pulse.
@@ -18,16 +19,16 @@ def calc_power_equivalent(rf_pulse: SimpleNamespace,
     :param td: interpulse delay [s]
     :param gamma_hz: gyromagnetic ratio [Hz]
     """
-    amp = rf_pulse.signal/gamma_hz
+    amp = rf_pulse.signal / gamma_hz
     duty_cycle = tp / (tp + td)
 
-    return np.sqrt(np.trapz(amp**2, rf_pulse.t) / tp * duty_cycle)  # continuous wave power equivalent
+    return np.sqrt(np.trapz(amp ** 2, rf_pulse.t) / tp * duty_cycle)  # continuous wave power equivalent
 
 
 def calc_amplitude_equivalent(rf_pulse: SimpleNamespace,
                               tp: float,
                               td: float,
-                              gamma_hz: float = 42.5764)\
+                              gamma_hz: float = 42.5764) \
         -> np.ndarray:
     """
     Calculates the continuous wave amplitude equivalent for a given rf pulse.

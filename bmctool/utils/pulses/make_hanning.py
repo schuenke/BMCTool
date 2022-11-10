@@ -1,7 +1,8 @@
-import numpy as np
 from types import SimpleNamespace
-from pypulseq.opts import Opts
-from pypulseq.make_gauss_pulse import make_gauss_pulse
+
+import numpy as np
+from pypulseq import Opts
+from pypulseq import make_gauss_pulse
 
 
 def hanning(n: int) -> np.ndarray:
@@ -11,11 +12,11 @@ def hanning(n: int) -> np.ndarray:
     :return: n point window
     """
     if n % 2 == 0:
-        half = n/2
+        half = n / 2
         window = calc_hanning(half, n)
         window = np.append(window, np.flipud(window))
     else:
-        half = (n+1)/2
+        half = (n + 1) / 2
         window = calc_hanning(half, n)
         window = np.append(window, np.flipud(window[:-1]))
     return window
@@ -27,13 +28,13 @@ def calc_hanning(m: int,
     """
     Calculates and returns the first m points of an n point hanning window.
     """
-    window = .5*(1 - np.cos(2*np.pi*np.arange(1,m+1)/(n+1)))
+    window = .5 * (1 - np.cos(2 * np.pi * np.arange(1, m + 1) / (n + 1)))
     return window
 
 
 def make_gauss_hanning(flip_angle: float,
                        pulse_duration: float,
-                       system: Opts = Opts())\
+                       system: Opts = Opts()) \
         -> SimpleNamespace:
     """
     Creates a radio-frequency pulse event for a gauss pulse with hanning window.

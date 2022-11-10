@@ -5,7 +5,7 @@ create_arbitrary_pulse_with_phase.py
 
 import numpy as np
 from types import SimpleNamespace
-from pypulseq.opts import Opts
+from pypulseq import Opts
 
 
 def create_arbitrary_pulse_with_phase(signal: np.ndarray,
