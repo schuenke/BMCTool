@@ -25,12 +25,13 @@ def create_arbitrary_pulse_with_phase(signal: np.ndarray,
     """
 
     signal *= (flip_angle / (2 * np.pi))
-    t = np.linspace(1, len(signal)) * system.rf_raster_time
+    t = np.linspace(1, len(signal), num=len(signal)) * system.rf_raster_time
 
     rf = SimpleNamespace()
     rf.type = 'rf'
     rf.signal = signal
     rf.t = t
+    rf.shape_dur = len(signal) * system.rf_raster_time
     rf.freq_offset = freq_offset
     rf.phase_offset = phase_offset
     rf.dead_time = system.rf_dead_time
