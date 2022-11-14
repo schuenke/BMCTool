@@ -19,15 +19,15 @@ The BMCTool can be installed from [PyPi](https://pypi.org/) using
 pip install bmctool
 ``
 
-Please keep in mind that the BMCTool is still in it's initial development and changes to the code might happen quite
-often. Thus, for the moment, we recommend cloning the latest version from the 
-[BMCTool GitHub repository](https://github.com/schuenke/BMCTool) using
+### IMPORTANT NOTE FOR RELEASE v0.5.0
+Version 0.5.0 of BMCTool requires PyPulseq >= 1.4.0, which is currently only available if installed directly from the [Dev branch](https://github.com/imr-framework/pypulseq/tree/dev) of the [PyPulseq Github Repository](https://github.com/imr-framework/pypulseq). A working version can be installed using
+
 
 ``
-git clone https://github.com/schuenke/BMCTool.git
+pip install git+https://github.com/imr-framework/pypulseq@c644fd9
 ``
 
-and carefully tracking any changes/commits. 
+A new version of the BMCTool with updated dependencies will be released as soon as PyPulseq v. 1.4.0 is officially released!
 
 ### Initial Test
 To make sure that the installation was successful, you can run an example simulation that is provided with both, 
