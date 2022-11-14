@@ -8,6 +8,7 @@ from types import SimpleNamespace
 import numpy as np
 from pypulseq import Opts
 
+from bmctool import GAMMA_HZ
 from bmctool.utils.pulses.calculate_phase import calculate_phase
 from bmctool.utils.pulses.create_arbitrary_pulse_with_phase import create_arbitrary_pulse_with_phase
 from bmctool.utils.pulses.make_hypsec_half_passage import calculate_amplitude as hypsec_amp
@@ -52,7 +53,7 @@ def make_hsexp(amp: float = 1.0,
                tip_down: bool = True,
                pos_offset: bool = True,
                system: Opts = Opts(),
-               gamma_hz: float = 42.5764) \
+               gamma_hz: float = GAMMA_HZ) \
         -> SimpleNamespace:
     """
     Creates a radio-frequency pulse event with amplitude and phase modulation of a HSExp pulse.
@@ -121,7 +122,7 @@ def generate_hsexp_dict(amp: float = 1.0,
                         t_window: float = 3.5e-3,
                         ef: float = 3.5,
                         system: Opts = Opts(),
-                        gamma_hz: float = 42.5764) \
+                        gamma_hz: float = GAMMA_HZ) \
         -> dict:
     """
     Creates a dictionary with the 4 different hsexp pulses (tip-down/up and pos/neg offsets)

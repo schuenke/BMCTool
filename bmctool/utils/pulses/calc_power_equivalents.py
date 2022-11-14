@@ -6,11 +6,13 @@ from types import SimpleNamespace
 
 import numpy as np
 
+from bmctool import GAMMA_HZ
+
 
 def calc_power_equivalent(rf_pulse: SimpleNamespace,
                           tp: float,
                           td: float,
-                          gamma_hz: float = 42.5764) \
+                          gamma_hz: float = GAMMA_HZ) \
         -> np.ndarray:
     """
     Calculates the continuous wave power equivalent for a given rf pulse.
@@ -28,7 +30,7 @@ def calc_power_equivalent(rf_pulse: SimpleNamespace,
 def calc_amplitude_equivalent(rf_pulse: SimpleNamespace,
                               tp: float,
                               td: float,
-                              gamma_hz: float = 42.5764) \
+                              gamma_hz: float = GAMMA_HZ) \
         -> np.ndarray:
     """
     Calculates the continuous wave amplitude equivalent for a given rf pulse.
