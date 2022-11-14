@@ -111,7 +111,10 @@ def write_seq_defs(seq: Sequence,
             v = str(round_number(v, 6))
         else:
             v = str(v)
-        seq.set_definition(key=k, value=v)
+        try:
+            seq.set_definition(key=k, value=v)
+        except TypeError:
+            seq.set_definition(key=k, val=v)
 
     return seq
 
