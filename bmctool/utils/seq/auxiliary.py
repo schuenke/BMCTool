@@ -1,32 +1,35 @@
 """
 auxiliary.py
-    Auxiliary functions for seq files.
+    Auxiliary functions for PyPulseq seq-file handling.
 """
 from pathlib import Path
 from typing import Any, Union
 
-import deprecation
 import numpy as np
-from pypulseq import Sequence
 from pypulseq.Sequence.read_seq import __read_definitions as read_definitions
 from pypulseq.Sequence.read_seq import __strip_line as strip_line
 
-from bmctool.utils.seq.read import read_any_version
 
+def get_definitions(filepath: Union[str, Path]) -> dict:
+    """
+    get_definitions Read all definitions directly from a seq-file.
 
-def get_definitions(seq_file: Union[str, Path] = None) \
-        -> dict:
+    Parameters
+    ----------
+    filepath : Union[str, Path]
+        Path to the seq-file
+
+    Returns
+    -------
+    dict
+        Dictionary of all definitions in the seq-file
     """
-    Reads all definitions directly from a seq-file.
-    :param seq_file: sequence file to read the definitions from
-    :return: dictionary with all definitions
-    """
-    with open(seq_file, 'r') as seq:
+    with open(filepath, "r") as seq:
         while True:
             line = strip_line(seq)
             if line == -1:
                 break
-            elif line == '[DEFINITIONS]':
+            elif line == "[DEFINITIONS]":
                 dict_definitions = read_definitions(seq)
             else:
                 pass
@@ -34,62 +37,60 @@ def get_definitions(seq_file: Union[str, Path] = None) \
     return dict_definitions
 
 
-def get_definition(seq_file: Union[str, Path] = None,
-                   key: str = None) \
-        -> Any:
+def get_definition(filepath: Union[str, Path], key: str) -> Any:
     """
-    Reads a single definition directly from a seq-file.
-    :param seq_file: sequence file to read the definition from
-    :param key: name of the dict entry of interest
-    :return: dictionary entry for 'name'
+    get_definition Read a single definition directly from a seq-file.
+
+    Parameters
+    ----------
+    filepath : Union[str, Path]
+        Path to the seq-file
+    key : str, optional
+        Name/key of the definition to be read
+
+    Returns
+    -------
+    Any
+        Value of the definition
+
+    Raises
+    ------
+    AttributeError
+        Raised if key is not found in the seq-file
     """
-    dict_definitions = get_definitions(seq_file)
+    dict_definitions = get_definitions(filepath)
     if key in dict_definitions:
-        value = dict_definitions[key]
-    else:
-        raise AttributeError(f'No definition called {key} in seq-file {seq_file}.')
+        return dict_definitions[key]
 
-    return value
+    raise AttributeError(f"No definition called {key} in file {filepath}.")
 
 
-@deprecation.deprecated(deprecated_in='0.3.2',
-                        removed_in='1.0',
-                        details="Use get_definition() function instead.")
-def get_offsets(seq: Sequence = None,
-                seq_file: str = None) \
-        -> list:
+def get_num_adc_events(filepath: Union[str, Path]) -> int:
     """
-    Reads offsets either from a seq file or from a Sequence object.
-    :param seq_file: sequence file to read the offsets from
-    :param seq: Sequence object to get the offsets from
-    :return: list of offsets
-    """
-    if not seq and not seq_file:
-        raise ValueError('You need to pass either the sequence filename or the Sequence object.')
-    if not seq:
-        seq = read_any_version(seq_file=seq_file)
-    offsets = seq.dict_definitions['offsets_ppm']
-    return offsets
+    get_num_adc_events Reads number of ADC events in a sequence file
 
+    Parameters
+    ----------
+    filepath : Union[str, Path]
+        Path to the seq-file
 
-def get_num_adc_events(seq_file: Union[str, Path]) -> int:
-    """
-    Reads number of ADC events in a sequence file
-    :param seq_file: sequence file to read the num_adc_events from
-    :return: num_adc_events
+    Returns
+    -------
+    int
+        Number of ADC events in the seq-file
     """
     adc_event_count = 0
-    with open(seq_file, 'r') as seq:
+    with open(filepath, "r") as seq:
         while True:
             line = strip_line(seq)
             if line == -1:
                 break
-            elif line == '[BLOCKS]':
+            elif line == "[BLOCKS]":
                 line = strip_line(seq)
-                while line != '' and line != ' ' and line != '#':
-                    block_event = np.fromstring(line, dtype=int, sep=' ')
+                while line != "" and line != " " and line != "#":
+                    block_event = np.fromstring(line, dtype=int, sep=" ")
                     if block_event[6] == 1:
-                        adc_event_count += 1  # count number of events before 1st adc
+                        adc_event_count += 1
                     line = strip_line(seq)
             else:
                 pass

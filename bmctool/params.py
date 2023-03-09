@@ -1,6 +1,6 @@
 """
 params.py
-    Class definition to store simulation parameters
+    Definition of the Params class, which stores all simulation parameters.
 """
 import numpy as np
 
@@ -10,10 +10,10 @@ class Params:
     Class to store simulation parameters
     """
 
-    def __init__(self, set_defaults: bool = False):
+    def __init__(self) -> None:
         """
-        :param set_defaults: if True, class initializes with parameters for a standard APT weightedCEST simulation of
-        gray matter at 3T with an amide CEST pool, a creatine CEST pool and a Lorentzian shaped MT pool
+        __init__ Initialize the Params class
+
         """
         self.water_pool = {}
         self.cest_pools = []
@@ -28,60 +28,94 @@ class Params:
 
     def set_water_pool(self, r1: float, r2: float, f: float = 1) -> dict:
         """
-        defining the water pool for simulation
-        :param r1: relaxation rate R1 = 1/ T1 [Hz]
-        :param r2: relaxation rate R2 = 1/T2 [Hz]
-        :param f: proton fraction (default = 1)
-        :return: dict of water pool parameters
+        set_water_pool Set all water pool parameters
+
+        Parameters
+        ----------
+        r1 : float
+            R1 relaxation rate [Hz] (1/T1)
+        r2 : float
+            R2 relaxation rate [Hz] (1/T2)
+        f : float, optional
+            Pool size fraction, by default 1
+
+        Returns
+        -------
+        dict
+            Dictionary containing the water pool parameters
         """
-        water_pool = {'r1': r1, 'r2': r2, 'f': f}
+        water_pool = {"r1": r1, "r2": r2, "f": f}
         self.water_pool = water_pool
         self.mz_loc += 2
         return water_pool
 
     def update_water_pool(self, **kwargs) -> dict:
         """
-        Updates water settings (kwargs: r1, r2, f)
-        kwargs: parameter to update the water pool with, from r1, r2, f
-        :param r1: relaxation rate R1 = 1/ T1 [Hz]
-        :param r2: relaxation rate R2 = 1/T2 [Hz]
-        :param f: proton fraction (default = 1)
-        :return: dict containing the new water_pool settings
+        update_water_pool Update water pool parameters (r1, r2, f) given as kwargs
+
+        Returns
+        -------
+        dict
+            Dictionary containing the updated water pool parameters
+
+        Raises
+        ------
+        AttributeError
+            If an unknown parameter is given
         """
-        option_names = ['r1', 'r2', 'f']
+        option_names = ["r1", "r2", "f"]
         if not all(name in option_names for name in kwargs.keys()):
-            raise AttributeError('Unknown option name. Update aborted!')
+            raise AttributeError("Unknown option name. Update aborted!")
 
         water_pool = {k: v for k, v in kwargs.items()}
         self.water_pool.update(water_pool)
         return water_pool
 
-    def set_cest_pool(self, r1: float, r2: float, k: int, f: float, dw: float) -> dict:
+    def set_cest_pool(self, r1: float, r2: float, k: float, f: float, dw: float) -> dict:
         """
-        defines a CEST pool for simulation
-        :param r1: relaxation rate R1 = 1/T1 [Hz]
-        :param r2: relaxation rate R2 = 1/T2 [Hz]
-        :param k: exchange rate [Hz]
-        :param f: proton fraction
-        :param dw: chemical shift from water [ppm]
-        :return: dict of CEST pool parameters
+        set_cest_pool Set all CEST pool parameters
+
+        Parameters
+        ----------
+        r1 : float
+            R1 relaxation rate [Hz] (1/T1)
+        r2 : float
+            R2 relaxation rate [Hz] (1/T2)
+        k : float
+            exchange rate [Hz]
+        f : float
+            pool size fraction
+        dw : float
+            chemical shift from water [ppm]
+
+        Returns
+        -------
+        dict
+            Dictionary containing the CEST pool parameters
         """
-        cest_pool = {'r1': r1, 'r2': r2, 'k': k, 'f': f, 'dw': dw}
+        cest_pool = {"r1": r1, "r2": r2, "k": k, "f": f, "dw": dw}
         self.cest_pools.append(cest_pool)
         self.mz_loc += 2
         return cest_pool
 
     def update_cest_pool(self, pool_idx: int = 0, **kwargs) -> dict:
         """
-        Updates CEST pool values (kwargs: r1, r2, k, f, dw)
-        :param pool_idx: index of the CEST pool that should be changed
-        :param kwargs: parameter(s) to update the defined CEST pool with, from r1, r2, k, f, dw
-        :param r1: relaxation rate R1 = 1/ T1 [Hz]
-        :param k: exchange rate [Hz]
-        :param r2: relaxation rate R2 = 1/T2 [Hz]
-        :param f: proton fraction (default = 1)
-        :param dw: chemical shift from water [ppm]
-        :return: dict of the new CEST pool parameters
+        update_cest_pool Update CEST pool parameters (r1, r2, k, f, dw) given as kwargs for a given pool
+
+        Parameters
+        ----------
+        pool_idx : int, optional
+            Index of the CEST pool to be updated, by default 0
+
+        Returns
+        -------
+        dict
+            Dictionary containing the updated CEST pool parameters
+
+        Raises
+        ------
+        AttributeError
+            If an unknown parameter is given
         """
         try:
             self.cest_pools[pool_idx]
@@ -89,44 +123,59 @@ class Params:
             print(f"CEST pool # {pool_idx} doesn't exist. No parameters have been changed.")
             return
 
-        option_names = ['r1', 'r2', 'k', 'f', 'dw']
+        option_names = ["r1", "r2", "k", "f", "dw"]
         if not all(name in option_names for name in kwargs):
-            raise AttributeError('Unknown option name. Update aborted!')
+            raise AttributeError("Unknown option name. Update aborted!")
 
         cest_pool = {k: v for k, v in kwargs.items()}
         self.cest_pools[pool_idx].update(cest_pool)
         return cest_pool
 
-    def set_mt_pool(self, r1: float, r2: float, k: int, f: float, dw: int, lineshape: str) -> dict:
+    def set_mt_pool(self, r1: float, r2: float, k: float, f: float, dw: float, lineshape: str) -> dict:
         """
-        defines an MT pool for simulation
-        :param r1: relaxation rate R1 = 1/ T1 [Hz]
-        :param r2: relaxation rate R2 = 1/ T2 [Hz]
-        :param k: exchange rate [Hz]
-        :param f: proton fraction
-        :param dw: chemical shift from water [ppm]
-        :param lineshape: shape of MT pool ("Lorentzian", "SuperLorentzian" or "None")
-        :return: dict containing MT pool parameters
+        set_mt_pool Set all MT pool parameters
+
+        Parameters
+        ----------
+        r1 : float
+            R1 relaxation rate [Hz] (1/T1)
+        r2 : float
+            R2 relaxation rate [Hz] (1/T2)
+        k : float
+            exchange rate [Hz]
+        f : float
+            pool size fraction
+        dw : float
+            chemical shift from water [ppm]
+        lineshape : str
+            Lineshape of the MT pool ("Lorentzian", "SuperLorentzian" or "None")
+
+        Returns
+        -------
+        dict
+            Dictionary containing the MT pool parameters
         """
-        mt_pool = {'r1': r1, 'r2': r2, 'k': k, 'f': f, 'dw': dw, 'lineshape': lineshape}
+        mt_pool = {"r1": r1, "r2": r2, "k": k, "f": f, "dw": dw, "lineshape": lineshape}
         self.mt_pool.update(mt_pool)
         return mt_pool
 
     def update_mt_pool(self, **kwargs) -> dict:
         """
-        Updates mt pool values (kwargs: r1, r2, k, f, dw)
-        :param kwargs: parameter(s) to update the MT pool with, from r1, r2, k, f, dw
-        :param r1: relaxation rate R1 = 1/ T1 [Hz]
-        :param r2: relaxation rate R2 = 1/ T2 [Hz]
-        :param k: exchange rate [Hz]
-        :param f: proton fraction
-        :param dw: chemical shift from water [ppm]
-        :param lineshape: shape of MT pool ("Lorentzian", "SuperLorentzian" or "None")
-        :return: dict containing the new MT pool parameters
+        update_mt_pool Update MT pool parameters (r1, r2, k, f, dw, lineshape) given as kwargs
+
+        Returns
+        -------
+        dict
+            Dictionary containing the updated MT pool parameters
+
+        Raises
+        ------
+        AttributeError
+            If an unknown parameter is given
         """
-        option_names = ['r1', 'r2', 'k', 'f', 'dw', 'lineshape']
+        option_names = ["r1", "r2", "k", "f", "dw", "lineshape"]
         if not all(name in option_names for name in kwargs):
-            raise AttributeError('Unknown option name. Update aborted!')
+            raise AttributeError("Unknown option name. Update aborted!")
 
         mt_pool = {k: v for k, v in kwargs.items()}
         self.mt_pool.update(mt_pool)
@@ -134,14 +183,25 @@ class Params:
 
     def set_scanner(self, b0: float, gamma: float, b0_inhom: float, rel_b1: float) -> dict:
         """
-        Sets the scanner values
-        :param b0: field strength [T]
-        :param gamma: gyromagnetic ratio [rad/uT]
-        :param b0_inhom: field ihnomogeneity [ppm]
-        :param rel_b1: relative B1 field
-        :return: dict containing the parameter values
+        set_scanner Set all scanner parameters
+
+        Parameters
+        ----------
+        b0 : float
+            field strength [T]
+        gamma : float
+            gyromagnetic ratio [rad/uT]
+        b0_inhom : float
+            _description_
+        rel_b1 : float
+            _description_
+
+        Returns
+        -------
+        dict
+            _description_
         """
-        scanner = {'b0': b0, 'gamma': gamma, 'b0_inhomogeneity': b0_inhom, 'rel_b1': rel_b1}
+        scanner = {"b0": b0, "gamma": gamma, "b0_inhomogeneity": b0_inhom, "rel_b1": rel_b1}
         self.scanner.update(scanner)
         return scanner
 
@@ -155,70 +215,104 @@ class Params:
         :param rel_b1: relative B1 field
         :return: dict containing the new parameter values
         """
-        kwargs = {('b0_inhomogeneity' if k == 'b0_inhom' else k): v for k, v in kwargs.items()}
-        option_names = ['b0', 'gamma', 'b0_inhomogeneity', 'rel_b1']
+        kwargs = {("b0_inhomogeneity" if k == "b0_inhom" else k): v for k, v in kwargs.items()}
+        option_names = ["b0", "gamma", "b0_inhomogeneity", "rel_b1"]
         if not all(name in option_names for name in kwargs):
-            raise AttributeError('Unknown option name. Update aborted!')
+            raise AttributeError("Unknown option name. Update aborted!")
 
         scanner = {k: v for k, v in kwargs.items()}
         self.scanner.update(scanner)
         return scanner
 
-    def _check_reset_init_mag(self):
-        if not self.options['reset_init_mag'] and self.options['par_calc']:
-            print(f"'par_calc = True' not available for 'reset_init_mag = False'. Changed 'par_calc' to 'False'.")
-            self.options['par_calc'] = False
+    def _check_reset_init_mag(self) -> None:
+        """
+        _check_reset_init_mag Check if reset_init_mag and par_calc are compatible
+        """
+        if not self.options["reset_init_mag"] and self.options["par_calc"]:
+            print("'par_calc = True' not available for 'reset_init_mag = False'. Changed 'par_calc' to 'False'.")
+            self.options["par_calc"] = False
 
-    def set_options(self, verbose: bool = False, reset_init_mag: bool = True, scale: float = 1.0,
-                    max_pulse_samples: int = 500, par_calc: bool = False) -> dict:
+    def set_options(
+        self,
+        verbose: bool = False,
+        reset_init_mag: bool = True,
+        scale: float = 1.0,
+        max_pulse_samples: int = 500,
+        par_calc: bool = False,
+    ) -> dict:
         """
-        Setting additional options
-        :param verbose: Verbose output
-        :param reset_init_mag: true if magnetization should be set to self.m_vec after each ADC
-        :param scale: scaling factor for the magnetization after reset (if reset_init_mag = True)
-        :param max_pulse_samples: max number of samples for shaped pulses
-        :param par_calc: toggles parallel calculation (BMCTool only)
-        :return: dict containing option parameters
+        set_options Set all additional options
+
+        Parameters
+        ----------
+        verbose : bool, optional
+            Flag to activate detailed outputs, by default False
+        reset_init_mag : bool, optional
+            flag to reset the initial magnetization for every offset, by default True
+        scale : float, optional
+            value of initial magnetization if reset_init_mag is True, by default 1.0
+        max_pulse_samples : int, optional
+            maximum number of simulation steps for one RF pulse, by default 500
+        par_calc : bool, optional
+            flag to activate parallel computation of all offsets (only available if reset_init_mag is True), by default False
+
+        Returns
+        -------
+        dict
+            Dictionary containing the additional options
         """
-        options = {'verbose': verbose, 'reset_init_mag': reset_init_mag, 'scale': scale,
-                   'max_pulse_samples': max_pulse_samples, 'par_calc': par_calc}
+        options = {
+            "verbose": verbose,
+            "reset_init_mag": reset_init_mag,
+            "scale": scale,
+            "max_pulse_samples": max_pulse_samples,
+            "par_calc": par_calc,
+        }
         self.options.update(options)
         self._check_reset_init_mag()
         return options
 
     def update_options(self, **kwargs) -> dict:
         """
-        Updates additional options (kwargs: verbose, reset_init_mag, scale, max_pulse_samples, par_calc)
-        :param kwargs: parameters to update the options with from verbose, reset_init_mag, scale, max_pulse_samples,
-                    par_calc
-        :param verbose: Verbose output
-        :param reset_init_mag: true if magnetization should be set to self.m_vec after each ADC
-        :param scale: scaling factor for the magnetization after reset (if reset_init_mag = True)
-        :param max_pulse_samples: max number of samples for shaped pulses
-        :param par_calc: toggles parallel calculation (BMCTool only)
-        :return: dict containing the new option parameters
+        update_options Update additional options (kwargs: verbose, reset_init_mag, scale, max_pulse_samples, par_calc)
+
+        Returns
+        -------
+        dict
+            Dictionary containing the updated additional options
+
+        Raises
+        ------
+        AttributeError
+            If an unknown parameter is given
         """
-        option_names = ['verbose', 'reset_init_mag', 'scale', 'max_pulse_samples', 'par_calc']
+        option_names = ["verbose", "reset_init_mag", "scale", "max_pulse_samples", "par_calc"]
 
         if not all(name in option_names for name in kwargs):
-            raise AttributeError('Unknown option name. Update aborted!')
+            raise AttributeError("Unknown option name. Update aborted!")
 
         options = {k: v for k, v in kwargs.items()}
         self.options.update(options)
         self._check_reset_init_mag()
         return options
 
-    def set_m_vec(self) -> np.array:
+    def set_m_vec(self) -> np.ndarray:
         """
-        Sets the initial magnetization vector (fully relaxed) from the defined pools
-        e. g. for 2 CEST pools: [MxA, MxB, MxD, MyA, MyB, MyD, MzA, MzB, MzD, MzC]
-        with A: water pool, B: 1st CEST pool, D: 2nd CEST pool, C: MT pool
-        with possible inclusion of more CEST pools in the same way
+        set_m_vec Sets the initial magnetization vector (fully relaxed) from the defined pools with A: water pool, B: 1st CEST pool, C: MT pool, D: 2nd CEST pool, etc. with possible inclusion of more CEST pools.
 
-        :return: array of the initial magnetizations
+
+        Returns
+        -------
+        np.ndarray
+            Initial magnetization vector (fully relaxed)
+
+        Raises
+        ------
+        Exception
+            If no water pool is defined.
         """
         if not self.water_pool:
-            raise Exception('No water pool defined before assignment of magnetization vector.')
+            raise Exception("No water pool defined before assignment of magnetization vector.")
 
         if self.cest_pools:
             n_total_pools = len(self.cest_pools) + 1
@@ -226,22 +320,22 @@ class Params:
             n_total_pools = 1
 
         m_vec = np.zeros(n_total_pools * 3)
-        m_vec[n_total_pools * 2] = self.water_pool['f']
+        m_vec[n_total_pools * 2] = self.water_pool["f"]
         if self.cest_pools:
             for ii in range(1, n_total_pools):
-                m_vec[n_total_pools * 2 + ii] = self.cest_pools[ii - 1]['f']
+                m_vec[n_total_pools * 2 + ii] = self.cest_pools[ii - 1]["f"]
                 m_vec[n_total_pools * 2] = m_vec[n_total_pools * 2]
         if self.mt_pool:
-            m_vec = np.append(m_vec, self.mt_pool['f'])
-        if type(self.options['scale']) == int or float:
-            m_vec = m_vec * self.options['scale']
+            m_vec = np.append(m_vec, self.mt_pool["f"])
+        if isinstance(self.options["scale"], float):
+            m_vec = m_vec * self.options["scale"]
 
         self.m_vec = m_vec
         return m_vec
 
-    def print_settings(self):
+    def print_settings(self) -> None:
         """
-        function to print the current parameter settings
+        print_settings Prints the current parameters
         """
         print("\n Current parameter settings:")
         print("\t water pool:\n", self.water_pool)
