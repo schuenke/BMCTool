@@ -164,7 +164,7 @@ def write_seq(
     write_seq_defs(seq, seq_defs, use_matlab_names)
 
     # write *.seq file
-    seq.write(filename)
+    seq.write(str(filename))
 
     # insert header
     insert_seq_file_header(filepath=filename, author=author)
