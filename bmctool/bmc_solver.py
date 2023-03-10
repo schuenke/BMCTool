@@ -14,7 +14,7 @@ class BlochMcConnellSolver:
     Solver class for Bloch-McConnell equations.
     """
 
-    def __init__(self, params: Params, n_offsets: int):
+    def __init__(self, params: Params, n_offsets: int) -> None:
         """
         __init__ Initialize BlochMcConnellSolver class.
 
@@ -25,19 +25,21 @@ class BlochMcConnellSolver:
         n_offsets : int
             Number of frequency offsets.
         """
-        self.params = params
-        self.n_offsets = n_offsets
-        self.par_calc = params.options["par_calc"]
-        self.first_dim = 1
-        self.n_pools = len(params.cest_pools)
+        self.params: Params = params
+        self.n_offsets: int = n_offsets
+        self.par_calc: bool = params.options["par_calc"]
+        self.first_dim: int = 1
+        self.n_pools: int = len(params.cest_pools)
         self.is_mt_active = bool(params.mt_pool)
-        self.size = params.m_vec.size
-        self.w0 = None
-        self.dw0 = None
+        self.size: int = params.m_vec.size
+        self.arr_a: np.ndarray = None
+        self.arr_c: np.ndarray = None
+        self.w0: float = None
+        self.dw0: float = None
 
         self.update_params(params)
 
-    def _init_matrix_a(self):
+    def _init_matrix_a(self) -> None:
         """
         Initialize self.arr_a with all parameters from self.params.
         """
@@ -93,7 +95,7 @@ class BlochMcConnellSolver:
             self.arr_a = np.repeat(self.arr_a, self.n_offsets, axis=0)
             self.first_dim = self.n_offsets
 
-    def _init_vector_c(self):
+    def _init_vector_c(self) -> None:
         """
         Initialize vector self.C with all parameters from self.params.
         """
@@ -113,7 +115,7 @@ class BlochMcConnellSolver:
         if self.par_calc:
             self.arr_c = np.repeat(self.arr_c, self.n_offsets, axis=0)
 
-    def update_params(self, params: Params):
+    def update_params(self, params: Params) -> None:
         """
         Updates matrix self.A according to given Params object.
         """
@@ -123,7 +125,7 @@ class BlochMcConnellSolver:
         self._init_matrix_a()
         self._init_vector_c()
 
-    def update_matrix(self, rf_amp: float, rf_phase: np.ndarray, rf_freq: np.ndarray):
+    def update_matrix(self, rf_amp: float, rf_phase: np.ndarray, rf_freq: np.ndarray) -> None:
         """
         Updates matrix self.A according to given parameters.
         :param rf_amp: amplitude of current step (e.g. pulse fragment)
@@ -218,7 +220,7 @@ class BlochMcConnellSolver:
         mag_ = np.dot(f, (mag_ + a_inv_t)) - a_inv_t
         return mag_[np.newaxis, :, np.newaxis]
 
-    def solve_equation(self, mag: np.ndarray, dtp: float):
+    def solve_equation(self, mag: np.ndarray, dtp: float) -> np.ndarray:
         """
         Solves one step of BMC equations using the eigenwert ansatz.
         :param mag: magnetization vector before current step
@@ -258,7 +260,7 @@ class BlochMcConnellSolver:
         inv = np.linalg.inv(vects)
         return np.einsum("ijk,ikl->ijl", tmp, inv)
 
-    def get_mt_shape_at_offset(self, offsets: np.ndarray, w0: float):
+    def get_mt_shape_at_offset(self, offsets: np.ndarray, w0: float) -> np.ndarray:
         """
         Calculates the lineshape of the MT pool at the given offset(s).
         :param offsets: frequency offset(s)
@@ -288,7 +290,7 @@ class BlochMcConnellSolver:
             mt_line = np.zeros(offsets.size)
         return mt_line
 
-    def interpolate_sl(self, dw: float):
+    def interpolate_sl(self, dw: float) -> float:
         """
         Interpolates MT profile for SuperLorentzian lineshape.
         :param dw: relative frequency offset
@@ -304,7 +306,7 @@ class BlochMcConnellSolver:
             mt_line += sqrt_2pi * t2 / powcu2 * np.exp(-2 * pow(dw * t2 / powcu2, 2))
         return mt_line * np.pi * step_size
 
-    def interpolate_chs(self, dw_pool: float, w0: float):
+    def interpolate_chs(self, dw_pool: float, w0: float) -> np.ndarray:
         """
         Cubic Hermite Spline Interpolation
         """
