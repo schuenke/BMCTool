@@ -3,34 +3,44 @@ create_arbitrary_pulse_with_phase.py
     Function to create a radio-frequency pulse event with arbitrary pulse shape and phase modulation.
 """
 
-import numpy as np
 from types import SimpleNamespace
-from pypulseq.opts import Opts
+
+import numpy as np
+from pypulseq import Opts
 
 
-def create_arbitrary_pulse_with_phase(signal: np.ndarray,
-                                      flip_angle: float,
-                                      freq_offset: float = 0,
-                                      phase_offset: float = 0,
-                                      system: Opts = Opts()) \
-        -> (SimpleNamespace, None):
+def create_arbitrary_pulse_with_phase(
+    signal: np.ndarray, flip_angle: float, freq_offset: float = 0, phase_offset: float = 0, system: Opts = Opts()
+) -> SimpleNamespace:
     """
-    Creates a radio-frequency pulse event with arbitrary pulse shape and phase modulation
-    :param signal: signal modulation (amplitude and phase) of pulse
-    :param flip_angle: flip angle of pulse [rad]
-    :param freq_offset: frequency offset [Hz]
-    :param phase_offset: phase offset [rad]
-    :param system: system limits of the MR scanner
-    :return:
-    """
+    create_arbitrary_pulse_with_phase Create an RF pulse with arbitrary pulse shape and phase modulation
 
-    signal *= (flip_angle / (2 * np.pi))
-    t = np.linspace(1, len(signal)) * system.rf_raster_time
+    Parameters
+    ----------
+    signal : np.ndarray
+        shape of the RF pulse
+    flip_angle : float
+        flip angle of the RF pulse
+    freq_offset : float, optional
+        frequency offset of the RF pulse, by default 0
+    phase_offset : float, optional
+        phase offset of the RF pulse, by default 0
+    system : Opts, optional
+        pypulseq Opts object containing system limits, by default Opts()
+
+    Returns
+    -------
+    SimpleNamespace
+        _description_
+    """
+    signal *= flip_angle / (2 * np.pi)
+    t = np.linspace(1, len(signal), num=len(signal)) * system.rf_raster_time
 
     rf = SimpleNamespace()
-    rf.type = 'rf'
+    rf.type = "rf"
     rf.signal = signal
     rf.t = t
+    rf.shape_dur = len(signal) * system.rf_raster_time
     rf.freq_offset = freq_offset
     rf.phase_offset = phase_offset
     rf.dead_time = system.rf_dead_time
