@@ -53,10 +53,17 @@ def prep_rf_simulation(block: SimpleNamespace, max_pulse_samples: int) -> Tuple[
     ph = ph[idx]
     n_unique = max(np.unique(amp).size, np.unique(ph).size)
 
-    if n_unique == 1:
+    # block pulse for seq-files >= 1.4.0
+    if n_unique == 1 and amp.size ==2:
+        amp_ = amp[0]
+        ph_ = ph[0]
+        dtp_ = dtp
+    # block pulse for seq-files < 1.4.0
+    elif n_unique == 1:
         amp_ = amp[0]
         ph_ = ph[0]
         dtp_ = dtp * amp.size
+    # shaped pulse
     elif n_unique > max_pulse_samples:
         sample_factor = int(np.ceil(amp.size / max_pulse_samples))
         amp_ = amp[::sample_factor]
@@ -148,11 +155,11 @@ class BMCTool:
         try:
             for block_event in loop_block_events:
                 block = self.seq.get_block(block_event)
-                current_adc, accum_pahse, mag = self.run_1_4_0(block, current_adc, accum_phase, mag)
+                current_adc, accum_phase, mag = self.run_1_4_0(block, current_adc, accum_phase, mag)
         except AttributeError:
             for block_event in loop_block_events:
                 block = self.seq.get_block(block_event)
-                current_adc, accum_pahse, mag = self.run_1_3_0(block, current_adc, accum_phase, mag)
+                current_adc, accum_phase, mag = self.run_1_3_0(block, current_adc, accum_phase, mag)
 
     def run_1_4_0(self, block, current_adc, accum_phase, mag) -> Tuple[int, float, np.ndarray]:
         # pseudo ADC event
