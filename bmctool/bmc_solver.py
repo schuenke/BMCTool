@@ -178,7 +178,7 @@ class BlochMcConnellSolver:
                 - rf_amp_2pi**2 * self.get_mt_shape_at_offset(rf_freq_2pi + self.dw0, self.w0)
             )
 
-    def solve_equation_pade(self, mag: np.ndarray, dtp: float) -> np.ndarray:
+    def solve_equation(self, mag: np.ndarray, dtp: float) -> np.ndarray:
         """
         Solves one step of BMC equations using the Padé approximation. This function is not used atm.
         :param mag: magnetization vector before current step
@@ -220,7 +220,7 @@ class BlochMcConnellSolver:
         mag_ = np.dot(f, (mag_ + a_inv_t)) - a_inv_t
         return mag_[np.newaxis, :, np.newaxis]
 
-    def solve_equation(self, mag: np.ndarray, dtp: float) -> np.ndarray:
+    def solve_equation_expm(self, mag: np.ndarray, dtp: float) -> np.ndarray:
         """
         Solves one step of BMC equations using the eigenwert ansatz.
         :param mag: magnetization vector before current step
