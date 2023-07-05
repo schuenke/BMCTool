@@ -70,7 +70,9 @@ def prep_rf_simulation(block: SimpleNamespace, max_pulse_samples: int) -> Tuple[
         ph_ = ph[::sample_factor]
         dtp_ = dtp * sample_factor
     else:
-        raise Exception("Case with 1 < unique samples < max_pulse_samples not implemented yet. Sorry :(")
+        amp_ = amp
+        ph_ = ph
+        dtp_ = dtp
 
     return amp_, ph_, dtp_, delay_after_pulse
 
