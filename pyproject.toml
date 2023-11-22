@@ -18,7 +18,13 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3 :: Only",
 ]
-dependencies = ["numpy>=1.23,<2.0", "matplotlib", "tqdm", "PyYAML", "pypulseq"]
+dependencies = [
+    "numpy>=1.23,<2.0",
+    "matplotlib",
+    "tqdm",
+    "PyYAML",
+    "pypulseq@git+https://github.com/imr-framework/pypulseq",
+]
 
 [project.optional-dependencies]
 test = [
