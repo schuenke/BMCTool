@@ -6,7 +6,7 @@
 # sources/references for settings in this file:
 # https://onlinelibrary.wiley.com/doi/abs/10.1002/mrm.26133
 
-###### Pool settings 
+###### Pool settings
 #  f: relative pool size fraction (float)
 # r1: inverse longitudinal relaxation time R1 = 1/T1 [Hz] (float)
 # r2: inverse transversal relaxation time R2 = 1/T2 [Hz] (float)
@@ -20,7 +20,7 @@ water_pool: {
   r2: 1 / 75e-3
 }
 
-###### Scanner settings 
+###### Scanner settings
 #       b0: field strength [T] (float)
 #    gamma: gyromagnetic ratio [rad / uT], default is 267.5153 (float)
 # b0_inhom: field inhomogeneity [ppm], default is 0.0 (float)

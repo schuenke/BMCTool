@@ -1,17 +1,11 @@
-"""
-eval.py
-    Functions for evaluation and visualization.
-"""
-from typing import Tuple, Union
-
+"""eval.py Functions for evaluation and visualization."""
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.figure import Figure
 
 
 def calc_mtr_asym(m_z: np.ndarray, offsets: np.ndarray, n_interp: int = 1000) -> np.ndarray:
-    """
-    calc_mtr_asym Calculate MTRasym from the magnetization vector.
+    """calc_mtr_asym Calculate MTRasym from the magnetization vector.
 
     Parameters
     ----------
@@ -34,10 +28,10 @@ def calc_mtr_asym(m_z: np.ndarray, offsets: np.ndarray, n_interp: int = 1000) ->
 
 
 def normalize_data(
-    m_z: np.ndarray, offsets: np.ndarray, threshold: Union[int, float, list, np.ndarray]
-) -> Tuple[np.ndarray, np.ndarray]:
-    """
-    normalize_data Normalize magnetization values by the mean of values corresponding to offsets exceeding the given threshold.
+    m_z: np.ndarray, offsets: np.ndarray, threshold: int | float | list | np.ndarray
+) -> tuple[np.ndarray, np.ndarray]:
+    """normalize_data Normalize magnetization values by the mean of values
+    corresponding to offsets exceeding the given threshold.
 
     Parameters
     ----------
@@ -46,7 +40,7 @@ def normalize_data(
     offsets : np.ndarray
         Offset values.
     threshold : Union[int, float, list, np.ndarray]
-        Threshold for data splitting. If int or float, the absolute value is used. If list or np.ndarray, the min and max value are used.
+        Threshold for data splitting. If int or float, using abs(value). If list or arry, using min/max values.
 
     Returns
     -------
@@ -62,10 +56,9 @@ def normalize_data(
 
 
 def split_data(
-    m_z: np.ndarray, offsets: np.ndarray, threshold: Union[int, float, list, np.ndarray]
-) -> Tuple[np.ndarray, np.ndarray, Union[np.ndarray, None]]:
-    """
-    split_data Split magnetization vector into data and normalization data.
+    m_z: np.ndarray, offsets: np.ndarray, threshold: int | float | list | np.ndarray
+) -> tuple[np.ndarray, np.ndarray, np.ndarray | None]:
+    """split_data Split magnetization vector into data and normalization data.
 
     Parameters
     ----------
@@ -74,7 +67,7 @@ def split_data(
     offsets : np.ndarray
         Offset values.
     threshold : Union[int, float, list, np.ndarray]
-        Threshold for data splitting. If int or float, the absolute value is used. If list or np.ndarray, the min and max value are used.
+        Threshold for data splitting. If int or float, using abs(value). If list or arry, using min/max values.
 
     Returns
     -------
@@ -113,17 +106,16 @@ def split_data(
 
 def plot_z(
     m_z: np.ndarray,
-    offsets: Union[np.ndarray, None] = None,
+    offsets: np.ndarray | None = None,
     normalize: bool = False,
-    norm_threshold: Union[int, float, list, np.ndarray] = 295,
+    norm_threshold: int | float | list | np.ndarray = 295,
     invert_ax: bool = True,
     plot_mtr_asym: bool = False,
-    title: str = "spectrum",
-    x_label: str = "offsets [ppm]",
-    y_label: str = "signal",
+    title: str = 'spectrum',
+    x_label: str = 'offsets [ppm]',
+    y_label: str = 'signal',
 ) -> Figure:
-    """
-    plot_z Plot Z-spectrum according to the given parameters.
+    """plot_z Plot Z-spectrum according to the given parameters.
 
     Parameters
     ----------
@@ -159,21 +151,21 @@ def plot_z(
 
     fig, ax1 = plt.subplots()
     ax1.set_ylim([round(min(m_z) - 0.05, 2), round(max(m_z) + 0.05, 2)])
-    ax1.set_ylabel(y_label, color="b")
+    ax1.set_ylabel(y_label, color='b')
     ax1.set_xlabel(x_label)
-    plt.plot(offsets, m_z, ".--", label="$Z$", color="b")
+    plt.plot(offsets, m_z, '.--', label='$Z$', color='b')
     if invert_ax:
         plt.gca().invert_xaxis()
-    ax1.tick_params(axis="y", labelcolor="b")
+    ax1.tick_params(axis='y', labelcolor='b')
 
     if plot_mtr_asym:
         mtr_asym = calc_mtr_asym(m_z=m_z, offsets=offsets)
 
         ax2 = ax1.twinx()
         ax2.set_ylim([round(min(mtr_asym) - 0.01, 2), round(max(mtr_asym) + 0.01, 2)])
-        ax2.set_ylabel("$MTR_{asym}$", color="y")
-        ax2.plot(offsets, mtr_asym, label="$MTR_{asym}$", color="y")
-        ax2.tick_params(axis="y", labelcolor="y")
+        ax2.set_ylabel('$MTR_{asym}$', color='y')
+        ax2.plot(offsets, mtr_asym, label='$MTR_{asym}$', color='y')
+        ax2.tick_params(axis='y', labelcolor='y')
         fig.tight_layout()
 
     plt.title(title)

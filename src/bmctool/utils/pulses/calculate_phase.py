@@ -1,7 +1,5 @@
-"""
-calculate_phase.py
-    Function to calculate phase modulation for a given frequency modulation.
-"""
+"""calculate_phase.py Function to calculate phase modulation for a given
+frequency modulation."""
 
 import numpy as np
 
@@ -9,8 +7,8 @@ import numpy as np
 def calculate_phase(
     frequency: np.ndarray, duration: float, samples: int, shift_idx: int = -1, pos_offsets: bool = False
 ) -> np.ndarray:
-    """
-    calculate_phase Calculate phase modulation for a given frequency modulation.
+    """calculate_phase Calculate phase modulation for a given frequency
+    modulation.
 
     Returns
     -------

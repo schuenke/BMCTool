@@ -1,22 +1,16 @@
-"""
-bmc_solver.py
-    Definition of BlochMcConnellSolver class.
-"""
+"""bmc_solver.py Definition of BlochMcConnellSolver class."""
 import math
 
 import numpy as np
 
-from bmctool.params import Params
+from src.bmctool.params import Params
 
 
 class BlochMcConnellSolver:
-    """
-    Solver class for Bloch-McConnell equations.
-    """
+    """Solver class for Bloch-McConnell equations."""
 
     def __init__(self, params: Params, n_offsets: int) -> None:
-        """
-        __init__ Initialize BlochMcConnellSolver class.
+        """__init__ Initialize BlochMcConnellSolver class.
 
         Parameters
         ----------
@@ -27,7 +21,7 @@ class BlochMcConnellSolver:
         """
         self.params: Params = params
         self.n_offsets: int = n_offsets
-        self.par_calc: bool = params.options["par_calc"]
+        self.par_calc: bool = params.options['par_calc']
         self.first_dim: int = 1
         self.n_pools: int = len(params.cest_pools)
         self.is_mt_active = bool(params.mt_pool)
@@ -40,25 +34,23 @@ class BlochMcConnellSolver:
         self.update_params(params)
 
     def _init_matrix_a(self) -> None:
-        """
-        Initialize self.arr_a with all parameters from self.params.
-        """
+        """Initialize self.arr_a with all parameters from self.params."""
         n_p = self.n_pools
         self.arr_a = np.zeros([self.size, self.size], dtype=float)
 
         # set mt_pool parameters
         k_ac = 0.0
         if self.is_mt_active:
-            k_ca = self.params.mt_pool["k"]
-            k_ac = k_ca * self.params.mt_pool["f"]
+            k_ca = self.params.mt_pool['k']
+            k_ac = k_ca * self.params.mt_pool['f']
             self.arr_a[2 * (n_p + 1), 3 * (n_p + 1)] = k_ca
             self.arr_a[3 * (n_p + 1), 2 * (n_p + 1)] = k_ac
 
         # set water_pool parameters
-        k1a = self.params.water_pool["r1"] + k_ac
-        k2a = self.params.water_pool["r2"]
+        k1a = self.params.water_pool['r1'] + k_ac
+        k2a = self.params.water_pool['r2']
         for pool in self.params.cest_pools:
-            k_ai = pool["f"] * pool["k"]
+            k_ai = pool['f'] * pool['k']
             k1a += k_ai
             k2a += k_ai
 
@@ -68,10 +60,10 @@ class BlochMcConnellSolver:
 
         # set cest_pools parameters
         for i, pool in enumerate(self.params.cest_pools):
-            k_ia = pool["k"]
-            k_ai = k_ia * pool["f"]
-            k_1i = k_ia + pool["r1"]
-            k_2i = k_ia + pool["r2"]
+            k_ia = pool['k']
+            k_ai = k_ia * pool['f']
+            k_1i = k_ia + pool['r1']
+            k_2i = k_ia + pool['r2']
 
             self.arr_a[0, i + 1] = k_ia
             self.arr_a[i + 1, 0] = k_ai
@@ -86,9 +78,7 @@ class BlochMcConnellSolver:
             self.arr_a[i + 1 + 2 * (n_p + 1), i + 1 + 2 * (n_p + 1)] = -k_1i
 
         # always expand to 3 dimensions
-        self.arr_a = self.arr_a[
-            np.newaxis,
-        ]
+        self.arr_a = self.arr_a[np.newaxis,]
 
         # if parallel computation is activated, repeat matrix A n_offsets times along a new axis
         if self.par_calc:
@@ -96,17 +86,15 @@ class BlochMcConnellSolver:
             self.first_dim = self.n_offsets
 
     def _init_vector_c(self) -> None:
-        """
-        Initialize vector self.C with all parameters from self.params.
-        """
+        """Initialize vector self.C with all parameters from self.params."""
         n_p = self.n_pools
         self.arr_c = np.zeros([self.size], dtype=float)
-        self.arr_c[(n_p + 1) * 2] = self.params.water_pool["f"] * self.params.water_pool["r1"]
+        self.arr_c[(n_p + 1) * 2] = self.params.water_pool['f'] * self.params.water_pool['r1']
         for i, pool in enumerate(self.params.cest_pools):
-            self.arr_c[(n_p + 1) * 2 + (i + 1)] = pool["f"] * pool["r1"]
+            self.arr_c[(n_p + 1) * 2 + (i + 1)] = pool['f'] * pool['r1']
 
         if self.is_mt_active:
-            self.arr_c[3 * (n_p + 1)] = self.params.mt_pool["f"] * self.params.mt_pool["r1"]
+            self.arr_c[3 * (n_p + 1)] = self.params.mt_pool['f'] * self.params.mt_pool['r1']
 
         # always expand to 3 dimensions (independent of sequential or parallel computation)
         self.arr_c = self.arr_c[np.newaxis, :, np.newaxis]
@@ -116,21 +104,20 @@ class BlochMcConnellSolver:
             self.arr_c = np.repeat(self.arr_c, self.n_offsets, axis=0)
 
     def update_params(self, params: Params) -> None:
-        """
-        Updates matrix self.A according to given Params object.
-        """
+        """Updates matrix self.A according to given Params object."""
         self.params = params
-        self.w0 = params.scanner["b0"] * params.scanner["gamma"]
-        self.dw0 = self.w0 * params.scanner["b0_inhomogeneity"]
+        self.w0 = params.scanner['b0'] * params.scanner['gamma']
+        self.dw0 = self.w0 * params.scanner['b0_inhomogeneity']
         self._init_matrix_a()
         self._init_vector_c()
 
     def update_matrix(self, rf_amp: float, rf_phase: np.ndarray, rf_freq: np.ndarray) -> None:
-        """
-        Updates matrix self.A according to given parameters.
+        """Updates matrix self.A according to given parameters.
+
         :param rf_amp: amplitude of current step (e.g. pulse fragment)
         :param rf_phase: phase of current step (e.g. pulse fragment)
-        :param rf_freq: frequency value of current step (e.g. pulse fragment)
+        :param rf_freq: frequency value of current step (e.g. pulse
+            fragment)
         """
         j = self.first_dim  # size of first dimension (=1 for sequential, n_offsets for parallel)
         n_p = self.n_pools
@@ -140,7 +127,7 @@ class BlochMcConnellSolver:
         self.arr_a[:, 1 + n_p, 0] = [-1 * self.dw0] * j
 
         # calculate omega_1
-        rf_amp_2pi = rf_amp * 2 * np.pi * self.params.scanner["rel_b1"]
+        rf_amp_2pi = rf_amp * 2 * np.pi * self.params.scanner['rel_b1']
         rf_amp_2pi_sin = rf_amp_2pi * np.sin(rf_phase)
         rf_amp_2pi_cos = rf_amp_2pi * np.cos(rf_phase)
 
@@ -166,21 +153,22 @@ class BlochMcConnellSolver:
 
         # set off-resonance terms for cest pools
         for i in range(1, n_p + 1):
-            dwi = self.params.cest_pools[i - 1]["dw"] * self.w0 - (rf_freq_2pi + self.dw0)
+            dwi = self.params.cest_pools[i - 1]['dw'] * self.w0 - (rf_freq_2pi + self.dw0)
             self.arr_a[:, i, i + n_p + 1] = -dwi
             self.arr_a[:, i + n_p + 1, i] = dwi
 
         # mt_pool
         if self.is_mt_active:
             self.arr_a[:, 3 * (n_p + 1), 3 * (n_p + 1)] = (
-                -self.params.mt_pool["r1"]
-                - self.params.mt_pool["k"]
+                -self.params.mt_pool['r1']
+                - self.params.mt_pool['k']
                 - rf_amp_2pi**2 * self.get_mt_shape_at_offset(rf_freq_2pi + self.dw0, self.w0)
             )
 
     def solve_equation(self, mag: np.ndarray, dtp: float) -> np.ndarray:
-        """
-        Solves one step of BMC equations using the Padé approximation. This function is not used atm.
+        """Solves one step of BMC equations using the Padé approximation.
+
+        This function is not used atm.
         :param mag: magnetization vector before current step
         :param dtp: duration of current step
         :return: magnetization vector after current step
@@ -221,8 +209,8 @@ class BlochMcConnellSolver:
         return mag_[np.newaxis, :, np.newaxis]
 
     def solve_equation_expm(self, mag: np.ndarray, dtp: float) -> np.ndarray:
-        """
-        Solves one step of BMC equations using the eigenwert ansatz.
+        """Solves one step of BMC equations using the eigenwert ansatz.
+
         :param mag: magnetization vector before current step
         :param dtp: duration of current step
         :return: magnetization vector after current step
@@ -240,39 +228,41 @@ class BlochMcConnellSolver:
         # A_.T.dot(A_), A_.T.dot(b_)). For speed reasons, the transpose of A_ (A_.T) is pre-calculated and the
         # .dot notation is replaced by the Einstein summation (np.einsum).
         arr_at = arr_a.T
-        tmps = np.linalg.solve(np.einsum("kji,ikl->ijl", arr_at, arr_a), np.einsum("kji,ikl->ijl", arr_at, arr_c))
+        tmps = np.linalg.solve(np.einsum('kji,ikl->ijl', arr_at, arr_a), np.einsum('kji,ikl->ijl', arr_at, arr_c))
 
         # solve equation for magnetization M: np.einsum('ijk,ikl->ijl') is used to calculate the matrix
         # multiplication for each element along the first (=offset) axis.
-        mag = np.real(np.einsum("ijk,ikl->ijl", ex, mag + tmps) - tmps)
+        mag = np.real(np.einsum('ijk,ikl->ijl', ex, mag + tmps) - tmps)
         return mag
 
     @staticmethod
     def _solve_expm(matrix: np.ndarray, dtp: float) -> np.ndarray:
-        """
-        Solve the matrix exponential. This version is faster than scipy expm for typical BMC matrices.
-        :param matrix: matrix representation of Bloch-McConnell equations
+        """Solve the matrix exponential.
+
+        This version is faster than scipy expm for typical BMC matrices.
+        :param matrix: matrix representation of Bloch-McConnell
+            equations
         :param dtp: duration of current step
         :return: solution of matrix exponential
         """
         vals, vects = np.linalg.eig(matrix * dtp)
-        tmp = np.einsum("ijk,ikl->ijl", vects, np.apply_along_axis(np.diag, -1, np.exp(vals)))
+        tmp = np.einsum('ijk,ikl->ijl', vects, np.apply_along_axis(np.diag, -1, np.exp(vals)))
         inv = np.linalg.inv(vects)
-        return np.einsum("ijk,ikl->ijl", tmp, inv)
+        return np.einsum('ijk,ikl->ijl', tmp, inv)
 
     def get_mt_shape_at_offset(self, offsets: np.ndarray, w0: float) -> np.ndarray:
-        """
-        Calculates the lineshape of the MT pool at the given offset(s).
+        """Calculates the lineshape of the MT pool at the given offset(s).
+
         :param offsets: frequency offset(s)
         :param w0: Larmor frequency of simulated system
         :return: lineshape of mt pool at given offset(s)
         """
-        ls = self.params.mt_pool["lineshape"].lower()
-        dw = self.params.mt_pool["dw"]
-        t2 = 1 / self.params.mt_pool["r2"]
-        if ls == "lorentzian":
+        ls = self.params.mt_pool['lineshape'].lower()
+        dw = self.params.mt_pool['dw']
+        t2 = 1 / self.params.mt_pool['r2']
+        if ls == 'lorentzian':
             mt_line = t2 / (1 + pow((offsets - dw * w0) * t2, 2.0))
-        elif ls == "superlorentzian":
+        elif ls == 'superlorentzian':
             dw_pool = offsets - dw * w0
             if self.par_calc:
                 mt_line = np.zeros(offsets.size)
@@ -291,13 +281,13 @@ class BlochMcConnellSolver:
         return mt_line
 
     def interpolate_sl(self, dw: float) -> float:
-        """
-        Interpolates MT profile for SuperLorentzian lineshape.
+        """Interpolates MT profile for SuperLorentzian lineshape.
+
         :param dw: relative frequency offset
         :return: MT profile at given relative frequency offset
         """
         mt_line = 0
-        t2 = 1 / self.params.mt_pool["r2"]
+        t2 = 1 / self.params.mt_pool['r2']
         n_samples = 101
         step_size = 0.01
         sqrt_2pi = np.sqrt(2 / np.pi)
@@ -307,9 +297,7 @@ class BlochMcConnellSolver:
         return mt_line * np.pi * step_size
 
     def interpolate_chs(self, dw_pool: float, w0: float) -> np.ndarray:
-        """
-        Cubic Hermite Spline Interpolation
-        """
+        """Cubic Hermite Spline Interpolation."""
         mt_line = 0
         px = np.array([-300 - w0, -100 - w0, 100 + w0, 300 + w0])
         py = np.zeros(px.size)

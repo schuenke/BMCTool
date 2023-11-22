@@ -18,7 +18,7 @@ from pypulseq import make_block_pulse
 from pypulseq import make_delay
 from pypulseq import make_trapezoid
 
-from bmctool.utils.seq.write import write_seq
+from src.bmctool.utils.seq.write import write_seq
 
 # general settings
 seqid = 'WASABI'
@@ -43,8 +43,15 @@ seq_defs['seq_id_string'] = seqid  # unique seq id
 seq_filename = seq_defs['seq_id_string'] + '.seq'
 
 # scanner limits
-sys = Opts(max_grad=40, grad_unit='mT/m', max_slew=130, slew_unit='T/m/s',
-           rf_ringdown_time=30e-6, rf_dead_time=100e-6, rf_raster_time=1e-6)
+sys = Opts(
+    max_grad=40,
+    grad_unit='mT/m',
+    max_slew=130,
+    slew_unit='T/m/s',
+    rf_ringdown_time=30e-6,
+    rf_dead_time=100e-6,
+    rf_raster_time=1e-6,
+)
 
 gamma_hz = 42.5764
 
@@ -57,8 +64,10 @@ spoil_amp = 0.8 * sys.max_grad  # Hz/m
 rise_time = 1.0e-3  # spoiler rise time in seconds
 spoil_dur = 6.5e-3  # complete spoiler duration in seconds
 
-gx_spoil, gy_spoil, gz_spoil = [make_trapezoid(channel=c, system=sys, amplitude=spoil_amp, duration=spoil_dur,
-                                               rise_time=rise_time) for c in ['x', 'y', 'z']]
+gx_spoil, gy_spoil, gz_spoil = (
+    make_trapezoid(channel=c, system=sys, amplitude=spoil_amp, duration=spoil_dur, rise_time=rise_time)
+    for c in ['x', 'y', 'z']
+)
 
 # RF pulses
 flip_angle_sat = seq_defs['b1cwpe'] * gamma_hz * 2 * np.pi * seq_defs['tp']
@@ -99,11 +108,7 @@ for m, offset in enumerate(offsets_hz):
     seq.add_block(gx_spoil, gy_spoil, gz_spoil)
     seq.add_block(pseudo_adc)
 
-write_seq(seq=seq,
-          seq_defs=seq_defs,
-          filename=seqid + '.seq',
-          author=author,
-          use_matlab_names=True)
+write_seq(seq=seq, seq_defs=seq_defs, filename=seqid + '.seq', author=author, use_matlab_names=True)
 
 # plot the sequence
 if plot_sequence:

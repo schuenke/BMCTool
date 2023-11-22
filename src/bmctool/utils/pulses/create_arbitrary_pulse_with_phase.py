@@ -1,7 +1,4 @@
-"""
-create_arbitrary_pulse_with_phase.py
-    Function to create a radio-frequency pulse event with arbitrary pulse shape and phase modulation.
-"""
+"""Function to create RF event with arbitrary shape and phase."""
 
 from types import SimpleNamespace
 
@@ -12,8 +9,7 @@ from pypulseq import Opts
 def create_arbitrary_pulse_with_phase(
     signal: np.ndarray, flip_angle: float, freq_offset: float = 0, phase_offset: float = 0, system: Opts = Opts()
 ) -> SimpleNamespace:
-    """
-    create_arbitrary_pulse_with_phase Create an RF pulse with arbitrary pulse shape and phase modulation
+    """Create RF pulse with arbitrary shape and phase.
 
     Parameters
     ----------
@@ -27,17 +23,12 @@ def create_arbitrary_pulse_with_phase(
         phase offset of the RF pulse, by default 0
     system : Opts, optional
         pypulseq Opts object containing system limits, by default Opts()
-
-    Returns
-    -------
-    SimpleNamespace
-        _description_
     """
     signal *= flip_angle / (2 * np.pi)
     t = np.linspace(1, len(signal), num=len(signal)) * system.rf_raster_time
 
     rf = SimpleNamespace()
-    rf.type = "rf"
+    rf.type = 'rf'
     rf.signal = signal
     rf.t = t
     rf.shape_dur = len(signal) * system.rf_raster_time

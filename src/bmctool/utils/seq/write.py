@@ -1,22 +1,20 @@
-"""
-write.py
-    Auxiliary functions for writing seq files.
-"""
+"""write.py Auxiliary functions for writing seq files."""
 import math
 from datetime import datetime
-from os import fdopen, remove
+from os import fdopen
+from os import remove
 from pathlib import Path
-from shutil import copymode, move
+from shutil import copymode
+from shutil import move
 from tempfile import mkstemp
-from typing import Union
 
 import numpy as np
 from pypulseq.Sequence.sequence import Sequence
 
 
 def round_number(number: float, significant_digits: int) -> float:
-    """
-    round_number Rounds a number to the specified number of significant digits
+    """round_number Rounds a number to the specified number of significant
+    digits.
 
     Parameters
     ----------
@@ -35,9 +33,8 @@ def round_number(number: float, significant_digits: int) -> float:
     return 0.0
 
 
-def insert_seq_file_header(filepath: Union[str, Path], author: str) -> None:
-    """
-    insert_seq_file_header Inserts header information into seq-file
+def insert_seq_file_header(filepath: str | Path, author: str) -> None:
+    """insert_seq_file_header Inserts header information into seq-file.
 
     Parameters
     ----------
@@ -50,20 +47,20 @@ def insert_seq_file_header(filepath: Union[str, Path], author: str) -> None:
     tmp, abs_path = mkstemp()
 
     in_position = False
-    with fdopen(tmp, "w") as new_file:
-        with open(filepath, "r") as old_file:
+    with fdopen(tmp, 'w') as new_file:
+        with open(filepath) as old_file:
             for line in old_file:
-                if line.startswith("# Created by"):
+                if line.startswith('# Created by'):
                     new_file.write(line)
                     in_position = True
                 else:
                     if in_position:
-                        new_file.write("\n")
-                        new_file.write("# Created for Pulseq-CEST\n")
-                        new_file.write("# https://pulseq-cest.github.io/\n")
-                        new_file.write(f"# Created by: {author}\n")
+                        new_file.write('\n')
+                        new_file.write('# Created for Pulseq-CEST\n')
+                        new_file.write('# https://pulseq-cest.github.io/\n')
+                        new_file.write(f'# Created by: {author}\n')
                         new_file.write(f"# Created at: {datetime.now().strftime('%d-%b-%Y %H:%M:%S')}\n")
-                        new_file.write("\n")
+                        new_file.write('\n')
                         in_position = False
                     else:
                         new_file.write(line)
@@ -77,8 +74,7 @@ def insert_seq_file_header(filepath: Union[str, Path], author: str) -> None:
 
 
 def write_seq_defs(seq: Sequence, seq_defs: dict, use_matlab_names: bool) -> Sequence:
-    """
-    write_seq_defs Writes seq-file 'Definitions' from dictionary
+    """write_seq_defs Writes seq-file 'Definitions' from dictionary.
 
     Parameters
     ----------
@@ -96,18 +92,18 @@ def write_seq_defs(seq: Sequence, seq_defs: dict, use_matlab_names: bool) -> Seq
     """
     if use_matlab_names:
         translator = {
-            "b0": "B0",
-            "b1cwpe": "B1cwpe",
-            "b1pa": "B1pa",
-            "b1rms": "B1rms",
-            "dcsat": "DCsat",
-            "freq": "FREQ",
-            "m0_offset": "M0_offset",
-            "n_slices": "nSlices",
-            "ti": "TI",
-            "trec": "Trec",
-            "trec_m0": "Trec_M0",
-            "tsat": "Tsat",
+            'b0': 'B0',
+            'b1cwpe': 'B1cwpe',
+            'b1pa': 'B1pa',
+            'b1rms': 'B1rms',
+            'dcsat': 'DCsat',
+            'freq': 'FREQ',
+            'm0_offset': 'M0_offset',
+            'n_slices': 'nSlices',
+            'ti': 'TI',
+            'trec': 'Trec',
+            'trec_m0': 'Trec_M0',
+            'tsat': 'Tsat',
         }
 
         # create new dict with correct names and values
@@ -123,10 +119,10 @@ def write_seq_defs(seq: Sequence, seq_defs: dict, use_matlab_names: bool) -> Seq
     # write definitions in alphabetical order and convert to correct value types
     for k, v in sorted(dict_.items()):
         # convert value types
-        if type(v) == np.ndarray:
+        if isinstance(v, np.ndarray):
             pass
-        elif type(v) in [int, float, np.float32, np.float64, np.float]:
-            v = str(round_number(v, 9))
+        elif isinstance(v, (int, float, np.float32, np.float64)):
+            v = str(round_number(float(v), 9))
         else:
             v = str(v)
         try:
@@ -140,12 +136,11 @@ def write_seq_defs(seq: Sequence, seq_defs: dict, use_matlab_names: bool) -> Seq
 def write_seq(
     seq: Sequence,
     seq_defs: dict,
-    filename: Union[str, Path],
+    filename: str | Path,
     author: str,
     use_matlab_names: bool = True,
 ) -> None:
-    """
-    write_seq Writes the seq-file according to given arguments
+    """write_seq Writes the seq-file according to given arguments.
 
     Parameters
     ----------

@@ -1,17 +1,15 @@
-"""
-    calc_power_equivalents.py
-"""
+"""calc_power_equivalents.py."""
 
 from types import SimpleNamespace
 
 import numpy as np
 
-from bmctool import GAMMA_HZ
+from src.bmctool import GAMMA_HZ
 
 
 def calc_power_equivalent(rf_pulse: SimpleNamespace, tp: float, td: float, gamma_hz: float = GAMMA_HZ) -> float:
-    """
-    calc_power_equivalent Calculate continuous wave power equivalent for a given rf pulse.
+    """calc_power_equivalent Calculate continuous wave power equivalent for a
+    given rf pulse.
 
     Parameters
     ----------
@@ -36,8 +34,8 @@ def calc_power_equivalent(rf_pulse: SimpleNamespace, tp: float, td: float, gamma
 
 
 def calc_amplitude_equivalent(rf_pulse: SimpleNamespace, tp: float, td: float, gamma_hz: float = GAMMA_HZ) -> float:
-    """
-    calc_amplitude_equivalent Calculate continuous wave amplitude equivalent for a given rf pulse.
+    """calc_amplitude_equivalent Calculate continuous wave amplitude equivalent
+    for a given rf pulse.
 
     Parameters
     ----------
