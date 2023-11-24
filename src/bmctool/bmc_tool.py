@@ -5,8 +5,8 @@ import numpy as np
 import pypulseq as pp
 from tqdm import tqdm
 
-from src.bmctool.bmc_solver import BlochMcConnellSolver
-from src.bmctool.params import Params
+from bmctool import Parameters
+from bmctool.bmc_solver import BlochMcConnellSolver
 
 
 def prep_rf_simulation(block: SimpleNamespace, max_pulse_samples: int) -> tuple[np.ndarray, np.ndarray, float, float]:
@@ -73,7 +73,13 @@ def prep_rf_simulation(block: SimpleNamespace, max_pulse_samples: int) -> tuple[
 class BMCTool:
     """Definition of the BMCTool class."""
 
-    def __init__(self, params: Params, seq_file: str | Path, verbose: bool = True, **kwargs) -> None:
+    def __init__(
+        self,
+        params: Parameters,
+        seq_file: str | Path,
+        verbose: bool = True,
+        **kwargs,
+    ) -> None:
         """__init__ Initialize BMCTool object.
 
         Parameters
@@ -115,7 +121,7 @@ class BMCTool:
 
         self.bm_solver = BlochMcConnellSolver(params=self.params, n_offsets=self.n_offsets)
 
-    def update_params(self, params: Params) -> None:
+    def update_params(self, params: Parameters) -> None:
         """Update Params and BlochMcConnellSolver."""
         self.params = params
         self.bm_solver.update_params(params)
@@ -157,12 +163,12 @@ class BMCTool:
             accum_phase = 0
             current_adc += 1
             # reset mag if this wasn't the last ADC event
-            if current_adc <= self.n_offsets and self.params.options['reset_init_mag']:
+            if current_adc <= self.n_offsets and self.params.options.reset_init_mag:
                 mag = self.m_init[np.newaxis, :, np.newaxis]
 
         # RF pulse
         elif block.rf is not None:
-            amp_, ph_, dtp_, delay_after_pulse = prep_rf_simulation(block, self.params.options['max_pulse_samples'])
+            amp_, ph_, dtp_, delay_after_pulse = prep_rf_simulation(block, self.params.options.max_pulse_samples)
             for i in range(amp_.size):
                 self.bm_solver.update_matrix(
                     rf_amp=amp_[i],
@@ -207,12 +213,12 @@ class BMCTool:
             accum_phase = 0
             current_adc += 1
             # reset mag if this wasn't the last ADC event
-            if current_adc <= self.n_offsets and self.params.options['reset_init_mag']:
+            if current_adc <= self.n_offsets and self.params.options.reset_init_mag:
                 mag = self.m_init[np.newaxis, :, np.newaxis]
 
         # RF pulse
         elif hasattr(block, 'rf'):
-            amp_, ph_, dtp_, delay_after_pulse = prep_rf_simulation(block, self.params.options['max_pulse_samples'])
+            amp_, ph_, dtp_, delay_after_pulse = prep_rf_simulation(block, self.params.options.max_pulse_samples)
             for i in range(amp_.size):
                 self.bm_solver.update_matrix(
                     rf_amp=amp_[i],

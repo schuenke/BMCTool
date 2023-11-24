@@ -3,9 +3,9 @@
 
 from pathlib import Path
 
-from src.bmctool.bmc_tool import BMCTool
-from src.bmctool.set_params import load_params
-from src.bmctool.utils.eval import plot_z
+from bmctool import Parameters
+from bmctool.bmc_tool import BMCTool
+from bmctool.utils.eval import plot_z
 
 
 def simulate(config_file: str | Path, seq_file: str | Path, show_plot: bool = False, **kwargs) -> BMCTool:
@@ -37,7 +37,7 @@ def simulate(config_file: str | Path, seq_file: str | Path, show_plot: bool = Fa
         raise FileNotFoundError(f'File {seq_file} not found.')
 
     # load config file(s)
-    sim_params = load_params(config_file)
+    sim_params = Parameters.from_yaml(config_file)
 
     # create BMCTool object and run simulation
     sim = BMCTool(sim_params, seq_file, **kwargs)

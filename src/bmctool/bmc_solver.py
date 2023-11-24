@@ -3,13 +3,13 @@ import math
 
 import numpy as np
 
-from src.bmctool.params import Params
+from bmctool import Parameters
 
 
 class BlochMcConnellSolver:
     """Solver class for Bloch-McConnell equations."""
 
-    def __init__(self, params: Params, n_offsets: int) -> None:
+    def __init__(self, params: Parameters, n_offsets: int) -> None:
         """__init__ Initialize BlochMcConnellSolver class.
 
         Parameters
@@ -19,9 +19,8 @@ class BlochMcConnellSolver:
         n_offsets : int
             Number of frequency offsets.
         """
-        self.params: Params = params
+        self.params: Parameters = params
         self.n_offsets: int = n_offsets
-        self.par_calc: bool = params.options['par_calc']
         self.first_dim: int = 1
         self.n_pools: int = len(params.cest_pools)
         self.is_mt_active = bool(params.mt_pool)
@@ -41,16 +40,16 @@ class BlochMcConnellSolver:
         # set mt_pool parameters
         k_ac = 0.0
         if self.is_mt_active:
-            k_ca = self.params.mt_pool['k']
-            k_ac = k_ca * self.params.mt_pool['f']
+            k_ca = self.params.mt_pool.k
+            k_ac = k_ca * self.params.mt_pool.f
             self.arr_a[2 * (n_p + 1), 3 * (n_p + 1)] = k_ca
             self.arr_a[3 * (n_p + 1), 2 * (n_p + 1)] = k_ac
 
         # set water_pool parameters
-        k1a = self.params.water_pool['r1'] + k_ac
-        k2a = self.params.water_pool['r2']
+        k1a = self.params.water_pool.r1 + k_ac
+        k2a = self.params.water_pool.r2
         for pool in self.params.cest_pools:
-            k_ai = pool['f'] * pool['k']
+            k_ai = pool.f * pool.k
             k1a += k_ai
             k2a += k_ai
 
@@ -60,10 +59,10 @@ class BlochMcConnellSolver:
 
         # set cest_pools parameters
         for i, pool in enumerate(self.params.cest_pools):
-            k_ia = pool['k']
-            k_ai = k_ia * pool['f']
-            k_1i = k_ia + pool['r1']
-            k_2i = k_ia + pool['r2']
+            k_ia = pool.k
+            k_ai = k_ia * pool.f
+            k_1i = k_ia + pool.r1
+            k_2i = k_ia + pool.r2
 
             self.arr_a[0, i + 1] = k_ia
             self.arr_a[i + 1, 0] = k_ai
@@ -80,34 +79,25 @@ class BlochMcConnellSolver:
         # always expand to 3 dimensions
         self.arr_a = self.arr_a[np.newaxis,]
 
-        # if parallel computation is activated, repeat matrix A n_offsets times along a new axis
-        if self.par_calc:
-            self.arr_a = np.repeat(self.arr_a, self.n_offsets, axis=0)
-            self.first_dim = self.n_offsets
-
     def _init_vector_c(self) -> None:
         """Initialize vector self.C with all parameters from self.params."""
         n_p = self.n_pools
         self.arr_c = np.zeros([self.size], dtype=float)
-        self.arr_c[(n_p + 1) * 2] = self.params.water_pool['f'] * self.params.water_pool['r1']
+        self.arr_c[(n_p + 1) * 2] = self.params.water_pool.f * self.params.water_pool.r1
         for i, pool in enumerate(self.params.cest_pools):
-            self.arr_c[(n_p + 1) * 2 + (i + 1)] = pool['f'] * pool['r1']
+            self.arr_c[(n_p + 1) * 2 + (i + 1)] = pool.f * pool.r1
 
         if self.is_mt_active:
-            self.arr_c[3 * (n_p + 1)] = self.params.mt_pool['f'] * self.params.mt_pool['r1']
+            self.arr_c[3 * (n_p + 1)] = self.params.mt_pool.f * self.params.mt_pool.r1
 
         # always expand to 3 dimensions (independent of sequential or parallel computation)
         self.arr_c = self.arr_c[np.newaxis, :, np.newaxis]
 
-        # if parallel computation is activated, repeat matrix C n_offsets times along axis 0
-        if self.par_calc:
-            self.arr_c = np.repeat(self.arr_c, self.n_offsets, axis=0)
-
-    def update_params(self, params: Params) -> None:
+    def update_params(self, params: Parameters) -> None:
         """Updates matrix self.A according to given Params object."""
         self.params = params
-        self.w0 = params.scanner['b0'] * params.scanner['gamma']
-        self.dw0 = self.w0 * params.scanner['b0_inhomogeneity']
+        self.w0 = params.system.b0 * params.system.gamma
+        self.dw0 = self.w0 * params.system.b0_inhom
         self._init_matrix_a()
         self._init_vector_c()
 
@@ -127,7 +117,7 @@ class BlochMcConnellSolver:
         self.arr_a[:, 1 + n_p, 0] = [-1 * self.dw0] * j
 
         # calculate omega_1
-        rf_amp_2pi = rf_amp * 2 * np.pi * self.params.scanner['rel_b1']
+        rf_amp_2pi = rf_amp * 2 * np.pi * self.params.system.rel_b1
         rf_amp_2pi_sin = rf_amp_2pi * np.sin(rf_phase)
         rf_amp_2pi_cos = rf_amp_2pi * np.cos(rf_phase)
 
@@ -153,15 +143,15 @@ class BlochMcConnellSolver:
 
         # set off-resonance terms for cest pools
         for i in range(1, n_p + 1):
-            dwi = self.params.cest_pools[i - 1]['dw'] * self.w0 - (rf_freq_2pi + self.dw0)
+            dwi = self.params.cest_pools[i - 1].dw * self.w0 - (rf_freq_2pi + self.dw0)
             self.arr_a[:, i, i + n_p + 1] = -dwi
             self.arr_a[:, i + n_p + 1, i] = dwi
 
         # mt_pool
         if self.is_mt_active:
             self.arr_a[:, 3 * (n_p + 1), 3 * (n_p + 1)] = (
-                -self.params.mt_pool['r1']
-                - self.params.mt_pool['k']
+                -self.params.mt_pool.r1
+                - self.params.mt_pool.k
                 - rf_amp_2pi**2 * self.get_mt_shape_at_offset(rf_freq_2pi + self.dw0, self.w0)
             )
 
@@ -257,25 +247,17 @@ class BlochMcConnellSolver:
         :param w0: Larmor frequency of simulated system
         :return: lineshape of mt pool at given offset(s)
         """
-        ls = self.params.mt_pool['lineshape'].lower()
-        dw = self.params.mt_pool['dw']
-        t2 = 1 / self.params.mt_pool['r2']
+        ls = self.params.mt_pool.lineshape.lower()
+        dw = self.params.mt_pool.dw
+        t2 = 1 / self.params.mt_pool.r2
         if ls == 'lorentzian':
             mt_line = t2 / (1 + pow((offsets - dw * w0) * t2, 2.0))
         elif ls == 'superlorentzian':
             dw_pool = offsets - dw * w0
-            if self.par_calc:
-                mt_line = np.zeros(offsets.size)
-                for i, dw_ in enumerate(dw_pool):
-                    if abs(dw_) >= w0:
-                        mt_line[i] = self.interpolate_sl(dw_)
-                    else:
-                        mt_line[i] = self.interpolate_chs(dw_, w0)
+            if abs(dw_pool) >= w0:
+                mt_line = self.interpolate_sl(dw_pool)
             else:
-                if abs(dw_pool) >= w0:
-                    mt_line = self.interpolate_sl(dw_pool)
-                else:
-                    mt_line = self.interpolate_chs(dw_pool, w0)
+                mt_line = self.interpolate_chs(dw_pool, w0)
         else:
             mt_line = np.zeros(offsets.size)
         return mt_line
@@ -287,7 +269,7 @@ class BlochMcConnellSolver:
         :return: MT profile at given relative frequency offset
         """
         mt_line = 0
-        t2 = 1 / self.params.mt_pool['r2']
+        t2 = 1 / self.params.mt_pool.r2
         n_samples = 101
         step_size = 0.01
         sqrt_2pi = np.sqrt(2 / np.pi)
