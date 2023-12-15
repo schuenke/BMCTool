@@ -1,4 +1,4 @@
-"""Definition of Options dataclass."""
+"""Definition of Options class."""
 
 from __future__ import annotations
 
@@ -24,6 +24,20 @@ class Options:
         scale: float = 1.0,
         max_pulse_samples: int = 500,
     ):
+        """Initialize Options instance.
+
+        Parameters
+        ----------
+        verbose
+            Print verbose output, default False.
+        reset_init_mag
+            Reset initial magnetization to "scale" value, default True.
+        scale
+            Scale factor for initial magnetization, default 1.0.
+        max_pulse_samples
+            Maximum number of samples in a pulse, default 500.
+        """
+        # set attributes using setters to check validity
         self.verbose = verbose
         self.reset_init_mag = reset_init_mag
         self.scale = scale
