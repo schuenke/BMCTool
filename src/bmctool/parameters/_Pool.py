@@ -41,17 +41,17 @@ class Pool(ABC):
             raise ValueError('Either r2 or t2 must be given, but not both.')
 
         if r1 is not None:
-            self.r1 = r1
+            Pool.r1.fset(self, r1)
         elif t1 is not None:
-            self.t1 = t1
+            Pool.t1.fset(self, t1)
 
         if r2 is not None:
-            self.r2 = r2
+            Pool.r2.fset(self, r2)
         elif t2 is not None:
-            self.t2 = t2
+            Pool.t2.fset(self, t2)
 
-        self.f = f
-        self.dw = dw
+        Pool.f.fset(self, f)
+        Pool.dw.fset(self, dw)
 
     def __eq__(self, other):
         if isinstance(other, self.__class__):
