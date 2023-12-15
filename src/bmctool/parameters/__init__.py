@@ -1,3 +1,4 @@
+from bmctool.parameters._Pool import Pool
 from bmctool.parameters._CESTPool import CESTPool
 from bmctool.parameters._MTPool import MTPool
 from bmctool.parameters._WaterPool import WaterPool
