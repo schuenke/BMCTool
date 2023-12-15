@@ -1,24 +1,42 @@
-"""Definition of WaterPool dataclass."""
+"""Definition of WaterPool class."""
 
 from __future__ import annotations
 
-import dataclasses
+from bmctool.parameters._Pool import Pool
 
 
-@dataclasses.dataclass(slots=True)
-class WaterPool:
-    """Class to store water pool parameters.
+class WaterPool(Pool):
+    """Class to store WaterPool parameters."""
 
-    Parameters:
-    -----------
-    r1 : float
-        R1 relaxation rate [Hz] (1/T1)
-    r2 : float
-        R2 relaxation rate [Hz] (1/T2)
-    f : float, optional
-        Pool size fraction, by default 1
-    """
+    __slots__ = ['_f', '_dw', '_r1', '_r2', '_t1', '_t2']
 
-    r1: float
-    r2: float
-    f: float = 1
+    def __init__(
+        self,
+        f: float = 1,
+        r1: float = None,
+        r2: float = None,
+        t1: float = None,
+        t2: float = None,
+    ):
+        """Initialize WaterPool object.
+
+        Parameters
+        ----------
+        r1
+            R1 relaxation rate [Hz] (1/T1)
+        r2
+            R2 relaxation rate [Hz] (1/T2)
+        f, optional
+            pool size fraction, by default 1
+        """
+
+        super().__init__(f=f, dw=0, r1=r1, r2=r2, t1=t1, t2=t2)
+
+    @property
+    def dw(self) -> float:
+        """Return chemical shift of WaterPool."""
+        return self._dw
+
+    @dw.setter
+    def dw(self, value: float) -> None:
+        raise UserWarning('Cannot set chemical shift of WaterPool. Value is fixed to 0.')
