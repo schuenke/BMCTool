@@ -17,7 +17,12 @@ from bmctool.parameters._Options import Options
 def test_from_valid_params(verbose, reset_init_mag, scale, max_pulse_samples):
     """Test Options instantiation from valid parameters."""
     a = Options(verbose=verbose, reset_init_mag=reset_init_mag, scale=scale, max_pulse_samples=max_pulse_samples)
-    assert isinstance(a, Options)
+
+    # assert that the attributes are set correctly
+    assert a.verbose == bool(verbose)
+    assert a.reset_init_mag == bool(reset_init_mag)
+    assert a.scale == float(scale)
+    assert a.max_pulse_samples == int(max_pulse_samples)
 
 
 @pytest.mark.parametrize(

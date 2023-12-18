@@ -18,7 +18,11 @@ from bmctool.parameters._WaterPool import WaterPool
 def test_from_valid_params(r1, r2, f, t1, t2):
     """Test WaterPool instantiation from valid parameters."""
     a = WaterPool(r1=r1, r2=r2, f=f, t1=t1, t2=t2)
-    assert isinstance(a, WaterPool)
+
+    # assert that the attributes are set correctly
+    assert a.r1 == float(r1) if r1 is not None else 1 / float(t1)
+    assert a.r2 == float(r2) if r2 is not None else 1 / float(t2)
+    assert a.f == float(f)
 
 
 @pytest.mark.parametrize(
