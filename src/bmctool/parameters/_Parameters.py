@@ -33,8 +33,6 @@ class Parameters:
         Additional options
     offsets : np.ndarray
         frequency offsets [ppm]
-    m0_scan : np.ndarray
-        # ToDo: add description and decide if it is needed
     """
 
     water_pool: WaterPool = dataclasses.field(default_factory=WaterPool)
@@ -42,6 +40,17 @@ class Parameters:
     mt_pool: MTPool = dataclasses.field(default_factory=MTPool)
     system: System = dataclasses.field(default_factory=System)
     options: Options = dataclasses.field(default_factory=Options)
+
+    def __eq__(self, other):
+        if isinstance(other, Parameters):
+            return (
+                self.water_pool == other.water_pool
+                and self.cest_pools == other.cest_pools
+                and self.mt_pool == other.mt_pool
+                and self.system == other.system
+                and self.options == other.options
+            )
+        return False
 
     @property
     def num_cest_pools(self):
@@ -77,239 +86,56 @@ class Parameters:
         return m_vec * self.options.scale
 
     @classmethod
-    def from_yaml(cls, yaml_file: str | Path) -> Parameters:
-        """Create a Params object from a yaml file.
+    def from_dict(cls, config: dict) -> Parameters:
+        """Create a Params object from a dictionary.
 
         Parameters
         ----------
-        yaml_file : str | Path
-            Path to the yaml file.
+        config : dict
+            Dictionary containing the simulation parameters.
 
         Returns
         -------
         Params
             Params object containing the simulation parameters.
-
-        Raises
-        ------
-        FileNotFoundError
-            If the yaml_file is not found.
         """
+        # create a dictionary with name pairs for renaming to match class attributes
+        rename = {
+            'b0_inhomogeneity': 'b0_inhom',
+            'relb1': 'rel_b1',
+            'max_samples': 'max_pulse_samples',
+        }
+
+        #
+        sys_keys = [
+            attr for attr in System.__dict__ if not callable(getattr(System, attr)) and not attr.startswith('_')
+        ]
+        opt_keys = [
+            attr for attr in Options.__dict__ if not callable(getattr(Options, attr)) and not attr.startswith('_')
+        ]
+
+        water_pool = WaterPool(**config['water_pool'])
+        cest_pools = [CESTPool(**pool) for pool in config.get('cest_pool', {}).values()]
+
+        mt_pool = MTPool(**config.get('mt_pool', {})) if config.get('mt_pool') else None
+        system = System(
+            **{rename.get(key, key): value for key, value in config.items() if rename.get(key, key) in sys_keys}
+        )
+        options = Options(
+            **{rename.get(key, key): value for key, value in config.items() if rename.get(key, key) in opt_keys}
+        )
+
+        return cls(water_pool, cest_pools, mt_pool, system, options)
+
+    @classmethod
+    def from_yaml(cls, yaml_file: str | Path) -> Parameters:
         if not Path(yaml_file).exists():
             raise FileNotFoundError(f'File {yaml_file} not found.')
 
         with open(yaml_file) as file:
             config = yaml.safe_load(file)
 
-        # rename config keys to match the dataclass attributes according to rename dict
-        rename = {'b1_inhomogeneity': 'b0_inhom', 'relb1': 'rel_b1'}
-
-        sys_keys = System.__annotations__.keys()
-        opt_keys = Options.__annotations__.keys()
-
-        water_pool = WaterPool(**config['water_pool'])
-        cest_pools = [CESTPool(**pool) for pool in config.get('cest_pools', [])]
-        mt_pool = MTPool(**config.get('mt_pool', {})) if config.get('mt_pool') else None
-        system = System(**{rename.get(key, key): value for key, value in config.items() if key in sys_keys})
-        options = Options(**{rename.get(key, key): value for key, value in config.items() if key in opt_keys})
-
-        return cls(water_pool, cest_pools, mt_pool, system, options)
-
-    def set_water_pool(self, r1: float, r2: float, f: float = 1) -> WaterPool:
-        """Set all water pool parameters.
-
-        Parameters
-        ----------
-        r1 : float
-            R1 relaxation rate [Hz] (1/T1)
-        r2 : float
-            R2 relaxation rate [Hz] (1/T2)
-        f : float, optional
-            Pool size fraction, by default 1
-
-        Returns
-        -------
-        WaterPool
-            WaterPool object containing the water pool parameters
-        """
-
-        water_pool = WaterPool(r1, r2, f)
-        self.water_pool = water_pool
-
-    def update_water_pool(self, **kwargs) -> WaterPool:
-        """Update water pool parameters (r1, r2, f) given as kwargs.
-
-        Returns
-        -------
-        WaterPool
-            WaterPool object containing the updated water pool parameters
-
-        Raises
-        ------
-        AttributeError
-            If an unknown parameter is given
-        """
-
-        water_pool = WaterPool(**kwargs)
-        self.water_pool = water_pool
-
-    def add_cest_pool(self, r1: float, r2: float, k: float, f: float, dw: float) -> CESTPool:
-        """Add a new CESTPool.
-
-        Parameters
-        ----------
-        r1 : float
-            R1 relaxation rate [Hz] (1/T1)
-        r2 : float
-            R2 relaxation rate [Hz] (1/T2)
-        k : float
-            exchange rate [Hz]
-        f : float
-            pool size fraction
-        dw : float
-            chemical shift from water [ppm]
-        """
-
-        cest_pool = CESTPool(r1, r2, k, f, dw)
-        self.mz_loc += 2
-        self.cest_pools.append(cest_pool)
-
-    def update_cest_pool(self, pool_idx: int, **kwargs) -> CESTPool:
-        """Update CEST pool parameters (r1, r2, k, f, dw) given as kwargs for a
-        given pool.
-
-        Parameters
-        ----------
-        pool_idx : int
-            Index of the CEST pool to be updated
-        kwargs : dict
-            Parameters to be updated
-
-        Raises
-        ------
-        AttributeError
-            If an unknown parameter is given
-        """
-
-        cest_pool = CESTPool(**kwargs)
-        self.cest_pools[pool_idx] = cest_pool
-
-    def set_mt_pool(self, r1: float, r2: float, k: float, f: float, dw: float, lineshape: str) -> MTPool:
-        """Set all MT pool parameters.
-
-        Parameters
-        ----------
-        r1 : float
-            R1 relaxation rate [Hz] (1/T1)
-        r2 : float
-            R2 relaxation rate [Hz] (1/T2)
-        k : float
-            exchange rate [Hz]
-        f : float
-            pool size fraction
-        dw : float
-            chemical shift from water [ppm]
-        lineshape : str
-            Lineshape of the MT pool ("Lorentzian", "SuperLorentzian" or "None")
-        """
-
-        mt_pool = MTPool(r1, r2, k, f, dw, lineshape)
-        self.mt_pool = mt_pool
-
-    def update_mt_pool(self, **kwargs) -> MTPool:
-        """Update MT pool parameters (r1, r2, k, f, dw, lineshape) given as
-        kwargs.
-
-        Parameters
-        ----------
-        kwargs : dict
-            Parameters to be updated
-
-        Raises
-        ------
-        AttributeError
-            If an unknown parameter is given
-        """
-
-        mt_pool = MTPool(**kwargs)
-        self.mt_pool = mt_pool
-
-    def set_scanner(self, b0: float, gamma: float, b0_inhom: float = 0, rel_b1: float = 1) -> System:
-        """Set all scanner parameters.
-
-        Parameters
-        ----------
-        b0 : float
-            field strength [T]
-        gamma : float
-            gyromagnetic ratio [MHz/T]
-        b0_inhom : float, optional
-            B0 inhomogeneity [ppm], by default 0
-        rel_b1 : float, optional
-            B1 field scaling factor, by default 1
-        """
-
-        scanner = System(b0, gamma, b0_inhom, rel_b1)
-        self.scanner = scanner
-
-    def update_scanner(self, **kwargs) -> System:
-        """Updates scanner values (kwargs: b0, gamma, b0_inhom, rel_b1)
-
-        Parameters
-        ----------
-        kwargs : dict
-            Parameters to be updated
-
-        Raises
-        ------
-        AttributeError
-            If an unknown parameter is given
-        """
-
-        scanner = System(**kwargs)
-        self.scanner = scanner
-
-    def set_options(
-        self,
-        verbose: bool = False,
-        reset_init_mag: bool = True,
-        scale: float = 1.0,
-        max_pulse_samples: int = 500,
-    ) -> Options:
-        """Set all additional options.
-
-        Parameters
-        ----------
-        verbose : bool, optional
-            Flag to activate detailed outputs, by default False
-        reset_init_mag : bool, optional
-            flag to reset the initial magnetization for every offset, by default True
-        scale : float, optional
-            value of initial magnetization if reset_init_mag is True, by default 1.0
-        max_pulse_samples : int, optional
-            maximum number of simulation steps for one RF pulse, by default 500
-        """
-
-        options = Options(verbose, reset_init_mag, scale, max_pulse_samples)
-        self.options = options
-
-    def update_options(self, **kwargs) -> Options:
-        """Update additional options (kwargs: verbose, reset_init_mag, scale,
-        max_pulse_samples)
-
-        Parameters
-        ----------
-        kwargs : dict
-            Parameters to be updated
-
-        Raises
-        ------
-        AttributeError
-            If an unknown parameter is given
-        """
-
-        options = Options(**kwargs)
-        self.options = options
+        return cls.from_dict(config)
 
     def _set_m_vec(self) -> np.ndarray:
         """Sets the initial magnetization vector (fully relaxed).
@@ -345,3 +171,58 @@ class Parameters:
 
         self.m_vec = m_vec
         return m_vec
+
+    def add_cest_pool(self, cest_pool: CESTPool) -> None:
+        """Add a CESTPool object to the cest_pools list."""
+        self.cest_pools.append(cest_pool)
+
+    def update_cest_pool(self, pool_idx: int, **kwargs) -> None:
+        """Update parameters (r1/t1, r2/t2, k, f, dw) for CEST pool with index
+        pool_idx.
+
+        Parameters
+        ----------
+        pool_idx
+            Index of the CEST pool to be updated
+        kwargs
+            Parameters to be updated
+        """
+
+        for key, value in kwargs.items():
+            setattr(self.cest_pools[pool_idx], key, value)
+
+    def update_mt_pool(self, **kwargs) -> None:
+        """Update MT pool parameters.
+
+        Available parameters are: r1 or t1, r2 or t2, f, k, dw.
+        """
+
+        for key, value in kwargs.items():
+            setattr(self.mt_pool, key, value)
+
+    def update_options(self, **kwargs) -> None:
+        """Update options parameters.
+
+        Available parameters are: verbose, reset_init_mag, scale, max_pulse_samples.
+        """
+
+        for key, value in kwargs.items():
+            setattr(self.options, key, value)
+
+    def update_system(self, **kwargs) -> None:
+        """Updates scanner parameters.
+
+        Available parameters are: b0, gamma, b0_inhom, rel_b1.
+        """
+
+        for key, value in kwargs.items():
+            setattr(self.system, key, value)
+
+    def update_water_pool(self, **kwargs) -> None:
+        """Update water pool parameters.
+
+        Available parameters are: r1 or t1, r2 or t2, f.
+        """
+
+        for key, value in kwargs.items():
+            setattr(self.water_pool, key, value)
