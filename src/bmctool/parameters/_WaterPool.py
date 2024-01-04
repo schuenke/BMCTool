@@ -32,6 +32,14 @@ class WaterPool(Pool):
 
         super().__init__(f=f, dw=0, r1=r1, r2=r2, t1=t1, t2=t2)
 
+    def __dict__(self):
+        """Return dictionary representation of WaterPool."""
+        return {
+            'f': self.f,
+            'r1': self.r1,
+            'r2': self.r2,
+        }
+
     @property
     def dw(self) -> float:
         """Return chemical shift of WaterPool."""

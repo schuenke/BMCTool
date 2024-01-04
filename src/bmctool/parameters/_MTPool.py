@@ -45,6 +45,17 @@ class MTPool(Pool):
         self.k = k
         self.lineshape = lineshape
 
+    def __dict__(self):
+        """Return dictionary representation of MTPool."""
+        return {
+            'f': self.f,
+            'r1': self.r1,
+            'r2': self.r2,
+            'k': self.k,
+            'dw': self.dw,
+            'lineshape': self.lineshape,
+        }
+
     @property
     def k(self) -> float:
         """Exchange rate [Hz]."""

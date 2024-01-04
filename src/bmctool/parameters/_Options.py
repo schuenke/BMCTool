@@ -43,6 +43,15 @@ class Options:
                 return all(getter(self) == getter(other) for getter in attr_getters)
         return False
 
+    def __dict__(self):
+        """Return dictionary representation of Options."""
+        return {
+            'verbose': self.verbose,
+            'reset_init_mag': self.reset_init_mag,
+            'scale': self.scale,
+            'max_pulse_samples': self.max_pulse_samples,
+        }
+
     @property
     def verbose(self) -> bool:
         """Return verbose option."""
