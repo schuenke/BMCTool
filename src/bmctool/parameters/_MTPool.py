@@ -17,10 +17,10 @@ class MTPool(Pool):
         f: float,
         dw: float,
         lineshape: str,
-        r1: float = None,
-        r2: float = None,
-        t1: float = None,
-        t2: float = None,
+        r1: float | None = None,
+        r2: float | None = None,
+        t1: float | None = None,
+        t2: float | None = None,
     ):
         """Initialize MTPool object.
 

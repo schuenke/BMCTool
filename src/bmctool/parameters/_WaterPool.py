@@ -13,10 +13,10 @@ class WaterPool(Pool):
     def __init__(
         self,
         f: float = 1,
-        r1: float = None,
-        r2: float = None,
-        t1: float = None,
-        t2: float = None,
+        r1: float | None = None,
+        r2: float | None = None,
+        t1: float | None = None,
+        t2: float | None = None,
     ):
         """Initialize WaterPool object.
 

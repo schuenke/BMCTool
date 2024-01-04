@@ -15,10 +15,10 @@ class CESTPool(Pool):
         k: float,
         f: float,
         dw: float,
-        r1: float = None,
-        r2: float = None,
-        t1: float = None,
-        t2: float = None,
+        r1: float | None = None,
+        r2: float | None = None,
+        t1: float | None = None,
+        t2: float | None = None,
     ):
         """Initialize CESTPool object.
 
