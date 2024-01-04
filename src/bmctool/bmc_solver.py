@@ -94,7 +94,7 @@ class BlochMcConnellSolver:
         self.arr_c = self.arr_c[np.newaxis, :, np.newaxis]
 
     def update_params(self, params: Parameters) -> None:
-        """Updates matrix self.A according to given Params object."""
+        """Update matrix self.A according to given Params object."""
         self.params = params
         self.w0 = params.system.b0 * params.system.gamma
         self.dw0 = self.w0 * params.system.b0_inhom
@@ -102,7 +102,7 @@ class BlochMcConnellSolver:
         self._init_vector_c()
 
     def update_matrix(self, rf_amp: float, rf_phase: np.ndarray, rf_freq: np.ndarray) -> None:
-        """Updates matrix self.A according to given parameters.
+        """Update matrix self.A according to given parameters.
 
         :param rf_amp: amplitude of current step (e.g. pulse fragment)
         :param rf_phase: phase of current step (e.g. pulse fragment)
@@ -156,7 +156,7 @@ class BlochMcConnellSolver:
             )
 
     def solve_equation(self, mag: np.ndarray, dtp: float) -> np.ndarray:
-        """Solves one step of BMC equations using the Padé approximation.
+        """Solve one step of BMC equations using the Padé approximation.
 
         This function is not used atm.
         :param mag: magnetization vector before current step
@@ -199,7 +199,7 @@ class BlochMcConnellSolver:
         return mag_[np.newaxis, :, np.newaxis]
 
     def solve_equation_expm(self, mag: np.ndarray, dtp: float) -> np.ndarray:
-        """Solves one step of BMC equations using the eigenwert ansatz.
+        """Solve one step of BMC equations using the eigenwert ansatz.
 
         :param mag: magnetization vector before current step
         :param dtp: duration of current step
@@ -241,7 +241,7 @@ class BlochMcConnellSolver:
         return np.einsum('ijk,ikl->ijl', tmp, inv)
 
     def get_mt_shape_at_offset(self, offsets: np.ndarray, w0: float) -> np.ndarray:
-        """Calculates the lineshape of the MT pool at the given offset(s).
+        """Calculate the lineshape of the MT pool at the given offset(s).
 
         :param offsets: frequency offset(s)
         :param w0: Larmor frequency of simulated system
@@ -263,7 +263,7 @@ class BlochMcConnellSolver:
         return mt_line
 
     def interpolate_sl(self, dw: float) -> float:
-        """Interpolates MT profile for SuperLorentzian lineshape.
+        """Interpolate MT profile for SuperLorentzian lineshape.
 
         :param dw: relative frequency offset
         :return: MT profile at given relative frequency offset

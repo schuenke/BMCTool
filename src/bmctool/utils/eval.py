@@ -1,26 +1,30 @@
-"""eval.py Functions for evaluation and visualization."""
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.figure import Figure
 
 
-def calc_mtr_asym(m_z: np.ndarray, offsets: np.ndarray, n_interp: int = 1000) -> np.ndarray:
-    """calc_mtr_asym Calculate MTRasym from the magnetization vector.
+def calc_mtr_asym(
+    m_z: np.ndarray,
+    offsets: np.ndarray,
+    n_interp: int = 1000,
+) -> np.ndarray:
+    """Calculate MTRasym from given magnetization vector.
 
-    Parameters
-    ----------
-    z : np.ndarray
-        Magnetization values.
-    offsets : np.ndarray
-        Offset values.
-    n_interp : int, optional
+    Parameter
+    ---------
+    m_z
+        magnetization values
+    offsets
+        frequency offsets
+    n_interp, optional
         Number of interpolation steps, by default 1000
 
-    Returns
-    -------
+    Return
+    ------
     np.ndarray
-        Array containing the MTRasym values.
+        Array containing the MTRasym values
     """
+
     x_interp = np.linspace(np.min(offsets), np.max(np.absolute(offsets)), n_interp)
     y_interp = np.interp(x_interp, offsets, m_z)
     asym = y_interp[::-1] - y_interp
@@ -28,25 +32,27 @@ def calc_mtr_asym(m_z: np.ndarray, offsets: np.ndarray, n_interp: int = 1000) ->
 
 
 def normalize_data(
-    m_z: np.ndarray, offsets: np.ndarray, threshold: int | float | list | np.ndarray
+    m_z: np.ndarray,
+    offsets: np.ndarray,
+    threshold: int | float | list | np.ndarray,
 ) -> tuple[np.ndarray, np.ndarray]:
-    """normalize_data Normalize magnetization values by the mean of values
-    corresponding to offsets exceeding the given threshold.
+    """Normalize magnetization values.
 
-    Parameters
-    ----------
-    m_z : np.ndarray
-        Magnetization values.
-    offsets : np.ndarray
-        Offset values.
-    threshold : Union[int, float, list, np.ndarray]
-        Threshold for data splitting. If int or float, using abs(value). If list or arry, using min/max values.
+    Parameter
+    ---------
+    m_z
+        not normalized magnetization values
+    offsets
+        frequency offsets
+    threshold
+        threshold for data splitting. If single value, abs(val) is used, else min/max values.
 
-    Returns
-    -------
+    Return
+    ------
     Tuple[np.ndarray, np.ndarray]
         Tuple containing the normalized magnetization vector and the corresponding offsets.
     """
+
     offsets, data, norm = split_data(m_z, offsets, threshold)
 
     if norm is not None:
@@ -56,21 +62,23 @@ def normalize_data(
 
 
 def split_data(
-    m_z: np.ndarray, offsets: np.ndarray, threshold: int | float | list | np.ndarray
+    m_z: np.ndarray,
+    offsets: np.ndarray,
+    threshold: int | float | list | np.ndarray,
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray | None]:
-    """split_data Split magnetization vector into data and normalization data.
+    """Split magnetization vector into data and normalization data.
 
-    Parameters
-    ----------
-    m_z : np.ndarray
-        Magnetization values.
-    offsets : np.ndarray
-        Offset values.
-    threshold : Union[int, float, list, np.ndarray]
-        Threshold for data splitting. If int or float, using abs(value). If list or arry, using min/max values.
+    Parameter
+    ---------
+    m_z
+        magnetization values
+    offsets
+        frequency offsets
+    threshold
+        threshold for data splitting. If single value, abs(val) is used, else min/max values.
 
-    Returns
-    -------
+    Return
+    ------
     Tuple[np.ndarray, np.ndarray, Union[np.ndarray, None]]
         Tuple containing offsets, data and normalization data.
 
@@ -79,6 +87,7 @@ def split_data(
     TypeError
         If threshold is not of type int, float, list or np.ndarray.
     """
+
     if isinstance(threshold, (int, float)):
         th_high = np.abs(threshold)
         th_low = -th_high

@@ -1,6 +1,3 @@
-"""simulate.py Script to run the BMCTool simulation based on a seq-file and a
-*.yaml config file."""
-
 from pathlib import Path
 
 from bmctool import Parameters
@@ -8,16 +5,21 @@ from bmctool.bmc_tool import BMCTool
 from bmctool.utils.eval import plot_z
 
 
-def simulate(config_file: str | Path, seq_file: str | Path, show_plot: bool = False, **kwargs) -> BMCTool:
-    """Simulate Run BMCTool simulation based on given seq-file and config file.
+def simulate(
+    config_file: str | Path,
+    seq_file: str | Path,
+    show_plot: bool = False,
+    **kwargs,
+) -> BMCTool:
+    """Run BMCTool simulation based on given seq-file and config file.
 
     Parameters
     ----------
-    config_file : Union[str, Path]
-        Path to the config file.
-    seq_file : Union[str, Path]
-        Path to the seq-file.
-    show_plot : bool, optional
+    config_file
+        Path to the YAML config file
+    seq_file
+        Path to the pulseq sequence file
+    show_plot (optional)
         Flag to activate plotting of simulated data, by default False
 
     Returns
@@ -28,8 +30,9 @@ def simulate(config_file: str | Path, seq_file: str | Path, show_plot: bool = Fa
     Raises
     ------
     FileNotFoundError
-        If the config_file or seq_file is not found.
+        If the config_file or seq_file not found.
     """
+
     if not Path(config_file).exists():
         raise FileNotFoundError(f'File {config_file} not found.')
 
@@ -56,14 +59,11 @@ def simulate(config_file: str | Path, seq_file: str | Path, show_plot: bool = Fa
 
 
 def sim_example() -> None:
-    """Function to run an example WASABI simulation."""
+    """Run an example simulation using included config and seq files."""
+
     seq_file = Path(__file__).parent / 'library' / 'seq-library' / 'WASABI.seq'
     config_file = Path(__file__).parent / 'library' / 'sim-library' / 'config_wasabi.yaml'
 
     simulate(
         config_file=config_file, seq_file=seq_file, show_plot=True, title='WASABI example spectrum', normalize=True
     )
-
-
-if __name__ == '__main__':
-    sim_example()

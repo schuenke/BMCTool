@@ -1,7 +1,4 @@
-import tempfile
-
 import pytest
-import yaml
 
 from bmctool.parameters import Parameters
 from tests.conftest import valid_config_dict

@@ -13,35 +13,35 @@ from pypulseq.Sequence.sequence import Sequence
 
 
 def round_number(number: float, significant_digits: int) -> float:
-    """round_number Rounds a number to the specified number of significant
-    digits.
+    """Round a number to the specified number of significant digits.
 
-    Parameters
-    ----------
-    number : float
+    Parameter
+    ---------
+    number
         number to be rounded
-    significant_digits : int
+    significant_digits
         number of significant digits
 
-    Returns
-    -------
+    Return
+    ------
     float
         rounded number
     """
+
     if number != 0:
         return round(number, significant_digits - int(math.floor(math.log10(abs(number)))) - 1)
     return 0.0
 
 
 def insert_seq_file_header(filepath: str | Path, author: str) -> None:
-    """insert_seq_file_header Inserts header information into seq-file.
+    """Insert header information into seq-file.
 
-    Parameters
-    ----------
-    filepath : Union[str, Path]
-        Path to the seq-file
-    author : str
-        author name
+    Parameter
+    ---------
+    filepath
+        Path to pypulseq sequence file
+    author
+        name of the author
     """
     # create a temp file
     tmp, abs_path = mkstemp()
@@ -74,21 +74,21 @@ def insert_seq_file_header(filepath: str | Path, author: str) -> None:
 
 
 def write_seq_defs(seq: Sequence, seq_defs: dict, use_matlab_names: bool) -> Sequence:
-    """write_seq_defs Writes seq-file 'Definitions' from dictionary.
+    """Write seq-file 'Definitions' from dictionary.
 
-    Parameters
-    ----------
-    seq : Sequence
-        Pulseq sequence object
-    seq_defs : dict
+    Parameter
+    ---------
+    seq
+        PyPulseq sequence object
+    seq_defs
         dictionary with sequence definitions
-    use_matlab_names : bool
+    use_matlab_names
         flag to use MATLAB names for sequence definitions
 
-    Returns
-    -------
-    Sequence
-        _description_
+    Return
+    ------
+    seq
+        PyPulseq sequence object
     """
     if use_matlab_names:
         translator = {
@@ -140,19 +140,19 @@ def write_seq(
     author: str,
     use_matlab_names: bool = True,
 ) -> None:
-    """write_seq Writes the seq-file according to given arguments.
+    """Write seq-file according to given arguments.
 
-    Parameters
-    ----------
-    seq : Sequence
+    Parameter
+    ---------
+    seq
         PyPulseq sequence object
-    seq_defs : dict
+    seq_defs
         dictionary with sequence definitions
-    filename : Union[str, Path]
+    filename
         name of the seq-file
-    author : str
-        author name
-    use_matlab_names : bool, optional
+    author
+        name of the author
+    use_matlab_names, optional
         flag to use MATLAB names for sequence definitions, by default True
     """
     # write definitions

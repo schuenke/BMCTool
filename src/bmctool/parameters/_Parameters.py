@@ -19,8 +19,8 @@ from bmctool.parameters import WaterPool
 class Parameters:
     """Class to store simulation parameters.
 
-    Parameters:
-    -----------
+    Parameters
+    ----------
     water_pool : WaterPool
         Water pool parameters
     cest_pools : list
@@ -31,8 +31,6 @@ class Parameters:
         System parameters
     options : Options
         Additional options
-    offsets : np.ndarray
-        frequency offsets [ppm]
     """
 
     water_pool: WaterPool = dataclasses.field(default_factory=WaterPool)
@@ -238,7 +236,7 @@ class Parameters:
             setattr(self.options, key, value)
 
     def update_system(self, **kwargs) -> None:
-        """Updates scanner parameters.
+        """Update scanner parameters.
 
         Available parameters are: b0, gamma, b0_inhom, rel_b1.
         """

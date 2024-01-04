@@ -1,10 +1,7 @@
-"""make_hsexp.py Function to create all possible HSExp pulses (tip-down/tip-up
-& pos/neg offset)"""
-
 from types import SimpleNamespace
 
 import numpy as np
-from pypulseq import Opts
+import pypulseq as pp
 
 from bmctool import GAMMA_HZ
 from bmctool.utils.pulses.calculate_phase import calculate_phase
@@ -13,27 +10,50 @@ from bmctool.utils.pulses.make_hypsec_half_passage import calculate_amplitude as
 
 
 def calculate_window_modulation(t: np.ndarray, t0: float) -> np.ndarray:
-    """Calculates modulation function for HSExp pulses.
+    """Calculate modulation function for HSExp pulses.
 
-    :param t: time points of the different sample points [s]
-    :param t0: reference time point (= last point for half passage
-        pulse) [s]
-    :return:
+    Parameter
+    ---------
+    t
+        time points of the different sample points [s]
+    t0
+        reference time point (= last point for half passage pulse) [s]
+
+    Return
+    ------
+    np.ndarray
+        Calculated window function.
     """
+
     return 0.42 - 0.5 * np.cos(np.pi * t / t0) + 0.08 * np.cos(2 * np.pi * t / t0)
 
 
-def calculate_frequency(t: np.ndarray, t0: float, bandwidth: float, ef: float, freq_factor: int) -> np.ndarray:
-    """Calculates modulation function for HSExp pulses.
+def calculate_frequency(
+    t: np.ndarray,
+    t0: float,
+    bandwidth: float,
+    ef: float,
+    freq_factor: int,
+) -> np.ndarray:
+    """Calculate modulation function for HSExp pulses.
 
-    :param t: time points of the different sample points [s]
-    :param t0: reference time point (= last point for half passage
-        pulse) [s]
-    :param bandwidth: bandwidth of the pulse [Hz]
-    :param ef: dimensionless parameter to control steepness of the
-        exponential curve
-    :param freq_factor: factor (-1 or +1) to switch between positive and
-        negative offsets
+    Parameter
+    ---------
+    t
+        time points of the different sample points [s]
+    t0
+        reference time point (= last point for half passage pulse) [s]
+    bandwidth
+        bandwidth of the pulse [Hz]
+    ef
+        dimensionless parameter to control steepness of the exponential curve
+    freq_factor
+        factor (-1 or +1) to switch between positive and negative offsets
+
+    Return
+    ------
+    np.ndarray
+        Calculated modulation function for HSExp pulse.
     """
 
     return -freq_factor * bandwidth * np.pi * np.exp(-t / t0 * ef)
@@ -48,25 +68,38 @@ def make_hsexp(
     ef: float = 3.5,
     tip_down: bool = True,
     pos_offset: bool = True,
-    system: Opts = Opts(),
+    system: pp.Opts = pp.Opts(),
     gamma_hz: float = GAMMA_HZ,
 ) -> SimpleNamespace:
-    """Creates a radio-frequency pulse event with amplitude and phase
-    modulation of a HSExp pulse.
+    """Create HSExp RF pulse using given settings.
 
-    :param amp: maximum amplitude value [µT]
-    :param t_p: pulse pulse_duration [s]
-    :param mu: parameter µ of hyperbolic secant pulse
-    :param bandwidth: bandwidth of hyperbolic secant pulse [Hz]
-    :param t_window: pulse_duration of window function
-    :param ef: dimensionless parameter to control steepness of the
-        exponential curve
-    :param tip_down: flag to switch between tip down (True) and tip up
-        (False) pulses
-    :param pos_offset: flag to switch between positive (True) and
-        negative (False) offsets
-    :param system: system limits of the MR scanner
-    :param gamma_hz: gyromagnetic ratio [Hz]
+    Parameter
+    ---------
+    amp, optional
+        maximum amplitude value [µT], by default 1.0
+    t_p, optional
+        pulse pulse_duration [s], by default 12e-3
+    mu, optional
+        parameter µ of hyperbolic secant pulse, by default 65
+    bandwidth, optional
+        bandwidth of hyperbolic secant pulse [Hz], by default 2500
+    t_window, optional
+        duration of window function, by default 3.5e-3
+    ef, optional
+        dimensionless parameter to control steepness of the exponential curve, by default 3.5
+    tip_down, optional
+        flag to switch between tip down (True) and tip up (False) pulses, by default True
+    pos_offset, optional
+        flag to switch between positive (True) and negative (False) offsets, by default True
+    system, optional
+        system limits of the MR scanner, by default pp.Opts()
+    gamma_hz, optional
+        gyromagnetic ratio [Hz], by default GAMMA_HZ
+
+    Return
+    ------
+    SimpleNamespace
+        PyPulseq rf pulse object.
     """
 
     samples = int(t_p * 1e6)
@@ -122,16 +155,41 @@ def generate_hsexp_dict(
     bandwidth: float = 2500,
     t_window: float = 3.5e-3,
     ef: float = 3.5,
-    system: Opts = Opts(),
+    system: pp.Opts = pp.Opts(),
     gamma_hz: float = GAMMA_HZ,
 ) -> dict:
-    """Creates a dictionary with the 4 different hsexp pulses (tip-down/up and
-    pos/neg offsets) :param amp: maximum amplitude value [µT] :param t_p: pulse
-    pulse_duration [s] :param mu: parameter µ of hyperbolic secant pulse :param
-    bandwidth: bandwidth of hyperbolic secant pulse [Hz] :param t_window:
-    pulse_duration of window function :param ef: dimensionless parameter to
-    control steepness of the exponential curve :param system: system limits of
-    the MR scanner :param gamma_hz: gyromagnetic ratio [Hz] :return:"""
+    """Create a dict with all 4 possible HSexp RF pulses.
+
+    Possible combinations are:
+    - tip-down positive offset
+    - tip-down negative offset
+    - tip-up positive offset
+    - tip-up negative offset
+
+    Parameter
+    ---------
+    amp, optional
+        maximum amplitude value [µT], by default 1.0
+    t_p, optional
+        pulse pulse_duration [s], by default 12e-3
+    mu, optional
+        parameter µ of hyperbolic secant pulse, by default 65
+    bandwidth, optional
+        bandwidth of hyperbolic secant pulse [Hz], by default 2500
+    t_window, optional
+        duration of window function, by default 3.5e-3
+    ef, optional
+        dimensionless parameter to control steepness of the exponential curve, by default 3.5
+    system, optional
+        system limits of the MR scanner, by default pp.Opts()
+    gamma_hz, optional
+        gyromagnetic ratio [Hz], by default GAMMA_HZ
+
+    Return
+    ------
+    dict
+        dict with all 4 possible HSexp RF pulses
+    """
 
     pulse_dict = {}  # create empty dict for the 4 different pulses
 

@@ -1,5 +1,3 @@
-"""make_hypsec_half_passage.py Functions to create an adiabatic hyperbolic
-secant half passage pulse."""
 from types import SimpleNamespace
 
 import numpy as np
@@ -9,44 +7,93 @@ from bmctool.utils.pulses.calculate_phase import calculate_phase
 from bmctool.utils.pulses.create_arbitrary_pulse_with_phase import create_arbitrary_pulse_with_phase
 
 
-def calculate_amplitude(t: np.ndarray, t_0: float, amp: float, mu: float, bandwidth: float) -> np.ndarray:
-    """Calculates amplitude modulation for a hyperbolic secant half passage
-    pulse.
+def calculate_amplitude(
+    t: np.ndarray,
+    t_0: float,
+    amp: float,
+    mu: float,
+    bandwidth: float,
+) -> np.ndarray:
+    """Calculate amp modulation for hyperbolic secant half passage pulse.
 
-    :param t: time points of the different sample points [s]
-    :param t_0: reference time point (= last point for half passage
-        pulse) [s]
-    :param amp: maximum amplitude value [µT]
-    :param mu: parameter µ of hyperbolic secant pulse
-    :param bandwidth: bandwidth of hyperbolic secant pulse [Hz]
+    Parameter
+    ---------
+    t
+        time points of the different sample points [s]
+    t_0
+        reference time point (= last point for half passage pulse) [s]
+    amp
+        maximum amplitude value [µT]
+    mu
+        parameter µ of hyperbolic secant pulse
+    bandwidth
+        bandwidth of hyperbolic secant pulse [Hz]
+
+    Return
+    ------
+    np.ndarray
+        Calculated amplitude modulation.
     """
+
     return np.divide(amp, np.cosh((bandwidth * np.pi / mu) * (t - t_0)))
 
 
-def calculate_frequency(t: np.ndarray, t_0: float, mu: float, bandwidth: float) -> np.ndarray:
-    """Calculates frequency modulation for a hyperbolic secant half passage
-    pulse.
+def calculate_frequency(
+    t: np.ndarray,
+    t_0: float,
+    mu: float,
+    bandwidth: float,
+) -> np.ndarray:
+    """Calculate freq modulation for hyperbolic secant half passage pulse.
 
-    :param t: time points of the different sample points [s]
-    :param t_0: reference time point (= last point for half passage
-        pulse) [s]
-    :param mu: parameter µ of hyperbolic secant pulse
-    :param bandwidth: bandwidth of hyperbolic secant pulse [Hz]
+    Parameter
+    ---------
+    t
+        time points of the different sample points [s]
+    t_0
+        reference time point (= last point for half passage pulse) [s]
+    mu
+        parameter µ of hyperbolic secant pulse
+    bandwidth
+        bandwidth of hyperbolic secant pulse [Hz]
+
+    Return
+    ------
+    np.ndarray
+        Calculated frequency modulation.
     """
+
     beta = bandwidth * np.pi / mu
     return bandwidth * np.pi * np.tanh(beta * (t - t_0))
 
 
 def make_hypsec_half_passage_rf(
-    amp: float, pulse_duration: float = 8e-3, mu: float = 6, bandwidth: float = 1200, system: Opts = Opts()
+    amp: float,
+    pulse_duration: float = 8e-3,
+    mu: float = 6,
+    bandwidth: float = 1200,
+    system: Opts = Opts(),
 ) -> SimpleNamespace:
     """
-    Creates block event for an hyperbolic secant half passage pulse according to DOI: 10.1002/mrm.26370.
-    :param amp: maximum amplitude value [µT]
-    :param pulse_duration: pulse pulse_duration [s]
-    :param mu: parameter µ of hyperbolic secant pulse
-    :param bandwidth: bandwidth of hyperbolic secant pulse [Hz]
-    :param system: system limits of the MR scanner
+    Create pypulseq rf pulse for an hyperbolic secant half passage pulse according to DOI: 10.1002/mrm.26370.
+
+    Parameter
+    ---------
+    amp
+        maximum amplitude value [µT]
+    pulse_duration
+        duration of the pulse [s]
+    mu
+        parameter µ of hyperbolic secant pulse
+    bandwidth
+        bandwidth of hyperbolic secant pulse [Hz]
+    system
+        system limits of the MR scanner
+
+    Return
+    ------
+    SimpleNamespace
+        PyPulseq block event for hyperbolic secant half passage pulse.
     """
 
     samples = int(pulse_duration * 1e6)
