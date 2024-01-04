@@ -87,17 +87,12 @@ class Parameters:
 
     @classmethod
     def from_dict(cls, config: dict) -> Parameters:
-        """Create a Params object from a dictionary.
+        """Create a Parameters instance from a dictionary.
 
         Parameters
         ----------
-        config : dict
+        config
             Dictionary containing the simulation parameters.
-
-        Returns
-        -------
-        Params
-            Params object containing the simulation parameters.
         """
         # create a dictionary with name pairs for renaming to match class attributes
         rename = {
@@ -129,6 +124,14 @@ class Parameters:
 
     @classmethod
     def from_yaml(cls, yaml_file: str | Path) -> Parameters:
+        """Create a Parameters instance from a yaml config file.
+
+        Parameters
+        ----------
+        yaml_file
+            Path to yaml config file.
+        """
+
         if not Path(yaml_file).exists():
             raise FileNotFoundError(f'File {yaml_file} not found.')
 
@@ -138,18 +141,19 @@ class Parameters:
         return cls.from_dict(config)
 
     def _set_m_vec(self) -> np.ndarray:
-        """Sets the initial magnetization vector (fully relaxed).
+        """Set the initial magnetization vector (fully relaxed).
 
         Returns
         -------
-        np.ndarray
-            Initial magnetization vector (fully relaxed)
+        m_vec
+            Initial magnetization vector (fully relaxed) as numpy array.
 
         Raises
         ------
         Exception
             If no water pool is defined.
         """
+
         if not self.water_pool:
             raise Exception('No water pool defined before assignment of magnetization vector.')
 
@@ -172,24 +176,48 @@ class Parameters:
         self.m_vec = m_vec
         return m_vec
 
+    def to_yaml(self, yaml_file: str | Path) -> None:
+        """Export parameters to yaml file.
+
+        Parameters
+        ----------
+        yaml_file
+            Path to yaml file.
+        """
+
+        if self.cest_pools:
+            cest_dict = {f'cest_{ii + 1}': pool.__dict__() for ii, pool in enumerate(self.cest_pools)}
+
+        with open(yaml_file, 'w') as file:
+            yaml.dump({'water_pool': self.water_pool.__dict__()}, file)
+            if self.mt_pool:
+                yaml.dump({'mt_pool': self.mt_pool.__dict__()}, file)
+            if self.cest_pools:
+                yaml.dump({'cest_pool': cest_dict}, file)
+            yaml.dump(self.system.__dict__(), file)
+            yaml.dump(self.options.__dict__(), file)
+
+        file.close()
+
     def add_cest_pool(self, cest_pool: CESTPool) -> None:
         """Add a CESTPool object to the cest_pools list."""
         self.cest_pools.append(cest_pool)
 
-    def update_cest_pool(self, pool_idx: int, **kwargs) -> None:
-        """Update parameters (r1/t1, r2/t2, k, f, dw) for CEST pool with index
-        pool_idx.
+    def update_cest_pool(self, idx: int, **kwargs) -> None:
+        """Update parameters for CEST pool with index idx.
+
+        Available parameters are: r1 or t1, r2 or t2, k, f, dw.
 
         Parameters
         ----------
-        pool_idx
+        idx
             Index of the CEST pool to be updated
         kwargs
-            Parameters to be updated
+            Parameters to be updated (r1 or t1, r2 or t2, k, f, dw)
         """
 
         for key, value in kwargs.items():
-            setattr(self.cest_pools[pool_idx], key, value)
+            setattr(self.cest_pools[idx], key, value)
 
     def update_mt_pool(self, **kwargs) -> None:
         """Update MT pool parameters.
