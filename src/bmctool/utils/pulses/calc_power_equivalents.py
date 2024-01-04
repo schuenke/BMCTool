@@ -4,7 +4,7 @@ from types import SimpleNamespace
 
 import numpy as np
 
-from src.bmctool import GAMMA_HZ
+from bmctool import GAMMA_HZ
 
 
 def calc_power_equivalent(rf_pulse: SimpleNamespace, tp: float, td: float, gamma_hz: float = GAMMA_HZ) -> float:

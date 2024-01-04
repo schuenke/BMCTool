@@ -5,8 +5,8 @@ from types import SimpleNamespace
 import numpy as np
 from pypulseq import Opts
 
-from src.bmctool.utils.pulses.calculate_phase import calculate_phase
-from src.bmctool.utils.pulses.create_arbitrary_pulse_with_phase import create_arbitrary_pulse_with_phase
+from bmctool.utils.pulses.calculate_phase import calculate_phase
+from bmctool.utils.pulses.create_arbitrary_pulse_with_phase import create_arbitrary_pulse_with_phase
 
 
 def calculate_amplitude(t: np.ndarray, t_0: float, amp: float, mu: float, bandwidth: float) -> np.ndarray:

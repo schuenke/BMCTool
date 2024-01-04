@@ -6,10 +6,10 @@ from types import SimpleNamespace
 import numpy as np
 from pypulseq import Opts
 
-from src.bmctool import GAMMA_HZ
-from src.bmctool.utils.pulses.calculate_phase import calculate_phase
-from src.bmctool.utils.pulses.create_arbitrary_pulse_with_phase import create_arbitrary_pulse_with_phase
-from src.bmctool.utils.pulses.make_hypsec_half_passage import calculate_amplitude as hypsec_amp
+from bmctool import GAMMA_HZ
+from bmctool.utils.pulses.calculate_phase import calculate_phase
+from bmctool.utils.pulses.create_arbitrary_pulse_with_phase import create_arbitrary_pulse_with_phase
+from bmctool.utils.pulses.make_hypsec_half_passage import calculate_amplitude as hypsec_amp
 
 
 def calculate_window_modulation(t: np.ndarray, t0: float) -> np.ndarray:
