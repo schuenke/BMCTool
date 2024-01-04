@@ -138,42 +138,6 @@ class Parameters:
 
         return cls.from_dict(config)
 
-    def _set_m_vec(self) -> np.ndarray:
-        """Set the initial magnetization vector (fully relaxed).
-
-        Returns
-        -------
-        m_vec
-            Initial magnetization vector (fully relaxed) as numpy array.
-
-        Raises
-        ------
-        Exception
-            If no water pool is defined.
-        """
-
-        if not self.water_pool:
-            raise Exception('No water pool defined before assignment of magnetization vector.')
-
-        if self.cest_pools:
-            n_total_pools = len(self.cest_pools) + 1
-        else:
-            n_total_pools = 1
-
-        m_vec = np.zeros(n_total_pools * 3)
-        m_vec[n_total_pools * 2] = self.water_pool.f
-        if self.cest_pools:
-            for ii in range(1, n_total_pools):
-                m_vec[n_total_pools * 2 + ii] = self.cest_pools[ii - 1].f
-                m_vec[n_total_pools * 2] = m_vec[n_total_pools * 2]
-        if self.mt_pool:
-            m_vec = np.append(m_vec, self.mt_pool.f)
-        if isinstance(self.options.scale, float):
-            m_vec = m_vec * self.options.scale
-
-        self.m_vec = m_vec
-        return m_vec
-
     def to_yaml(self, yaml_file: str | Path) -> None:
         """Export parameters to yaml file.
 
