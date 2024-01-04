@@ -1,4 +1,7 @@
+import tempfile
+
 import pytest
+import yaml
 
 from bmctool.parameters import Parameters
 from tests.conftest import valid_config_dict
@@ -62,6 +65,22 @@ def test_init_from_alternative_param_names(valid_config_dict):
     assert p == q
 
 
+def test_export_to_yaml(valid_config_dict, empty_config_file):
+    """Test that the Parameters class can be exported to a YAML config file."""
+
+    # create Parameters object from valid_config_dict
+    p = Parameters.from_dict(valid_config_dict)
+
+    # export Parameters object to YAML config file
+    p.to_yaml(empty_config_file)
+
+    # create Parameters object from the exported config file
+    q = Parameters.from_yaml(empty_config_file)
+
+    # ensure that both objects are equal
+    assert p == q
+
+
 @pytest.mark.parametrize(
     'parameter, value',
     [
@@ -80,19 +99,3 @@ def test_update_water_pool_parameter(valid_config_dict, parameter, value):
 
     # assert that the attribute was updated correctly
     assert getattr(p.water_pool, parameter) == float(value)
-
-
-# @pytest.mark.parametrize(
-#     'parameter, value',
-#     [
-#         ('b0', 3.0),
-#         ('gamma', 42.5764),
-#         ('b0_inhom', 0.0),
-#         ('rel_b1', 1.0),
-#     ],
-# )
-# def test_update_waterpool_parameter(parameter, value):
-#     """Test that the water pool parameters are updated correctly."""
-#     p = Parameters()
-#     p.update_waterpool(**{parameter: value})
-#     assert getattr(p.waterpool, parameter) == value

@@ -1,10 +1,8 @@
-import tempfile
-
 import pytest
 import yaml
 
 
-@pytest.fixture
+@pytest.fixture(scope='session')
 def valid_config_dict():
     return {
         'water_pool': {
@@ -27,9 +25,20 @@ def valid_config_dict():
     }
 
 
-@pytest.fixture()
-def valid_yaml_config_file(valid_config_dict):
-    with tempfile.NamedTemporaryFile(mode='w', delete=False) as f:
+@pytest.fixture(scope='session')
+def valid_yaml_config_file(valid_config_dict, tmp_path_factory):
+    fn = tmp_path_factory.mktemp('valid_config_file') / 'valid_config_file.yaml'
+    with open(fn, 'w') as f:
         yaml.dump(valid_config_dict, f)
-    yield f.name
     f.close()
+    yield fn
+
+
+@pytest.fixture(scope='session')
+def empty_config_file(tmp_path_factory):
+    """Create an empty config file."""
+    fn = tmp_path_factory.mktemp('empty_config') / 'empty_config.yaml'
+    with open(fn, 'w') as f:
+        f.write('')
+    f.close()
+    yield fn
