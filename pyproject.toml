@@ -35,7 +35,7 @@ test = [
     "pytest-cov",
     "pytest-xdist",
 ]
-lint = ["mypy", "flake8", "isort", "pre-commit", "autopep8", "pydocstyle"]
+lint = ["mypy", "ruff", "pre-commit"]
 docs = ["sphinx", "pydata-sphinx-theme", "sphinx-pyproject"]
 
 [project.urls]
@@ -54,51 +54,36 @@ warn_no_return = true
 warn_unreachable = true
 exclude = ["docs"]
 
-[[tool.mypy.overrides]]
-module = ["ismrmrd.*", "h5py", "scipy.*"]
-ignore_missing_imports = true
-
-[tool.black]
+# general ruff section
+[tool.ruff]
+extend = "../pyproject.toml"
 line-length = 120
-skip-string-normalization = true
-target-version = ['py310']
-exclude = '''
-/(
-    \.git
-  | \.mypy_cache
-  | \.venv
-  | _build
-  | build
-  | dist
-)/
-'''
+extend-select = ["B", "C", "SIM", "UP", "Q"]
+ignore = ["C901"]
+ignore-init-module-imports = true
+include = ["src/**/*.py"]
 
-[tool.isort]
-profile = "black"
-skip = ["__init__.py"]
-line_length = 120
-sections = ["FUTURE", "STDLIB", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]
-force_single_line = true
+# ruff format section
+[tool.ruff.format]
+quote-style = "single"
+docstring-code-format = true
 
+# ruff lint section
+[tool.ruff.lint.flake8-quotes]
+docstring-quotes = "double"
+inline-quotes = "single"
 
-[tool.pydocstyle]
+[tool.ruff.lint.isort]
+force-single-line = true
+
+[tool.ruff.lint.pydocstyle]
 convention = "numpy"
-add_ignore = [
-    "D100",
-    "D101",
-    "D102",
-    "D103",
-    "D104",
-    "D105",
-    "D106",
-    "D107",
-    "D202",
-]
-# select = ["D200", "D201", "D205", "D206", "D207", "D208", "D214", "D215", "D409"]
 
+# codespell section
 [tool.codespell]
 builtin = "en-GB_to_en-US"
 ignore-words-list = "te,TE"
 
+# coverage section
 [tool.coverage.paths]
 source = ["src", "*/site-packages"]

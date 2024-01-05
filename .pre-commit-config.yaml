@@ -11,65 +11,21 @@ repos:
       - id: check-toml
       - id: check-json
         exclude: ^.vscode/
-      - id: double-quote-string-fixer
       - id: end-of-file-fixer
       - id: mixed-line-ending
       - id: trailing-whitespace
 
-  - repo: 'https://github.com/PyCQA/isort'
-    rev: 5.12.0
+  - repo: 'https://github.com/pre-commit/mirrors-mypy'
+    rev: v1.5.1
     hooks:
-      - id: isort
-        exclude: ^docs/
-
-  - repo: 'https://github.com/psf/black'
-    rev: 23.7.0
-    hooks:
-      - id: black
-        language_version: python3
-
-  - repo: 'https://github.com/PyCQA/flake8'
-    rev: 6.1.0
-    hooks:
-      - id: flake8
-        args:
-          - '--exclude=__init__.py'
-        exclude: ^docs/|tests/.*
-
-  # - repo: 'https://github.com/pre-commit/mirrors-mypy'
-  #   rev: v1.5.1
-  #   hooks:
-  #     - id: mypy
-  #       additional_dependencies:
-  #         - numpy
-  #         - torch
-  #         - '--index-url=https://download.pytorch.org/whl/cpu'
-  #         - '--extra-index-url=https://pypi.python.org/simple'
-  #       exclude: docs/.*|tests/.*
-
-  - repo: 'https://github.com/myint/docformatter'
-    rev: v1.7.5
-    hooks:
-      - id: docformatter
-        args:
-          - '--in-place'
-
-  - repo: 'https://github.com/PyCQA/pydocstyle'
-    rev: 6.3.0
-    hooks:
-      - id: pydocstyle
-        exclude: __init__.py
-        files: ^src/
+      - id: mypy
         additional_dependencies:
-          - tomli
-
-  - repo: 'https://github.com/asottile/pyupgrade'
-    rev: v3.10.1
-    hooks:
-      - id: pyupgrade
-        args:
-          - '--py310-plus'
-        exclude: ^docs/
+          - numpy
+          - torch
+          - types-pyyaml
+          - '--index-url=https://download.pytorch.org/whl/cpu'
+          - '--extra-index-url=https://pypi.python.org/simple'
+        exclude: docs/.*|tests/.*
 
   - repo: 'https://github.com/codespell-project/codespell'
     rev: v2.2.4
@@ -77,3 +33,13 @@ repos:
       - id: codespell
         additional_dependencies:
           - tomli
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.1.11
+    hooks:
+      # Run the linter.
+      - id: ruff
+        args: [ --fix ]
+        # exclude: ^docs/|tests/.*
+      # Run the formatter.
+      - id: ruff-format
