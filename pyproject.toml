@@ -56,7 +56,6 @@ exclude = ["docs"]
 
 # general ruff section
 [tool.ruff]
-extend = "../pyproject.toml"
 line-length = 120
 extend-select = ["B", "C", "SIM", "UP", "Q"]
 ignore = ["C901"]
