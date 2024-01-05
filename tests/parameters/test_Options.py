@@ -16,7 +16,12 @@ from bmctool.parameters._Options import Options
 )
 def test_from_valid_params(verbose, reset_init_mag, scale, max_pulse_samples):
     """Test Options instantiation from valid parameters."""
-    a = Options(verbose=verbose, reset_init_mag=reset_init_mag, scale=scale, max_pulse_samples=max_pulse_samples)
+    a = Options(
+        verbose=verbose,
+        reset_init_mag=reset_init_mag,
+        scale=scale,
+        max_pulse_samples=max_pulse_samples,
+    )
 
     # assert that the attributes are set correctly
     assert a.verbose == bool(verbose)
@@ -36,4 +41,9 @@ def test_from_valid_params(verbose, reset_init_mag, scale, max_pulse_samples):
 def test_raise_valueerror_for_invalid_values(verbose, reset_init_mag, scale, max_pulse_samples):
     """Test Options instantiation from invalid parameter types."""
     with pytest.raises(ValueError):
-        Options(verbose=verbose, reset_init_mag=reset_init_mag, scale=scale, max_pulse_samples=max_pulse_samples)
+        Options(
+            verbose=verbose,
+            reset_init_mag=reset_init_mag,
+            scale=scale,
+            max_pulse_samples=max_pulse_samples,
+        )

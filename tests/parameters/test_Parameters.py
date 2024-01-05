@@ -1,8 +1,6 @@
 import pytest
 
 from bmctool.parameters import Parameters
-from tests.conftest import valid_config_dict
-from tests.conftest import valid_yaml_config_file
 
 
 def test_init_from_valid_dict(valid_config_dict):
@@ -92,7 +90,7 @@ def test_update_water_pool_parameter(valid_config_dict, parameter, value):
     p = Parameters.from_dict(valid_config_dict)
 
     # call p.update_water_pool() with the parameter and value
-    getattr(p, 'update_water_pool')(**{parameter: value})
+    p.update_water_pool(**{parameter: value})
 
     # assert that the attribute was updated correctly
     assert getattr(p.water_pool, parameter) == float(value)
