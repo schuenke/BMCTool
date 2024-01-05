@@ -65,7 +65,13 @@ rise_time = 1.0e-3  # spoiler rise time in seconds
 spoil_dur = 6.5e-3  # complete spoiler duration in seconds
 
 gx_spoil, gy_spoil, gz_spoil = (
-    make_trapezoid(channel=c, system=sys, amplitude=spoil_amp, duration=spoil_dur, rise_time=rise_time)
+    make_trapezoid(
+        channel=c,
+        system=sys,
+        amplitude=spoil_amp,
+        duration=spoil_dur,
+        rise_time=rise_time,
+    )
     for c in ['x', 'y', 'z']
 )
 
@@ -108,7 +114,13 @@ for m, offset in enumerate(offsets_hz):
     seq.add_block(gx_spoil, gy_spoil, gz_spoil)
     seq.add_block(pseudo_adc)
 
-write_seq(seq=seq, seq_defs=seq_defs, filename=seqid + '.seq', author=author, use_matlab_names=True)
+write_seq(
+    seq=seq,
+    seq_defs=seq_defs,
+    filename=seqid + '.seq',
+    author=author,
+    use_matlab_names=True,
+)
 
 # plot the sequence
 if plot_sequence:

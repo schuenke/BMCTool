@@ -5,8 +5,12 @@ import pypulseq as pp
 
 from bmctool import GAMMA_HZ
 from bmctool.utils.pulses.calculate_phase import calculate_phase
-from bmctool.utils.pulses.create_arbitrary_pulse_with_phase import create_arbitrary_pulse_with_phase
-from bmctool.utils.pulses.make_hypsec_half_passage import calculate_amplitude as hypsec_amp
+from bmctool.utils.pulses.create_arbitrary_pulse_with_phase import (
+    create_arbitrary_pulse_with_phase,
+)
+from bmctool.utils.pulses.make_hypsec_half_passage import (
+    calculate_amplitude as hypsec_amp,
+)
 
 
 def calculate_window_modulation(t: np.ndarray, t0: float) -> np.ndarray:
@@ -68,7 +72,7 @@ def make_hsexp(
     ef: float = 3.5,
     tip_down: bool = True,
     pos_offset: bool = True,
-    system: pp.Opts = pp.Opts(),
+    system: pp.Opts | None = None,
     gamma_hz: float = GAMMA_HZ,
 ) -> SimpleNamespace:
     """Create HSExp RF pulse using given settings.
@@ -92,7 +96,7 @@ def make_hsexp(
     pos_offset, optional
         flag to switch between positive (True) and negative (False) offsets, by default True
     system, optional
-        system limits of the MR scanner, by default pp.Opts()
+        system limits of the MR scanner, defaults to pp.Opts()
     gamma_hz, optional
         gyromagnetic ratio [Hz], by default GAMMA_HZ
 
@@ -102,16 +106,15 @@ def make_hsexp(
         PyPulseq rf pulse object.
     """
 
+    system = system or pp.Opts()
+
     samples = int(t_p * 1e6)
     t_pulse = np.divide(np.arange(1, samples + 1), samples) * t_p  # time point array
 
     # find start index of window function
     idx_window = np.argmin(np.abs(t_pulse - t_window))
 
-    if tip_down:
-        shift_idx = -1
-    else:
-        shift_idx = 0
+    shift_idx = -1 if tip_down else 0
 
     # calculate amplitude of hyperbolic secant (HS) pulse
     w1 = hypsec_amp(t_pulse, t_pulse[shift_idx], amp, mu, bandwidth)
@@ -155,7 +158,7 @@ def generate_hsexp_dict(
     bandwidth: float = 2500,
     t_window: float = 3.5e-3,
     ef: float = 3.5,
-    system: pp.Opts = pp.Opts(),
+    system: pp.Opts | None = None,
     gamma_hz: float = GAMMA_HZ,
 ) -> dict:
     """Create a dict with all 4 possible HSexp RF pulses.
@@ -190,6 +193,8 @@ def generate_hsexp_dict(
     dict
         dict with all 4 possible HSexp RF pulses
     """
+
+    system = system or pp.Opts()
 
     pulse_dict = {}  # create empty dict for the 4 different pulses
 

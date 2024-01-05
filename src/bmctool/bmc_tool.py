@@ -1,3 +1,4 @@
+# type: ignore
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -112,9 +113,8 @@ class BMCTool:
             self.n_measure = int(self.defs['num_meas'])
         else:
             self.n_measure = self.n_offsets
-            if 'run_m0_scan' in self.defs:
-                if 1 in self.defs['run_m0_scan'] or 'True' in self.defs['run_m0_scan']:
-                    self.n_measure += 1
+            if 'run_m0_scan' in self.defs and self.defs['run_m0_scan'] in [1, '1', 'True', 'true']:
+                self.n_measure += 1
 
         self.m_init = params.m_vec.copy()
         self.m_out = np.zeros([self.m_init.shape[0], self.n_measure])
@@ -287,9 +287,6 @@ class BMCTool:
         if self.offsets_ppm.size != m_z.size:
             self.offsets_ppm = np.arange(0, m_z.size)
 
-        if return_abs:
-            m_z = np.abs(m_z)
-        else:
-            m_z = np.array(m_z)
+        m_z = np.abs(m_z) if return_abs else np.array(m_z)
 
         return self.offsets_ppm, m_z

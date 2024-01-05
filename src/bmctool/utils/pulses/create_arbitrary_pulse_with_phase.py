@@ -3,11 +3,15 @@
 from types import SimpleNamespace
 
 import numpy as np
-from pypulseq import Opts
+import pypulseq as pp
 
 
 def create_arbitrary_pulse_with_phase(
-    signal: np.ndarray, flip_angle: float, freq_offset: float = 0, phase_offset: float = 0, system: Opts = Opts()
+    signal: np.ndarray,
+    flip_angle: float,
+    freq_offset: float = 0,
+    phase_offset: float = 0,
+    system: pp.Opts | None = None,
 ) -> SimpleNamespace:
     """Create RF pulse with arbitrary shape and phase.
 
@@ -22,8 +26,11 @@ def create_arbitrary_pulse_with_phase(
     phase_offset : float, optional
         phase offset of the RF pulse, by default 0
     system : Opts, optional
-        pypulseq Opts object containing system limits, by default Opts()
+        pypulseq Opts object containing system limits, defaults to pp.Opts()
     """
+
+    system = system or pp.Opts()
+
     signal *= flip_angle / (2 * np.pi)
     t = np.linspace(1, len(signal), num=len(signal)) * system.rf_raster_time
 

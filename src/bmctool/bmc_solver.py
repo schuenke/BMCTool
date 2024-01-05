@@ -1,4 +1,4 @@
-"""bmc_solver.py Definition of BlochMcConnellSolver class."""
+# type: ignore
 import math
 
 import numpy as np
@@ -186,14 +186,11 @@ class BlochMcConnellSolver:
             x = np.dot(a_t, x)
             c_x = c * x
             n = n + c_x
-            if p:
-                d = d + c_x
-            else:
-                d = d - c_x
+            d = d + c_x if p else d - c_x
             p = not p
 
         f = np.dot(np.linalg.pinv(d), n)
-        for k in range(1, j + 1):
+        for _ in range(1, j + 1):
             f = np.dot(f, f)
         mag_ = np.dot(f, (mag_ + a_inv_t)) - a_inv_t
         return mag_[np.newaxis, :, np.newaxis]
@@ -218,7 +215,10 @@ class BlochMcConnellSolver:
         # A_.T.dot(A_), A_.T.dot(b_)). For speed reasons, the transpose of A_ (A_.T) is pre-calculated and the
         # .dot notation is replaced by the Einstein summation (np.einsum).
         arr_at = arr_a.T
-        tmps = np.linalg.solve(np.einsum('kji,ikl->ijl', arr_at, arr_a), np.einsum('kji,ikl->ijl', arr_at, arr_c))
+        tmps = np.linalg.solve(
+            np.einsum('kji,ikl->ijl', arr_at, arr_a),
+            np.einsum('kji,ikl->ijl', arr_at, arr_c),
+        )
 
         # solve equation for magnetization M: np.einsum('ijk,ikl->ijl') is used to calculate the matrix
         # multiplication for each element along the first (=offset) axis.
@@ -254,10 +254,7 @@ class BlochMcConnellSolver:
             mt_line = t2 / (1 + pow((offsets - dw * w0) * t2, 2.0))
         elif ls == 'superlorentzian':
             dw_pool = offsets - dw * w0
-            if abs(dw_pool) >= w0:
-                mt_line = self.interpolate_sl(dw_pool)
-            else:
-                mt_line = self.interpolate_chs(dw_pool, w0)
+            mt_line = self.interpolate_sl(dw_pool) if abs(dw_pool) >= w0 else self.interpolate_chs(dw_pool, w0)
         else:
             mt_line = np.zeros(offsets.size)
         return mt_line

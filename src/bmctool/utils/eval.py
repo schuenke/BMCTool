@@ -88,15 +88,15 @@ def split_data(
         If threshold is not of type int, float, list or np.ndarray.
     """
 
-    if isinstance(threshold, (int, float)):
+    if isinstance(threshold, int | float):
         th_high = np.abs(threshold)
         th_low = -th_high
     elif isinstance(threshold, list) and len(threshold) == 2:
         th_high = max(threshold)
         th_low = min(threshold)
     elif isinstance(threshold, np.ndarray) and threshold.size == 2:
-        th_high = max(threshold)
-        th_low = min(threshold)
+        th_high = np.max(threshold)
+        th_low = np.min(threshold)
     else:
         raise TypeError(f"Threshold of type '{type(threshold)}' not supported.")
 
@@ -152,8 +152,8 @@ def plot_z(
     Figure
         Matplotlib figure object.
     """
-    if offsets is None:
-        offsets = range(len(m_z))
+
+    offsets = offsets or np.arange(len(m_z))
 
     if normalize:
         m_z, offsets = normalize_data(m_z, offsets, norm_threshold)

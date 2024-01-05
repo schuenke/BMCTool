@@ -27,7 +27,7 @@ def calc_hanning(m: int, n: int) -> np.ndarray:
 def make_gauss_hanning(
     flip_angle: float,
     pulse_duration: float,
-    system: pp.Opts = pp.Opts(),
+    system: pp.Opts | None = None,
 ) -> SimpleNamespace:
     """Create an RF pulse event for a gaussian pulse with hanning window.
 
@@ -45,6 +45,8 @@ def make_gauss_hanning(
     SimpleNamespace
         RF pulse event for a gaussian pulse with hanning window.
     """
+
+    system = system or pp.Opts()
 
     rf_pulse = make_gauss_pulse(flip_angle=flip_angle, duration=pulse_duration, system=system, phase_offset=0)
     # n_signal = np.sum(np.abs(rf_pulse.signal) > 0)

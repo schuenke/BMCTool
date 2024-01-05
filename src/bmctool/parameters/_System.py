@@ -38,10 +38,9 @@ class System:
         self.rel_b1 = rel_b1
 
     def __eq__(self, other):
-        if isinstance(other, self.__class__):
-            if self.__slots__ == other.__slots__:
-                attr_getters = [operator.attrgetter(attr) for attr in self.__slots__]
-                return all(getter(self) == getter(other) for getter in attr_getters)
+        if isinstance(other, self.__class__) and self.__slots__ == other.__slots__:
+            attr_getters = [operator.attrgetter(attr) for attr in self.__slots__]
+            return all(getter(self) == getter(other) for getter in attr_getters)
         return False
 
     def __dict__(self):

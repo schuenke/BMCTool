@@ -47,23 +47,22 @@ def insert_seq_file_header(filepath: str | Path, author: str) -> None:
     tmp, abs_path = mkstemp()
 
     in_position = False
-    with fdopen(tmp, 'w') as new_file:
-        with open(filepath) as old_file:
-            for line in old_file:
-                if line.startswith('# Created by'):
-                    new_file.write(line)
-                    in_position = True
+    with fdopen(tmp, 'w') as new_file, open(filepath) as old_file:
+        for line in old_file:
+            if line.startswith('# Created by'):
+                new_file.write(line)
+                in_position = True
+            else:
+                if in_position:
+                    new_file.write('\n')
+                    new_file.write('# Created for Pulseq-CEST\n')
+                    new_file.write('# https://pulseq-cest.github.io/\n')
+                    new_file.write(f'# Created by: {author}\n')
+                    new_file.write(f"# Created at: {datetime.now().strftime('%d-%b-%Y %H:%M:%S')}\n")
+                    new_file.write('\n')
+                    in_position = False
                 else:
-                    if in_position:
-                        new_file.write('\n')
-                        new_file.write('# Created for Pulseq-CEST\n')
-                        new_file.write('# https://pulseq-cest.github.io/\n')
-                        new_file.write(f'# Created by: {author}\n')
-                        new_file.write(f"# Created at: {datetime.now().strftime('%d-%b-%Y %H:%M:%S')}\n")
-                        new_file.write('\n')
-                        in_position = False
-                    else:
-                        new_file.write(line)
+                    new_file.write(line)
 
     # copy permissions from old file to new file
     copymode(filepath, abs_path)
@@ -121,7 +120,7 @@ def write_seq_defs(seq: Sequence, seq_defs: dict, use_matlab_names: bool) -> Seq
         # convert value types
         if isinstance(v, np.ndarray):
             pass
-        elif isinstance(v, (int, float, np.float32, np.float64)):
+        elif isinstance(v, int | float | np.float32 | np.float64):
             v = str(round_number(float(v), 9))
         else:
             v = str(v)

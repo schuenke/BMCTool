@@ -41,23 +41,22 @@ class Pool(ABC):
             raise ValueError('Either r2 or t2 must be given, but not both.')
 
         if r1 is not None:
-            Pool.r1.fset(self, r1)
+            Pool.r1.fset(self, r1)  # type: ignore[attr-defined]
         elif t1 is not None:
-            Pool.t1.fset(self, t1)
+            Pool.t1.fset(self, t1)  # type: ignore[attr-defined]
 
         if r2 is not None:
-            Pool.r2.fset(self, r2)
+            Pool.r2.fset(self, r2)  # type: ignore[attr-defined]
         elif t2 is not None:
-            Pool.t2.fset(self, t2)
+            Pool.t2.fset(self, t2)  # type: ignore[attr-defined]
 
-        Pool.f.fset(self, f)
-        Pool.dw.fset(self, dw)
+        Pool.f.fset(self, f)  # type: ignore[attr-defined]
+        Pool.dw.fset(self, dw)  # type: ignore[attr-defined]
 
     def __eq__(self, other):
-        if isinstance(other, self.__class__):
-            if self.__slots__ == other.__slots__:
-                attr_getters = [operator.attrgetter(attr) for attr in self.__slots__]
-                return all(getter(self) == getter(other) for getter in attr_getters)
+        if isinstance(other, self.__class__) and self.__slots__ == other.__slots__:
+            attr_getters = [operator.attrgetter(attr) for attr in self.__slots__]
+            return all(getter(self) == getter(other) for getter in attr_getters)
         return False
 
     @property

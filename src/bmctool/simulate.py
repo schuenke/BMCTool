@@ -65,5 +65,9 @@ def sim_example() -> None:
     config_file = Path(__file__).parent / 'library' / 'sim-library' / 'config_wasabi.yaml'
 
     simulate(
-        config_file=config_file, seq_file=seq_file, show_plot=True, title='WASABI example spectrum', normalize=True
+        config_file=config_file,
+        seq_file=seq_file,
+        show_plot=True,
+        title='WASABI example spectrum',
+        normalize=True,
     )
