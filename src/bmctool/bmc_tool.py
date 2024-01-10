@@ -6,45 +6,46 @@ import numpy as np
 import pypulseq as pp
 from tqdm import tqdm
 
-from bmctool import Parameters
+from bmctool.parameters import Parameters
 from bmctool.bmc_solver import BlochMcConnellSolver
 
 
-def prep_rf_simulation(block: SimpleNamespace, max_pulse_samples: int) -> tuple[np.ndarray, np.ndarray, float, float]:
-    """prep_rf_simulation Resamples the amplitude and phase of given rf event.
+def prep_rf_simulation(
+    block: SimpleNamespace,
+    max_pulse_samples: int,
+) -> tuple[np.ndarray, np.ndarray, float, float]:
+    """Resample amplitude and phase of an RF event within given block.
 
     Parameters
     ----------
-    block : SimpleNamespace
-        PyPulseq block event
-    max_pulse_samples : int
-        Maximum number of samples for the rf pulse
+    block
+        PyPulseq block object containing the RF event
+    max_pulse_samples
+        Maximum number of samples for the resampled rf pulse
 
     Returns
     -------
     Tuple[np.ndarray, np.ndarray, float, float]
         Tuple of resampled amplitude, phase, time step and delay after pulse
-
-    Raises
-    ------
-    Exception
-        If number of unique samples is larger than 1 but smaller than max_pulse_samples (not implemented yet)
     """
+
+    # get amplitude and phase of RF pulse
     amp = np.abs(block.rf.signal)
     ph = np.angle(block.rf.signal)
+
+    # find all non-zero sample points
     idx = np.argwhere(amp > 1e-6)
 
-    try:
-        rf_length = amp.size
-        dtp = block.rf.t[1] - block.rf.t[0]
-        delay_after_pulse = (rf_length - idx.size) * dtp
-    except AttributeError:
-        rf_length = amp.size
-        dtp = 1e-6
-        delay_after_pulse = (rf_length - idx.size) * dtp
+    # calculate time step and delay after pulse
+    rf_length = amp.size
+    dtp = block.rf.t[1] - block.rf.t[0]
+    delay_after_pulse = (rf_length - idx.size) * dtp
 
+    # remove all zero samples
     amp = amp[idx]
     ph = ph[idx]
+
+    # get maximum number of unique samples in amplitude and/or phase
     n_unique = max(np.unique(amp).size, np.unique(ph).size)
 
     # block pulse for seq-files >= 1.4.0
@@ -72,7 +73,7 @@ def prep_rf_simulation(block: SimpleNamespace, max_pulse_samples: int) -> tuple[
 
 
 class BMCTool:
-    """Definition of the BMCTool class."""
+    """Class for Bloch-McConnell simulations using PyPulseq sequences."""
 
     def __init__(
         self,
@@ -85,11 +86,11 @@ class BMCTool:
 
         Parameters
         ----------
-        params : Params
-            Params object containing all simulation parameters
-        seq_file : Union[str, Path]
-            Path to the seq-file
-        verbose : bool, optional
+        params
+            Parameters object containing all simulation parameters
+        seq_file
+            Path to the pulseq seq-file
+        verbose, optional
             Flag to activate detailed outpus, by default True
         """
         self.params = params
@@ -98,28 +99,21 @@ class BMCTool:
         self.run_m0_scan = None
         self.bm_solver = None
 
+        # read pulseq sequence
         self.seq = pp.Sequence()
         self.seq.read(seq_file)
 
-        try:
-            self.defs = self.seq.definitions
-        except AttributeError:
-            self.defs = self.seq.dict_definitions
-
+        # get offsets from pypulseq definitions
+        self.defs = self.seq.definitions
         self.offsets_ppm = np.array(self.defs['offsets_ppm'])
-        self.n_offsets = self.offsets_ppm.size
+        self.n_measure = self.offsets_ppm.size
 
-        if 'num_meas' in self.defs:
-            self.n_measure = int(self.defs['num_meas'])
-        else:
-            self.n_measure = self.n_offsets
-            if 'run_m0_scan' in self.defs and self.defs['run_m0_scan'] in [1, '1', 'True', 'true']:
-                self.n_measure += 1
-
+        # extract initial magnetization vector and create output array
         self.m_init = params.m_vec.copy()
         self.m_out = np.zeros([self.m_init.shape[0], self.n_measure])
 
-        self.bm_solver = BlochMcConnellSolver(params=self.params, n_offsets=self.n_offsets)
+        # initialize solver
+        self.bm_solver = BlochMcConnellSolver(params=self.params, n_offsets=self.n_measure)
 
     def update_params(self, params: Parameters) -> None:
         """Update Params and BlochMcConnellSolver."""
@@ -128,148 +122,155 @@ class BMCTool:
 
     def run(self) -> None:
         """Start simulation process."""
-        if self.n_offsets != self.n_measure:
-            self.run_m0_scan = True
 
         current_adc = 0
         accum_phase = 0
+
+        # create initial magnezitation array with correct shape
         mag = self.m_init[np.newaxis, :, np.newaxis]
 
-        try:
-            block_events = self.seq.block_events
-        except AttributeError:
-            block_events = self.seq.dict_block_events
+        # get all block events from pypulseq sequence
+        block_events = self.seq.block_events
 
+        # create loop with or w/o tqdm statu bar depending on verbose settings
         if self.verbose:
             loop_block_events = tqdm(range(1, len(block_events) + 1), desc='BMCTool simulation')
         else:
             loop_block_events = range(1, len(block_events) + 1)
 
-        # code for pypulseq >= 1.4.0:
-        try:
-            for block_event in loop_block_events:
-                block = self.seq.get_block(block_event)
-                current_adc, accum_phase, mag = self.run_1_4_0(block, current_adc, accum_phase, mag)
-        except AttributeError:
-            for block_event in loop_block_events:
-                block = self.seq.get_block(block_event)
-                current_adc, accum_phase, mag = self.run_1_3_0(block, current_adc, accum_phase, mag)
+        # run simulation for all blocks
+        for block_event in loop_block_events:
+            block = self.seq.get_block(block_event)
+            current_adc, accum_phase, mag = self._simulate_block(block, current_adc, accum_phase, mag)
 
-    def run_1_4_0(self, block, current_adc, accum_phase, mag) -> tuple[int, float, np.ndarray]:
-        # pseudo ADC event
-        if block.adc is not None:
-            # write current magnetization to output
-            self.m_out[:, current_adc] = np.squeeze(mag)
-            accum_phase = 0
-            current_adc += 1
-            # reset mag if this wasn't the last ADC event
-            if current_adc <= self.n_offsets and self.params.options.reset_init_mag:
-                mag = self.m_init[np.newaxis, :, np.newaxis]
+    def _simulate_block(
+        self,
+        block: SimpleNamespace,
+        current_adc: float,
+        accum_phase: float,
+        mag: np.ndarray,
+    ) -> tuple[int, float, np.ndarray]:
+        """Run BMC simulation for given block containing different events.
 
-        # RF pulse
-        elif block.rf is not None:
-            amp_, ph_, dtp_, delay_after_pulse = prep_rf_simulation(block, self.params.options.max_pulse_samples)
-            for i in range(amp_.size):
-                self.bm_solver.update_matrix(
-                    rf_amp=amp_[i],
-                    rf_phase=-ph_[i] + block.rf.phase_offset - accum_phase,
-                    rf_freq=block.rf.freq_offset,
-                )
-                mag = self.bm_solver.solve_equation(mag=mag, dtp=dtp_)
-
-            if delay_after_pulse > 0:
-                self.bm_solver.update_matrix(0, 0, 0)
-                mag = self.bm_solver.solve_equation(mag=mag, dtp=delay_after_pulse)
-
-            phase_degree = dtp_ * amp_.size * 360 * block.rf.freq_offset
-            phase_degree %= 360
-            accum_phase += phase_degree / 180 * np.pi
-
-        # spoiler gradient in z-direction
-        elif block.gz is not None:
-            dur_ = block.block_duration
-            self.bm_solver.update_matrix(0, 0, 0)
-            mag = self.bm_solver.solve_equation(mag=mag, dtp=dur_)
-            for j in range((len(self.params.cest_pools) + 1) * 2):
-                mag[0, j, 0] = 0.0  # assume complete spoiling
-
-        # delay or gradient(s) in x and/or y-direction
-        elif hasattr(block, 'block_duration') and block.block_duration != '0':
-            delay = block.block_duration
-            self.bm_solver.update_matrix(0, 0, 0)
-            mag = self.bm_solver.solve_equation(mag=mag, dtp=delay)
-
-        # this should not happen
-        else:
-            raise Exception('Unknown case')
-
-        return current_adc, accum_phase, mag
-
-    def run_1_3_0(self, block, current_adc, accum_phase, mag) -> tuple[int, float, np.ndarray]:
-        # pseudo ADC event
-        if hasattr(block, 'adc'):
-            # write current magnetization to output
-            self.m_out[:, current_adc] = np.squeeze(mag)
-            accum_phase = 0
-            current_adc += 1
-            # reset mag if this wasn't the last ADC event
-            if current_adc <= self.n_offsets and self.params.options.reset_init_mag:
-                mag = self.m_init[np.newaxis, :, np.newaxis]
-
-        # RF pulse
-        elif hasattr(block, 'rf'):
-            amp_, ph_, dtp_, delay_after_pulse = prep_rf_simulation(block, self.params.options.max_pulse_samples)
-            for i in range(amp_.size):
-                self.bm_solver.update_matrix(
-                    rf_amp=amp_[i],
-                    rf_phase=-ph_[i] + block.rf.phase_offset - accum_phase,
-                    rf_freq=block.rf.freq_offset,
-                )
-                mag = self.bm_solver.solve_equation(mag=mag, dtp=dtp_)
-
-            if delay_after_pulse > 0:
-                self.bm_solver.update_matrix(0, 0, 0)
-                mag = self.bm_solver.solve_equation(mag=mag, dtp=delay_after_pulse)
-
-            phase_degree = dtp_ * amp_.size * 360 * block.rf.freq_offset
-            phase_degree %= 360
-            accum_phase += phase_degree / 180 * np.pi
-
-        # spoiler gradient in z-direction
-        elif hasattr(block, 'gz'):
-            dur_ = float(block.gz.rise_time + block.gz.flat_time + block.gz.fall_time)
-            self.bm_solver.update_matrix(0, 0, 0)
-            mag = self.bm_solver.solve_equation(mag=mag, dtp=dur_)
-            for j in range((len(self.params.cest_pools) + 1) * 2):
-                mag[0, j, 0] = 0.0  # assume complete spoiling
-
-        # gradient in x and/or y-direction (handled as delay)
-        elif hasattr(block, 'gx') or hasattr(block, 'gy'):
-            if hasattr(block, 'gx'):
-                delay = float(block.gx.rise_time + block.gx.flat_time + block.gx.fall_time)
-            elif hasattr(block, 'gy'):
-                delay = float(block.gy.rise_time + block.gy.flat_time + block.gy.fall_time)
-            self.bm_solver.update_matrix(0, 0, 0)
-            mag = self.bm_solver.solve_equation(mag=mag, dtp=delay)
-
-        # delay
-        elif hasattr(block, 'delay') and hasattr(block.delay, 'delay'):
-            delay = float(block.delay.delay)
-            self.bm_solver.update_matrix(0, 0, 0)
-            mag = self.bm_solver.solve_equation(mag=mag, dtp=delay)
-
-        # this should not happen
-        else:
-            raise Exception('Unknown case')
-
-        return current_adc, accum_phase, mag
-
-    def get_zspec(self, return_abs: bool = True) -> tuple[np.ndarray, np.ndarray]:
-        """get_zspec Calculate/extract the Z-spectrum.
+        The BMCTool distinguishes between the following cases:
+        1) block contains an ADC: proceeding to next offset, all other events are neglected.
+        2) block contains an RF, but no ADC: simulate the RF pulse, all other events are neglected.
+        3) block contains a z-gradient, but no ADC or RF: assume spoiling, all other events are neglected.
+        4) block contains no ADC, RF, z-grad, but x/y-grad or delay: simulate delay
 
         Parameters
         ----------
-        return_abs : bool, optional
+        block
+            PyPulseq block object containing different events
+        current_adc
+            ADC counter
+        accum_phase
+            accumulated phase from previous RF pulses
+        mag
+            magnetization vector from previous block
+
+        Returns
+        -------
+        Tuple[int, float, np.ndarray]
+            Tuple of ADC counter, accumulated phase and magnetization vector
+
+        Raises
+        ------
+        ValueError
+            If the current block event cannot be handled by BMCTool
+        """
+
+        # Pseudo ADC event
+        if block.adc is not None:
+            current_adc, accum_phase, mag = self._handle_adc_event(current_adc, accum_phase, mag)
+
+        # RF pulse
+        elif block.rf is not None:
+            current_adc, accum_phase, mag = self._handle_rf_pulse(block, current_adc, accum_phase, mag)
+
+        # Spoiler gradient in z-direction
+        elif block.gz is not None:
+            mag = self._handle_spoiler_gradient(block, mag)
+
+        # Delay or gradient(s) in x and/or y-direction
+        elif hasattr(block, 'block_duration') and block.block_duration != '0':
+            mag = self._handle_delay_or_gradient(block, mag)
+
+        # This should not happen
+        else:
+            raise ValueError('The current block event cannot be handled by BMCTool. Please check you sequence.')
+
+        return current_adc, accum_phase, mag
+
+    def _handle_adc_event(self, current_adc, accum_phase, mag):
+        """Handle ADC event: write current mag to output, reset phase and increase ADC counter."""
+
+        # write current magnetization to output
+        self.m_out[:, current_adc] = np.squeeze(mag)
+
+        # reset phase and increase ADC counter
+        accum_phase = 0
+        current_adc += 1
+
+        # reset magnetization if reset_init_mag is True
+        if self.params.options.reset_init_mag:
+            mag = self.m_init[np.newaxis, :, np.newaxis]
+        return current_adc, accum_phase, mag
+
+    def _handle_rf_pulse(self, block, current_adc, accum_phase, mag):
+        """Handle RF pulse: simulate all steps of RF pulse and update phase."""
+
+        # resample amplitude and phase of RF pulse according to max_pulse_samples
+        amp_, ph_, dtp_, delay_after_pulse = prep_rf_simulation(block, self.params.options.max_pulse_samples)
+
+        # simulate all steps of RF pulse subsequently
+        for i in range(amp_.size):
+            self.bm_solver.update_matrix(
+                rf_amp=amp_[i],
+                rf_phase=-ph_[i] + block.rf.phase_offset - accum_phase,
+                rf_freq=block.rf.freq_offset,
+            )
+            mag = self.bm_solver.solve_equation(mag=mag, dtp=dtp_)
+
+        # simulate a potential delay after the RF pulse
+        if delay_after_pulse > 0:
+            self.bm_solver.update_matrix(0, 0, 0)
+            mag = self.bm_solver.solve_equation(mag=mag, dtp=delay_after_pulse)
+
+        # update accumulated phase
+        phase_degree = dtp_ * amp_.size * 360 * block.rf.freq_offset
+        phase_degree %= 360
+        accum_phase += phase_degree / 180 * np.pi
+
+        return current_adc, accum_phase, mag
+
+    def _handle_spoiler_gradient(self, block, mag):
+        """Handle spoiler gradient: assume complete spoiling."""
+
+        _dur = block.block_duration
+        self.bm_solver.update_matrix(0, 0, 0)
+        mag = self.bm_solver.solve_equation(mag=mag, dtp=_dur)
+
+        # set x and y components of the water pool and all cest pools to zero
+        mag[0, : ((len(self.params.cest_pools) + 1) * 2), 0] = 0.0
+
+        return mag
+
+    def _handle_delay_or_gradient(self, block, mag):
+        """Handle delay or gradient(s): simulate delay."""
+
+        _dur = block.block_duration
+        self.bm_solver.update_matrix(0, 0, 0)
+        mag = self.bm_solver.solve_equation(mag=mag, dtp=_dur)
+
+        return mag
+
+    def get_zspec(self, return_abs: bool = True) -> tuple[np.ndarray, np.ndarray]:
+        """Calculate/extract the Z-spectrum.
+
+        Parameters
+        ----------
+        return_abs, optional
             flag to activate the return of absolute values, by default True
 
         Returns
@@ -277,6 +278,7 @@ class BMCTool:
         Tuple[np.ndarray, np.ndarray]
             Tuple of offsets and Z-spectrum
         """
+
         if self.run_m0_scan:
             m_0 = self.m_out[self.params.mz_loc, 0]
             m_ = self.m_out[self.params.mz_loc, 1:]
