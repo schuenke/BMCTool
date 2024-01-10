@@ -153,7 +153,8 @@ def plot_z(
         Matplotlib figure object.
     """
 
-    offsets = offsets or np.arange(len(m_z))
+    if offsets is None:
+        offsets = np.arange(len(m_z))
 
     if normalize:
         m_z, offsets = normalize_data(m_z, offsets, norm_threshold)
