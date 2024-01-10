@@ -7,7 +7,7 @@ import pypulseq as pp
 from tqdm import tqdm
 
 from bmctool.parameters import Parameters
-from bmctool.bmc_solver import BlochMcConnellSolver
+from bmctool.BlochMcConnellSolver import BlochMcConnellSolver
 
 
 def prep_rf_simulation(
