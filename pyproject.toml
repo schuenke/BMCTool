@@ -52,7 +52,7 @@ warn_return_any = false
 check_untyped_defs = true
 warn_no_return = true
 warn_unreachable = true
-exclude = ["docs"]
+exclude = ["docs", "examples"]
 
 # general ruff section
 [tool.ruff]

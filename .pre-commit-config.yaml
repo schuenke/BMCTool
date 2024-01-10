@@ -25,7 +25,7 @@ repos:
           - types-pyyaml
           - '--index-url=https://download.pytorch.org/whl/cpu'
           - '--extra-index-url=https://pypi.python.org/simple'
-        exclude: docs/.*|tests/.*
+        exclude: docs/.*|tests/.*|examples/.*
 
   - repo: 'https://github.com/codespell-project/codespell'
     rev: v2.2.4
