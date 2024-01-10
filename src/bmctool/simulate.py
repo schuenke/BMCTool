@@ -1,7 +1,7 @@
 from pathlib import Path
 
 from bmctool import Parameters
-from bmctool.bmc_tool import BMCTool
+from bmctool import BMCTool
 from bmctool.utils.eval import plot_z
 
 
@@ -71,3 +71,7 @@ def sim_example() -> None:
         title='WASABI example spectrum',
         normalize=True,
     )
+
+
+if __name__ == '__main__':
+    sim_example()
