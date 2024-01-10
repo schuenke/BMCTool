@@ -33,11 +33,11 @@ class Parameters:
         Additional options
     """
 
-    water_pool: WaterPool = dataclasses.field(default_factory=WaterPool)
-    cest_pools: list = dataclasses.field(default_factory=list)
-    mt_pool: MTPool = dataclasses.field(default_factory=MTPool)
-    system: System = dataclasses.field(default_factory=System)
-    options: Options = dataclasses.field(default_factory=Options)
+    water_pool: WaterPool
+    cest_pools: list[CESTPool]
+    mt_pool: MTPool | None
+    system: System
+    options: Options
 
     def __eq__(self, other):
         if isinstance(other, Parameters):
@@ -100,12 +100,9 @@ class Parameters:
         }
 
         #
-        sys_keys = [
-            attr for attr in System.__dict__ if not callable(getattr(System, attr)) and not attr.startswith('_')
-        ]
-        opt_keys = [
-            attr for attr in Options.__dict__ if not callable(getattr(Options, attr)) and not attr.startswith('_')
-        ]
+        sys_keys = [attr.lstrip('_') for attr in System.__slots__]
+
+        opt_keys = [attr.lstrip('_') for attr in Options.__slots__]
 
         water_pool = WaterPool(**config['water_pool'])
         cest_pools = [CESTPool(**pool) for pool in config.get('cest_pool', {}).values()]

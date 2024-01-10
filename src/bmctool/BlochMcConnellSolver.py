@@ -1,4 +1,3 @@
-# type: ignore
 import math
 
 import numpy as np
@@ -23,7 +22,6 @@ class BlochMcConnellSolver:
         self.params: Parameters = params
         self.n_offsets: int = n_offsets
         self.n_pools: int = params.num_cest_pools
-        self.is_mt_active = bool(params.mt_pool)
         self.size: int = params.m_vec.size
         self.arr_a: np.ndarray
         self.arr_c: np.ndarray
@@ -42,7 +40,7 @@ class BlochMcConnellSolver:
 
         # Set mt_pool parameters
         k_ac = 0.0
-        if self.is_mt_active:
+        if self.params.mt_pool is not None:
             k_ca = self.params.mt_pool.k
             k_ac = k_ca * self.params.mt_pool.f
             self.arr_a[0, 2 * (n_p + 1), 3 * (n_p + 1)] = k_ca
@@ -95,8 +93,8 @@ class BlochMcConnellSolver:
             pool.f * pool.r1 for pool in self.params.cest_pools
         ]
 
-        if self.is_mt_active:
-            # Set mt_pool parameters
+        # Set mt_pool parameters
+        if self.params.mt_pool is not None:
             self.arr_c[0, 3 * (n_p + 1), 0] = self.params.mt_pool.f * self.params.mt_pool.r1
 
     def update_params(self, params: Parameters) -> None:
@@ -114,7 +112,7 @@ class BlochMcConnellSolver:
         self._init_matrix_a()
         self._init_vector_c()
 
-    def update_matrix(self, rf_amp: float, rf_phase: np.ndarray, rf_freq: np.ndarray) -> None:
+    def update_matrix(self, rf_amp: float, rf_phase: float, rf_freq: float) -> None:
         """Update matrix self.A according to given parameters.
 
         Parameters
@@ -165,7 +163,7 @@ class BlochMcConnellSolver:
         self.arr_a[:, indices + n_p + 1, indices] = dwi_values
 
         # mt_pool
-        if self.is_mt_active:
+        if self.params.mt_pool is not None:
             self.arr_a[:, 3 * (n_p + 1), 3 * (n_p + 1)] = (
                 -self.params.mt_pool.r1
                 - self.params.mt_pool.k
@@ -257,23 +255,26 @@ class BlochMcConnellSolver:
         inv = np.linalg.inv(vects)
         return np.einsum('ijk,ikl->ijl', tmp, inv)
 
-    def get_mt_shape_at_offset(self, offsets: np.ndarray, w0: float) -> np.ndarray:
+    def get_mt_shape_at_offset(self, offset: float, w0: float) -> float:
         """Calculate the lineshape of the MT pool at the given offset(s).
 
         :param offsets: frequency offset(s)
         :param w0: Larmor frequency of simulated system
         :return: lineshape of mt pool at given offset(s)
         """
+        if not self.params.mt_pool:
+            return 0
+
         ls = self.params.mt_pool.lineshape.lower()
         dw = self.params.mt_pool.dw
         t2 = 1 / self.params.mt_pool.r2
         if ls == 'lorentzian':
-            mt_line = t2 / (1 + pow((offsets - dw * w0) * t2, 2.0))
+            mt_line = t2 / (1 + pow((offset - dw * w0) * t2, 2.0))
         elif ls == 'superlorentzian':
-            dw_pool = offsets - dw * w0
+            dw_pool = offset - dw * w0
             mt_line = self.interpolate_sl(dw_pool) if abs(dw_pool) >= w0 else self.interpolate_chs(dw_pool, w0)
         else:
-            mt_line = np.zeros(offsets.size)
+            mt_line = 0
         return mt_line
 
     def interpolate_sl(self, dw: float) -> float:
@@ -282,6 +283,9 @@ class BlochMcConnellSolver:
         :param dw: relative frequency offset
         :return: MT profile at given relative frequency offset
         """
+        if not self.params.mt_pool:
+            return 0
+
         mt_line = 0
         t2 = 1 / self.params.mt_pool.r2
         n_samples = 101
@@ -292,7 +296,7 @@ class BlochMcConnellSolver:
             mt_line += sqrt_2pi * t2 / powcu2 * np.exp(-2 * pow(dw * t2 / powcu2, 2))
         return mt_line * np.pi * step_size
 
-    def interpolate_chs(self, dw_pool: float, w0: float) -> np.ndarray:
+    def interpolate_chs(self, dw_pool: float, w0: float) -> float:
         """Cubic Hermite Spline Interpolation."""
         mt_line = 0
         px = np.array([-300 - w0, -100 - w0, 100 + w0, 300 + w0])

@@ -1,4 +1,3 @@
-# type: ignore
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -96,8 +95,6 @@ class BMCTool:
         self.params = params
         self.seq_file = seq_file
         self.verbose = verbose
-        self.run_m0_scan = None
-        self.bm_solver = None
 
         # read pulseq sequence
         self.seq = pp.Sequence()
@@ -124,7 +121,7 @@ class BMCTool:
         """Start simulation process."""
 
         current_adc = 0
-        accum_phase = 0
+        accum_phase = 0.0
 
         # create initial magnezitation array with correct shape
         mag = self.m_init[np.newaxis, :, np.newaxis]
@@ -146,7 +143,7 @@ class BMCTool:
     def _simulate_block(
         self,
         block: SimpleNamespace,
-        current_adc: float,
+        current_adc: int,
         accum_phase: float,
         mag: np.ndarray,
     ) -> tuple[int, float, np.ndarray]:
@@ -202,14 +199,14 @@ class BMCTool:
 
         return current_adc, accum_phase, mag
 
-    def _handle_adc_event(self, current_adc, accum_phase, mag):
+    def _handle_adc_event(self, current_adc: int, accum_phase: float, mag: np.ndarray) -> tuple[int, float, np.ndarray]:
         """Handle ADC event: write current mag to output, reset phase and increase ADC counter."""
 
         # write current magnetization to output
         self.m_out[:, current_adc] = np.squeeze(mag)
 
         # reset phase and increase ADC counter
-        accum_phase = 0
+        accum_phase = 0.0
         current_adc += 1
 
         # reset magnetization if reset_init_mag is True
@@ -217,7 +214,9 @@ class BMCTool:
             mag = self.m_init[np.newaxis, :, np.newaxis]
         return current_adc, accum_phase, mag
 
-    def _handle_rf_pulse(self, block, current_adc, accum_phase, mag):
+    def _handle_rf_pulse(
+        self, block: SimpleNamespace, current_adc: int, accum_phase: float, mag: np.ndarray
+    ) -> tuple[int, float, np.ndarray]:
         """Handle RF pulse: simulate all steps of RF pulse and update phase."""
 
         # resample amplitude and phase of RF pulse according to max_pulse_samples
@@ -244,7 +243,7 @@ class BMCTool:
 
         return current_adc, accum_phase, mag
 
-    def _handle_spoiler_gradient(self, block, mag):
+    def _handle_spoiler_gradient(self, block: SimpleNamespace, mag: np.ndarray) -> np.ndarray:
         """Handle spoiler gradient: assume complete spoiling."""
 
         _dur = block.block_duration
@@ -256,7 +255,7 @@ class BMCTool:
 
         return mag
 
-    def _handle_delay_or_gradient(self, block, mag):
+    def _handle_delay_or_gradient(self, block: SimpleNamespace, mag: np.ndarray) -> np.ndarray:
         """Handle delay or gradient(s): simulate delay."""
 
         _dur = block.block_duration
@@ -279,12 +278,7 @@ class BMCTool:
             Tuple of offsets and Z-spectrum
         """
 
-        if self.run_m0_scan:
-            m_0 = self.m_out[self.params.mz_loc, 0]
-            m_ = self.m_out[self.params.mz_loc, 1:]
-            m_z = m_ / m_0
-        else:
-            m_z = self.m_out[self.params.mz_loc, :]
+        m_z = self.m_out[self.params.mz_loc, :]
 
         if self.offsets_ppm.size != m_z.size:
             self.offsets_ppm = np.arange(0, m_z.size)
