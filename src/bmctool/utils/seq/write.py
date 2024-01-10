@@ -122,12 +122,8 @@ def write_seq_defs(seq: Sequence, seq_defs: dict, use_matlab_names: bool) -> Seq
             pass
         elif isinstance(v, int | float | np.float32 | np.float64):
             v = str(round_number(float(v), 9))
-        else:
-            v = str(v)
-        try:
-            seq.set_definition(key=k, value=v)
-        except TypeError:
-            seq.set_definition(key=k, val=v)
+
+        seq.set_definition(key=k, value=v)
 
     return seq
 
