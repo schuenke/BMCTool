@@ -18,7 +18,7 @@ from pypulseq import make_block_pulse
 from pypulseq import make_delay
 from pypulseq import make_trapezoid
 
-from src.bmctool.utils.seq.write import write_seq
+from bmctool.utils.seq.write import write_seq
 
 # general settings
 seqid = 'WASABI'

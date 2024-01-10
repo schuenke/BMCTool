@@ -2,8 +2,8 @@
 sequence."""
 from pathlib import Path
 
-from src.bmctool.simulate import simulate
-from src.bmctool.utils.seq.auxiliary import get_definition
+from bmctool.simulate import simulate
+from bmctool.utils.seq.auxiliary import get_definition
 
 # set necessary file paths:
 config_file = Path(__file__).parent / 'library' / 'example_config.yaml'
