@@ -1,6 +1,6 @@
-__all__ = ['Parameters', 'BMCTool', 'GAMMA_HZ']
+__all__ = ['Parameters', 'BMCSim', 'GAMMA_HZ']
 
-from bmctool.BMCTool import BMCTool
+from bmctool.simulation import BMCSim
 from bmctool.parameters import Parameters
 
 GAMMA_HZ = 42.5764

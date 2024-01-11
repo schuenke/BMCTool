@@ -6,72 +6,10 @@ import pypulseq as pp
 from tqdm import tqdm
 
 from bmctool.parameters import Parameters
-from bmctool.BlochMcConnellSolver import BlochMcConnellSolver
+from bmctool.simulation._BlochMcConnellSolver import BlochMcConnellSolver
 
 
-def prep_rf_simulation(
-    block: SimpleNamespace,
-    max_pulse_samples: int,
-) -> tuple[np.ndarray, np.ndarray, float, float]:
-    """Resample amplitude and phase of an RF event within given block.
-
-    Parameters
-    ----------
-    block
-        PyPulseq block object containing the RF event
-    max_pulse_samples
-        Maximum number of samples for the resampled rf pulse
-
-    Returns
-    -------
-    Tuple[np.ndarray, np.ndarray, float, float]
-        Tuple of resampled amplitude, phase, time step and delay after pulse
-    """
-
-    # get amplitude and phase of RF pulse
-    amp = np.abs(block.rf.signal)
-    ph = np.angle(block.rf.signal)
-
-    # find all non-zero sample points
-    idx = np.argwhere(amp > 1e-6)
-
-    # calculate time step and delay after pulse
-    rf_length = amp.size
-    dtp = block.rf.t[1] - block.rf.t[0]
-    delay_after_pulse = (rf_length - idx.size) * dtp
-
-    # remove all zero samples
-    amp = amp[idx]
-    ph = ph[idx]
-
-    # get maximum number of unique samples in amplitude and/or phase
-    n_unique = max(np.unique(amp).size, np.unique(ph).size)
-
-    # block pulse for seq-files >= 1.4.0
-    if n_unique == 1 and amp.size == 2:
-        amp_ = amp[0]
-        ph_ = ph[0]
-        dtp_ = dtp
-    # block pulse for seq-files < 1.4.0
-    elif n_unique == 1:
-        amp_ = amp[0]
-        ph_ = ph[0]
-        dtp_ = dtp * amp.size
-    # shaped pulse
-    elif n_unique > max_pulse_samples:
-        sample_factor = int(np.ceil(amp.size / max_pulse_samples))
-        amp_ = amp[::sample_factor]
-        ph_ = ph[::sample_factor]
-        dtp_ = dtp * sample_factor
-    else:
-        amp_ = amp
-        ph_ = ph
-        dtp_ = dtp
-
-    return amp_, ph_, dtp_, delay_after_pulse
-
-
-class BMCTool:
+class BMCSim:
     """Class for Bloch-McConnell simulations using PyPulseq sequences."""
 
     def __init__(
@@ -81,7 +19,7 @@ class BMCTool:
         verbose: bool = True,
         **kwargs,
     ) -> None:
-        """__init__ Initialize BMCTool object.
+        """Initialize BMCSim object.
 
         Parameters
         ----------
@@ -111,6 +49,68 @@ class BMCTool:
 
         # initialize solver
         self.bm_solver = BlochMcConnellSolver(params=self.params, n_offsets=self.n_measure)
+
+    @staticmethod
+    def prep_rf_simulation(
+        block: SimpleNamespace,
+        max_pulse_samples: int,
+    ) -> tuple[np.ndarray, np.ndarray, float, float]:
+        """Resample amplitude and phase of an RF event within given block.
+
+        Parameters
+        ----------
+        block
+            PyPulseq block object containing the RF event
+        max_pulse_samples
+            Maximum number of samples for the resampled rf pulse
+
+        Returns
+        -------
+        Tuple[np.ndarray, np.ndarray, float, float]
+            Tuple of resampled amplitude, phase, time step and delay after pulse
+        """
+
+        # get amplitude and phase of RF pulse
+        amp = np.abs(block.rf.signal)
+        ph = np.angle(block.rf.signal)
+
+        # find all non-zero sample points
+        idx = np.argwhere(amp > 1e-6)
+
+        # calculate time step and delay after pulse
+        rf_length = amp.size
+        dtp = block.rf.t[1] - block.rf.t[0]
+        delay_after_pulse = (rf_length - idx.size) * dtp
+
+        # remove all zero samples
+        amp = amp[idx]
+        ph = ph[idx]
+
+        # get maximum number of unique samples in amplitude and/or phase
+        n_unique = max(np.unique(amp).size, np.unique(ph).size)
+
+        # block pulse for seq-files >= 1.4.0
+        if n_unique == 1 and amp.size == 2:
+            amp_ = amp[0]
+            ph_ = ph[0]
+            dtp_ = dtp
+        # block pulse for seq-files < 1.4.0
+        elif n_unique == 1:
+            amp_ = amp[0]
+            ph_ = ph[0]
+            dtp_ = dtp * amp.size
+        # shaped pulse
+        elif n_unique > max_pulse_samples:
+            sample_factor = int(np.ceil(amp.size / max_pulse_samples))
+            amp_ = amp[::sample_factor]
+            ph_ = ph[::sample_factor]
+            dtp_ = dtp * sample_factor
+        else:
+            amp_ = amp
+            ph_ = ph
+            dtp_ = dtp
+
+        return amp_, ph_, dtp_, delay_after_pulse
 
     def update_params(self, params: Parameters) -> None:
         """Update Params and BlochMcConnellSolver."""
@@ -220,7 +220,7 @@ class BMCTool:
         """Handle RF pulse: simulate all steps of RF pulse and update phase."""
 
         # resample amplitude and phase of RF pulse according to max_pulse_samples
-        amp_, ph_, dtp_, delay_after_pulse = prep_rf_simulation(block, self.params.options.max_pulse_samples)
+        amp_, ph_, dtp_, delay_after_pulse = self.prep_rf_simulation(block, self.params.options.max_pulse_samples)
 
         # simulate all steps of RF pulse subsequently
         for i in range(amp_.size):

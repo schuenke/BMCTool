@@ -1,7 +1,9 @@
+from __future__ import annotations
+
 from pathlib import Path
 
-from bmctool import Parameters
-from bmctool import BMCTool
+from bmctool.parameters import Parameters
+from bmctool.simulation import BMCSim
 from bmctool.utils.eval import plot_z
 
 
@@ -10,7 +12,7 @@ def simulate(
     seq_file: str | Path,
     show_plot: bool = False,
     **kwargs,
-) -> BMCTool:
+) -> BMCSim:
     """Run BMCTool simulation based on given seq-file and config file.
 
     Parameters
@@ -43,7 +45,7 @@ def simulate(
     sim_params = Parameters.from_yaml(config_file)
 
     # create BMCTool object and run simulation
-    sim = BMCTool(sim_params, seq_file, **kwargs)
+    sim = BMCSim(sim_params, seq_file, **kwargs)
     sim.run()
 
     if show_plot:
@@ -61,8 +63,8 @@ def simulate(
 def sim_example() -> None:
     """Run an example simulation using included config and seq files."""
 
-    seq_file = Path(__file__).parent / 'library' / 'seq-library' / 'WASABI.seq'
-    config_file = Path(__file__).parent / 'library' / 'sim-library' / 'config_wasabi.yaml'
+    seq_file = Path(__file__).parent.parent / 'library' / 'seq-library' / 'WASABI.seq'
+    config_file = Path(__file__).parent.parent / 'library' / 'sim-library' / 'config_wasabi.yaml'
 
     simulate(
         config_file=config_file,
