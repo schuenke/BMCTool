@@ -26,6 +26,25 @@ def valid_config_dict():
 
 
 @pytest.fixture(scope='session')
+def valid_config_dict_only_water():
+    return {
+        'water_pool': {
+            'r1': 1.0,
+            'r2': 2.0,
+            'f': 1.0,
+        },
+        'verbose': True,
+        'reset_init_mag': True,
+        'scale': 1.0,
+        'max_pulse_samples': 200,
+        'b0': 3.0,
+        'gamma': 42.5764,
+        'b0_inhom': 0.0,
+        'rel_b1': 1.0,
+    }
+
+
+@pytest.fixture(scope='session')
 def valid_yaml_config_file(valid_config_dict, tmp_path_factory):
     fn = tmp_path_factory.mktemp('valid_config_file') / 'valid_config_file.yaml'
     with open(fn, 'w') as f:

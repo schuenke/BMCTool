@@ -27,7 +27,6 @@ class BlochMcConnellSolver:
         self.arr_c: np.ndarray
         self.w0: float
         self.dw0: float
-        self.first_dim: int = 1
 
         self.update_params(params)
 
@@ -108,7 +107,7 @@ class BlochMcConnellSolver:
 
         self.params = params
         self.w0 = params.system.b0 * params.system.gamma
-        self.dw0 = self.w0 * params.system.b0_inhom
+        self.dw0 = self.w0 * params.system.b0_inhom * 1e-6
         self._init_matrix_a()
         self._init_vector_c()
 
