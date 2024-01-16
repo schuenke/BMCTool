@@ -15,7 +15,7 @@ class BMCSim:
     def __init__(
         self,
         params: Parameters,
-        seq_file: str | Path,
+        seq: str | Path | pp.Sequence,
         verbose: bool = True,
         **kwargs,
     ) -> None:
@@ -25,18 +25,20 @@ class BMCSim:
         ----------
         params
             Parameters object containing all simulation parameters
-        seq_file
-            Path to the pulseq seq-file
+        seq
+            Path to the pulseq seq-file or PyPulseq sequence object
         verbose, optional
             Flag to activate detailed outpus, by default True
         """
         self.params = params
-        self.seq_file = seq_file
         self.verbose = verbose
 
-        # read pulseq sequence
-        self.seq = pp.Sequence()
-        self.seq.read(seq_file)
+        # load sequence
+        if isinstance(seq, pp.Sequence):
+            self.seq = seq
+        else:
+            self.seq = pp.Sequence()
+            self.seq.read(seq)
 
         # get offsets from pypulseq definitions
         self.defs = self.seq.definitions
