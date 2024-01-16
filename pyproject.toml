@@ -1,0 +1,88 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "BMCTool"
+version = "0.7.0"
+description = "A python tool to perform Bloch-McConnell (BMC) simulations."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
+keywords = ["MRI, Bloch, Bloch-McConnell, CEST, simulation"]
+authors = [{ name = "Patrick Schuenke", email = "patrick.schuenke@ptb.de" }]
+classifiers = [
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3 :: Only",
+]
+dependencies = [
+    "numpy>=1.23,<2.0",
+    "matplotlib",
+    "tqdm",
+    "PyYAML",
+    "pypulseq@git+https://github.com/imr-framework/pypulseq",
+]
+
+[project.optional-dependencies]
+test = [
+    "coverage",
+    "codecov",
+    "pre-commit",
+    "pytest",
+    "pytest-cov",
+    "pytest-xdist",
+]
+lint = ["mypy", "ruff", "pre-commit"]
+docs = ["sphinx", "pydata-sphinx-theme", "sphinx-pyproject"]
+
+[project.urls]
+"repository" = "https://github.com/schuenke/BMCTool"
+
+# PyTest section
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+filterwarnings = ["error"]
+
+# MyPy section
+[tool.mypy]
+warn_return_any = false
+check_untyped_defs = true
+warn_no_return = true
+warn_unreachable = true
+exclude = ["docs", "examples"]
+
+# general ruff section
+[tool.ruff]
+line-length = 120
+extend-select = ["B", "C", "SIM", "UP", "Q"]
+ignore = ["C901"]
+ignore-init-module-imports = true
+include = ["src/**/*.py"]
+
+# ruff format section
+[tool.ruff.format]
+quote-style = "single"
+docstring-code-format = true
+
+# ruff lint section
+[tool.ruff.lint.flake8-quotes]
+docstring-quotes = "double"
+inline-quotes = "single"
+
+[tool.ruff.lint.isort]
+force-single-line = true
+
+[tool.ruff.lint.pydocstyle]
+convention = "numpy"
+
+# codespell section
+[tool.codespell]
+builtin = "en-GB_to_en-US"
+ignore-words-list = "te,TE"
+
+# coverage section
+[tool.coverage.paths]
+source = ["src", "*/site-packages"]
