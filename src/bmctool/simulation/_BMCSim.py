@@ -17,6 +17,7 @@ class BMCSim:
         params: Parameters,
         seq: str | Path | pp.Sequence,
         verbose: bool = True,
+        store_dynamics: int = 0,
         **kwargs,
     ) -> None:
         """Initialize BMCSim object.
@@ -26,12 +27,18 @@ class BMCSim:
         params
             Parameters object containing all simulation parameters
         seq
-            Path to the pulseq seq-file or PyPulseq sequence object
+            path to the pulseq seq-file or PyPulseq sequence object
         verbose, optional
-            Flag to activate detailed outpus, by default True
+            flag to activate detailed outputs, by default True
+        store_dynamics, optional
+            option to activate storage of intermediate magnetization values, by default 0
+            0 = deactivate
+            1 = store mag after each block
+            2 = store mag after each simulation step (e.g. after each pulse sample)
         """
         self.params = params
         self.verbose = verbose
+        self.store_dynamic = store_dynamics
 
         # load sequence
         if isinstance(seq, pp.Sequence):
@@ -48,6 +55,8 @@ class BMCSim:
         # extract initial magnetization vector and create output array
         self.m_init = params.m_vec.copy()
         self.m_out = np.zeros([self.m_init.shape[0], self.n_measure])
+        self.m_dyn = self.m_init[:, np.newaxis]
+        self.dyn_dt = [0.0]
 
         # initialize solver
         self.bm_solver = BlochMcConnellSolver(params=self.params, n_offsets=self.n_measure)
@@ -199,6 +208,10 @@ class BMCSim:
         else:
             raise ValueError('The current block event cannot be handled by BMCTool. Please check you sequence.')
 
+        if self.store_dynamic == 1:
+            self.m_dyn = np.concatenate((self.m_dyn, mag[0,]), axis=1)
+            self.dyn_dt.append(self.dyn_dt[-1] + block.block_duration)
+
         return current_adc, accum_phase, mag
 
     def _handle_adc_event(self, current_adc: int, accum_phase: float, mag: np.ndarray) -> tuple[int, float, np.ndarray]:
@@ -232,11 +245,17 @@ class BMCSim:
                 rf_freq=block.rf.freq_offset,
             )
             mag = self.bm_solver.solve_equation(mag=mag, dtp=dtp_)
+            if self.store_dynamic == 2:
+                self.m_dyn = np.concatenate((self.m_dyn, mag[0,]), axis=1)
+                self.dyn_dt.append(self.dyn_dt[-1] + dtp_)
 
         # simulate a potential delay after the RF pulse
         if delay_after_pulse > 0:
             self.bm_solver.update_matrix(0, 0, 0)
             mag = self.bm_solver.solve_equation(mag=mag, dtp=delay_after_pulse)
+            if self.store_dynamic == 2:
+                self.m_dyn = np.concatenate((self.m_dyn, mag[0,]), axis=1)
+                self.dyn_dt.append(self.dyn_dt[-1] + dtp_)
 
         # update accumulated phase
         phase_degree = dtp_ * amp_.size * 360 * block.rf.freq_offset
@@ -255,6 +274,10 @@ class BMCSim:
         # set x and y components of the water pool and all cest pools to zero
         mag[0, : ((len(self.params.cest_pools) + 1) * 2), 0] = 0.0
 
+        if self.store_dynamic == 2:
+            self.m_dyn = np.concatenate((self.m_dyn, mag[0,]), axis=1)
+            self.dyn_dt.append(self.dyn_dt[-1] + _dur)
+
         return mag
 
     def _handle_delay_or_gradient(self, block: SimpleNamespace, mag: np.ndarray) -> np.ndarray:
@@ -263,6 +286,10 @@ class BMCSim:
         _dur = block.block_duration
         self.bm_solver.update_matrix(0, 0, 0)
         mag = self.bm_solver.solve_equation(mag=mag, dtp=_dur)
+
+        if self.store_dynamic == 2:
+            self.m_dyn = np.concatenate((self.m_dyn, mag[0,]), axis=1)
+            self.dyn_dt.append(self.dyn_dt[-1] + _dur)
 
         return mag
 
