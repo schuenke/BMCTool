@@ -1,10 +1,9 @@
 """write.py Auxiliary functions for writing seq files."""
+
 import math
 from datetime import datetime
 from os import fdopen
-from os import remove
 from pathlib import Path
-from shutil import copymode
 from shutil import move
 from tempfile import mkstemp
 
@@ -27,7 +26,6 @@ def round_number(number: float, significant_digits: int) -> float:
     float
         rounded number
     """
-
     if number != 0:
         return round(number, significant_digits - int(math.floor(math.log10(abs(number)))) - 1)
     return 0.0
@@ -47,7 +45,7 @@ def insert_seq_file_header(filepath: str | Path, author: str) -> None:
     tmp, abs_path = mkstemp()
 
     in_position = False
-    with fdopen(tmp, 'w') as new_file, open(filepath) as old_file:
+    with fdopen(tmp, 'w') as new_file, Path(filepath).open() as old_file:
         for line in old_file:
             if line.startswith('# Created by'):
                 new_file.write(line)
@@ -65,9 +63,8 @@ def insert_seq_file_header(filepath: str | Path, author: str) -> None:
                     new_file.write(line)
 
     # copy permissions from old file to new file
-    copymode(filepath, abs_path)
     # remove old file
-    remove(filepath)
+    Path(filepath).unlink()
     # move new file
     move(abs_path, filepath)
 

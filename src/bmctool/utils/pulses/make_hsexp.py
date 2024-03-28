@@ -1,3 +1,5 @@
+"""Functions to create Hyperbolic Secant Exponential (HSExp) RF pulses."""
+
 from types import SimpleNamespace
 
 import numpy as np
@@ -5,12 +7,8 @@ import pypulseq as pp
 
 from bmctool import GAMMA_HZ
 from bmctool.utils.pulses.calculate_phase import calculate_phase
-from bmctool.utils.pulses.create_arbitrary_pulse_with_phase import (
-    create_arbitrary_pulse_with_phase,
-)
-from bmctool.utils.pulses.make_hypsec_half_passage import (
-    calculate_amplitude as hypsec_amp,
-)
+from bmctool.utils.pulses.create_arbitrary_pulse_with_phase import create_arbitrary_pulse_with_phase
+from bmctool.utils.pulses.make_hypsec_half_passage import calculate_amplitude as hypsec_amp
 
 
 def calculate_window_modulation(t: np.ndarray, t0: float) -> np.ndarray:
@@ -28,8 +26,7 @@ def calculate_window_modulation(t: np.ndarray, t0: float) -> np.ndarray:
     np.ndarray
         Calculated window function.
     """
-
-    return 0.42 - 0.5 * np.cos(np.pi * t / t0) + 0.08 * np.cos(2 * np.pi * t / t0)
+    return np.array(0.42 - 0.5 * np.cos(np.pi * t / t0) + 0.08 * np.cos(2 * np.pi * t / t0))
 
 
 def calculate_frequency(
@@ -59,8 +56,7 @@ def calculate_frequency(
     np.ndarray
         Calculated modulation function for HSExp pulse.
     """
-
-    return -freq_factor * bandwidth * np.pi * np.exp(-t / t0 * ef)
+    return np.array(-freq_factor * bandwidth * np.pi * np.exp(-t / t0 * ef))
 
 
 def make_hsexp(
@@ -105,7 +101,6 @@ def make_hsexp(
     SimpleNamespace
         PyPulseq rf pulse object.
     """
-
     system = system or pp.Opts()
 
     samples = int(t_p * 1e6)
@@ -193,7 +188,6 @@ def generate_hsexp_dict(
     dict
         dict with all 4 possible HSexp RF pulses
     """
-
     system = system or pp.Opts()
 
     pulse_dict = {}  # create empty dict for the 4 different pulses

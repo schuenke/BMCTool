@@ -24,16 +24,23 @@ class Pool(ABC):
 
         Parameters
         ----------
-        r1
-            R1 relaxation rate [Hz] (1/T1)
-        r2
-            R2 relaxation rate [Hz] (1/T2)
         f
             pool size fraction
         dw
             chemical shift from water [ppm]
+        r1
+            R1 relaxation rate [Hz] (1/T1)
+            either r1 or t1 must be given, but not both
+        t1
+            T1 relaxation time [s] (1/R1)
+            either t1 or r1 must be given, but not both
+        r2
+            R2 relaxation rate [Hz] (1/T2)
+            either r2 or t2 must be given, but not both
+        t2
+            T2 relaxation time [s] (1/R2)
+            either t2 or r2 must be given, but not both
         """
-
         if (r1 is None) == (t1 is None):
             raise ValueError('Either r1 or t1 must be given, but not both.')
 
@@ -53,8 +60,10 @@ class Pool(ABC):
         Pool.f.fset(self, f)  # type: ignore[attr-defined]
         Pool.dw.fset(self, dw)  # type: ignore[attr-defined]
 
-    def __eq__(self, other):
-        if isinstance(other, self.__class__) and self.__slots__ == other.__slots__:
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, self.__class__):
+            return NotImplemented
+        if self.__slots__ == other.__slots__:
             attr_getters = [operator.attrgetter(attr) for attr in self.__slots__]
             return all(getter(self) == getter(other) for getter in attr_getters)
         return False

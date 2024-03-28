@@ -1,11 +1,9 @@
 import pytest
-
 from bmctool.parameters import Parameters
 
 
 def test_init_from_valid_dict(valid_config_dict):
-    """Test that the Parameters class can be instantiated from a valid
-    dictionary."""
+    """Test initialization of the Parameters class from a valid dictionary."""
     p = Parameters.from_dict(valid_config_dict)
 
     # assert that the attributes are set correctly
@@ -37,8 +35,7 @@ def test_init_from_valid_dict(valid_config_dict):
 
 
 def test_init_from_valid_file(valid_config_dict, valid_yaml_config_file):
-    """Test that the Parameters class can be instantiated from a valid YAML
-    config file."""
+    """Test initialization of the Parameters class from a valid YAML config file."""
     p = Parameters.from_yaml(valid_yaml_config_file)
     q = Parameters.from_dict(valid_config_dict)
 
@@ -46,9 +43,7 @@ def test_init_from_valid_file(valid_config_dict, valid_yaml_config_file):
 
 
 def test_init_from_alternative_param_names(valid_config_dict):
-    """Test that the Parameters class can be instantiated with alternative
-    parameter names."""
-
+    """Test initialization of the Parameters class from a dictionary with alternative parameter names."""
     # create copy of valid_config_dict and rename some parameters
     valid_config_dict_alt_names = valid_config_dict.copy()
     valid_config_dict_alt_names['relb1'] = valid_config_dict_alt_names.pop('rel_b1')
@@ -62,7 +57,6 @@ def test_init_from_alternative_param_names(valid_config_dict):
 
 def test_export_to_yaml(valid_config_dict, empty_config_file):
     """Test that the Parameters class can be exported to a YAML config file."""
-
     # create Parameters object from valid_config_dict
     p = Parameters.from_dict(valid_config_dict)
 
@@ -77,7 +71,7 @@ def test_export_to_yaml(valid_config_dict, empty_config_file):
 
 
 @pytest.mark.parametrize(
-    'parameter, value',
+    ('parameter', 'value'),
     [
         ('t1', 3.0),
         ('t1', '5'),

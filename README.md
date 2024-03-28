@@ -61,12 +61,12 @@ sim = simulate(config_file=config_path, seq_file=seq_path, show_plot=True)
 The simulate function accepts several additional keyword arguments (**kwargs), that allow to adjust the plot.
 These are for example *normalize* (bool: toggle normalization), *norm_threshold* (value/list/array: threshold for
 normalization offsets), *offsets* (list/array: manually defined x-values), *invert_ax* (bool: toggle invert ax),
-*plot_mtr_asym* (bool:toggle plot MTR_asym) and *title*, *x_label*, *y_label* to control the lables.
+*plot_mtr_asym* (bool:toggle plot MTR_asym) and *title*, *x_label*, *y_label* to control the labels.
 
 The [examples folder](examples) in the [BMCTool GitHub repository](https://github.com/schuenke/BMCTool) contains some
 further simulation examples as well as an example script to create your own *WASABI.seq* file. _Please note that this
 file will include an additional normalization offset at -300 ppm. To use this for normalization in the simulation,
-simply add the kewword argument ``normalize=True`` to the simulate function._
+simply add the keyword argument ``normalize=True`` to the simulate function._
 
 ## Pulseq-CEST Project
 

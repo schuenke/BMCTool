@@ -1,12 +1,12 @@
+"""Functions to create hyperbolic secant half passage pulse."""
+
 from types import SimpleNamespace
 
 import numpy as np
 import pypulseq as pp
 
 from bmctool.utils.pulses.calculate_phase import calculate_phase
-from bmctool.utils.pulses.create_arbitrary_pulse_with_phase import (
-    create_arbitrary_pulse_with_phase,
-)
+from bmctool.utils.pulses.create_arbitrary_pulse_with_phase import create_arbitrary_pulse_with_phase
 
 
 def calculate_amplitude(
@@ -36,8 +36,7 @@ def calculate_amplitude(
     np.ndarray
         Calculated amplitude modulation.
     """
-
-    return np.divide(amp, np.cosh((bandwidth * np.pi / mu) * (t - t_0)))
+    return np.divide(amp, np.cosh((bandwidth * np.pi / mu) * (t - t_0)))  # type: ignore
 
 
 def calculate_frequency(
@@ -64,9 +63,8 @@ def calculate_frequency(
     np.ndarray
         Calculated frequency modulation.
     """
-
     beta = bandwidth * np.pi / mu
-    return bandwidth * np.pi * np.tanh(beta * (t - t_0))
+    return np.array(bandwidth * np.pi * np.tanh(beta * (t - t_0)))
 
 
 def make_hypsec_half_passage_rf(
@@ -97,7 +95,6 @@ def make_hypsec_half_passage_rf(
     SimpleNamespace
         PyPulseq block event for hyperbolic secant half passage pulse.
     """
-
     system = system or pp.Opts()
 
     samples = int(pulse_duration * 1e6)

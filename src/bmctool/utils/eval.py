@@ -1,3 +1,5 @@
+"""Evaluation module for the bmctool package."""
+
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.figure import Figure
@@ -24,7 +26,6 @@ def calc_mtr_asym(
     np.ndarray
         Array containing the MTRasym values
     """
-
     x_interp = np.linspace(np.min(offsets), np.max(np.absolute(offsets)), n_interp)
     y_interp = np.interp(x_interp, offsets, m_z)
     asym = y_interp[::-1] - y_interp
@@ -52,7 +53,6 @@ def normalize_data(
     Tuple[np.ndarray, np.ndarray]
         Tuple containing the normalized magnetization vector and the corresponding offsets.
     """
-
     offsets, data, norm = split_data(m_z, offsets, threshold)
 
     if norm is not None:
@@ -87,7 +87,6 @@ def split_data(
     TypeError
         If threshold is not of type int, float, list or np.ndarray.
     """
-
     if isinstance(threshold, int | float):
         th_high = np.abs(threshold)
         th_low = -th_high
@@ -152,7 +151,6 @@ def plot_z(
     Figure
         Matplotlib figure object.
     """
-
     if offsets is None:
         offsets = np.arange(len(m_z))
 

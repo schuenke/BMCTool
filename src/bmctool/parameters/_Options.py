@@ -36,8 +36,10 @@ class Options:
         self.scale = scale
         self.max_pulse_samples = max_pulse_samples
 
-    def __eq__(self, other):
-        if isinstance(other, self.__class__) and self.__slots__ == other.__slots__:
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, self.__class__):
+            return NotImplemented
+        if self.__slots__ == other.__slots__:
             attr_getters = [operator.attrgetter(attr) for attr in self.__slots__]
             return all(getter(self) == getter(other) for getter in attr_getters)
         return False
@@ -94,6 +96,6 @@ class Options:
         self._max_pulse_samples = value
 
     @classmethod
-    def from_dict(cls, d):
+    def from_dict(cls, dictionary: dict):
         """Create Options instance from dictionary."""
-        return cls(**d)
+        return cls(**dictionary)

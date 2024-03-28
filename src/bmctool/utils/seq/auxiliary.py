@@ -1,6 +1,6 @@
 """auxiliary.py Auxiliary functions for PyPulseq seq-file handling."""
+
 from pathlib import Path
-from typing import Any
 
 import numpy as np
 from pypulseq.Sequence.read_seq import __read_definitions as read_definitions
@@ -19,21 +19,27 @@ def get_definitions(filepath: str | Path) -> dict:
     -------
     dict
         Dictionary of all definitions in the seq-file
+
+    Raises
+    ------
+    AttributeError
+        Raised if no definitions are found in the seq-file
     """
-    with open(filepath) as seq:
+    with Path(filepath).open() as seq:
         while True:
             line = strip_line(seq)
             if line == -1:
                 break
             elif line == '[DEFINITIONS]':
-                dict_definitions = read_definitions(seq)
+                dict_definitions: dict = read_definitions(seq)
             else:
                 pass
-
+    if not dict_definitions:
+        raise AttributeError(f'No definitions found in file {filepath}.')
     return dict_definitions
 
 
-def get_definition(filepath: str | Path, key: str) -> Any:
+def get_definition(filepath: str | Path, key: str) -> int | float | np.ndarray | None:
     """get_definition Read a single definition directly from a seq-file.
 
     Parameters
@@ -53,7 +59,7 @@ def get_definition(filepath: str | Path, key: str) -> Any:
     AttributeError
         Raised if key is not found in the seq-file
     """
-    dict_definitions = get_definitions(filepath)
+    dict_definitions: dict[str, int | float | np.ndarray | None] = get_definitions(filepath)
     if key in dict_definitions:
         return dict_definitions[key]
 
@@ -74,7 +80,7 @@ def get_num_adc_events(filepath: str | Path) -> int:
         Number of ADC events in the seq-file
     """
     adc_event_count = 0
-    with open(filepath) as seq:
+    with Path(filepath).open() as seq:
         while True:
             line = strip_line(seq)
             if line == -1:

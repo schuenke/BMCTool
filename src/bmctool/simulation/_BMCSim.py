@@ -17,7 +17,6 @@ class BMCSim:
         params: Parameters,
         seq: str | Path | pp.Sequence,
         verbose: bool = True,
-        **kwargs,
     ) -> None:
         """Initialize BMCSim object.
 
@@ -28,7 +27,7 @@ class BMCSim:
         seq
             Path to the pulseq seq-file or PyPulseq sequence object
         verbose, optional
-            Flag to activate detailed outpus, by default True
+            Flag to activate detailed outputs, by default True
         """
         self.params = params
         self.verbose = verbose
@@ -71,7 +70,6 @@ class BMCSim:
         Tuple[np.ndarray, np.ndarray, float, float]
             Tuple of resampled amplitude, phase, time step and delay after pulse
         """
-
         # get amplitude and phase of RF pulse
         amp = np.abs(block.rf.signal)
         ph = np.angle(block.rf.signal)
@@ -121,7 +119,6 @@ class BMCSim:
 
     def run(self) -> None:
         """Start simulation process."""
-
         current_adc = 0
         accum_phase = 0.0
 
@@ -131,7 +128,7 @@ class BMCSim:
         # get all block events from pypulseq sequence
         block_events = self.seq.block_events
 
-        # create loop with or w/o tqdm statu bar depending on verbose settings
+        # create loop with or w/o tqdm status bar depending on verbose settings
         if self.verbose:
             loop_block_events = tqdm(range(1, len(block_events) + 1), desc='BMCTool simulation')
         else:
@@ -178,7 +175,6 @@ class BMCSim:
         ValueError
             If the current block event cannot be handled by BMCTool
         """
-
         # Pseudo ADC event
         if block.adc is not None:
             current_adc, accum_phase, mag = self._handle_adc_event(current_adc, accum_phase, mag)
@@ -203,7 +199,6 @@ class BMCSim:
 
     def _handle_adc_event(self, current_adc: int, accum_phase: float, mag: np.ndarray) -> tuple[int, float, np.ndarray]:
         """Handle ADC event: write current mag to output, reset phase and increase ADC counter."""
-
         # write current magnetization to output
         self.m_out[:, current_adc] = np.squeeze(mag)
 
@@ -217,10 +212,13 @@ class BMCSim:
         return current_adc, accum_phase, mag
 
     def _handle_rf_pulse(
-        self, block: SimpleNamespace, current_adc: int, accum_phase: float, mag: np.ndarray
+        self,
+        block: SimpleNamespace,
+        current_adc: int,
+        accum_phase: float,
+        mag: np.ndarray,
     ) -> tuple[int, float, np.ndarray]:
         """Handle RF pulse: simulate all steps of RF pulse and update phase."""
-
         # resample amplitude and phase of RF pulse according to max_pulse_samples
         amp_, ph_, dtp_, delay_after_pulse = self.prep_rf_simulation(block, self.params.options.max_pulse_samples)
 
@@ -247,7 +245,6 @@ class BMCSim:
 
     def _handle_spoiler_gradient(self, block: SimpleNamespace, mag: np.ndarray) -> np.ndarray:
         """Handle spoiler gradient: assume complete spoiling."""
-
         _dur = block.block_duration
         self.bm_solver.update_matrix(0, 0, 0)
         mag = self.bm_solver.solve_equation(mag=mag, dtp=_dur)
@@ -259,7 +256,6 @@ class BMCSim:
 
     def _handle_delay_or_gradient(self, block: SimpleNamespace, mag: np.ndarray) -> np.ndarray:
         """Handle delay or gradient(s): simulate delay."""
-
         _dur = block.block_duration
         self.bm_solver.update_matrix(0, 0, 0)
         mag = self.bm_solver.solve_equation(mag=mag, dtp=_dur)
@@ -279,7 +275,6 @@ class BMCSim:
         Tuple[np.ndarray, np.ndarray]
             Tuple of offsets and Z-spectrum
         """
-
         m_z = self.m_out[self.params.mz_loc, :]
 
         if self.offsets_ppm.size != m_z.size:

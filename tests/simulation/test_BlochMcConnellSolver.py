@@ -1,13 +1,11 @@
-import pytest
 import numpy as np
-
+import pytest
 from bmctool.parameters import Parameters
 from bmctool.simulation import BlochMcConnellSolver
 
 
 def test_init_from_valid_dict(valid_config_dict):
     """Test initializatim from a Parameters object and n_offsets."""
-
     params = Parameters.from_dict(valid_config_dict)
     solver = BlochMcConnellSolver(params=params, n_offsets=100)
 
@@ -17,7 +15,6 @@ def test_init_from_valid_dict(valid_config_dict):
 
 def test_correct_shape(valid_config_dict):
     """Test that array a and c have the correct shape."""
-
     params = Parameters.from_dict(valid_config_dict)
     solver = BlochMcConnellSolver(params=params, n_offsets=100)
 
@@ -33,7 +30,6 @@ def test_correct_shape(valid_config_dict):
 
 def test_correct_attributes(valid_config_dict):
     """Test that all other attributes are correct."""
-
     params = Parameters.from_dict(valid_config_dict)
     solver = BlochMcConnellSolver(params=params, n_offsets=100)
 
@@ -51,7 +47,7 @@ def test_correct_attributes(valid_config_dict):
 
 
 @pytest.mark.parametrize(
-    'parameter, value',
+    ('parameter', 'value'),
     [
         ('b0', 1.0),
         ('b0', 2.0),
@@ -61,7 +57,6 @@ def test_correct_attributes(valid_config_dict):
 )
 def test_update_params(valid_config_dict, parameter, value):
     """Test that update_params() works correctly."""
-
     params = Parameters.from_dict(valid_config_dict)
     solver = BlochMcConnellSolver(params=params, n_offsets=100)
 
@@ -73,12 +68,11 @@ def test_update_params(valid_config_dict, parameter, value):
 
     # assert that changed parameters are correct
     assert solver.w0 == params.system.b0 * params.system.gamma
-    assert solver.dw0 == solver.w0 * params.system.b0_inhom * 1e-6
+    assert solver.dw0 == solver.w0 * params.system.b0_inhom
 
 
 def test_solve_equation_correct_shape(valid_config_dict):
     """Test that solve_equation() returns an array with the correct shape."""
-
     params = Parameters.from_dict(valid_config_dict)
     solver = BlochMcConnellSolver(params=params, n_offsets=100)
 
@@ -93,7 +87,7 @@ def test_solve_equation_correct_shape(valid_config_dict):
 
 
 @pytest.mark.parametrize(
-    'time, value',
+    ('time', 'value'),
     [
         (1, 0.6321205588),
         (2, 0.8646647167),
@@ -103,7 +97,6 @@ def test_solve_equation_correct_shape(valid_config_dict):
 )
 def test_solve_equation_relaxation_from_zero(valid_config_dict_only_water, time, value):
     """Test that solve_equation() returns an array with the correct shape."""
-
     params = Parameters.from_dict(valid_config_dict_only_water)
     solver = BlochMcConnellSolver(params=params, n_offsets=100)
 

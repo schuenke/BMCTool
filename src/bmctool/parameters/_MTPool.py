@@ -2,13 +2,15 @@
 
 from __future__ import annotations
 
+import typing
+
 from bmctool.parameters import Pool
 
 
 class MTPool(Pool):
     """Class to store MTPool parameters."""
 
-    valid_lineshapes = ['lorentzian', 'superlorentzian']
+    valid_lineshapes: typing.ClassVar[list[str]] = ['lorentzian', 'superlorentzian']
     __slots__ = ['_r1', '_r2', '_k', '_f', '_dw', '_lineshape']
 
     def __init__(
@@ -26,10 +28,6 @@ class MTPool(Pool):
 
         Parameters
         ----------
-        r1
-            R1 relaxation rate [Hz] (1/T1)
-        r2
-            R2 relaxation rate [Hz] (1/T2)
         k
             exchange rate [Hz]
         f
@@ -38,8 +36,19 @@ class MTPool(Pool):
             chemical shift from water [ppm]
         lineshape
             lineshape of the MT pool ("Lorentzian", "SuperLorentzian")
+        r1
+            R1 relaxation rate [Hz] (1/T1)
+            either r1 or t1 must be given, but not both
+        t1
+            T1 relaxation time [s] (1/R1)
+            either t1 or r1 must be given, but not both
+        r2
+            R2 relaxation rate [Hz] (1/T2)
+            either r2 or t2 must be given, but not both
+        t2
+            T2 relaxation time [s] (1/R2)
+            either t2 or r2 must be given, but not both
         """
-
         super().__init__(f=f, dw=dw, r1=r1, r2=r2, t1=t1, t2=t2)
 
         self.k = k

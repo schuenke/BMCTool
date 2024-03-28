@@ -39,8 +39,10 @@ class Parameters:
     system: System
     options: Options
 
-    def __eq__(self, other):
-        if isinstance(other, Parameters):
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, self.__class__):
+            return NotImplemented
+        if self.__slots__ == other.__slots__:
             return (
                 self.water_pool == other.water_pool
                 and self.cest_pools == other.cest_pools
@@ -126,11 +128,10 @@ class Parameters:
         yaml_file
             Path to yaml config file.
         """
-
         if not Path(yaml_file).exists():
             raise FileNotFoundError(f'File {yaml_file} not found.')
 
-        with open(yaml_file) as file:
+        with Path(yaml_file).open() as file:
             config = yaml.safe_load(file)
 
         return cls.from_dict(config)
@@ -143,11 +144,10 @@ class Parameters:
         yaml_file
             Path to yaml file.
         """
-
         if self.cest_pools:
             cest_dict = {f'cest_{ii + 1}': pool.__dict__() for ii, pool in enumerate(self.cest_pools)}
 
-        with open(yaml_file, 'w') as file:
+        with Path(yaml_file).open('w') as file:
             yaml.dump({'water_pool': self.water_pool.__dict__()}, file)
             if self.mt_pool:
                 yaml.dump({'mt_pool': self.mt_pool.__dict__()}, file)
@@ -174,7 +174,6 @@ class Parameters:
         kwargs
             Parameters to be updated (r1 or t1, r2 or t2, k, f, dw)
         """
-
         for key, value in kwargs.items():
             setattr(self.cest_pools[idx], key, value)
 
@@ -183,7 +182,6 @@ class Parameters:
 
         Available parameters are: r1 or t1, r2 or t2, f, k, dw.
         """
-
         for key, value in kwargs.items():
             setattr(self.mt_pool, key, value)
 
@@ -192,7 +190,6 @@ class Parameters:
 
         Available parameters are: verbose, reset_init_mag, scale, max_pulse_samples.
         """
-
         for key, value in kwargs.items():
             setattr(self.options, key, value)
 
@@ -201,7 +198,6 @@ class Parameters:
 
         Available parameters are: b0, gamma, b0_inhom, rel_b1.
         """
-
         for key, value in kwargs.items():
             setattr(self.system, key, value)
 
@@ -210,6 +206,5 @@ class Parameters:
 
         Available parameters are: r1 or t1, r2 or t2, f.
         """
-
         for key, value in kwargs.items():
             setattr(self.water_pool, key, value)

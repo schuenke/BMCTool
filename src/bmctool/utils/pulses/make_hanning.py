@@ -1,3 +1,5 @@
+"""Functions to create a RF pulse event for a gaussian pulse with hanning window."""
+
 from types import SimpleNamespace
 
 import numpy as np
@@ -20,7 +22,7 @@ def hanning(n: int) -> np.ndarray:
 
 def calc_hanning(m: int, n: int) -> np.ndarray:
     """Calculate the first m points of an n point hanning window."""
-    window = 0.5 * (1 - np.cos(2 * np.pi * np.arange(1, m + 1) / (n + 1)))
+    window = np.array(0.5 * (1 - np.cos(2 * np.pi * np.arange(1, m + 1) / (n + 1))))
     return window
 
 
@@ -45,15 +47,10 @@ def make_gauss_hanning(
     SimpleNamespace
         RF pulse event for a gaussian pulse with hanning window.
     """
-
     system = system or pp.Opts()
 
     rf_pulse = make_gauss_pulse(flip_angle=flip_angle, duration=pulse_duration, system=system, phase_offset=0)
-    # n_signal = np.sum(np.abs(rf_pulse.signal) > 0)
     n_signal = rf_pulse.signal.size
-    # hanning_shape = hanning(n_signal + 2)
     hanning_shape = hanning(n_signal)
-    # rf_pulse.signal[:n_signal] = hanning_shape[1:-1] / np.trapz(rf_pulse.t[:n_signal], hanning_shape[1:-1]) * \
-    #                              (flip_angle / (2 * np.pi))
     rf_pulse.signal = hanning_shape / np.trapz(hanning_shape, x=rf_pulse.t) * (flip_angle / (2 * np.pi))
-    return rf_pulse
+    return rf_pulse  # type: ignore

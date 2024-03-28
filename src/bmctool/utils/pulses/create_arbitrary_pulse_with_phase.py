@@ -28,7 +28,6 @@ def create_arbitrary_pulse_with_phase(
     system : Opts, optional
         pypulseq Opts object containing system limits, defaults to pp.Opts()
     """
-
     system = system or pp.Opts()
 
     signal *= flip_angle / (2 * np.pi)

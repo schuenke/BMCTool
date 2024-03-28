@@ -18,7 +18,6 @@ class BlochMcConnellSolver:
         n_offsets
             number of offsets
         """
-
         self.params: Parameters = params
         self.n_offsets: int = n_offsets
         self.n_pools: int = params.num_cest_pools
@@ -78,7 +77,6 @@ class BlochMcConnellSolver:
 
     def _init_vector_c(self) -> None:
         """Initialize vector self.C with all parameters from self.params."""
-
         n_p = self.n_pools
 
         # initialize vector c
@@ -104,10 +102,9 @@ class BlochMcConnellSolver:
         params
             Parameters object
         """
-
         self.params = params
         self.w0 = params.system.b0 * params.system.gamma
-        self.dw0 = self.w0 * params.system.b0_inhom * 1e-6
+        self.dw0 = self.w0 * params.system.b0_inhom
         self._init_matrix_a()
         self._init_vector_c()
 
@@ -123,12 +120,11 @@ class BlochMcConnellSolver:
         rf_freq
             rf frequency [Hz]
         """
-
         n_p: int = self.n_pools
 
         # set dw0 due to b0_inhomogeneity
-        self.arr_a[:, 0, 1 + n_p] = [self.dw0] * 1
-        self.arr_a[:, 1 + n_p, 0] = [-1 * self.dw0] * 1
+        self.arr_a[:, 0, 1 + n_p] = [-1 * self.dw0] * 1
+        self.arr_a[:, 1 + n_p, 0] = [self.dw0] * 1
 
         # calculate omega_1
         rf_amp_2pi = rf_amp * 2 * np.pi * self.params.system.rel_b1
@@ -252,7 +248,7 @@ class BlochMcConnellSolver:
         vals, vects = np.linalg.eig(matrix * dtp)
         tmp = np.einsum('ijk,ikl->ijl', vects, np.apply_along_axis(np.diag, -1, np.exp(vals)))
         inv = np.linalg.inv(vects)
-        return np.einsum('ijk,ikl->ijl', tmp, inv)
+        return np.einsum('ijk,ikl->ijl', tmp, inv)  # type: ignore
 
     def get_mt_shape_at_offset(self, offset: float, w0: float) -> float:
         """Calculate the lineshape of the MT pool at the given offset(s).
@@ -273,8 +269,8 @@ class BlochMcConnellSolver:
             dw_pool = offset - dw * w0
             mt_line = self.interpolate_sl(dw_pool) if abs(dw_pool) >= w0 else self.interpolate_chs(dw_pool, w0)
         else:
-            mt_line = 0
-        return mt_line
+            mt_line = 0.0
+        return mt_line  # type: ignore
 
     def interpolate_sl(self, dw: float) -> float:
         """Interpolate MT profile for SuperLorentzian lineshape.

@@ -1,10 +1,9 @@
 import pytest
-
 from bmctool.parameters import System
 
 
 @pytest.mark.parametrize(
-    'b0, gamma, b0_inhom, rel_b1',
+    ('b0', 'gamma', 'b0_inhom', 'rel_b1'),
     [
         (3.0, 42.5764, 0.0, 1.0),  # all values correct type
         (3, 42.5764, 0, 1),  # b0, b0_inhom, rel_b1 int instead of float
@@ -23,9 +22,9 @@ def test_from_valid_params(b0, gamma, b0_inhom, rel_b1):
 
 
 @pytest.mark.parametrize(
-    'b0, gamma, b0_inhom, rel_b1',
+    ('b0', 'gamma', 'b0_inhom', 'rel_b1'),
     [
-        ('three', 42.5764, 0.0, 1.0),  # b0 str (not convertable to float)
+        ('three', 42.5764, 0.0, 1.0),  # b0 str (not convertible to float)
         (-3.0, 42.5764, 0.0, 1.0),  # b0 negative
         (3.0, 42.5764, 0.0, -1.0),  # rel_b1 negative
     ],

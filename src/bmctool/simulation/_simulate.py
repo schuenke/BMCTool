@@ -21,8 +21,10 @@ def simulate(
         Path to the YAML config file
     seq_file
         Path to the pulseq sequence file
-    show_plot (optional)
+    show_plot, optional
         Flag to activate plotting of simulated data, by default False
+    **kwargs
+        Additional keyword arguments passed to the plot_z function
 
     Returns
     -------
@@ -34,7 +36,6 @@ def simulate(
     FileNotFoundError
         If the config_file or seq_file not found.
     """
-
     if not Path(config_file).exists():
         raise FileNotFoundError(f'File {config_file} not found.')
 
@@ -45,7 +46,7 @@ def simulate(
     sim_params = Parameters.from_yaml(config_file)
 
     # create BMCTool object and run simulation
-    sim = BMCSim(sim_params, seq_file, **kwargs)
+    sim = BMCSim(sim_params, seq_file)
     sim.run()
 
     if show_plot:
@@ -62,7 +63,6 @@ def simulate(
 
 def sim_example() -> None:
     """Run an example simulation using included config and seq files."""
-
     seq_file = Path(__file__).parent.parent / 'library' / 'seq-library' / 'WASABI.seq'
     config_file = Path(__file__).parent.parent / 'library' / 'sim-library' / 'config_wasabi.yaml'
 

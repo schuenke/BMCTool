@@ -1,10 +1,9 @@
 import pytest
-
 from bmctool.parameters._Pool import Pool
 
 
 @pytest.mark.parametrize(
-    'r1, r2, f, dw, t1, t2',
+    ('r1', 'r2', 'f', 'dw', 't1', 't2'),
     [
         (1.0, 2.0, 0.3, 5.0, None, None),  # all values float
         (1.0, 2.0, 0.3, 5, None, None),  # dw int
@@ -27,7 +26,7 @@ def test_from_valid_params(r1, r2, f, dw, t1, t2):
 
 
 @pytest.mark.parametrize(
-    'r1, r2, f, dw, t1, t2',
+    ('r1', 'r2', 'f', 'dw', 't1', 't2'),
     [
         (1.0, 2.0, 0.3, 4.0, 1.0, None),  # r1 and t1 both given
         (None, 2.0, 0.3, 4.0, None, None),  # neither r1 nor t1 given
@@ -42,7 +41,7 @@ def test_from_invalid_combination(r1, r2, f, dw, t1, t2):
 
 
 @pytest.mark.parametrize(
-    'r1, r2, f, dw, t1, t2',
+    ('r1', 'r2', 'f', 'dw', 't1', 't2'),
     [
         ([1.0], 2.0, 0.3, 4.0, None, None),  # invalid type list
         ((1.0,), 2.0, 0.3, 4.0, None, None),  # invalid type tuple))
@@ -55,7 +54,7 @@ def test_from_invalid_types(r1, r2, f, dw, t1, t2):
 
 
 @pytest.mark.parametrize(
-    'r1, r2, f, dw, t1, t2',
+    ('r1', 'r2', 'f', 'dw', 't1', 't2'),
     [
         (1.0, 2.0, 3.0, 4.0, None, None),  # f not between 0 and 1
         (-1.0, 2.0, 0.3, 4.0, None, None),  # r1 negative
@@ -69,7 +68,7 @@ def test_from_invalid_values(r1, r2, f, dw, t1, t2):
 
 
 @pytest.mark.parametrize(
-    'r1, r2, f, dw, t1, t2',
+    ('r1', 'r2', 'f', 'dw', 't1', 't2'),
     [
         ('1,0', 2.0, 0.3, 5.0, None, None),  # r1 str not convertible to float
         (None, 2.0, 0.3, 5.0, '1,0', None),  # t1 str not convertible to float

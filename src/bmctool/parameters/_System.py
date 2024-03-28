@@ -30,15 +30,16 @@ class System:
         rel_b1
             B1 field scaling factor
         """
-
         # set attributes using setters to check validity
         self.b0 = b0
         self.gamma = gamma
         self.b0_inhom = b0_inhom
         self.rel_b1 = rel_b1
 
-    def __eq__(self, other):
-        if isinstance(other, self.__class__) and self.__slots__ == other.__slots__:
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, self.__class__):
+            return NotImplemented
+        if self.__slots__ == other.__slots__:
             attr_getters = [operator.attrgetter(attr) for attr in self.__slots__]
             return all(getter(self) == getter(other) for getter in attr_getters)
         return False

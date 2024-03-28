@@ -1,10 +1,9 @@
 import pytest
-
 from bmctool.parameters._WaterPool import WaterPool
 
 
 @pytest.mark.parametrize(
-    'r1, r2, f, t1, t2',
+    ('r1', 'r2', 'f', 't1', 't2'),
     [
         (1.0, 2.0, 1.0, None, None),  # all values float
         (1.0, 2.0, 1, None, None),  # f int
@@ -26,7 +25,7 @@ def test_from_valid_params(r1, r2, f, t1, t2):
 
 
 @pytest.mark.parametrize(
-    'r1, r2, f, t1, t2',
+    ('r1', 'r2', 'f', 't1', 't2'),
     [
         (1.0, 2.0, 0.3, 1.0, None),  # r1 and t1 both given
         (None, 2.0, 0.3, None, None),  # neither r1 nor t1 given
@@ -41,7 +40,7 @@ def test_from_invalid_combination(r1, r2, f, t1, t2):
 
 
 @pytest.mark.parametrize(
-    'r1, r2, f, t1, t2',
+    ('r1', 'r2', 'f', 't1', 't2'),
     [
         (1.0, 2.0, 3.0, None, None),  # f not between 0 and 1
         (-1.0, 2.0, 0.3, None, None),  # r1 negative
