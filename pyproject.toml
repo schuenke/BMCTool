@@ -48,35 +48,73 @@ filterwarnings = ["error"]
 
 # MyPy section
 [tool.mypy]
-warn_return_any = false
+warn_return_any = true
 check_untyped_defs = true
 warn_no_return = true
 warn_unreachable = true
-exclude = ["docs", "examples"]
+warn_unused_ignores = true
+exclude = ["docs"]
 
-# general ruff section
 [tool.ruff]
 line-length = 120
-extend-select = ["B", "C", "SIM", "UP", "Q"]
-ignore = ["C901"]
-ignore-init-module-imports = true
-include = ["src/**/*.py"]
+extend-exclude = ["__init__.py"]
+exclude = ["docs/**"]
 
-# ruff format section
-[tool.ruff.format]
-quote-style = "single"
-docstring-code-format = true
-
-# ruff lint section
-[tool.ruff.lint.flake8-quotes]
-docstring-quotes = "double"
-inline-quotes = "single"
+[tool.ruff.lint]
+select = [
+    "A",   # flake8-builtins
+    "ARG", # flake8-unused-arguments
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "COM", # flake8-commas
+    "D",   # pydocstyle
+    "E",   # pycodestyle errors
+    "F",   # Pyflakes
+    "FA",  # flake8-future-annotations
+    "I",   # isort
+    "N",   # pep8-naming
+    "NPY", # NumPy-specific rules
+    "RUF", # Ruff-specific rules
+    "S",   # flake8-bandit
+    "SIM", # flake8-simplify
+    "UP",  # pyupgrade
+    "PIE", # flake8-pie
+    "PTH", # flake8-use-pathlib
+    "T20", # flake8-print
+    "Q",   # flake8-quotes
+    "W",   # pycodestyle warnings
+    "YTT", # flake8-2020
+    "ERA", # flake8-eradicate
+]
+extend-select = [
+    "ANN001", #  type annotation for function argument
+    "ANN201", #  return type annonation public function
+    "ANN205", #  return type annonation static method
+    "ANN401", #  any type annotation
+    "BLE001", #  blind exception
+    "D107",   #  missing docstring in __init__
+    "D415",   #  first line should end with punctuation
+    "D417",   #  undocumented-parameter
+]
+ignore = [
+    "N999",   #  invalid module name
+    "COM812", #  missing-trailing-comma (conflict with formatter)
+    "SIM108", #  if-else-block-instead-of-if-exp
+]
 
 [tool.ruff.lint.isort]
 force-single-line = true
 
+[tool.ruff.lint.flake8-quotes]
+docstring-quotes = "double"
+inline-quotes = "single"
+
 [tool.ruff.lint.pydocstyle]
 convention = "numpy"
+
+[tool.ruff.format]
+quote-style = "single"
+skip-magic-trailing-comma = false
 
 # codespell section
 [tool.codespell]
