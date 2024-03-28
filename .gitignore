@@ -13,8 +13,6 @@ __pycache__/
 !.gitattributes
 !.editorconfig
 !.pre-commit-config.yaml
-!.vscode/
-
 
 # Distribution / packaging
 

@@ -104,8 +104,6 @@ def test_solve_equation_relaxation_from_zero(valid_config_dict_only_water, time,
     mag = params.m_vec[np.newaxis, :, np.newaxis]
     mag[0, params.mz_loc, 0] = 0.0
 
-    # consider R1 observed factor
-
     # solve equation for current relaxation time
     res = np.squeeze(solver.solve_equation(mag=mag, dtp=time))
 
