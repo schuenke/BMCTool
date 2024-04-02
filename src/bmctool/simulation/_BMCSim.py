@@ -250,7 +250,7 @@ class BMCSim:
         mag = self.bm_solver.solve_equation(mag=mag, dtp=_dur)
 
         # set x and y components of the water pool and all cest pools to zero
-        mag[0, : ((len(self.params.cest_pools) + 1) * 2), 0] = 0.0
+        mag[: ((len(self.params.cest_pools) + 1) * 2), 0] = 0.0
 
         return mag
 

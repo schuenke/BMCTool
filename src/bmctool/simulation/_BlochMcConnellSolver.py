@@ -33,16 +33,16 @@ class BlochMcConnellSolver:
         """Initialize self.arr_a with all parameters from self.params."""
         n_p = self.n_pools
 
-        # Create a 3D array with size 1 along the first dimension
-        self.arr_a = np.zeros((1, self.size, self.size), dtype=float)
+        # Create a 2D array with dimensions (size, size)
+        self.arr_a = np.zeros((self.size, self.size), dtype=float)
 
         # Set mt_pool parameters
         k_ac = 0.0
         if self.params.mt_pool is not None:
             k_ca = self.params.mt_pool.k
             k_ac = k_ca * self.params.mt_pool.f
-            self.arr_a[0, 2 * (n_p + 1), 3 * (n_p + 1)] = k_ca
-            self.arr_a[0, 3 * (n_p + 1), 2 * (n_p + 1)] = k_ac
+            self.arr_a[2 * (n_p + 1), 3 * (n_p + 1)] = k_ca
+            self.arr_a[3 * (n_p + 1), 2 * (n_p + 1)] = k_ac
 
         # Set water_pool parameters
         k1a = self.params.water_pool.r1 + k_ac
@@ -52,9 +52,9 @@ class BlochMcConnellSolver:
             k1a += k_ai
             k2a += k_ai
 
-        self.arr_a[0, 0, 0] = -k2a
-        self.arr_a[0, 1 + n_p, 1 + n_p] = -k2a
-        self.arr_a[0, 2 + 2 * n_p, 2 + 2 * n_p] = -k1a
+        self.arr_a[0, 0] = -k2a
+        self.arr_a[1 + n_p, 1 + n_p] = -k2a
+        self.arr_a[2 + 2 * n_p, 2 + 2 * n_p] = -k1a
 
         # Set cest_pools parameters
         for i, pool in enumerate(self.params.cest_pools):
@@ -63,36 +63,36 @@ class BlochMcConnellSolver:
             k_1i = k_ia + pool.r1
             k_2i = k_ia + pool.r2
 
-            self.arr_a[0, 0, i + 1] = k_ia
-            self.arr_a[0, i + 1, 0] = k_ai
-            self.arr_a[0, i + 1, i + 1] = -k_2i
+            self.arr_a[0, i + 1] = k_ia
+            self.arr_a[i + 1, 0] = k_ai
+            self.arr_a[i + 1, i + 1] = -k_2i
 
-            self.arr_a[0, 1 + n_p, i + 2 + n_p] = k_ia
-            self.arr_a[0, i + 2 + n_p, 1 + n_p] = k_ai
-            self.arr_a[0, i + 2 + n_p, i + 2 + n_p] = -k_2i
+            self.arr_a[1 + n_p, i + 2 + n_p] = k_ia
+            self.arr_a[i + 2 + n_p, 1 + n_p] = k_ai
+            self.arr_a[i + 2 + n_p, i + 2 + n_p] = -k_2i
 
-            self.arr_a[0, 2 * (n_p + 1), i + 1 + 2 * (n_p + 1)] = k_ia
-            self.arr_a[0, i + 1 + 2 * (n_p + 1), 2 * (n_p + 1)] = k_ai
-            self.arr_a[0, i + 1 + 2 * (n_p + 1), i + 1 + 2 * (n_p + 1)] = -k_1i
+            self.arr_a[2 * (n_p + 1), i + 1 + 2 * (n_p + 1)] = k_ia
+            self.arr_a[i + 1 + 2 * (n_p + 1), 2 * (n_p + 1)] = k_ai
+            self.arr_a[i + 1 + 2 * (n_p + 1), i + 1 + 2 * (n_p + 1)] = -k_1i
 
     def _init_vector_c(self) -> None:
         """Initialize vector self.C with all parameters from self.params."""
         n_p = self.n_pools
 
-        # initialize vector c
-        self.arr_c = np.zeros((1, self.size, 1), dtype=float)
+        # initialize vector c with dimensions (size, 1)
+        self.arr_c = np.zeros((self.size, 1), dtype=float)
 
         # Set water_pool parameters
-        self.arr_c[0, (n_p + 1) * 2, 0] = self.params.water_pool.f * self.params.water_pool.r1
+        self.arr_c[(n_p + 1) * 2, 0] = self.params.water_pool.f * self.params.water_pool.r1
 
         # Set parameters for all cest pools
-        self.arr_c[0, (n_p + 1) * 2 + 1 : (n_p + 1) * 2 + 1 + len(self.params.cest_pools), 0] = [
+        self.arr_c[(n_p + 1) * 2 + 1 : (n_p + 1) * 2 + 1 + len(self.params.cest_pools), 0] = [
             pool.f * pool.r1 for pool in self.params.cest_pools
         ]
 
         # Set mt_pool parameters
         if self.params.mt_pool is not None:
-            self.arr_c[0, 3 * (n_p + 1), 0] = self.params.mt_pool.f * self.params.mt_pool.r1
+            self.arr_c[3 * (n_p + 1), 0] = self.params.mt_pool.f * self.params.mt_pool.r1
 
     def update_params(self, params: Parameters) -> None:
         """Update matrix self.A according to given Parameters object.
@@ -123,8 +123,8 @@ class BlochMcConnellSolver:
         n_p: int = self.n_pools
 
         # set dw0 due to b0_inhomogeneity
-        self.arr_a[:, 0, 1 + n_p] = [-1 * self.dw0] * 1
-        self.arr_a[:, 1 + n_p, 0] = [self.dw0] * 1
+        self.arr_a[0, 1 + n_p] = -self.dw0
+        self.arr_a[1 + n_p, 0] = self.dw0
 
         # calculate omega_1
         rf_amp_2pi = rf_amp * 2 * np.pi * self.params.system.rel_b1
@@ -132,34 +132,34 @@ class BlochMcConnellSolver:
         rf_amp_2pi_cos = rf_amp_2pi * np.cos(rf_phase)
 
         # set omega_1 for water_pool
-        self.arr_a[:, 0, 2 * (n_p + 1)] = -rf_amp_2pi_sin
-        self.arr_a[:, 2 * (n_p + 1), 0] = rf_amp_2pi_sin
+        self.arr_a[0, 2 * (n_p + 1)] = -rf_amp_2pi_sin
+        self.arr_a[2 * (n_p + 1), 0] = rf_amp_2pi_sin
 
-        self.arr_a[:, n_p + 1, 2 * (n_p + 1)] = rf_amp_2pi_cos
-        self.arr_a[:, 2 * (n_p + 1), n_p + 1] = -rf_amp_2pi_cos
+        self.arr_a[n_p + 1, 2 * (n_p + 1)] = rf_amp_2pi_cos
+        self.arr_a[2 * (n_p + 1), n_p + 1] = -rf_amp_2pi_cos
 
         # set omega_1 for cest pools
-        i_values = np.arange(1, n_p + 1)
-        self.arr_a[:, i_values, i_values + 2 * (n_p + 1)] = -rf_amp_2pi_sin
-        self.arr_a[:, i_values + 2 * (n_p + 1), i_values] = rf_amp_2pi_sin
+        i_values = np.arange(n_p + 1)
+        self.arr_a[i_values, i_values + 2 * (n_p + 1)] = -rf_amp_2pi_sin
+        self.arr_a[i_values + 2 * (n_p + 1), i_values] = rf_amp_2pi_sin
 
-        self.arr_a[:, n_p + 1 + i_values, i_values + 2 * (n_p + 1)] = rf_amp_2pi_cos
-        self.arr_a[:, i_values + 2 * (n_p + 1), n_p + 1 + i_values] = -rf_amp_2pi_cos
+        self.arr_a[n_p + 1 + i_values, i_values + 2 * (n_p + 1)] = rf_amp_2pi_cos
+        self.arr_a[i_values + 2 * (n_p + 1), n_p + 1 + i_values] = -rf_amp_2pi_cos
 
         # set off-resonance terms for water pool
         rf_freq_2pi = rf_freq * 2 * np.pi
-        self.arr_a[:, 0, 1 + n_p] += rf_freq_2pi
-        self.arr_a[:, 1 + n_p, 0] -= rf_freq_2pi
+        self.arr_a[0, 1 + n_p] += rf_freq_2pi
+        self.arr_a[1 + n_p, 0] -= rf_freq_2pi
 
         # set off-resonance terms for cest pools
         dwi_values = np.array([pool.dw for pool in self.params.cest_pools]) * self.w0 - (rf_freq_2pi + self.dw0)
         indices = np.arange(1, n_p + 1)
-        self.arr_a[:, indices, indices + n_p + 1] = -dwi_values
-        self.arr_a[:, indices + n_p + 1, indices] = dwi_values
+        self.arr_a[indices, indices + n_p + 1] = -dwi_values
+        self.arr_a[indices + n_p + 1, indices] = dwi_values
 
         # mt_pool
         if self.params.mt_pool is not None:
-            self.arr_a[:, 3 * (n_p + 1), 3 * (n_p + 1)] = (
+            self.arr_a[3 * (n_p + 1), 3 * (n_p + 1)] = (
                 -self.params.mt_pool.r1
                 - self.params.mt_pool.k
                 - rf_amp_2pi**2 * self.get_mt_shape_at_offset(rf_freq_2pi + self.dw0, self.w0)
@@ -203,7 +203,7 @@ class BlochMcConnellSolver:
         for _ in range(1, j + 1):
             f = np.dot(f, f)
         mag_ = np.dot(f, (mag_ + a_inv_t)) - a_inv_t
-        return mag_[np.newaxis, :, np.newaxis]
+        return mag_[:, np.newaxis]
 
     def solve_equation_expm(self, mag: np.ndarray, dtp: float) -> np.ndarray:
         """Solve one step of BMC equations using the eigenwert ansatz.

@@ -22,10 +22,10 @@ def test_correct_shape(valid_config_dict):
     assert solver.size == params.m_vec.size
 
     # check that arr_a has the correct shape
-    assert solver.arr_a.shape == (1, 9, 9)  # valid_config has 1 water, 2 cest pools
+    assert solver.arr_a.shape == (9, 9)  # valid_config has 1 water, 2 cest pools
 
     # check hat arr_c has the correct shape
-    assert solver.arr_c.shape == (1, 9, 1)  # valid_config has 1 water, 2 cest pools
+    assert solver.arr_c.shape == (9, 1)  # valid_config has 1 water, 2 cest pools
 
 
 def test_correct_attributes(valid_config_dict):
@@ -77,13 +77,13 @@ def test_solve_equation_correct_shape(valid_config_dict):
     solver = BlochMcConnellSolver(params=params, n_offsets=100)
 
     # get initial magnetization in required shape
-    mag = params.m_vec[np.newaxis, :, np.newaxis]
+    mag = params.m_vec[:, np.newaxis]
 
     # solve equation
     res = solver.solve_equation(mag=mag, dtp=1e-3)
 
     # assert that res has the correct shape
-    assert res.shape == (1, 9, 1)
+    assert res.shape == (9, 1)
 
 
 @pytest.mark.parametrize(
