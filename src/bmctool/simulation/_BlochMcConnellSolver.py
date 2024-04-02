@@ -7,14 +7,14 @@ class BlochMcConnellSolver:
     """Solver class for Bloch-McConnell equations."""
 
     def __init__(self, params: Parameters, n_offsets: int) -> None:
-        """Init method for Bloch-McConnell solver.
+        """Initialize Bloch-McConnell solver.
 
         Parameters
         ----------
         params
             Parameters object
         n_offsets
-            number of offsets
+            number of frequency offsets
         """
         self.params: Parameters = params
         self.n_offsets: int = n_offsets
@@ -28,7 +28,7 @@ class BlochMcConnellSolver:
         self.update_params(params)
 
     def _init_matrix_a(self) -> None:
-        """Initialize self.arr_a with all parameters from self.params."""
+        """Initialize matrix self.arr_a with all parameters from self.params."""
         n_p = self.n_pools
 
         # Create a 2D array with dimensions (size, size)
@@ -74,7 +74,7 @@ class BlochMcConnellSolver:
             self.arr_a[i + 1 + 2 * (n_p + 1), i + 1 + 2 * (n_p + 1)] = -k_1i
 
     def _init_vector_c(self) -> None:
-        """Initialize vector self.C with all parameters from self.params."""
+        """Initialize vector self.arr_c with all parameters from self.params."""
         n_p = self.n_pools
 
         # initialize vector c with dimension (size)
@@ -93,12 +93,12 @@ class BlochMcConnellSolver:
             self.arr_c[3 * (n_p + 1)] = self.params.mt_pool.f * self.params.mt_pool.r1
 
     def update_params(self, params: Parameters) -> None:
-        """Update matrix self.A according to given Parameters object.
+        """Update matrix self.arr_a according to given Parameters.
 
         Parameters
         ----------
         params
-            Parameters object
+            Parameters object with updated parameters
         """
         self.params = params
         self.w0 = params.system.b0 * params.system.gamma
@@ -107,16 +107,16 @@ class BlochMcConnellSolver:
         self._init_vector_c()
 
     def update_matrix(self, rf_amp: float, rf_phase: float, rf_freq: float) -> None:
-        """Update matrix self.A according to given parameters.
+        """Update matrix self.arr_a according to given parameters.
 
         Parameters
         ----------
         rf_amp
-            rf amplitude [Hz]
+            Amplitude of the rf pulse [Hz]
         rf_phase
-            rf phase [rad]
+            Phase of the rf pulse [rad]
         rf_freq
-            rf frequency [Hz]
+            Frequency offset of the rf pulse [Hz]
         """
         n_p: int = self.n_pools
 
@@ -209,11 +209,14 @@ class BlochMcConnellSolver:
         return mag
 
     def get_mt_shape_at_offset(self, offset: float, w0: float) -> float:
-        """Calculate the lineshape of the MT pool at the given offset(s).
+        """Calculate the lineshape of the MT pool at the given offset.
 
-        :param offsets: frequency offset(s)
-        :param w0: Larmor frequency of simulated system
-        :return: lineshape of mt pool at given offset(s)
+        Parameters
+        ----------
+        offset
+            frequency offset
+        w0
+            Larmor frequency
         """
         if not self.params.mt_pool:
             return 0
@@ -230,11 +233,13 @@ class BlochMcConnellSolver:
             mt_line = 0.0
         return mt_line  # type: ignore
 
-    def interpolate_sl(self, dw: float) -> float:
+    def interpolate_sl(self, offset: float) -> float:
         """Interpolate MT profile for SuperLorentzian lineshape.
 
-        :param dw: relative frequency offset
-        :return: MT profile at given relative frequency offset
+        Parameters
+        ----------
+        offset
+            frequency offset
         """
         if not self.params.mt_pool:
             return 0
@@ -246,11 +251,19 @@ class BlochMcConnellSolver:
         sqrt_2pi = np.sqrt(2 / np.pi)
         for i in range(n_samples):
             powcu2 = abs(3 * pow(step_size * i, 2) - 1)
-            mt_line += sqrt_2pi * t2 / powcu2 * np.exp(-2 * pow(dw * t2 / powcu2, 2))
+            mt_line += sqrt_2pi * t2 / powcu2 * np.exp(-2 * pow(offset * t2 / powcu2, 2))
         return mt_line * np.pi * step_size
 
     def interpolate_chs(self, dw_pool: float, w0: float) -> float:
-        """Cubic Hermite Spline Interpolation."""
+        """Cubic hermite spline interpolation.
+
+        Parameters
+        ----------
+        dw_pool
+            frequency offset of the MT pool
+        w0
+            Larmor frequency
+        """
         mt_line = 0
         px = np.array([-300 - w0, -100 - w0, 100 + w0, 300 + w0])
         py = np.zeros(px.size)

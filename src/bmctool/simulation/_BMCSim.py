@@ -161,9 +161,9 @@ class BMCSim:
         current_adc
             ADC counter
         accum_phase
-            accumulated phase from previous RF pulses
+            Accumulated phase from previous RF pulses
         mag
-            magnetization vector from previous block
+            Magnetization vector from previous block
 
         Returns
         -------
@@ -198,7 +198,22 @@ class BMCSim:
         return current_adc, accum_phase, mag
 
     def _handle_adc_event(self, current_adc: int, accum_phase: float, mag: np.ndarray) -> tuple[int, float, np.ndarray]:
-        """Handle ADC event: write current mag to output, reset phase and increase ADC counter."""
+        """Handle ADC event: write current mag to output, reset phase and increase ADC counter.
+
+        Parameters
+        ----------
+        current_adc
+            ADC counter
+        accum_phase
+            Accumulated phase from previous block(s)
+        mag
+            Magnetization vector from previous block
+
+        Returns
+        -------
+        Tuple[int, float, np.ndarray]
+            Tuple of ADC counter, accumulated phase and updated magnetization vector
+        """
         # write current magnetization to output
         self.m_out[:, current_adc] = mag
 
@@ -218,7 +233,24 @@ class BMCSim:
         accum_phase: float,
         mag: np.ndarray,
     ) -> tuple[int, float, np.ndarray]:
-        """Handle RF pulse: simulate all steps of RF pulse and update phase."""
+        """Handle RF pulse: simulate all steps of RF pulse and update phase.
+
+        Parameters
+        ----------
+        block
+            PyPulseq block object containing the RF event
+        current_adc
+            ADC counter
+        accum_phase
+            Accumulated phase from previous block(s)
+        mag
+            Magnetization vector from previous block
+
+        Returns
+        -------
+        Tuple[int, float, np.ndarray]
+            Tuple of ADC counter, accumulated phase and updated magnetization vector
+        """
         # resample amplitude and phase of RF pulse according to max_pulse_samples
         amp_, ph_, dtp_, delay_after_pulse = self.prep_rf_simulation(block, self.params.options.max_pulse_samples)
 
@@ -244,7 +276,20 @@ class BMCSim:
         return current_adc, accum_phase, mag
 
     def _handle_spoiler_gradient(self, block: SimpleNamespace, mag: np.ndarray) -> np.ndarray:
-        """Handle spoiler gradient: assume complete spoiling."""
+        """Handle spoiler gradient: assume complete spoiling.
+
+        Parameters
+        ----------
+        block
+            PyPulseq block object containing the z-gradient event
+        mag
+            Magnetization vector from previous block(s)
+
+        Returns
+        -------
+        np.ndarray
+            Updated magnetization vector
+        """
         _dur = block.block_duration
         self.bm_solver.update_matrix(0, 0, 0)
         mag = self.bm_solver.solve_equation(mag=mag, dtp=_dur)
@@ -255,7 +300,20 @@ class BMCSim:
         return mag
 
     def _handle_delay_or_gradient(self, block: SimpleNamespace, mag: np.ndarray) -> np.ndarray:
-        """Handle delay or gradient(s): simulate delay."""
+        """Handle delay or gradient(s): simulate delay.
+
+        Parameters
+        ----------
+        block
+            PyPulseq block object containing the delay or gradient event
+        mag
+            Magnetization vector from previous block(s)
+
+        Returns
+        -------
+        np.ndarray
+            Updated magnetization vector
+        """
         _dur = block.block_duration
         self.bm_solver.update_matrix(0, 0, 0)
         mag = self.bm_solver.solve_equation(mag=mag, dtp=_dur)
