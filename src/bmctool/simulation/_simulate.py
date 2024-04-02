@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
+import numpy as np
+
 from bmctool.parameters import Parameters
 from bmctool.simulation import BMCSim
 from bmctool.utils.eval import plot_z
@@ -61,18 +63,27 @@ def simulate(
     return sim
 
 
-def sim_example() -> None:
-    """Run an example simulation using included config and seq files."""
-    seq_file = Path(__file__).parent.parent / 'library' / 'seq-library' / 'WASABI.seq'
-    config_file = Path(__file__).parent.parent / 'library' / 'sim-library' / 'config_wasabi.yaml'
+def sim_example(show_plot: bool = True) -> tuple[np.ndarray, np.ndarray]:
+    """Run an example simulation using included config and seq files.
 
-    simulate(
+    Parameters
+    ----------
+    show_plot, optional
+        Flag to activate plotting of simulated data, by default True
+    """
+    seq_file = Path(__file__).parent.parent / 'library' / 'seq-library' / 'WASABI.seq'
+    config_file = Path(__file__).parent.parent / 'library' / 'sim-library' / 'config_1pool.yaml'
+
+    sim = simulate(
         config_file=config_file,
         seq_file=seq_file,
-        show_plot=True,
+        show_plot=show_plot,
         title='WASABI example spectrum',
         normalize=True,
     )
+
+    offsets, mz = sim.get_zspec(return_abs=False)
+    return offsets, mz
 
 
 if __name__ == '__main__':
