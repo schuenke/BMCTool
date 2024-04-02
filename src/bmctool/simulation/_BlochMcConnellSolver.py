@@ -1,5 +1,3 @@
-import math
-
 import numpy as np
 
 from bmctool.parameters import Parameters
@@ -79,20 +77,20 @@ class BlochMcConnellSolver:
         """Initialize vector self.C with all parameters from self.params."""
         n_p = self.n_pools
 
-        # initialize vector c with dimensions (size, 1)
-        self.arr_c = np.zeros((self.size, 1), dtype=float)
+        # initialize vector c with dimension (size)
+        self.arr_c = np.zeros((self.size), dtype=float)
 
         # Set water_pool parameters
-        self.arr_c[(n_p + 1) * 2, 0] = self.params.water_pool.f * self.params.water_pool.r1
+        self.arr_c[(n_p + 1) * 2] = self.params.water_pool.f * self.params.water_pool.r1
 
         # Set parameters for all cest pools
-        self.arr_c[(n_p + 1) * 2 + 1 : (n_p + 1) * 2 + 1 + len(self.params.cest_pools), 0] = [
+        self.arr_c[(n_p + 1) * 2 + 1 : (n_p + 1) * 2 + 1 + len(self.params.cest_pools)] = [
             pool.f * pool.r1 for pool in self.params.cest_pools
         ]
 
         # Set mt_pool parameters
         if self.params.mt_pool is not None:
-            self.arr_c[3 * (n_p + 1), 0] = self.params.mt_pool.f * self.params.mt_pool.r1
+            self.arr_c[3 * (n_p + 1)] = self.params.mt_pool.f * self.params.mt_pool.r1
 
     def update_params(self, params: Parameters) -> None:
         """Update matrix self.A according to given Parameters object.
@@ -165,28 +163,33 @@ class BlochMcConnellSolver:
                 - rf_amp_2pi**2 * self.get_mt_shape_at_offset(rf_freq_2pi + self.dw0, self.w0)
             )
 
-    def solve_equation(self, mag: np.ndarray, dtp: float) -> np.ndarray:
+    def solve_equation(self, mag: np.ndarray, dtp: float, n_iter: int = 6) -> np.ndarray:
         """Solve one step of BMC equations using the Padé approximation.
 
-        This function is not used atm.
-        :param mag: magnetization vector before current step
-        :param dtp: duration of current step
-        :return: magnetization vector after current step
-        """
-        arr_a = np.squeeze(self.arr_a)
-        arr_c = np.squeeze(self.arr_c)
-        mag_ = np.squeeze(mag)
-        n_iter = 6  # number of iterations
-        a_inv_t = np.dot(np.linalg.pinv(arr_a), arr_c)
-        a_t = np.dot(arr_a, dtp)
+        Parameters
+        ----------
+        mag
+            magnetization vector before the current step
+        dtp
+            duration of the current step
+        n_iter
+            number of iterations
 
-        _, inf_exp = math.frexp(np.linalg.norm(a_t, ord=np.inf))
+        Returns
+        -------
+        np.ndarray
+            magnetization vector after the current step
+        """
+        a_inv_t = np.dot(np.linalg.pinv(self.arr_a), self.arr_c)
+        a_t = np.dot(self.arr_a, dtp)
+
+        _, inf_exp = np.frexp(np.linalg.norm(a_t, ord=np.inf))
         j = max(0, inf_exp)
         a_t = a_t * (1 / pow(2, j))
 
         x = a_t.copy()
         c = 0.5
-        n = np.identity(arr_a.shape[0])
+        n = np.identity(self.arr_a.shape[0])
         d = n - c * a_t
         n = n + c * a_t
 
@@ -202,8 +205,8 @@ class BlochMcConnellSolver:
         f = np.dot(np.linalg.pinv(d), n)
         for _ in range(1, j + 1):
             f = np.dot(f, f)
-        mag_ = np.dot(f, (mag_ + a_inv_t)) - a_inv_t
-        return mag_[:, np.newaxis]
+        mag = np.dot(f, (mag + a_inv_t)) - a_inv_t
+        return mag
 
     def get_mt_shape_at_offset(self, offset: float, w0: float) -> float:
         """Calculate the lineshape of the MT pool at the given offset(s).

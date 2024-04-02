@@ -123,7 +123,7 @@ class BMCSim:
         accum_phase = 0.0
 
         # create initial magnezitation array with correct shape
-        mag = self.m_init[:, np.newaxis]
+        mag = self.m_init[:]
 
         # get all block events from pypulseq sequence
         block_events = self.seq.block_events
@@ -200,7 +200,7 @@ class BMCSim:
     def _handle_adc_event(self, current_adc: int, accum_phase: float, mag: np.ndarray) -> tuple[int, float, np.ndarray]:
         """Handle ADC event: write current mag to output, reset phase and increase ADC counter."""
         # write current magnetization to output
-        self.m_out[:, current_adc] = np.squeeze(mag)
+        self.m_out[:, current_adc] = mag
 
         # reset phase and increase ADC counter
         accum_phase = 0.0
@@ -208,7 +208,7 @@ class BMCSim:
 
         # reset magnetization if reset_init_mag is True
         if self.params.options.reset_init_mag:
-            mag = self.m_init[np.newaxis, :, np.newaxis]
+            mag = self.m_init[:]
         return current_adc, accum_phase, mag
 
     def _handle_rf_pulse(
@@ -250,7 +250,7 @@ class BMCSim:
         mag = self.bm_solver.solve_equation(mag=mag, dtp=_dur)
 
         # set x and y components of the water pool and all cest pools to zero
-        mag[: ((len(self.params.cest_pools) + 1) * 2), 0] = 0.0
+        mag[: ((len(self.params.cest_pools) + 1) * 2)] = 0.0
 
         return mag
 
