@@ -123,7 +123,7 @@ class BMCSim:
         accum_phase = 0.0
 
         # create initial magnezitation array with correct shape
-        mag = self.m_init[np.newaxis, :, np.newaxis]
+        mag = self.m_init[:, np.newaxis]
 
         # get all block events from pypulseq sequence
         block_events = self.seq.block_events
