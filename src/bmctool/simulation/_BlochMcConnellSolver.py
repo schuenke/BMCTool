@@ -205,51 +205,6 @@ class BlochMcConnellSolver:
         mag_ = np.dot(f, (mag_ + a_inv_t)) - a_inv_t
         return mag_[:, np.newaxis]
 
-    def solve_equation_expm(self, mag: np.ndarray, dtp: float) -> np.ndarray:
-        """Solve one step of BMC equations using the eigenwert ansatz.
-
-        :param mag: magnetization vector before current step
-        :param dtp: duration of current step
-        :return: magnetization vector after current step
-        """
-        arr_a = self.arr_a
-        arr_c = self.arr_c
-
-        if not arr_a.ndim == arr_c.ndim == mag.ndim:
-            raise Exception("Matrix dimensions don't match. That's not gonna work.")
-
-        # solve matrix exponential for current timestep
-        ex = self._solve_expm(arr_a, dtp)
-
-        # because np.linalg.lstsq(A_,b_) doesn't work for stacked arrays, it is calculated as np.linalg.solve(
-        # A_.T.dot(A_), A_.T.dot(b_)). For speed reasons, the transpose of A_ (A_.T) is pre-calculated and the
-        # .dot notation is replaced by the Einstein summation (np.einsum).
-        arr_at = arr_a.T
-        tmps = np.linalg.solve(
-            np.einsum('kji,ikl->ijl', arr_at, arr_a),
-            np.einsum('kji,ikl->ijl', arr_at, arr_c),
-        )
-
-        # solve equation for magnetization M: np.einsum('ijk,ikl->ijl') is used to calculate the matrix
-        # multiplication for each element along the first (=offset) axis.
-        mag = np.real(np.einsum('ijk,ikl->ijl', ex, mag + tmps) - tmps)
-        return mag
-
-    @staticmethod
-    def _solve_expm(matrix: np.ndarray, dtp: float) -> np.ndarray:
-        """Solve the matrix exponential.
-
-        This version is faster than scipy expm for typical BMC matrices.
-        :param matrix: matrix representation of Bloch-McConnell
-            equations
-        :param dtp: duration of current step
-        :return: solution of matrix exponential
-        """
-        vals, vects = np.linalg.eig(matrix * dtp)
-        tmp = np.einsum('ijk,ikl->ijl', vects, np.apply_along_axis(np.diag, -1, np.exp(vals)))
-        inv = np.linalg.inv(vects)
-        return np.einsum('ijk,ikl->ijl', tmp, inv)  # type: ignore
-
     def get_mt_shape_at_offset(self, offset: float, w0: float) -> float:
         """Calculate the lineshape of the MT pool at the given offset(s).
 
