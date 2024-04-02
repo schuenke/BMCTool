@@ -1,0 +1,49 @@
+################################################################################
+# ---- Simulation settings for (py)pulseq-cest BlochMcConnell simulations ---- #
+# ---------------------- https://pulseq-cest.github.io/ ---------------------- #
+################################################################################
+
+# Simulation parameters for a 5 pool model at 3T with
+# - water pool
+# - 2 CEST pools
+# - 1 NOE pool
+# - 1 MT pool
+
+### Pool settings
+#         f: relative pool size fraction (float)
+#        t1: longitudinal relaxation time T1 = 1/R1 [s] (float)
+#        t2: transversal relaxation time T2 = 1/R2 [s] (float)
+#         k: exchange rate [Hz] to water pool (MT and CEST pools only) (float)
+#        dw: chemical shift relative to water [ppm] (MT/CEST pools only) (float)
+
+# water pool
+water_pool: { f: 1.0, t1: 1.0, t2: 0.040 }
+
+# CEST, NOE, MT pools
+cest_pool:
+  {
+    "amide": { f: 0.0009009, t1: 1.0, t2: 0.1, k: 50, dw: 3.5 },
+    "guanidine_1": { f: 0.0009009, t1: 1.0, t2: 0.1, k: 1000, dw: 2 },
+    "NOE_1": { f: 0.0045, t1: 1.3, t2: 0.005, k: 20, dw: -3 },
+    "MT": { f: 0.1351, t1: 1.0, t2: 4.0e-05, k: 30, dw: -3.0 },
+  }
+
+### Scanner settings
+#       b0: field strength [T] (float)
+#    gamma: gyromagnetic ratio [rad / uT], default 267.5153 (float)
+# b0_inhom: field inhomogeneity [ppm], default 0.0 (float)
+#   rel_b1: relative amp inhomogeneity, default 1.0 (float)
+b0: 3
+gamma: 267.5154109126009
+b0_inhom: 0.0
+rel_b1: 1
+
+### Additional simulation settings
+#           verbose: verbose output, default False (bool)
+#    reset_init_mag: reset magnetization after each readout, default True (bool)
+#             scale: reset of magnetization to this value, default is 1 (float)
+# max_pulse_samples: max. number of samples for shaped pulses, default 500 (int)
+verbose: False
+reset_init_mag: True
+scale: 1
+max_pulse_samples: 200
