@@ -23,7 +23,8 @@ dependencies = [
     "matplotlib",
     "tqdm",
     "PyYAML",
-    "pypulseq@git+https://github.com/imr-framework/pypulseq",
+    # "pypulseq@git+https://github.com/imr-framework/pypulseq",
+    "pypulseq",
 ]
 
 [project.optional-dependencies]
