@@ -9,7 +9,7 @@ __pycache__/
 # ignore all files and folders starting with a dot and define exceptions
 .*
 .*/
-!/github
+!/.github
 !.gitignore
 !.gitattributes
 !.editorconfig
