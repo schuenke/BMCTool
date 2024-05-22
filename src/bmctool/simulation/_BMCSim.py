@@ -290,7 +290,7 @@ class BMCSim:
         np.ndarray
             Updated magnetization vector
         """
-        _dur = block.block_duration
+        _dur = pp.calc_duration(block)
         self.bm_solver.update_matrix(0, 0, 0)
         mag = self.bm_solver.solve_equation(mag=mag, dtp=_dur)
 
