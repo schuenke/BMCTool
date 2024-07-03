@@ -31,6 +31,6 @@ repos:
     hooks:
       - id: mypy
         additional_dependencies:
-          - numpy
+          - numpy<2.0.0
           - types-pyyaml
         exclude: docs/.*|tests/.*
