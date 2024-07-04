@@ -22,7 +22,7 @@ This repository uses a *pyproject.toml* file to specify all the requirements.
 
 
 src/bmctool structure
-===================
+=====================
 **library**
     Some example sequence and config files used in the examples/tests.
 

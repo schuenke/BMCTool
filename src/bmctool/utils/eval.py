@@ -123,7 +123,7 @@ def plot_z(
     x_label: str = 'offsets [ppm]',
     y_label: str = 'signal',
 ) -> Figure:
-    """plot_z Plot Z-spectrum according to the given parameters.
+    """Plot Z-spectrum according to the given parameters.
 
     Parameters
     ----------

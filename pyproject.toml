@@ -7,7 +7,7 @@ name = "BMCTool"
 version = "0.7.0"
 description = "A python tool to perform Bloch-McConnell (BMC) simulations."
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 license = { file = "LICENSE" }
 keywords = ["MRI, Bloch, Bloch-McConnell, CEST, simulation"]
 authors = [{ name = "Patrick Schuenke", email = "patrick.schuenke@ptb.de" }]
@@ -36,7 +36,7 @@ test = [
     "pytest-xdist",
 ]
 lint = ["mypy", "ruff", "pre-commit"]
-docs = ["sphinx", "pydata-sphinx-theme", "sphinx-pyproject"]
+docs = ["sphinx", "sphinx_rtd_theme", "sphinx-pyproject"]
 
 [project.urls]
 "repository" = "https://github.com/schuenke/BMCTool"

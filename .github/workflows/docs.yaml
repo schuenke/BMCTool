@@ -30,7 +30,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install --upgrade pip
-          pip install ".[docs]"
+          pip install --upgrade --upgrade-strategy "eager" .[docs]
 
       - name: Build docs
         run: sphinx-build -b html ./docs/source ./docs/build/html

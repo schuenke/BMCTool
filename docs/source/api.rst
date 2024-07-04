@@ -1,11 +1,11 @@
 API
 ===
 
-This is the BMCTool api documentation.
+This is Application Programming Interface (API) documentation for BMCTool.
 
 
 BMCTool Parameters
-----------
+------------------
 
 .. autosummary::
    :toctree: _autosummary
@@ -16,7 +16,7 @@ BMCTool Parameters
 
 
 BMCTool Simulation
---------------
+------------------
 
 .. autosummary::
    :toctree: _autosummary
@@ -27,7 +27,7 @@ BMCTool Simulation
 
 
 BMCTool Utilities
----------------
+-----------------
 
 .. autosummary::
    :toctree: _autosummary

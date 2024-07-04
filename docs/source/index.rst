@@ -1,7 +1,7 @@
 .. BMCTool documentation
 
 Welcome to BMCTool's documentation!
-=================================
+===================================
 
 .. toctree::
    :maxdepth: 1
