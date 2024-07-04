@@ -61,6 +61,7 @@ class Pool(ABC):
         Pool.dw.fset(self, dw)  # type: ignore[attr-defined]
 
     def __eq__(self, other: object) -> bool:
+        """Check if two Pool instances are equal."""
         if not isinstance(other, self.__class__):
             return NotImplemented
         if self.__slots__ == other.__slots__:

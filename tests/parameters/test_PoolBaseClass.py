@@ -1,5 +1,5 @@
 import pytest
-from bmctool.parameters._Pool import Pool
+from bmctool.parameters.Pool import Pool
 
 
 @pytest.mark.parametrize(

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import typing
 
-from bmctool.parameters import Pool
+from bmctool.parameters.Pool import Pool
 
 
 class MTPool(Pool):

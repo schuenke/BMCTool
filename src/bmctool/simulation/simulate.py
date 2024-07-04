@@ -1,11 +1,13 @@
+"""Functions to run BMCTool simulations based on given seq-file and config file."""
+
 from __future__ import annotations
 
 from pathlib import Path
 
 import numpy as np
 
-from bmctool.parameters import Parameters
-from bmctool.simulation import BMCSim
+from bmctool.parameters.Parameters import Parameters
+from bmctool.simulation.BMCSim import BMCSim
 from bmctool.utils.eval import plot_z
 
 

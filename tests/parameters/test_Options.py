@@ -1,5 +1,5 @@
 import pytest
-from bmctool.parameters._Options import Options
+from bmctool.parameters.Options import Options
 
 
 @pytest.mark.parametrize(

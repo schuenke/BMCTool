@@ -1,7 +1,7 @@
 from pathlib import Path
 
 import numpy as np
-from bmctool.simulation._simulate import sim_example
+from bmctool.simulation.simulate import sim_example
 
 
 def test_sim_example():

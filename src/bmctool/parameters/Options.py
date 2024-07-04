@@ -8,6 +8,8 @@ from bmctool.utils import truthy_check
 
 
 class Options:
+    """Class to store simulation options."""
+
     __slots__ = ['_verbose', '_reset_init_mag', '_scale', '_max_pulse_samples']
 
     def __init__(
@@ -37,6 +39,7 @@ class Options:
         self.max_pulse_samples = max_pulse_samples
 
     def __eq__(self, other: object) -> bool:
+        """Check if two Options instances are equal."""
         if not isinstance(other, self.__class__):
             return NotImplemented
         if self.__slots__ == other.__slots__:

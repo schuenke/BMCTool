@@ -1,5 +1,5 @@
 import pytest
-from bmctool.parameters._WaterPool import WaterPool
+from bmctool.parameters.WaterPool import WaterPool
 
 
 @pytest.mark.parametrize(

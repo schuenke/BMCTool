@@ -1,6 +1,8 @@
+"""Bloch-McConnell equations solver class."""
+
 import numpy as np
 
-from bmctool.parameters import Parameters
+from bmctool.parameters.Parameters import Parameters
 
 
 class BlochMcConnellSolver:

@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from bmctool.parameters import Pool
+from bmctool.parameters.Pool import Pool
 
 
 class WaterPool(Pool):

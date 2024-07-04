@@ -37,6 +37,7 @@ class System:
         self.rel_b1 = rel_b1
 
     def __eq__(self, other: object) -> bool:
+        """Check if two System instances are equal."""
         if not isinstance(other, self.__class__):
             return NotImplemented
         if self.__slots__ == other.__slots__:

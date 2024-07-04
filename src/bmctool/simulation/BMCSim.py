@@ -1,3 +1,5 @@
+"""BMCSim class for Bloch-McConnell simulations using Pulseq sequences."""
+
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -5,12 +7,12 @@ import numpy as np
 import pypulseq as pp
 from tqdm import tqdm
 
-from bmctool.parameters import Parameters
-from bmctool.simulation._BlochMcConnellSolver import BlochMcConnellSolver
+from bmctool.parameters.Parameters import Parameters
+from bmctool.simulation.BlochMcConnellSolver import BlochMcConnellSolver
 
 
 class BMCSim:
-    """Class for Bloch-McConnell simulations using PyPulseq sequences."""
+    """Class for Bloch-McConnell simulations using Pulseq sequences."""
 
     def __init__(
         self,

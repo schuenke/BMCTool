@@ -8,11 +8,11 @@ from pathlib import Path
 import numpy as np
 import yaml
 
-from bmctool.parameters import CESTPool
-from bmctool.parameters import MTPool
-from bmctool.parameters import Options
-from bmctool.parameters import System
-from bmctool.parameters import WaterPool
+from bmctool.parameters.CESTPool import CESTPool
+from bmctool.parameters.MTPool import MTPool
+from bmctool.parameters.Options import Options
+from bmctool.parameters.System import System
+from bmctool.parameters.WaterPool import WaterPool
 
 
 @dataclasses.dataclass(slots=True)
@@ -40,6 +40,7 @@ class Parameters:
     options: Options
 
     def __eq__(self, other: object) -> bool:
+        """Check if two Parameters instances are equal."""
         if not isinstance(other, self.__class__):
             return NotImplemented
         if self.__slots__ == other.__slots__:
@@ -53,12 +54,12 @@ class Parameters:
         return False
 
     @property
-    def num_cest_pools(self):
+    def num_cest_pools(self) -> int:
         """Get the number of pools."""
         return len(self.cest_pools) if self.cest_pools else 0
 
     @property
-    def mz_loc(self):
+    def mz_loc(self) -> int:
         """Get the location of the water z-magnetization in the BMC matrix."""
         if not self.water_pool:
             raise Exception('No water pool defined. mz_loc cannot be determined')
@@ -67,7 +68,7 @@ class Parameters:
         return 2 + 2 * len(self.cest_pools)
 
     @property
-    def m_vec(self):
+    def m_vec(self) -> np.ndarray:
         """Get the initial magnetization vector (fully relaxed)."""
         if not self.water_pool:
             raise Exception('No water pool defined. m_vec cannot be determined')
