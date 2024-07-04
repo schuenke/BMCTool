@@ -95,3 +95,13 @@ def test_from_dict_classmethod():
     a = CESTPool.from_dict(d)
     b = CESTPool(**d)
     assert a == b
+
+
+def test_k_value_setter():
+    """Test that k value is set correctly."""
+    a = CESTPool(r1=1.0, r2=2.0, k=3.0, f=0.5, dw=5.0)
+    assert a.k == 3.0
+    a.k = 4.0
+    assert a.k == 4.0
+    with pytest.raises(ValueError):
+        a.k = -4.0
