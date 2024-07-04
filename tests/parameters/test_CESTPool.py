@@ -59,7 +59,8 @@ def test_from_invalid_types(r1, r2, k, f, dw, t1, t2):
     [
         (1.0, 2.0, 3.0, 4.0, 5.0, None, None),  # f not between 0 and 1
         (-1.0, 2.0, 3.0, 0.5, 5.0, None, None),  # r1 negative
-        (None, 2.0, -3.0, 4.0, 5.0, -1.0, None),  # t1 negative
+        (None, 2.0, 3.0, 4.0, 5.0, -1.0, None),  # t1 negative
+        (None, 2.0, -3.0, 4.0, 5.0, 1.0, None),  # k negative
     ],
 )
 def test_from_invalid_values(r1, r2, k, f, dw, t1, t2):
