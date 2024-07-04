@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "BMCTool"
-version = "0.7.0"
+version = "1.0.0"
 description = "A python tool to perform Bloch-McConnell (BMC) simulations."
 readme = "README.md"
 requires-python = ">=3.11"
@@ -13,7 +13,6 @@ keywords = ["MRI, Bloch, Bloch-McConnell, CEST, simulation"]
 authors = [{ name = "Patrick Schuenke", email = "patrick.schuenke@ptb.de" }]
 classifiers = [
     "Programming Language :: Python",
-    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3 :: Only",
