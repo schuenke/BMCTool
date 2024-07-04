@@ -158,7 +158,7 @@ def plot_z(
         m_z, offsets = normalize_data(m_z, offsets, norm_threshold)
 
     fig, ax1 = plt.subplots()
-    ax1.set_ylim([round(min(m_z) - 0.05, 2), round(max(m_z) + 0.05, 2)])
+    ax1.set_ylim((round(min(m_z) - 0.05, 2), round(max(m_z) + 0.05, 2)))
     ax1.set_ylabel(y_label, color='b')
     ax1.set_xlabel(x_label)
     plt.plot(offsets, m_z, '.--', label='$Z$', color='b')
@@ -170,9 +170,9 @@ def plot_z(
         mtr_asym = calc_mtr_asym(m_z=m_z, offsets=offsets)
 
         ax2 = ax1.twinx()
-        ax2.set_ylim([round(min(mtr_asym) - 0.01, 2), round(max(mtr_asym) + 0.01, 2)])
+        ax2.set_ylim((round(min(mtr_asym) - 0.01, 2), round(max(mtr_asym) + 0.01, 2)))
         ax2.set_ylabel('$MTR_{asym}$', color='y')
-        ax2.plot(offsets, mtr_asym, label='$MTR_{asym}$', color='y')
+        ax2.plot(offsets, mtr_asym, label='$MTR_{asym}$', color='y')  # type: ignore
         ax2.tick_params(axis='y', labelcolor='y')
         fig.tight_layout()
 
