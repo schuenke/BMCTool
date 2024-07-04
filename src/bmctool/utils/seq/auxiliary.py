@@ -3,7 +3,7 @@
 from pathlib import Path
 
 import numpy as np
-from pypulseq.Sequence.read_seq import __read_definitions as read_definitions
+from pypulseq.Sequence.read_seq import __read_definitions as read_definitions  # type: ignore
 from pypulseq.Sequence.read_seq import __strip_line as strip_line
 
 

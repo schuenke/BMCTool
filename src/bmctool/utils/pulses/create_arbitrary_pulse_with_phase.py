@@ -3,7 +3,7 @@
 from types import SimpleNamespace
 
 import numpy as np
-import pypulseq as pp
+import pypulseq as pp  # type: ignore
 
 
 def create_arbitrary_pulse_with_phase(

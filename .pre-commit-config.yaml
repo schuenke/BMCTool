@@ -2,8 +2,8 @@ default_language_version:
   python: python3
 
 repos:
-  - repo: 'https://github.com/pre-commit/pre-commit-hooks'
-    rev: v4.5.0
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
     hooks:
       - id: check-docstring-first
       - id: check-merge-conflict
@@ -14,23 +14,27 @@ repos:
       - id: mixed-line-ending
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.3.4
+    rev: v0.4.7
     hooks:
       - id: ruff # linter
         args: [--fix]
       - id: ruff-format # formatter
 
   - repo: https://github.com/crate-ci/typos
-    rev: v1.19.0
+    rev: v1.21.0
     hooks:
       - id: typos
 
-
-  - repo: 'https://github.com/pre-commit/mirrors-mypy'
-    rev: v1.9.0
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.10.0
     hooks:
       - id: mypy
+        pass_filenames: false
+        always_run: true
+        args: [src, tests]
         additional_dependencies:
-          - numpy<2.0.0
+          - numpy<2.0
+          - pytest
+          - pypulseq
           - types-pyyaml
-        exclude: docs/.*|tests/.*
+          - types-tqdm

@@ -3,8 +3,7 @@
 from types import SimpleNamespace
 
 import numpy as np
-import pypulseq as pp
-from pypulseq import make_gauss_pulse
+import pypulseq as pp  # type: ignore
 
 
 def hanning(n: int) -> np.ndarray:
@@ -49,7 +48,7 @@ def make_gauss_hanning(
     """
     system = system or pp.Opts()
 
-    rf_pulse = make_gauss_pulse(flip_angle=flip_angle, duration=pulse_duration, system=system, phase_offset=0)
+    rf_pulse = pp.make_gauss_pulse(flip_angle=flip_angle, duration=pulse_duration, system=system, phase_offset=0)
     n_signal = rf_pulse.signal.size
     hanning_shape = hanning(n_signal)
     rf_pulse.signal = hanning_shape / np.trapz(hanning_shape, x=rf_pulse.t) * (flip_angle / (2 * np.pi))

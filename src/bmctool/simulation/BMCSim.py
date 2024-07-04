@@ -4,7 +4,7 @@ from pathlib import Path
 from types import SimpleNamespace
 
 import numpy as np
-import pypulseq as pp
+import pypulseq as pp  # type: ignore
 from tqdm import tqdm
 
 from bmctool.parameters.Parameters import Parameters
@@ -132,14 +132,13 @@ class BMCSim:
 
         # create loop with or w/o tqdm status bar depending on verbose settings
         if self.verbose:
-            loop_block_events = tqdm(range(1, len(block_events) + 1), desc='BMCTool simulation')
+            for block_event in tqdm(range(1, len(block_events) + 1), desc='BMCTool simulation'):
+                block = self.seq.get_block(block_event)
+                current_adc, accum_phase, mag = self._simulate_block(block, current_adc, accum_phase, mag)
         else:
-            loop_block_events = range(1, len(block_events) + 1)
-
-        # run simulation for all blocks
-        for block_event in loop_block_events:
-            block = self.seq.get_block(block_event)
-            current_adc, accum_phase, mag = self._simulate_block(block, current_adc, accum_phase, mag)
+            for block_event in range(1, len(block_events) + 1):
+                block = self.seq.get_block(block_event)
+                current_adc, accum_phase, mag = self._simulate_block(block, current_adc, accum_phase, mag)
 
     def _simulate_block(
         self,

@@ -3,7 +3,7 @@
 from types import SimpleNamespace
 
 import numpy as np
-import pypulseq as pp
+import pypulseq as pp  # type: ignore
 
 from bmctool import GAMMA_HZ
 from bmctool.utils.pulses.calculate_phase import calculate_phase

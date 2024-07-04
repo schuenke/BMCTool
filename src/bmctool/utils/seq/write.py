@@ -8,7 +8,7 @@ from shutil import move
 from tempfile import mkstemp
 
 import numpy as np
-from pypulseq.Sequence.sequence import Sequence
+from pypulseq import Sequence  # type: ignore
 
 
 def round_number(number: float, significant_digits: int) -> float:

@@ -57,7 +57,7 @@ def test_slots_property():
     """Test that __slots__ is properly set."""
     a = WaterPool(r1=1.0, r2=2.0, f=0.3)
     with pytest.raises(AttributeError):
-        a.new_attr = 1.0
+        a.new_attr = 1.0  # type: ignore
 
 
 def test_dw_is_zero():
