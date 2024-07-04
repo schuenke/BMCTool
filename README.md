@@ -26,12 +26,13 @@ To make sure that the installation was successful, you can run an example simula
 the installation using pip and GitHub. To run an example simulation, simply execute the following code:
 
 ```python
-from bmctool.simulate import sim_example
+from src.bmctool.simulate import sim_example
+
 sim_example()
 ```
 
-The sim_example function uses the [WASABI.seq](bmctool/library/seq-library/WASABI.seq)
-and [config_wasabi.yaml](bmctool/library/sim-library/config_wasabi.yaml) example files. The generated plot should look
+The sim_example function uses the [WASABI.seq](src/bmctool/library/seq-library/WASABI.seq)
+and [config_wasabi.yaml](src/bmctool/library/sim-library/config_wasabi.yaml) example files. The generated plot should look
 like this:
 
 ![](https://raw.githubusercontent.com/schuenke/BMCTool/master/examples/example_wasabi_spectrum.png "Example WASABI spectrum")
@@ -40,8 +41,8 @@ like this:
 
 All simulations using the BMCTool require a config file (in the *yaml* format) that includes all simulation settings
 and a sequence file (in the *seq* format), which defines the events to be simulated. An
-[example seq-file](bmctool/library/seq-library/WASABI.seq) and an
-[example yaml file](bmctool/library/sim-library/config_wasabi.yaml) can be found in the [library](bmctool/library)
+[example seq-file](src/bmctool/library/seq-library/WASABI.seq) and an
+[example yaml file](src/bmctool/library/sim-library/config_wasabi.yaml) can be found in the [library](src/bmctool/library)
 subfolder. For more information about config and sequence files and about the
 [pulseq-cest-library](library/pulseq-cest-library), where both types of files are shared, please read the
 **Pulseq-CEST Library** section below.
@@ -50,7 +51,8 @@ If you created your own files or downloaded them from the [pulseq-cest-library](
 you can start the simulation by running the following code:
 
 ```python
-from bmctool.simulate import simulate
+from src.bmctool.simulate import simulate
+
 config_path = '<path_to_your_config>'  # can be a str or a Path
 seq_path = '<path_to_your_sequence>'  # can be a str or a Path
 sim = simulate(config_file=config_path, seq_file=seq_path, show_plot=True)
@@ -59,12 +61,12 @@ sim = simulate(config_file=config_path, seq_file=seq_path, show_plot=True)
 The simulate function accepts several additional keyword arguments (**kwargs), that allow to adjust the plot.
 These are for example *normalize* (bool: toggle normalization), *norm_threshold* (value/list/array: threshold for
 normalization offsets), *offsets* (list/array: manually defined x-values), *invert_ax* (bool: toggle invert ax),
-*plot_mtr_asym* (bool:toggle plot MTR_asym) and *title*, *x_label*, *y_label* to control the lables.
+*plot_mtr_asym* (bool:toggle plot MTR_asym) and *title*, *x_label*, *y_label* to control the labels.
 
 The [examples folder](examples) in the [BMCTool GitHub repository](https://github.com/schuenke/BMCTool) contains some
 further simulation examples as well as an example script to create your own *WASABI.seq* file. _Please note that this
 file will include an additional normalization offset at -300 ppm. To use this for normalization in the simulation,
-simply add the kewword argument ``normalize=True`` to the simulate function._
+simply add the keyword argument ``normalize=True`` to the simulate function._
 
 ## Pulseq-CEST Project
 
