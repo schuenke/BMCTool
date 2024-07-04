@@ -1,7 +1,5 @@
 """Definition of System dataclass."""
 
-from __future__ import annotations
-
 import operator
 
 

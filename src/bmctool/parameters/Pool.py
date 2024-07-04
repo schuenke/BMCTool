@@ -1,9 +1,8 @@
 """Definition of Pool base class."""
 
-from __future__ import annotations
-
 import operator
 from abc import ABC
+from typing import Self
 
 
 class Pool(ABC):
@@ -133,6 +132,6 @@ class Pool(ABC):
         self.r2 = 1 / float(value)
 
     @classmethod
-    def from_dict(cls, data: dict) -> Pool:
+    def from_dict(cls, data: dict) -> Self:
         """Create Pool instance from dictionary."""
         return cls(**data)

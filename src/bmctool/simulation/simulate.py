@@ -1,7 +1,5 @@
 """Functions to run BMCTool simulations based on given seq-file and config file."""
 
-from __future__ import annotations
-
 from pathlib import Path
 
 import numpy as np

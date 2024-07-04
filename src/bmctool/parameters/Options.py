@@ -1,7 +1,5 @@
 """Definition of Options class."""
 
-from __future__ import annotations
-
 import operator
 
 from bmctool.utils import truthy_check

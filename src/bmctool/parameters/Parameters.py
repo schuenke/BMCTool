@@ -1,9 +1,8 @@
 """Definition of Params dataclass."""
 
-from __future__ import annotations
-
 import dataclasses
 from pathlib import Path
+from typing import Self
 
 import numpy as np
 import yaml
@@ -87,7 +86,7 @@ class Parameters:
         return m_vec * self.options.scale
 
     @classmethod
-    def from_dict(cls, config: dict) -> Parameters:
+    def from_dict(cls, config: dict) -> Self:
         """Create a Parameters instance from a dictionary.
 
         Parameters
@@ -121,7 +120,7 @@ class Parameters:
         return cls(water_pool, cest_pools, mt_pool, system, options)
 
     @classmethod
-    def from_yaml(cls, yaml_file: str | Path) -> Parameters:
+    def from_yaml(cls, yaml_file: str | Path) -> Self:
         """Create a Parameters instance from a yaml config file.
 
         Parameters

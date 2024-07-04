@@ -1,7 +1,5 @@
 """Definition of MTPool class."""
 
-from __future__ import annotations
-
 import typing
 
 from bmctool.parameters.Pool import Pool

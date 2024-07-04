@@ -1,7 +1,5 @@
 """Definition of CESTPool class."""
 
-from __future__ import annotations
-
 from bmctool.parameters.Pool import Pool
 
 
