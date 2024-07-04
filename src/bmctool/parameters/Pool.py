@@ -2,7 +2,8 @@
 
 import operator
 from abc import ABC
-from typing import Self
+
+from typing_extensions import Self
 
 
 class Pool(ABC):

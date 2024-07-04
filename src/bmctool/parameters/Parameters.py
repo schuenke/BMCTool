@@ -2,10 +2,10 @@
 
 import dataclasses
 from pathlib import Path
-from typing import Self
 
 import numpy as np
 import yaml
+from typing_extensions import Self
 
 from bmctool.parameters.CESTPool import CESTPool
 from bmctool.parameters.MTPool import MTPool
