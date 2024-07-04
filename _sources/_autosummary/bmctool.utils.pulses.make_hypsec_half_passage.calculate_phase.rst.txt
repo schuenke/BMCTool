@@ -1,0 +1,6 @@
+bmctool.utils.pulses.make\_hypsec\_half\_passage.calculate\_phase
+=================================================================
+
+.. currentmodule:: bmctool.utils.pulses.make_hypsec_half_passage
+
+.. autofunction:: calculate_phase

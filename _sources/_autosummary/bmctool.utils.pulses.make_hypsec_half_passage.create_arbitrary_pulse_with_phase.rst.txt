@@ -1,0 +1,6 @@
+bmctool.utils.pulses.make\_hypsec\_half\_passage.create\_arbitrary\_pulse\_with\_phase
+======================================================================================
+
+.. currentmodule:: bmctool.utils.pulses.make_hypsec_half_passage
+
+.. autofunction:: create_arbitrary_pulse_with_phase

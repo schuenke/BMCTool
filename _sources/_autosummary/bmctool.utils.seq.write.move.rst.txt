@@ -1,0 +1,6 @@
+bmctool.utils.seq.write.move
+============================
+
+.. currentmodule:: bmctool.utils.seq.write
+
+.. autofunction:: move

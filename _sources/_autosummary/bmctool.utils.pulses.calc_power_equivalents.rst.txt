@@ -1,0 +1,39 @@
+bmctool.utils.pulses.calc\_power\_equivalents
+=============================================
+
+.. automodule:: bmctool.utils.pulses.calc_power_equivalents
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      calc_amplitude_equivalent
+      calc_power_equivalent
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: class_template.rst
+   
+      SimpleNamespace
+   
+   
+
+   
+   
+   
+
+
+

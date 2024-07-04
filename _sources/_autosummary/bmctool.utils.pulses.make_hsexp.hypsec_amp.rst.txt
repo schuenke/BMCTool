@@ -1,0 +1,6 @@
+bmctool.utils.pulses.make\_hsexp.hypsec\_amp
+============================================
+
+.. currentmodule:: bmctool.utils.pulses.make_hsexp
+
+.. autofunction:: hypsec_amp

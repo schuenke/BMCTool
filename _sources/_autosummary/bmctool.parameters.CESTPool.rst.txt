@@ -1,0 +1,38 @@
+bmctool.parameters.CESTPool
+===========================
+
+.. currentmodule:: bmctool.parameters
+
+.. autoclass:: CESTPool
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~CESTPool.__init__
+      ~CESTPool.from_dict
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~CESTPool.dw
+      ~CESTPool.f
+      ~CESTPool.k
+      ~CESTPool.r1
+      ~CESTPool.r2
+      ~CESTPool.t1
+      ~CESTPool.t2
+   
+   

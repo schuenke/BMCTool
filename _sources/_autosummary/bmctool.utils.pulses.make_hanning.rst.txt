@@ -1,0 +1,40 @@
+bmctool.utils.pulses.make\_hanning
+==================================
+
+.. automodule:: bmctool.utils.pulses.make_hanning
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      calc_hanning
+      hanning
+      make_gauss_hanning
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: class_template.rst
+   
+      SimpleNamespace
+   
+   
+
+   
+   
+   
+
+
+

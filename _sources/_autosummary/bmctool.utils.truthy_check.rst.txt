@@ -1,0 +1,6 @@
+bmctool.utils.truthy\_check
+===========================
+
+.. currentmodule:: bmctool.utils
+
+.. autofunction:: truthy_check

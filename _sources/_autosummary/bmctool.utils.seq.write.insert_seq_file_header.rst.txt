@@ -1,0 +1,6 @@
+bmctool.utils.seq.write.insert\_seq\_file\_header
+=================================================
+
+.. currentmodule:: bmctool.utils.seq.write
+
+.. autofunction:: insert_seq_file_header

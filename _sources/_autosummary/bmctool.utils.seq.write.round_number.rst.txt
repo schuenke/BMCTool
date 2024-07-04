@@ -1,0 +1,6 @@
+bmctool.utils.seq.write.round\_number
+=====================================
+
+.. currentmodule:: bmctool.utils.seq.write
+
+.. autofunction:: round_number

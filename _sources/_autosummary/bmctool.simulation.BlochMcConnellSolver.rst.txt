@@ -1,0 +1,31 @@
+bmctool.simulation.BlochMcConnellSolver
+=======================================
+
+.. currentmodule:: bmctool.simulation
+
+.. autoclass:: BlochMcConnellSolver
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~BlochMcConnellSolver.__init__
+      ~BlochMcConnellSolver.get_mt_shape_at_offset
+      ~BlochMcConnellSolver.interpolate_chs
+      ~BlochMcConnellSolver.interpolate_sl
+      ~BlochMcConnellSolver.solve_equation
+      ~BlochMcConnellSolver.update_matrix
+      ~BlochMcConnellSolver.update_params
+   
+   
+
+   
+   
+   

@@ -1,0 +1,46 @@
+bmctool.utils.seq.write
+=======================
+
+.. automodule:: bmctool.utils.seq.write
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      fdopen
+      insert_seq_file_header
+      mkstemp
+      move
+      round_number
+      write_seq
+      write_seq_defs
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: class_template.rst
+   
+      Path
+      Sequence
+      datetime
+   
+   
+
+   
+   
+   
+
+
+

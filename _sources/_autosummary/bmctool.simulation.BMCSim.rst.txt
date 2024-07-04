@@ -1,0 +1,29 @@
+bmctool.simulation.BMCSim
+=========================
+
+.. currentmodule:: bmctool.simulation
+
+.. autoclass:: BMCSim
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~BMCSim.__init__
+      ~BMCSim.get_zspec
+      ~BMCSim.prep_rf_simulation
+      ~BMCSim.run
+      ~BMCSim.update_params
+   
+   
+
+   
+   
+   

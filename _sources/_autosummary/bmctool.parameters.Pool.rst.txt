@@ -1,0 +1,37 @@
+bmctool.parameters.Pool
+=======================
+
+.. currentmodule:: bmctool.parameters
+
+.. autoclass:: Pool
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~Pool.__init__
+      ~Pool.from_dict
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Pool.dw
+      ~Pool.f
+      ~Pool.r1
+      ~Pool.r2
+      ~Pool.t1
+      ~Pool.t2
+   
+   

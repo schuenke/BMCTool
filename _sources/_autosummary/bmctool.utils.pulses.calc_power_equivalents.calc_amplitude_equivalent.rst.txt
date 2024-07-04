@@ -1,0 +1,6 @@
+bmctool.utils.pulses.calc\_power\_equivalents.calc\_amplitude\_equivalent
+=========================================================================
+
+.. currentmodule:: bmctool.utils.pulses.calc_power_equivalents
+
+.. autofunction:: calc_amplitude_equivalent

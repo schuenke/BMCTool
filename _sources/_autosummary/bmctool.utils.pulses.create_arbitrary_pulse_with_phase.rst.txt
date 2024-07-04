@@ -1,0 +1,38 @@
+bmctool.utils.pulses.create\_arbitrary\_pulse\_with\_phase
+==========================================================
+
+.. automodule:: bmctool.utils.pulses.create_arbitrary_pulse_with_phase
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      create_arbitrary_pulse_with_phase
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: class_template.rst
+   
+      SimpleNamespace
+   
+   
+
+   
+   
+   
+
+
+

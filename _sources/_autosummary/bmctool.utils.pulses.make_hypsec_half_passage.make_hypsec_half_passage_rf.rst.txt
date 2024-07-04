@@ -1,0 +1,6 @@
+bmctool.utils.pulses.make\_hypsec\_half\_passage.make\_hypsec\_half\_passage\_rf
+================================================================================
+
+.. currentmodule:: bmctool.utils.pulses.make_hypsec_half_passage
+
+.. autofunction:: make_hypsec_half_passage_rf

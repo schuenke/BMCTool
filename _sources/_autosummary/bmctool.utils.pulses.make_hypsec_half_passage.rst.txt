@@ -1,0 +1,42 @@
+bmctool.utils.pulses.make\_hypsec\_half\_passage
+================================================
+
+.. automodule:: bmctool.utils.pulses.make_hypsec_half_passage
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      calculate_amplitude
+      calculate_frequency
+      calculate_phase
+      create_arbitrary_pulse_with_phase
+      make_hypsec_half_passage_rf
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: class_template.rst
+   
+      SimpleNamespace
+   
+   
+
+   
+   
+   
+
+
+

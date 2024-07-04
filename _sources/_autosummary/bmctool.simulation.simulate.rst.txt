@@ -1,0 +1,6 @@
+bmctool.simulation.simulate
+===========================
+
+.. currentmodule:: bmctool.simulation
+
+.. autofunction:: simulate

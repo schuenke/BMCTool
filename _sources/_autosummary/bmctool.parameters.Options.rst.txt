@@ -1,0 +1,35 @@
+bmctool.parameters.Options
+==========================
+
+.. currentmodule:: bmctool.parameters
+
+.. autoclass:: Options
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~Options.__init__
+      ~Options.from_dict
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Options.max_pulse_samples
+      ~Options.reset_init_mag
+      ~Options.scale
+      ~Options.verbose
+   
+   

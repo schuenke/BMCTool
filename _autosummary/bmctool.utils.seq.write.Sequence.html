@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>bmctool.utils.seq.write.Sequence &mdash; BMCTool</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=16f952a1" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="bmctool.utils.seq.write.datetime" href="bmctool.utils.seq.write.datetime.html" />
+    <link rel="prev" title="bmctool.utils.seq.write.Path" href="bmctool.utils.seq.write.Path.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            BMCTool
+          </a>
+              <div class="version">
+                1.0.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../user_guide.html">Guide for Users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributor_guide.html">Guide for Contributors</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../api.html#bmctool-parameters">BMCTool Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#bmctool-simulation">BMCTool Simulation</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../api.html#bmctool-utilities">BMCTool Utilities</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="bmctool.utils.html">bmctool.utils</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="bmctool.utils.plot_z.html">bmctool.utils.plot_z</a></li>
+<li class="toctree-l4"><a class="reference internal" href="bmctool.utils.truthy_check.html">bmctool.utils.truthy_check</a></li>
+<li class="toctree-l4"><a class="reference internal" href="bmctool.utils.eval.html">bmctool.utils.eval</a></li>
+<li class="toctree-l4"><a class="reference internal" href="bmctool.utils.misc.html">bmctool.utils.misc</a></li>
+<li class="toctree-l4"><a class="reference internal" href="bmctool.utils.pulses.html">bmctool.utils.pulses</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="bmctool.utils.seq.html">bmctool.utils.seq</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">BMCTool</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../api.html">API</a></li>
+          <li class="breadcrumb-item"><a href="bmctool.utils.html">bmctool.utils</a></li>
+          <li class="breadcrumb-item"><a href="bmctool.utils.seq.html">bmctool.utils.seq</a></li>
+          <li class="breadcrumb-item"><a href="bmctool.utils.seq.write.html">bmctool.utils.seq.write</a></li>
+      <li class="breadcrumb-item active">bmctool.utils.seq.write.Sequence</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/_autosummary/bmctool.utils.seq.write.Sequence.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="bmctool-utils-seq-write-sequence">
+<h1>bmctool.utils.seq.write.Sequence<a class="headerlink" href="#bmctool-utils-seq-write-sequence" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="bmctool.utils.seq.write.Sequence">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bmctool.utils.seq.write.</span></span><span class="sig-name descname"><span class="pre">Sequence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">system</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_block_cache</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypulseq/Sequence/sequence.html#Sequence"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bmctool.utils.seq.write.Sequence" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Generate sequences and read/write sequence files. This class defines properties and methods to define a complete MR
+sequence including RF pulses, gradients, ADC events, etc. The class provides an implementation of the open MR
+sequence format defined by the Pulseq project. See <a class="reference external" href="http://pulseq.github.io/">http://pulseq.github.io/</a>.</p>
+<p>See also <cite>demo_read.py</cite>, <cite>demo_write.py</cite>.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="bmctool.utils.seq.write.Sequence.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">system</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_block_cache</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pypulseq/Sequence/sequence.html#Sequence.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bmctool.utils.seq.write.Sequence.__init__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#bmctool.utils.seq.write.Sequence.__init__" title="bmctool.utils.seq.write.Sequence.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>([system, use_block_cache])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#bmctool.utils.seq.write.Sequence.adc_times" title="bmctool.utils.seq.write.Sequence.adc_times"><code class="xref py py-obj docutils literal notranslate"><span class="pre">adc_times</span></code></a>([time_range])</p></td>
+<td><p>Return time points of ADC sampling points.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#bmctool.utils.seq.write.Sequence.add_block" title="bmctool.utils.seq.write.Sequence.add_block"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_block</span></code></a>(*args)</p></td>
+<td><p>Add a new block/multiple events to the sequence.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#bmctool.utils.seq.write.Sequence.calculate_gradient_spectrum" title="bmctool.utils.seq.write.Sequence.calculate_gradient_spectrum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_gradient_spectrum</span></code></a>([max_frequency, ...])</p></td>
+<td><p>Calculates the gradient spectrum of the sequence.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#bmctool.utils.seq.write.Sequence.calculate_kspace" title="bmctool.utils.seq.write.Sequence.calculate_kspace"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_kspace</span></code></a>([trajectory_delay, ...])</p></td>
+<td><p>Calculates the k-space trajectory of the entire pulse sequence.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_kspacePP</span></code>([trajectory_delay, ...])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#bmctool.utils.seq.write.Sequence.calculate_pns" title="bmctool.utils.seq.write.Sequence.calculate_pns"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_pns</span></code></a>(hardware[, time_range, do_plots])</p></td>
+<td><p>Calculate PNS using safe model implementation by Szczepankiewicz and Witzel See <a class="reference external" href="http://github.com/filip-szczepankiewicz/safe_pns_prediction">http://github.com/filip-szczepankiewicz/safe_pns_prediction</a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#bmctool.utils.seq.write.Sequence.check_timing" title="bmctool.utils.seq.write.Sequence.check_timing"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_timing</span></code></a>()</p></td>
+<td><p>Checks timing of all blocks and objects in the sequence optionally returns the detailed error log.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#bmctool.utils.seq.write.Sequence.duration" title="bmctool.utils.seq.write.Sequence.duration"><code class="xref py py-obj docutils literal notranslate"><span class="pre">duration</span></code></a>()</p></td>
+<td><p>Returns the total duration of this sequence, and the total count of blocks and events.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#bmctool.utils.seq.write.Sequence.evaluate_labels" title="bmctool.utils.seq.write.Sequence.evaluate_labels"><code class="xref py py-obj docutils literal notranslate"><span class="pre">evaluate_labels</span></code></a>([init, evolution])</p></td>
+<td><p>Evaluate label values of the entire sequence.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#bmctool.utils.seq.write.Sequence.flip_grad_axis" title="bmctool.utils.seq.write.Sequence.flip_grad_axis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">flip_grad_axis</span></code></a>(axis)</p></td>
+<td><p>Invert all gradients along the corresponding axis/channel.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#bmctool.utils.seq.write.Sequence.get_block" title="bmctool.utils.seq.write.Sequence.get_block"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_block</span></code></a>(block_index)</p></td>
+<td><p>Return a block of the sequence  specified by the index.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#bmctool.utils.seq.write.Sequence.get_definition" title="bmctool.utils.seq.write.Sequence.get_definition"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_definition</span></code></a>(key)</p></td>
+<td><p>Return value of the definition specified by the key.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#bmctool.utils.seq.write.Sequence.get_extension_type_ID" title="bmctool.utils.seq.write.Sequence.get_extension_type_ID"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_extension_type_ID</span></code></a>(extension_string)</p></td>
+<td><p>Get numeric extension ID for <cite>extension_string</cite>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#bmctool.utils.seq.write.Sequence.get_extension_type_string" title="bmctool.utils.seq.write.Sequence.get_extension_type_string"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_extension_type_string</span></code></a>(extension_id)</p></td>
+<td><p>Get string extension ID for <cite>extension_id</cite>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#bmctool.utils.seq.write.Sequence.get_gradients" title="bmctool.utils.seq.write.Sequence.get_gradients"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_gradients</span></code></a>([trajectory_delay, ...])</p></td>
+<td><p>Get all gradient waveforms of the sequence in a piecewise-polynomial format (scipy PPoly).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#bmctool.utils.seq.write.Sequence.mod_grad_axis" title="bmctool.utils.seq.write.Sequence.mod_grad_axis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mod_grad_axis</span></code></a>(axis, modifier)</p></td>
+<td><p>Invert or scale all gradients along the corresponding axis/channel.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#bmctool.utils.seq.write.Sequence.plot" title="bmctool.utils.seq.write.Sequence.plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code></a>([label, show_blocks, save, time_range, ...])</p></td>
+<td><p>Plot <cite>Sequence</cite>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#bmctool.utils.seq.write.Sequence.read" title="bmctool.utils.seq.write.Sequence.read"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read</span></code></a>(file_path[, detect_rf_use, ...])</p></td>
+<td><p>Read <cite>.seq</cite> file from <cite>file_path</cite>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">register_adc_event</span></code>(event)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">register_grad_event</span></code>(event)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">register_label_event</span></code>(event)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">register_rf_event</span></code>(event)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#bmctool.utils.seq.write.Sequence.remove_duplicates" title="bmctool.utils.seq.write.Sequence.remove_duplicates"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_duplicates</span></code></a>([in_place])</p></td>
+<td><p>Removes duplicate events from the shape and event libraries contained in this sequence.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#bmctool.utils.seq.write.Sequence.rf_from_lib_data" title="bmctool.utils.seq.write.Sequence.rf_from_lib_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rf_from_lib_data</span></code></a>(lib_data[, use])</p></td>
+<td><p>Construct RF object from <cite>lib_data</cite>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#bmctool.utils.seq.write.Sequence.rf_times" title="bmctool.utils.seq.write.Sequence.rf_times"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rf_times</span></code></a>([time_range])</p></td>
+<td><p>Return time points of excitations and refocusings.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#bmctool.utils.seq.write.Sequence.set_block" title="bmctool.utils.seq.write.Sequence.set_block"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_block</span></code></a>(block_index, *args)</p></td>
+<td><p>Replace block at index with new block provided as block structure, add sequence block, or create a new block from events and store at position specified by index.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#bmctool.utils.seq.write.Sequence.set_definition" title="bmctool.utils.seq.write.Sequence.set_definition"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_definition</span></code></a>(key, value)</p></td>
+<td><p>Modify a custom definition of the sequence.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#bmctool.utils.seq.write.Sequence.set_extension_string_ID" title="bmctool.utils.seq.write.Sequence.set_extension_string_ID"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_extension_string_ID</span></code></a>(extension_str, ...)</p></td>
+<td><p>Set numeric ID for the given string extension ID.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#bmctool.utils.seq.write.Sequence.test_report" title="bmctool.utils.seq.write.Sequence.test_report"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_report</span></code></a>()</p></td>
+<td><p>Analyze the sequence and return a text report.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#bmctool.utils.seq.write.Sequence.waveforms" title="bmctool.utils.seq.write.Sequence.waveforms"><code class="xref py py-obj docutils literal notranslate"><span class="pre">waveforms</span></code></a>([append_RF, time_range])</p></td>
+<td><p>Decompress the entire gradient waveform.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#bmctool.utils.seq.write.Sequence.waveforms_and_times" title="bmctool.utils.seq.write.Sequence.waveforms_and_times"><code class="xref py py-obj docutils literal notranslate"><span class="pre">waveforms_and_times</span></code></a>([append_RF, time_range])</p></td>
+<td><p>Decompress the entire gradient waveform.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#bmctool.utils.seq.write.Sequence.waveforms_export" title="bmctool.utils.seq.write.Sequence.waveforms_export"><code class="xref py py-obj docutils literal notranslate"><span class="pre">waveforms_export</span></code></a>([time_range])</p></td>
+<td><p>Plot <cite>Sequence</cite>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#bmctool.utils.seq.write.Sequence.write" title="bmctool.utils.seq.write.Sequence.write"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write</span></code></a>(name[, create_signature, ...])</p></td>
+<td><p>Write the sequence data to the given filename using the open file format for MR sequences.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">version_major</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">version_minor</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">version_revision</span></code></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="bmctool.utils.seq.write.Sequence.adc_times">
+<span class="sig-name descname"><span class="pre">adc_times</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time_range</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/pypulseq/Sequence/sequence.html#Sequence.adc_times"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bmctool.utils.seq.write.Sequence.adc_times" title="Link to this definition"></a></dt>
+<dd><p>Return time points of ADC sampling points.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p><strong>t_adc</strong> (<em>np.ndarray</em>) – Contains times of all ADC sample points.</p></li>
+<li><p><strong>fp_adc</strong> (<em>np.ndarray</em>) – Contains frequency and phase offsets of each ADC object (not samples).</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bmctool.utils.seq.write.Sequence.add_block">
+<span class="sig-name descname"><span class="pre">add_block</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="bmctool.utils.pulses.make_hypsec_half_passage.SimpleNamespace.html#bmctool.utils.pulses.make_hypsec_half_passage.SimpleNamespace" title="types.SimpleNamespace"><span class="pre">SimpleNamespace</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/pypulseq/Sequence/sequence.html#Sequence.add_block"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bmctool.utils.seq.write.Sequence.add_block" title="Link to this definition"></a></dt>
+<dd><p>Add a new block/multiple events to the sequence. Adds a sequence block with provided as a block structure</p>
+<p>See also:
+- <cite>pypulseq.Sequence.sequence.Sequence.set_block()</cite>
+- <cite>pypulseq.make_adc.make_adc()</cite>
+- <cite>pypulseq.make_trapezoid.make_trapezoid()</cite>
+- <cite>pypulseq.make_sinc_pulse.make_sinc_pulse()</cite></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>args</strong> (<a class="reference internal" href="bmctool.utils.pulses.calc_power_equivalents.SimpleNamespace.html#bmctool.utils.pulses.calc_power_equivalents.SimpleNamespace" title="bmctool.utils.pulses.calc_power_equivalents.SimpleNamespace"><em>SimpleNamespace</em></a>) – Block structure or events to be added as a block to <cite>Sequence</cite>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bmctool.utils.seq.write.Sequence.calculate_gradient_spectrum">
+<span class="sig-name descname"><span class="pre">calculate_gradient_spectrum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_frequency</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_width</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frequency_oversampling</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_range</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">combine_mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'max'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_derivative</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">acoustic_resonances</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/pypulseq/Sequence/sequence.html#Sequence.calculate_gradient_spectrum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bmctool.utils.seq.write.Sequence.calculate_gradient_spectrum" title="Link to this definition"></a></dt>
+<dd><p>Calculates the gradient spectrum of the sequence. Returns a spectrogram
+for each gradient channel, as well as a root-sum-squares combined
+spectrogram.</p>
+<p>Works by splitting the sequence into windows that are ‘window_width’
+long and calculating the fourier transform of each window. Windows
+overlap 50% with the previous and next window. When ‘combine_mode’ is
+not ‘none’, all windows are combined into one spectrogram.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>max_frequency</strong> (<em>float</em><em>, </em><em>optional</em>) – Maximum frequency to include in spectrograms. The default is 2000.</p></li>
+<li><p><strong>window_width</strong> (<em>float</em><em>, </em><em>optional</em>) – Window width (in seconds). The default is 0.05.</p></li>
+<li><p><strong>frequency_oversampling</strong> (<em>float</em><em>, </em><em>optional</em>) – Oversampling in the frequency dimension, higher values make
+smoother spectrograms. The default is 3.</p></li>
+<li><p><strong>time_range</strong> (<em>List</em><em>[</em><em>float</em><em>]</em><em>, </em><em>optional</em>) – Time range over which to calculate the spectrograms as a list of
+two timepoints (in seconds) (e.g. [1, 1.5])
+The default is None.</p></li>
+<li><p><strong>plot</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to plot the spectograms. The default is True.</p></li>
+<li><p><strong>combine_mode</strong> (<em>str</em><em>, </em><em>optional</em>) – <dl class="simple">
+<dt>How to combine all windows into one spectrogram, options:</dt><dd><p>’max’, ‘mean’, ‘sos’ (root-sum-of-squares), ‘none’ (no combination)</p>
+</dd>
+</dl>
+<p>The default is ‘max’.</p>
+</p></li>
+<li><p><strong>use_derivative</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether the use the derivative of the gradient waveforms instead of the
+gradient waveforms for the gradient spectrum calculations. The default
+is False</p></li>
+<li><p><strong>acoustic_resonances</strong> (<em>List</em><em>[</em><em>dict</em><em>]</em><em>, </em><em>optional</em>) – Acoustic resonances as a list of dictionaries with ‘frequency’ and
+‘bandwidth’ elements. Only used when plot==True. The default is [].</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>spectrograms</strong> (<em>List[np.ndarray]</em>) – List of spectrograms per gradient channel.</p></li>
+<li><p><strong>spectrogram_sos</strong> (<em>np.ndarray</em>) – Root-sum-of-squares combined spectrogram over all gradient channels.</p></li>
+<li><p><strong>frequencies</strong> (<em>np.ndarray</em>) – Frequency axis of the spectrograms.</p></li>
+<li><p><strong>times</strong> (<em>np.ndarray</em>) – Time axis of the spectrograms (only relevant when combine_mode == ‘none’).</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bmctool.utils.seq.write.Sequence.calculate_kspace">
+<span class="sig-name descname"><span class="pre">calculate_kspace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trajectory_delay</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gradient_offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">array</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/pypulseq/Sequence/sequence.html#Sequence.calculate_kspace"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bmctool.utils.seq.write.Sequence.calculate_kspace" title="Link to this definition"></a></dt>
+<dd><p>Calculates the k-space trajectory of the entire pulse sequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>trajectory_delay</strong> (<em>float</em><em> or </em><em>list</em><em>, </em><em>default=0</em>) – Compensation factor in seconds (s) to align ADC and gradients in the reconstruction.</p></li>
+<li><p><strong>gradient_offset</strong> (<em>float</em><em> or </em><em>list</em><em>, </em><em>default=0</em>) – Simulates background gradients (specified in Hz/m)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>k_traj_adc</strong> (<em>numpy.array</em>) – K-space trajectory sampled at <cite>t_adc</cite> timepoints.</p></li>
+<li><p><strong>k_traj</strong> (<em>numpy.array</em>) – K-space trajectory of the entire pulse sequence.</p></li>
+<li><p><strong>t_excitation</strong> (<em>List[float]</em>) – Excitation timepoints.</p></li>
+<li><p><strong>t_refocusing</strong> (<em>List[float]</em>) – Refocusing timepoints.</p></li>
+<li><p><strong>t_adc</strong> (<em>numpy.array</em>) – Sampling timepoints.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bmctool.utils.seq.write.Sequence.calculate_pns">
+<span class="sig-name descname"><span class="pre">calculate_pns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hardware</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="bmctool.utils.pulses.make_hypsec_half_passage.SimpleNamespace.html#bmctool.utils.pulses.make_hypsec_half_passage.SimpleNamespace" title="types.SimpleNamespace"><span class="pre">SimpleNamespace</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_range</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_plots</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">array</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/pypulseq/Sequence/sequence.html#Sequence.calculate_pns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bmctool.utils.seq.write.Sequence.calculate_pns" title="Link to this definition"></a></dt>
+<dd><p>Calculate PNS using safe model implementation by Szczepankiewicz and Witzel
+See <a class="reference external" href="http://github.com/filip-szczepankiewicz/safe_pns_prediction">http://github.com/filip-szczepankiewicz/safe_pns_prediction</a></p>
+<p>Returns pns levels due to respective axes (normalized to 1 and not to 100#)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hardware</strong> (<a class="reference internal" href="bmctool.utils.pulses.calc_power_equivalents.SimpleNamespace.html#bmctool.utils.pulses.calc_power_equivalents.SimpleNamespace" title="bmctool.utils.pulses.calc_power_equivalents.SimpleNamespace"><em>SimpleNamespace</em></a>) – Hardware specifications. See safe_example_hw() from
+the safe_pns_prediction package. Alternatively a text file
+in the .asc format (Siemens) can be passed, e.g. for Prisma
+it is MP_GPA_K2309_2250V_951A_AS82.asc (we leave it as an
+exercise to the interested user to find were these files
+can be acquired from)</p></li>
+<li><p><strong>do_plots</strong> (<em>bool</em><em>, </em><em>optional</em>) – Plot the results from the PNS calculations. The default is True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>ok</strong> (<em>bool</em>) – Boolean flag indicating whether peak PNS is within acceptable limits</p></li>
+<li><p><strong>pns_norm</strong> (<em>numpy.array [N]</em>) – PNS norm over all gradient channels, normalized to 1</p></li>
+<li><p><strong>pns_components</strong> (<em>numpy.array [Nx3]</em>) – PNS levels per gradient channel</p></li>
+<li><p><strong>t_pns</strong> (<em>np.array [N]</em>) – Time axis for the pns_norm and pns_components arrays</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bmctool.utils.seq.write.Sequence.check_timing">
+<span class="sig-name descname"><span class="pre">check_timing</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/pypulseq/Sequence/sequence.html#Sequence.check_timing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bmctool.utils.seq.write.Sequence.check_timing" title="Link to this definition"></a></dt>
+<dd><p>Checks timing of all blocks and objects in the sequence optionally returns the detailed error log. This
+function also modifies the sequence object by adding the field “TotalDuration” to sequence definitions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p><strong>is_ok</strong> (<em>bool</em>) – Boolean flag indicating timing errors.</p></li>
+<li><p><strong>error_report</strong> (<em>str</em>) – Error report in case of timing errors.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bmctool.utils.seq.write.Sequence.duration">
+<span class="sig-name descname"><span class="pre">duration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/pypulseq/Sequence/sequence.html#Sequence.duration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bmctool.utils.seq.write.Sequence.duration" title="Link to this definition"></a></dt>
+<dd><p>Returns the total duration of this sequence, and the total count of blocks and events.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p><strong>duration</strong> (<em>int</em>) – Duration of this sequence in seconds (s).</p></li>
+<li><p><strong>num_blocks</strong> (<em>int</em>) – Number of blocks in this sequence.</p></li>
+<li><p><strong>event_count</strong> (<em>np.ndarray</em>) – Number of events in this sequence.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bmctool.utils.seq.write.Sequence.evaluate_labels">
+<span class="sig-name descname"><span class="pre">evaluate_labels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">init</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evolution</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'none'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="../_modules/pypulseq/Sequence/sequence.html#Sequence.evaluate_labels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bmctool.utils.seq.write.Sequence.evaluate_labels" title="Link to this definition"></a></dt>
+<dd><p>Evaluate label values of the entire sequence.</p>
+<p>When no evolution is given, returns the label values at the end of the
+sequence. Returns a dictionary with keys named after the labels used
+in the sequence. Only the keys corresponding to the labels actually
+used are created.
+E.g. labels[‘LIN’] == 4</p>
+<p>When evolution is given, labels are tracked through the sequence. See
+below for options for different types of evolutions. The resulting
+dictionary will contain arrays of the label values.
+E.g. labels[‘LIN’] == np.array([0,1,2,3,4])</p>
+<p>Initial values for the labels can be given with the ‘init’ parameter.
+Useful if evaluating labels block-by-block.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>init</strong> (<em>dict</em><em>, </em><em>optional</em>) – Dictionary containing initial label values. The default is None.</p></li>
+<li><p><strong>evolution</strong> (<em>str</em><em>, </em><em>optional</em>) – <p>Flag to specify tracking of label evolutions.
+Must be one of: ‘none’, ‘adc’, ‘label’, ‘blocks’ (default = ‘none’)
+‘blocks’: Return label values for all blocks.
+‘adc’:    Return label values only for blocks containing ADC events.
+‘label’:  Return label values only for blocks where labels are</p>
+<blockquote>
+<div><p>manipulated.</p>
+</div></blockquote>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>labels</strong> – Dictionary containing label values.
+If evolution == ‘none’, the dictionary values only contains the
+final label value.
+Otherwise, the dictionary values are arrays of label evolutions.
+Only the labels that are used in the sequence are created in the
+dictionary.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bmctool.utils.seq.write.Sequence.flip_grad_axis">
+<span class="sig-name descname"><span class="pre">flip_grad_axis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/pypulseq/Sequence/sequence.html#Sequence.flip_grad_axis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bmctool.utils.seq.write.Sequence.flip_grad_axis" title="Link to this definition"></a></dt>
+<dd><p>Invert all gradients along the corresponding axis/channel. The function acts on all gradient objects already
+added to the sequence object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>axis</strong> (<em>str</em>) – Gradients to invert or scale. Must be one of ‘x’, ‘y’ or ‘z’.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bmctool.utils.seq.write.Sequence.get_block">
+<span class="sig-name descname"><span class="pre">get_block</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">block_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="bmctool.utils.pulses.make_hypsec_half_passage.SimpleNamespace.html#bmctool.utils.pulses.make_hypsec_half_passage.SimpleNamespace" title="types.SimpleNamespace"><span class="pre">SimpleNamespace</span></a></span></span><a class="reference internal" href="../_modules/pypulseq/Sequence/sequence.html#Sequence.get_block"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bmctool.utils.seq.write.Sequence.get_block" title="Link to this definition"></a></dt>
+<dd><p>Return a block of the sequence  specified by the index. The block is created from the sequence data with all
+events and shapes decompressed.</p>
+<p>See also:
+- <cite>pypulseq.Sequence.sequence.Sequence.set_block()</cite>.
+- <cite>pypulseq.Sequence.sequence.Sequence.add_block()</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>block_index</strong> (<em>int</em>) – Index of block to be retrieved from <cite>Sequence</cite>.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Event identified by <cite>block_index</cite>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="bmctool.utils.pulses.calc_power_equivalents.SimpleNamespace.html#bmctool.utils.pulses.calc_power_equivalents.SimpleNamespace" title="bmctool.utils.pulses.calc_power_equivalents.SimpleNamespace">SimpleNamespace</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bmctool.utils.seq.write.Sequence.get_definition">
+<span class="sig-name descname"><span class="pre">get_definition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../_modules/pypulseq/Sequence/sequence.html#Sequence.get_definition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bmctool.utils.seq.write.Sequence.get_definition" title="Link to this definition"></a></dt>
+<dd><p>Return value of the definition specified by the key. These definitions can be added manually or read from the
+header of a sequence file defined in the sequence header. An empty array is returned if the key is not defined.</p>
+<p>See also <cite>pypulseq.Sequence.sequence.Sequence.set_definition()</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>key</strong> (<em>str</em>) – Key of definition to retrieve.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Definition identified by <cite>key</cite> if found, else returns ‘’.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bmctool.utils.seq.write.Sequence.get_extension_type_ID">
+<span class="sig-name descname"><span class="pre">get_extension_type_ID</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">extension_string</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../_modules/pypulseq/Sequence/sequence.html#Sequence.get_extension_type_ID"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bmctool.utils.seq.write.Sequence.get_extension_type_ID" title="Link to this definition"></a></dt>
+<dd><p>Get numeric extension ID for <cite>extension_string</cite>. Will automatically create a new ID if unknown.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>extension_string</strong> (<em>str</em>) – Given string extension ID.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>extension_id</strong> – Numeric ID for given string extension ID.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bmctool.utils.seq.write.Sequence.get_extension_type_string">
+<span class="sig-name descname"><span class="pre">get_extension_type_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">extension_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../_modules/pypulseq/Sequence/sequence.html#Sequence.get_extension_type_string"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bmctool.utils.seq.write.Sequence.get_extension_type_string" title="Link to this definition"></a></dt>
+<dd><p>Get string extension ID for <cite>extension_id</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>extension_id</strong> (<em>int</em>) – Given numeric extension ID.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>extension_str</strong> – String ID for the given numeric extension ID.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If given numeric extension ID is unknown.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bmctool.utils.seq.write.Sequence.get_gradients">
+<span class="sig-name descname"><span class="pre">get_gradients</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trajectory_delay</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gradient_offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_range</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">PPoly</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/pypulseq/Sequence/sequence.html#Sequence.get_gradients"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bmctool.utils.seq.write.Sequence.get_gradients" title="Link to this definition"></a></dt>
+<dd><p>Get all gradient waveforms of the sequence in a piecewise-polynomial
+format (scipy PPoly). Gradient values can be accessed easily at one or
+more timepoints using <cite>gw_pp[channel](t)</cite> (where t is a float, list of
+floats, or numpy array). Note that PPoly objects return nan for
+timepoints outside the waveform.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>trajectory_delay</strong> (<em>float</em><em> or </em><em>list</em><em>, </em><em>default=0</em>) – Compensation factor in seconds (s) to align ADC and gradients in the reconstruction.</p></li>
+<li><p><strong>gradient_offset</strong> (<em>float</em><em> or </em><em>list</em><em>, </em><em>default=0</em>) – Simulates background gradients (specified in Hz/m)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>gw_pp</strong> – List of gradient waveforms for each of the gradient channels,
+expressed as scipy PPoly objects.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[PPoly]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bmctool.utils.seq.write.Sequence.mod_grad_axis">
+<span class="sig-name descname"><span class="pre">mod_grad_axis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modifier</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/pypulseq/Sequence/sequence.html#Sequence.mod_grad_axis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bmctool.utils.seq.write.Sequence.mod_grad_axis" title="Link to this definition"></a></dt>
+<dd><p>Invert or scale all gradients along the corresponding axis/channel. The function acts on all gradient objects
+already added to the sequence object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>axis</strong> (<em>str</em>) – Gradients to invert or scale. Must be one of ‘x’, ‘y’ or ‘z’.</p></li>
+<li><p><strong>modifier</strong> (<em>int</em>) – Scaling value.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – If invalid <cite>axis</cite> is passed. Must be one of ‘x’, ‘y’,’z’.</p></li>
+<li><p><strong>RuntimeError</strong> – If same gradient event is used on multiple axes.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bmctool.utils.seq.write.Sequence.plot">
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_blocks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0,</span> <span class="pre">inf)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_disp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'s'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grad_disp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'kHz/m'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_now</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/pypulseq/Sequence/sequence.html#Sequence.plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bmctool.utils.seq.write.Sequence.plot" title="Link to this definition"></a></dt>
+<dd><p>Plot <cite>Sequence</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>label</strong> (<em>str</em><em>, </em><em>defualt=str</em><em>(</em><em>)</em>) – Plot label values for ADC events: in this example for LIN and REP labels; other valid labes are accepted as
+a comma-separated list.</p></li>
+<li><p><strong>save</strong> (<em>bool</em><em>, </em><em>default=False</em>) – Boolean flag indicating if plots should be saved. The two figures will be saved as JPG with numerical
+suffixes to the filename ‘seq_plot’.</p></li>
+<li><p><strong>show_blocks</strong> (<em>bool</em><em>, </em><em>default=False</em>) – Boolean flag to indicate if grid and tick labels at the block boundaries are to be plotted.</p></li>
+<li><p><strong>time_range</strong> (<em>iterable</em><em>, </em><em>default=</em><em>(</em><em>0</em><em>, </em><em>np.inf</em><em>)</em>) – Time range (x-axis limits) for plotting the sequence. Default is 0 to infinity (entire sequence).</p></li>
+<li><p><strong>time_disp</strong> (<em>str</em><em>, </em><em>default='s'</em>) – Time display type, must be one of <cite>s</cite>, <cite>ms</cite> or <cite>us</cite>.</p></li>
+<li><p><strong>grad_disp</strong> (<em>str</em><em>, </em><em>default='s'</em>) – Gradient display unit, must be one of <cite>kHz/m</cite> or <cite>mT/m</cite>.</p></li>
+<li><p><strong>plot_now</strong> (<em>bool</em><em>, </em><em>default=True</em>) – If true, function immediately shows the plots, blocking the rest of the code until plots are exited.
+If false, plots are shown when plt.show() is called. Useful if plots are to be modified.</p></li>
+<li><p><strong>plot_type</strong> (<em>str</em><em>, </em><em>default='Gradient'</em>) – Gradients display type, must be one of either ‘Gradient’ or ‘Kspace’.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bmctool.utils.seq.write.Sequence.read">
+<span class="sig-name descname"><span class="pre">read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detect_rf_use</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remove_duplicates</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/pypulseq/Sequence/sequence.html#Sequence.read"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bmctool.utils.seq.write.Sequence.read" title="Link to this definition"></a></dt>
+<dd><p>Read <cite>.seq</cite> file from <cite>file_path</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>detect_rf_use</strong></p></li>
+<li><p><strong>file_path</strong> (<em>str</em>) – Path to <cite>.seq</cite> file to be read.</p></li>
+<li><p><strong>remove_duplicates</strong> (<em>bool</em><em>, </em><em>default=True</em>) – Remove duplicate events from the sequence after reading.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bmctool.utils.seq.write.Sequence.remove_duplicates">
+<span class="sig-name descname"><span class="pre">remove_duplicates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_place</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Self</span></span></span><a class="reference internal" href="../_modules/pypulseq/Sequence/sequence.html#Sequence.remove_duplicates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bmctool.utils.seq.write.Sequence.remove_duplicates" title="Link to this definition"></a></dt>
+<dd><p>Removes duplicate events from the shape and event libraries contained
+in this sequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>in_place</strong> (<em>bool</em><em>, </em><em>optional</em>) – If true, removes the duplicates from the current sequence.
+Otherwise, a copy is created. The default is False.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>seq_copy</strong> – If <cite>in_place</cite>, returns self. Otherwise returns a copy of the
+sequence.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#bmctool.utils.seq.write.Sequence" title="bmctool.utils.seq.write.Sequence">Sequence</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bmctool.utils.seq.write.Sequence.rf_from_lib_data">
+<span class="sig-name descname"><span class="pre">rf_from_lib_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lib_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="bmctool.utils.pulses.make_hypsec_half_passage.SimpleNamespace.html#bmctool.utils.pulses.make_hypsec_half_passage.SimpleNamespace" title="types.SimpleNamespace"><span class="pre">SimpleNamespace</span></a></span></span><a class="reference internal" href="../_modules/pypulseq/Sequence/sequence.html#Sequence.rf_from_lib_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bmctool.utils.seq.write.Sequence.rf_from_lib_data" title="Link to this definition"></a></dt>
+<dd><p>Construct RF object from <cite>lib_data</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lib_data</strong> (<em>list</em>) – RF envelope.</p></li>
+<li><p><strong>use</strong> (<em>str</em><em>, </em><em>default=str</em><em>(</em><em>)</em>) – RF event use.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>rf</strong> – RF object constructed from <cite>lib_data</cite>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="bmctool.utils.pulses.calc_power_equivalents.SimpleNamespace.html#bmctool.utils.pulses.calc_power_equivalents.SimpleNamespace" title="bmctool.utils.pulses.calc_power_equivalents.SimpleNamespace">SimpleNamespace</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bmctool.utils.seq.write.Sequence.rf_times">
+<span class="sig-name descname"><span class="pre">rf_times</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time_range</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/pypulseq/Sequence/sequence.html#Sequence.rf_times"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bmctool.utils.seq.write.Sequence.rf_times" title="Link to this definition"></a></dt>
+<dd><p>Return time points of excitations and refocusings.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p><strong>t_excitation</strong> (<em>List[float]</em>) – Contains time moments of the excitation RF pulses</p></li>
+<li><p><strong>fp_excitation</strong> (<em>np.ndarray</em>) – Contains frequency and phase offsets of the excitation RF pulses</p></li>
+<li><p><strong>t_refocusing</strong> (<em>List[float]</em>) – Contains time moments of the refocusing RF pulses</p></li>
+<li><p><strong>fp_refocusing</strong> (<em>np.ndarray</em>) – Contains frequency and phase offsets of the excitation RF pulses</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bmctool.utils.seq.write.Sequence.set_block">
+<span class="sig-name descname"><span class="pre">set_block</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">block_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="bmctool.utils.pulses.make_hypsec_half_passage.SimpleNamespace.html#bmctool.utils.pulses.make_hypsec_half_passage.SimpleNamespace" title="types.SimpleNamespace"><span class="pre">SimpleNamespace</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/pypulseq/Sequence/sequence.html#Sequence.set_block"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bmctool.utils.seq.write.Sequence.set_block" title="Link to this definition"></a></dt>
+<dd><p>Replace block at index with new block provided as block structure, add sequence block, or create a new block
+from events and store at position specified by index. The block or events are provided in uncompressed form and
+will be stored in the compressed, non-redundant internal libraries.</p>
+<p>See also:
+- <cite>pypulseq.Sequence.sequence.Sequence.get_block()</cite>
+- <cite>pypulseq.Sequence.sequence.Sequence.add_block()</cite></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>block_index</strong> (<em>int</em>) – Index at which block is replaced.</p></li>
+<li><p><strong>args</strong> (<a class="reference internal" href="bmctool.utils.pulses.calc_power_equivalents.SimpleNamespace.html#bmctool.utils.pulses.calc_power_equivalents.SimpleNamespace" title="bmctool.utils.pulses.calc_power_equivalents.SimpleNamespace"><em>SimpleNamespace</em></a>) – Block or events to be replaced/added or created at <cite>block_index</cite>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bmctool.utils.seq.write.Sequence.set_definition">
+<span class="sig-name descname"><span class="pre">set_definition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">tuple</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/pypulseq/Sequence/sequence.html#Sequence.set_definition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bmctool.utils.seq.write.Sequence.set_definition" title="Link to this definition"></a></dt>
+<dd><p>Modify a custom definition of the sequence. Set the user definition ‘key’ to value ‘value’. If the definition
+does not exist it will be created.</p>
+<p>See also <cite>pypulseq.Sequence.sequence.Sequence.get_definition()</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> (<em>str</em>) – Definition key.</p></li>
+<li><p><strong>value</strong> (<em>int</em><em>, </em><em>list</em><em>, </em><em>np.ndarray</em><em>, </em><em>str</em><em> or </em><em>tuple</em>) – Definition value.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bmctool.utils.seq.write.Sequence.set_extension_string_ID">
+<span class="sig-name descname"><span class="pre">set_extension_string_ID</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">extension_str</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extension_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/pypulseq/Sequence/sequence.html#Sequence.set_extension_string_ID"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bmctool.utils.seq.write.Sequence.set_extension_string_ID" title="Link to this definition"></a></dt>
+<dd><p>Set numeric ID for the given string extension ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>extension_str</strong> (<em>str</em>) – Given string extension ID.</p></li>
+<li><p><strong>extension_id</strong> (<em>int</em>) – Given numeric extension ID.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If given numeric or string extension ID is not unique.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bmctool.utils.seq.write.Sequence.test_report">
+<span class="sig-name descname"><span class="pre">test_report</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../_modules/pypulseq/Sequence/sequence.html#Sequence.test_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bmctool.utils.seq.write.Sequence.test_report" title="Link to this definition"></a></dt>
+<dd><p>Analyze the sequence and return a text report.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bmctool.utils.seq.write.Sequence.waveforms">
+<span class="sig-name descname"><span class="pre">waveforms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">append_RF</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_range</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/pypulseq/Sequence/sequence.html#Sequence.waveforms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bmctool.utils.seq.write.Sequence.waveforms" title="Link to this definition"></a></dt>
+<dd><p>Decompress the entire gradient waveform. Returns gradient waveforms as a tuple of <cite>np.ndarray</cite> of
+<cite>gradient_axes</cite> (typically 3) dimensions. Each <cite>np.ndarray</cite> contains timepoints and the corresponding
+gradient amplitude values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>append_RF</strong> (<em>bool</em><em>, </em><em>default=False</em>) – Boolean flag to indicate if RF wave shapes are to be appended after the gradients.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>wave_data</strong></p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bmctool.utils.seq.write.Sequence.waveforms_and_times">
+<span class="sig-name descname"><span class="pre">waveforms_and_times</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">append_RF</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_range</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/pypulseq/Sequence/sequence.html#Sequence.waveforms_and_times"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bmctool.utils.seq.write.Sequence.waveforms_and_times" title="Link to this definition"></a></dt>
+<dd><p>Decompress the entire gradient waveform. Returns gradient waveforms as a tuple of <cite>np.ndarray</cite> of
+<cite>gradient_axes</cite> (typically 3) dimensions. Each <cite>np.ndarray</cite> contains timepoints and the corresponding
+gradient amplitude values. Additional return values are time points of excitations, refocusings and ADC
+sampling points.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>append_RF</strong> (<em>bool</em><em>, </em><em>default=False</em>) – Boolean flag to indicate if RF wave shapes are to be appended after the gradients.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>wave_data</strong> (<em>np.ndarray</em>)</p></li>
+<li><p><strong>tfp_excitation</strong> (<em>np.ndarray</em>) – Contains time moments, frequency and phase offsets of the excitation RF pulses (similar for `
+tfp_refocusing`).</p></li>
+<li><p><strong>tfp_refocusing</strong> (<em>np.ndarray</em>)</p></li>
+<li><p><strong>t_adc</strong> (<em>np.ndarray</em>) – Contains times of all ADC sample points.</p></li>
+<li><p><strong>fp_adc</strong> (<em>np.ndarray</em>) – Contains frequency and phase offsets of each ADC object (not samples).</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bmctool.utils.seq.write.Sequence.waveforms_export">
+<span class="sig-name descname"><span class="pre">waveforms_export</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0,</span> <span class="pre">inf)</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="../_modules/pypulseq/Sequence/sequence.html#Sequence.waveforms_export"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bmctool.utils.seq.write.Sequence.waveforms_export" title="Link to this definition"></a></dt>
+<dd><p>Plot <cite>Sequence</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>time_range</strong> (<em>iterable</em><em>, </em><em>default=</em><em>(</em><em>0</em><em>, </em><em>np.inf</em><em>)</em>) – Time range (x-axis limits) for all waveforms. Default is 0 to infinity (entire sequence).</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>all_waveforms</strong> – Dictionary containing the following sequence waveforms and time array(s):
+- <cite>t_adc</cite> - ADC timing array [seconds]
+- <cite>t_rf</cite> - RF timing array [seconds]
+- <cite>t_rf_centers</cite>: <cite>rf_t_centers</cite>,
+- <cite>t_gx</cite>: x gradient timing array,
+- <cite>t_gy</cite>: y gradient timing array,
+- <cite>t_gz</cite>: z gradient timing array,
+- <cite>adc</cite> - ADC complex signal (amplitude=1, phase=adc phase) [a.u.]
+- <cite>rf</cite> - RF complex signal
+- <cite>rf_centers</cite>: RF centers array,
+- <cite>gx</cite> - x gradient
+- <cite>gy</cite> - y gradient
+- <cite>gz</cite> - z gradient
+- <cite>grad_unit</cite>: [kHz/m],
+- <cite>rf_unit</cite>: [Hz],
+- <cite>time_unit</cite>: [seconds],</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bmctool.utils.seq.write.Sequence.write">
+<span class="sig-name descname"><span class="pre">write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">create_signature</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remove_duplicates</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/pypulseq/Sequence/sequence.html#Sequence.write"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bmctool.utils.seq.write.Sequence.write" title="Link to this definition"></a></dt>
+<dd><p>Write the sequence data to the given filename using the open file format for MR sequences.</p>
+<p>See also <cite>pypulseq.Sequence.read_seq.read()</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – Filename of <cite>.seq</cite> file to be written to disk.</p></li>
+<li><p><strong>create_signature</strong> (<em>bool</em><em>, </em><em>default=True</em>) – Boolean flag to indicate if the file has to be signed.</p></li>
+<li><p><strong>remove_duplicates</strong> (<em>bool</em><em>, </em><em>default=True</em>) – Remove duplicate events from the sequence before writing</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>signature or None</strong> (<em>If create_signature is True, it returns the written .seq file’s signature as a string,</em>)</p></li>
+<li><p><em>otherwise it returns None. Note that, if remove_duplicates is True, signature belongs to the</em></p></li>
+<li><p><em>deduplicated sequences signature, and not the Sequence that is stored in the Sequence object.</em></p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="bmctool.utils.seq.write.Path.html" class="btn btn-neutral float-left" title="bmctool.utils.seq.write.Path" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="bmctool.utils.seq.write.datetime.html" class="btn btn-neutral float-right" title="bmctool.utils.seq.write.datetime" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Patrick Schuenke.</p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

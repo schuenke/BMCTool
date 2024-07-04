@@ -1,0 +1,47 @@
+bmctool.parameters.Parameters
+=============================
+
+.. currentmodule:: bmctool.parameters
+
+.. autoclass:: Parameters
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~Parameters.__init__
+      ~Parameters.add_cest_pool
+      ~Parameters.from_dict
+      ~Parameters.from_yaml
+      ~Parameters.to_yaml
+      ~Parameters.update_cest_pool
+      ~Parameters.update_mt_pool
+      ~Parameters.update_options
+      ~Parameters.update_system
+      ~Parameters.update_water_pool
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Parameters.water_pool
+      ~Parameters.cest_pools
+      ~Parameters.mt_pool
+      ~Parameters.system
+      ~Parameters.options
+      ~Parameters.m_vec
+      ~Parameters.mz_loc
+      ~Parameters.num_cest_pools
+   
+   

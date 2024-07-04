@@ -1,0 +1,6 @@
+bmctool.utils.seq.auxiliary.get\_num\_adc\_events
+=================================================
+
+.. currentmodule:: bmctool.utils.seq.auxiliary
+
+.. autofunction:: get_num_adc_events

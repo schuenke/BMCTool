@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>bmctool.utils.pulses.make_hsexp.generate_hsexp_dict &mdash; BMCTool</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=16f952a1" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="bmctool.utils.pulses.make_hsexp.hypsec_amp" href="bmctool.utils.pulses.make_hsexp.hypsec_amp.html" />
+    <link rel="prev" title="bmctool.utils.pulses.make_hsexp.create_arbitrary_pulse_with_phase" href="bmctool.utils.pulses.make_hsexp.create_arbitrary_pulse_with_phase.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            BMCTool
+          </a>
+              <div class="version">
+                1.0.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../user_guide.html">Guide for Users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributor_guide.html">Guide for Contributors</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../api.html#bmctool-parameters">BMCTool Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#bmctool-simulation">BMCTool Simulation</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../api.html#bmctool-utilities">BMCTool Utilities</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="bmctool.utils.html">bmctool.utils</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="bmctool.utils.plot_z.html">bmctool.utils.plot_z</a></li>
+<li class="toctree-l4"><a class="reference internal" href="bmctool.utils.truthy_check.html">bmctool.utils.truthy_check</a></li>
+<li class="toctree-l4"><a class="reference internal" href="bmctool.utils.eval.html">bmctool.utils.eval</a></li>
+<li class="toctree-l4"><a class="reference internal" href="bmctool.utils.misc.html">bmctool.utils.misc</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="bmctool.utils.pulses.html">bmctool.utils.pulses</a></li>
+<li class="toctree-l4"><a class="reference internal" href="bmctool.utils.seq.html">bmctool.utils.seq</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">BMCTool</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../api.html">API</a></li>
+          <li class="breadcrumb-item"><a href="bmctool.utils.html">bmctool.utils</a></li>
+          <li class="breadcrumb-item"><a href="bmctool.utils.pulses.html">bmctool.utils.pulses</a></li>
+          <li class="breadcrumb-item"><a href="bmctool.utils.pulses.make_hsexp.html">bmctool.utils.pulses.make_hsexp</a></li>
+      <li class="breadcrumb-item active">bmctool.utils.pulses.make_hsexp.generate_hsexp_dict</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/_autosummary/bmctool.utils.pulses.make_hsexp.generate_hsexp_dict.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="bmctool-utils-pulses-make-hsexp-generate-hsexp-dict">
+<h1>bmctool.utils.pulses.make_hsexp.generate_hsexp_dict<a class="headerlink" href="#bmctool-utils-pulses-make-hsexp-generate-hsexp-dict" title="Link to this heading"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="bmctool.utils.pulses.make_hsexp.generate_hsexp_dict">
+<span class="sig-prename descclassname"><span class="pre">bmctool.utils.pulses.make_hsexp.</span></span><span class="sig-name descname"><span class="pre">generate_hsexp_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">amp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_p</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.012</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">65</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bandwidth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2500</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_window</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0035</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ef</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">system</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Opts</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma_hz</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">42.5764</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="../_modules/bmctool/utils/pulses/make_hsexp.html#generate_hsexp_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bmctool.utils.pulses.make_hsexp.generate_hsexp_dict" title="Link to this definition"></a></dt>
+<dd><p>Create a dict with all 4 possible HSexp RF pulses.</p>
+<p>Possible combinations are:
+- tip-down positive offset
+- tip-down negative offset
+- tip-up positive offset
+- tip-up negative offset</p>
+<section id="parameter">
+<h2>Parameter<a class="headerlink" href="#parameter" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>amp, optional</dt><dd><p>maximum amplitude value [µT], by default 1.0</p>
+</dd>
+<dt>t_p, optional</dt><dd><p>pulse pulse_duration [s], by default 12e-3</p>
+</dd>
+<dt>mu, optional</dt><dd><p>parameter µ of hyperbolic secant pulse, by default 65</p>
+</dd>
+<dt>bandwidth, optional</dt><dd><p>bandwidth of hyperbolic secant pulse [Hz], by default 2500</p>
+</dd>
+<dt>t_window, optional</dt><dd><p>duration of window function, by default 3.5e-3</p>
+</dd>
+<dt>ef, optional</dt><dd><p>dimensionless parameter to control steepness of the exponential curve, by default 3.5</p>
+</dd>
+<dt>system, optional</dt><dd><p>system limits of the MR scanner, by default pp.Opts()</p>
+</dd>
+<dt>gamma_hz, optional</dt><dd><p>gyromagnetic ratio [Hz], by default GAMMA_HZ</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict with all 4 possible HSexp RF pulses</p>
+</dd>
+<dt class="field-even">rtype<span class="colon">:</span></dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="bmctool.utils.pulses.make_hsexp.create_arbitrary_pulse_with_phase.html" class="btn btn-neutral float-left" title="bmctool.utils.pulses.make_hsexp.create_arbitrary_pulse_with_phase" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="bmctool.utils.pulses.make_hsexp.hypsec_amp.html" class="btn btn-neutral float-right" title="bmctool.utils.pulses.make_hsexp.hypsec_amp" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Patrick Schuenke.</p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

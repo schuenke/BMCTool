@@ -1,0 +1,30 @@
+bmctool.utils.pulses.calculate\_phase
+=====================================
+
+.. automodule:: bmctool.utils.pulses.calculate_phase
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      calculate_phase
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

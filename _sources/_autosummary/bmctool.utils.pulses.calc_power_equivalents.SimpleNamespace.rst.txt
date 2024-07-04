@@ -1,0 +1,25 @@
+bmctool.utils.pulses.calc\_power\_equivalents.SimpleNamespace
+=============================================================
+
+.. currentmodule:: bmctool.utils.pulses.calc_power_equivalents
+
+.. autoclass:: SimpleNamespace
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~SimpleNamespace.__init__
+   
+   
+
+   
+   
+   

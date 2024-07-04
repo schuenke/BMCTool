@@ -1,0 +1,30 @@
+bmctool.utils.misc
+==================
+
+.. automodule:: bmctool.utils.misc
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      truthy_check
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

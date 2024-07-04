@@ -1,0 +1,6 @@
+bmctool.utils.seq.write.write\_seq\_defs
+========================================
+
+.. currentmodule:: bmctool.utils.seq.write
+
+.. autofunction:: write_seq_defs

@@ -1,0 +1,6 @@
+bmctool.utils.pulses.calculate\_phase.calculate\_phase
+======================================================
+
+.. currentmodule:: bmctool.utils.pulses.calculate_phase
+
+.. autofunction:: calculate_phase

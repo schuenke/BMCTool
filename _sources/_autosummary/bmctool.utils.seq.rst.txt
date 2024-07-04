@@ -1,0 +1,33 @@
+bmctool.utils.seq
+=================
+
+.. automodule:: bmctool.utils.seq
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :template: module_template.rst
+   :recursive:
+
+   bmctool.utils.seq.auxiliary
+   bmctool.utils.seq.write
+

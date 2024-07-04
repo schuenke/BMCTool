@@ -1,0 +1,6 @@
+bmctool.utils.seq.auxiliary.read\_definitions
+=============================================
+
+.. currentmodule:: bmctool.utils.seq.auxiliary
+
+.. autofunction:: read_definitions

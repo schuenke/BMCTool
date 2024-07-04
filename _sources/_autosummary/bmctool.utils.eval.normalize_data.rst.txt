@@ -1,0 +1,6 @@
+bmctool.utils.eval.normalize\_data
+==================================
+
+.. currentmodule:: bmctool.utils.eval
+
+.. autofunction:: normalize_data

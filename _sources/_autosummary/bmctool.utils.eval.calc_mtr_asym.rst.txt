@@ -1,0 +1,6 @@
+bmctool.utils.eval.calc\_mtr\_asym
+==================================
+
+.. currentmodule:: bmctool.utils.eval
+
+.. autofunction:: calc_mtr_asym

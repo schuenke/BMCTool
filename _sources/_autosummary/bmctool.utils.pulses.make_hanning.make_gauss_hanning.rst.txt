@@ -1,0 +1,6 @@
+bmctool.utils.pulses.make\_hanning.make\_gauss\_hanning
+=======================================================
+
+.. currentmodule:: bmctool.utils.pulses.make_hanning
+
+.. autofunction:: make_gauss_hanning

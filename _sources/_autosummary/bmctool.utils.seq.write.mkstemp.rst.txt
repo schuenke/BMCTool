@@ -1,0 +1,6 @@
+bmctool.utils.seq.write.mkstemp
+===============================
+
+.. currentmodule:: bmctool.utils.seq.write
+
+.. autofunction:: mkstemp

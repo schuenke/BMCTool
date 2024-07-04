@@ -1,0 +1,6 @@
+bmctool.utils.pulses.create\_arbitrary\_pulse\_with\_phase.create\_arbitrary\_pulse\_with\_phase
+================================================================================================
+
+.. currentmodule:: bmctool.utils.pulses.create_arbitrary_pulse_with_phase
+
+.. autofunction:: create_arbitrary_pulse_with_phase

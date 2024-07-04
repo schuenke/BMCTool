@@ -1,0 +1,6 @@
+bmctool.utils.pulses.make\_hsexp.generate\_hsexp\_dict
+======================================================
+
+.. currentmodule:: bmctool.utils.pulses.make_hsexp
+
+.. autofunction:: generate_hsexp_dict

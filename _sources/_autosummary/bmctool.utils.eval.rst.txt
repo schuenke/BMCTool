@@ -1,0 +1,41 @@
+bmctool.utils.eval
+==================
+
+.. automodule:: bmctool.utils.eval
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      calc_mtr_asym
+      normalize_data
+      plot_z
+      split_data
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: class_template.rst
+   
+      Figure
+   
+   
+
+   
+   
+   
+
+
+

@@ -1,0 +1,6 @@
+bmctool.utils.pulses.make\_hanning.calc\_hanning
+================================================
+
+.. currentmodule:: bmctool.utils.pulses.make_hanning
+
+.. autofunction:: calc_hanning

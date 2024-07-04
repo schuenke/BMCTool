@@ -1,0 +1,164 @@
+bmctool.utils.eval.Figure
+=========================
+
+.. currentmodule:: bmctool.utils.eval
+
+.. autoclass:: Figure
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~Figure.__init__
+      ~Figure.add_artist
+      ~Figure.add_axes
+      ~Figure.add_axobserver
+      ~Figure.add_callback
+      ~Figure.add_gridspec
+      ~Figure.add_subfigure
+      ~Figure.add_subplot
+      ~Figure.align_labels
+      ~Figure.align_titles
+      ~Figure.align_xlabels
+      ~Figure.align_ylabels
+      ~Figure.autofmt_xdate
+      ~Figure.clear
+      ~Figure.clf
+      ~Figure.colorbar
+      ~Figure.contains
+      ~Figure.convert_xunits
+      ~Figure.convert_yunits
+      ~Figure.delaxes
+      ~Figure.draw
+      ~Figure.draw_artist
+      ~Figure.draw_without_rendering
+      ~Figure.figimage
+      ~Figure.findobj
+      ~Figure.format_cursor_data
+      ~Figure.gca
+      ~Figure.get_agg_filter
+      ~Figure.get_alpha
+      ~Figure.get_animated
+      ~Figure.get_axes
+      ~Figure.get_children
+      ~Figure.get_clip_box
+      ~Figure.get_clip_on
+      ~Figure.get_clip_path
+      ~Figure.get_constrained_layout
+      ~Figure.get_constrained_layout_pads
+      ~Figure.get_cursor_data
+      ~Figure.get_default_bbox_extra_artists
+      ~Figure.get_dpi
+      ~Figure.get_edgecolor
+      ~Figure.get_facecolor
+      ~Figure.get_figheight
+      ~Figure.get_figure
+      ~Figure.get_figwidth
+      ~Figure.get_frameon
+      ~Figure.get_gid
+      ~Figure.get_in_layout
+      ~Figure.get_label
+      ~Figure.get_layout_engine
+      ~Figure.get_linewidth
+      ~Figure.get_mouseover
+      ~Figure.get_path_effects
+      ~Figure.get_picker
+      ~Figure.get_rasterized
+      ~Figure.get_size_inches
+      ~Figure.get_sketch_params
+      ~Figure.get_snap
+      ~Figure.get_suptitle
+      ~Figure.get_supxlabel
+      ~Figure.get_supylabel
+      ~Figure.get_tight_layout
+      ~Figure.get_tightbbox
+      ~Figure.get_transform
+      ~Figure.get_transformed_clip_path_and_affine
+      ~Figure.get_url
+      ~Figure.get_visible
+      ~Figure.get_window_extent
+      ~Figure.get_zorder
+      ~Figure.ginput
+      ~Figure.have_units
+      ~Figure.is_transform_set
+      ~Figure.legend
+      ~Figure.pchanged
+      ~Figure.pick
+      ~Figure.pickable
+      ~Figure.properties
+      ~Figure.remove
+      ~Figure.remove_callback
+      ~Figure.savefig
+      ~Figure.sca
+      ~Figure.set
+      ~Figure.set_agg_filter
+      ~Figure.set_alpha
+      ~Figure.set_animated
+      ~Figure.set_canvas
+      ~Figure.set_clip_box
+      ~Figure.set_clip_on
+      ~Figure.set_clip_path
+      ~Figure.set_constrained_layout
+      ~Figure.set_constrained_layout_pads
+      ~Figure.set_dpi
+      ~Figure.set_edgecolor
+      ~Figure.set_facecolor
+      ~Figure.set_figheight
+      ~Figure.set_figure
+      ~Figure.set_figwidth
+      ~Figure.set_frameon
+      ~Figure.set_gid
+      ~Figure.set_in_layout
+      ~Figure.set_label
+      ~Figure.set_layout_engine
+      ~Figure.set_linewidth
+      ~Figure.set_mouseover
+      ~Figure.set_path_effects
+      ~Figure.set_picker
+      ~Figure.set_rasterized
+      ~Figure.set_size_inches
+      ~Figure.set_sketch_params
+      ~Figure.set_snap
+      ~Figure.set_tight_layout
+      ~Figure.set_transform
+      ~Figure.set_url
+      ~Figure.set_visible
+      ~Figure.set_zorder
+      ~Figure.show
+      ~Figure.subfigures
+      ~Figure.subplot_mosaic
+      ~Figure.subplots
+      ~Figure.subplots_adjust
+      ~Figure.suptitle
+      ~Figure.supxlabel
+      ~Figure.supylabel
+      ~Figure.text
+      ~Figure.tight_layout
+      ~Figure.update
+      ~Figure.update_from
+      ~Figure.waitforbuttonpress
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Figure.axes
+      ~Figure.dpi
+      ~Figure.frameon
+      ~Figure.mouseover
+      ~Figure.stale
+      ~Figure.sticky_edges
+      ~Figure.zorder
+   
+   

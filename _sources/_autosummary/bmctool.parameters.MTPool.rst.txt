@@ -1,0 +1,40 @@
+bmctool.parameters.MTPool
+=========================
+
+.. currentmodule:: bmctool.parameters
+
+.. autoclass:: MTPool
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~MTPool.__init__
+      ~MTPool.from_dict
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~MTPool.dw
+      ~MTPool.f
+      ~MTPool.k
+      ~MTPool.lineshape
+      ~MTPool.r1
+      ~MTPool.r2
+      ~MTPool.t1
+      ~MTPool.t2
+      ~MTPool.valid_lineshapes
+   
+   

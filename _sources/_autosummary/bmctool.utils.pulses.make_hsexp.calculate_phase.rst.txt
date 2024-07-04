@@ -1,0 +1,6 @@
+bmctool.utils.pulses.make\_hsexp.calculate\_phase
+=================================================
+
+.. currentmodule:: bmctool.utils.pulses.make_hsexp
+
+.. autofunction:: calculate_phase

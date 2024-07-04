@@ -1,0 +1,66 @@
+bmctool.utils.seq.write.Sequence
+================================
+
+.. currentmodule:: bmctool.utils.seq.write
+
+.. autoclass:: Sequence
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~Sequence.__init__
+      ~Sequence.adc_times
+      ~Sequence.add_block
+      ~Sequence.calculate_gradient_spectrum
+      ~Sequence.calculate_kspace
+      ~Sequence.calculate_kspacePP
+      ~Sequence.calculate_pns
+      ~Sequence.check_timing
+      ~Sequence.duration
+      ~Sequence.evaluate_labels
+      ~Sequence.flip_grad_axis
+      ~Sequence.get_block
+      ~Sequence.get_definition
+      ~Sequence.get_extension_type_ID
+      ~Sequence.get_extension_type_string
+      ~Sequence.get_gradients
+      ~Sequence.mod_grad_axis
+      ~Sequence.plot
+      ~Sequence.read
+      ~Sequence.register_adc_event
+      ~Sequence.register_grad_event
+      ~Sequence.register_label_event
+      ~Sequence.register_rf_event
+      ~Sequence.remove_duplicates
+      ~Sequence.rf_from_lib_data
+      ~Sequence.rf_times
+      ~Sequence.set_block
+      ~Sequence.set_definition
+      ~Sequence.set_extension_string_ID
+      ~Sequence.test_report
+      ~Sequence.waveforms
+      ~Sequence.waveforms_and_times
+      ~Sequence.waveforms_export
+      ~Sequence.write
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Sequence.version_major
+      ~Sequence.version_minor
+      ~Sequence.version_revision
+   
+   

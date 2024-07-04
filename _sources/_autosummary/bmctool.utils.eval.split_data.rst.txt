@@ -1,0 +1,6 @@
+bmctool.utils.eval.split\_data
+==============================
+
+.. currentmodule:: bmctool.utils.eval
+
+.. autofunction:: split_data

@@ -1,0 +1,6 @@
+bmctool.utils.plot\_z
+=====================
+
+.. currentmodule:: bmctool.utils
+
+.. autofunction:: plot_z
