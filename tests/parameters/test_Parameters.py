@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 import pytest
 from bmctool.parameters import Parameters
 
@@ -88,3 +90,24 @@ def test_update_water_pool_parameter(valid_config_dict, parameter, value):
 
     # assert that the attribute was updated correctly
     assert getattr(p.water_pool, parameter) == float(value)
+
+
+def test_equality(
+    valid_parameters_object, valid_water_pool_object, valid_cest_pool_object, valid_options_object, valid_system_object
+):
+    """Test that Options instances are equal if their attributes are equal."""
+    a = Parameters(
+        water_pool=valid_water_pool_object,
+        cest_pools=[valid_cest_pool_object],
+        mt_pool=None,
+        options=valid_options_object,
+        system=valid_system_object,
+    )
+    b = deepcopy(valid_parameters_object)
+    b.options.max_pulse_samples = 10
+    c = deepcopy(valid_parameters_object)
+    c.water_pool.r1 = 2.0
+
+    assert a == valid_parameters_object
+    assert a != b
+    assert a != c

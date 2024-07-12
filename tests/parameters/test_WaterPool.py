@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 import pytest
 from bmctool.parameters.WaterPool import WaterPool
 
@@ -44,7 +46,9 @@ def test_from_invalid_combination(r1, r2, f, t1, t2):
     [
         (1.0, 2.0, 3.0, None, None),  # f not between 0 and 1
         (-1.0, 2.0, 0.3, None, None),  # r1 negative
+        (1.0, -2.0, 0.3, None, None),  # r2 negative
         (None, 2.0, 0.3, -1.0, None),  # t1 negative
+        (1.0, None, 0.3, None, -0.5),  # t2 negative
     ],
 )
 def test_from_invalid_values(r1, r2, f, t1, t2):
@@ -69,3 +73,20 @@ def test_dw_cannot_be_changed():
     a = WaterPool(r1=1.0, r2=2.0, f=1)
     with pytest.raises(UserWarning):
         a.dw = 0.5
+
+
+def test_equality(valid_waterpool_object):
+    """Test that WaterPool instances are equal if their attributes are equal."""
+    a = deepcopy(valid_waterpool_object)
+    b = WaterPool(r1=1.0, r2=2.0, f=1.0)
+    c = WaterPool(r1=1.0, r2=2.0, f=0.5)
+    d = WaterPool(r1=7.0, r2=2.0, f=1.0)
+    e = WaterPool(r1=1.0, r2=7.0, f=1.0)
+    f = 'not a WaterPool object'
+
+    assert a == valid_waterpool_object
+    assert a == b
+    assert a != c
+    assert a != d
+    assert a != e
+    assert a != f

@@ -66,3 +66,25 @@ def test_k_value_setter():
     assert a.k == 4.0
     with pytest.raises(ValueError):
         a.k = -4.0
+
+
+def test_equality():
+    """Test that MTPool instances are equal if their attributes are equal."""
+    a = MTPool(r1=1.0, r2=2.0, k=3.0, f=0.5, dw=5.0, lineshape='lorentzian')
+    b = MTPool(r1=1.0, r2=2.0, k=3.0, f=0.5, dw=5.0, lineshape='lorentzian')
+    c = MTPool(r1=2.0, r2=2.0, k=3.0, f=0.5, dw=5.0, lineshape='lorentzian')
+    d = MTPool(r1=1.0, r2=1.0, k=3.0, f=0.5, dw=5.0, lineshape='lorentzian')
+    e = MTPool(r1=1.0, r2=2.0, k=4.0, f=0.5, dw=5.0, lineshape='lorentzian')
+    f = MTPool(r1=1.0, r2=2.0, k=3.0, f=0.6, dw=5.0, lineshape='lorentzian')
+    g = MTPool(r1=1.0, r2=2.0, k=3.0, f=0.5, dw=6.0, lineshape='lorentzian')
+    h = MTPool(r1=1.0, r2=2.0, k=3.0, f=0.5, dw=5.0, lineshape='superlorentzian')
+    i = 'not a MTPool object'
+
+    assert a == b
+    assert a != c
+    assert a != d
+    assert a != e
+    assert a != f
+    assert a != g
+    assert a != h
+    assert a != i
