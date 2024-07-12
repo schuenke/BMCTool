@@ -1,12 +1,14 @@
+from copy import deepcopy
+
 import numpy as np
 import pytest
 from bmctool.parameters import Parameters
 from bmctool.simulation import BlochMcConnellSolver
 
 
-def test_init_from_valid_dict(valid_config_dict):
+def test_init_from_valid_dict(valid_parameters_object):
     """Test initializatim from a Parameters object and n_offsets."""
-    params = Parameters.from_dict(valid_config_dict)
+    params = deepcopy(valid_parameters_object)
     solver = BlochMcConnellSolver(params=params, n_offsets=100)
 
     assert solver is not None
@@ -55,9 +57,9 @@ def test_correct_attributes(valid_config_dict):
         ('b0_inhom', 2.0),
     ],
 )
-def test_update_params(valid_config_dict, parameter, value):
+def test_update_params(valid_parameters_object, parameter, value):
     """Test that update_params() works correctly."""
-    params = Parameters.from_dict(valid_config_dict)
+    params = deepcopy(valid_parameters_object)
     solver = BlochMcConnellSolver(params=params, n_offsets=100)
 
     # change field strength in Parameters object

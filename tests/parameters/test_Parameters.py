@@ -94,6 +94,50 @@ def test_update_water_pool_parameter(valid_parameters_object, parameter, value):
 @pytest.mark.parametrize(
     ('parameter', 'value'),
     [
+        ('f', 0.5),
+        ('t1', 3.0),
+        ('t2', 5.0),
+        ('k', 100.0),
+        ('dw', 3.0),
+    ],
+)
+def test_update_mt_pool_parameter(valid_parameters_object, parameter, value):
+    """Test that the MT pool parameters are updated correctly."""
+    p = deepcopy(valid_parameters_object)
+
+    # call p.update_mt_pool() with the parameter and value
+    p.update_mt_pool(**{parameter: value})
+
+    # assert that the attribute was updated correctly
+    assert getattr(p.mt_pool, parameter) == value
+
+
+@pytest.mark.parametrize(
+    ('parameter', 'value', 'pool_idx'),
+    [
+        ('f', 0.5, 0),
+        ('t1', 3.0, 0),
+        ('t2', 5.0, 0),
+        ('k', 100.0, 0),
+        ('dw', 3.0, 0),
+        ('f', 0.5, 1),
+    ],
+)
+def test_update_cest_pool_parameter(valid_parameters_object, valid_cest_pool_object, parameter, value, pool_idx):
+    """Test that the MT pool parameters are updated correctly."""
+    p = deepcopy(valid_parameters_object)
+    p.add_cest_pool(valid_cest_pool_object)  # add 2nd identical CEST pool
+
+    # call p.update_cest_pool() with the parameter and value
+    p.update_cest_pool(pool_idx, **{parameter: value})
+
+    # assert that the attribute was updated correctly
+    assert getattr(p.cest_pools[pool_idx], parameter) == value
+
+
+@pytest.mark.parametrize(
+    ('parameter', 'value'),
+    [
         ('verbose', True),
         ('reset_init_mag', False),
         ('scale', 0.0),
