@@ -74,7 +74,7 @@ def empty_config_file(tmp_path_factory):
 
 @pytest.fixture(scope='session')
 def valid_water_pool_object():
-    return WaterPool(r1=1.0, r2=20.0)
+    return WaterPool(r1=1.0, r2=2.0)
 
 
 @pytest.fixture(scope='session')

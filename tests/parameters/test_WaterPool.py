@@ -75,16 +75,16 @@ def test_dw_cannot_be_changed():
         a.dw = 0.5
 
 
-def test_equality(valid_waterpool_object):
+def test_equality(valid_water_pool_object):
     """Test that WaterPool instances are equal if their attributes are equal."""
-    a = deepcopy(valid_waterpool_object)
+    a = deepcopy(valid_water_pool_object)
     b = WaterPool(r1=1.0, r2=2.0, f=1.0)
     c = WaterPool(r1=1.0, r2=2.0, f=0.5)
     d = WaterPool(r1=7.0, r2=2.0, f=1.0)
     e = WaterPool(r1=1.0, r2=7.0, f=1.0)
     f = 'not a WaterPool object'
 
-    assert a == valid_waterpool_object
+    assert a == valid_water_pool_object
     assert a == b
     assert a != c
     assert a != d
