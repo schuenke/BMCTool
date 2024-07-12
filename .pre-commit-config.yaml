@@ -35,6 +35,6 @@ repos:
         additional_dependencies:
           - numpy<2.0
           - pytest
-          - pypulseq
+          - pypulseq>=1.4.2
           - types-pyyaml
           - types-tqdm

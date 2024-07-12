@@ -1,7 +1,14 @@
 from pathlib import Path
 
+import numpy as np
+import pypulseq as pp  # type: ignore
 import pytest
 import yaml
+from bmctool.parameters import CESTPool
+from bmctool.parameters import Options
+from bmctool.parameters import Parameters
+from bmctool.parameters import System
+from bmctool.parameters import WaterPool
 
 
 @pytest.fixture(scope='session')
@@ -62,4 +69,63 @@ def empty_config_file(tmp_path_factory):
     with Path(fn).open('w') as f:
         f.write('')
     f.close()
+    return fn
+
+
+@pytest.fixture(scope='session')
+def valid_water_pool_object():
+    return WaterPool(r1=1.0, r2=20.0)
+
+
+@pytest.fixture(scope='session')
+def valid_cest_pool_object():
+    return CESTPool(f=0.001, r1=1.0, r2=60, k=100, dw=3.0)
+
+
+@pytest.fixture(scope='session')
+def valid_system_object():
+    return System(b0=3.0, gamma=42.5764, b0_inhom=0.0, rel_b1=1.0)
+
+
+@pytest.fixture(scope='session')
+def valid_options_object():
+    return Options()
+
+
+@pytest.fixture(scope='session')
+def valid_parameters_object(valid_water_pool_object, valid_cest_pool_object, valid_system_object, valid_options_object):
+    return Parameters(
+        water_pool=valid_water_pool_object,
+        cest_pools=[valid_cest_pool_object],
+        mt_pool=None,
+        system=valid_system_object,
+        options=valid_options_object,
+    )
+
+
+@pytest.fixture(scope='session')
+def valid_sequence_object():
+    seq = pp.Sequence()
+    sys = pp.Opts()
+
+    offsets_ppm = np.linspace(-5, 5, 11)
+    offsets_hz = offsets_ppm * 42.5764 * 3
+    delay = pp.make_delay(100e-3)
+    pseudo_adc = pp.make_adc(num_samples=1, duration=1e-3)
+
+    for offset in offsets_hz:
+        rf = pp.make_gauss_pulse(flip_angle=10 * np.pi, duration=5e-3, freq_offset=offset, system=sys)
+        seq.add_block(rf)
+        seq.add_block(delay)
+        seq.add_block(pseudo_adc)
+
+    seq.set_definition('offsets_ppm', offsets_ppm)
+
+    return seq
+
+
+@pytest.fixture(scope='session')
+def valid_seq_file(tmp_path_factory, valid_sequence_object):
+    fn = tmp_path_factory.mktemp('valid_seq_file') / 'valid_seq_file.seq'
+    valid_sequence_object.write(fn)
     return fn
