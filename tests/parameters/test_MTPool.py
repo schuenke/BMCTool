@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 import pytest
 from bmctool.parameters import MTPool
 
@@ -68,9 +70,9 @@ def test_k_value_setter():
         a.k = -4.0
 
 
-def test_equality():
+def test_equality(valid_mt_pool_object):
     """Test that MTPool instances are equal if their attributes are equal."""
-    a = MTPool(r1=1.0, r2=2.0, k=3.0, f=0.5, dw=5.0, lineshape='lorentzian')
+    a = deepcopy(valid_mt_pool_object)
     b = MTPool(r1=1.0, r2=2.0, k=3.0, f=0.5, dw=5.0, lineshape='lorentzian')
     c = MTPool(r1=2.0, r2=2.0, k=3.0, f=0.5, dw=5.0, lineshape='lorentzian')
     d = MTPool(r1=1.0, r2=1.0, k=3.0, f=0.5, dw=5.0, lineshape='lorentzian')
@@ -80,6 +82,7 @@ def test_equality():
     h = MTPool(r1=1.0, r2=2.0, k=3.0, f=0.5, dw=5.0, lineshape='superlorentzian')
     i = 'not a MTPool object'
 
+    assert a == valid_mt_pool_object
     assert a == b
     assert a != c
     assert a != d

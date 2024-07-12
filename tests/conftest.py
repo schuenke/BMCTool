@@ -5,6 +5,7 @@ import pypulseq as pp  # type: ignore
 import pytest
 import yaml
 from bmctool.parameters import CESTPool
+from bmctool.parameters import MTPool
 from bmctool.parameters import Options
 from bmctool.parameters import Parameters
 from bmctool.parameters import System
@@ -83,6 +84,11 @@ def valid_cest_pool_object():
 
 
 @pytest.fixture(scope='session')
+def valid_mt_pool_object():
+    return MTPool(r1=1.0, r2=2.0, k=3.0, f=0.5, dw=5.0, lineshape='lorentzian')
+
+
+@pytest.fixture(scope='session')
 def valid_system_object():
     return System(b0=3.0, gamma=42.5764, b0_inhom=0.0, rel_b1=1.0)
 
@@ -93,11 +99,13 @@ def valid_options_object():
 
 
 @pytest.fixture(scope='session')
-def valid_parameters_object(valid_water_pool_object, valid_cest_pool_object, valid_system_object, valid_options_object):
+def valid_parameters_object(
+    valid_water_pool_object, valid_cest_pool_object, valid_mt_pool_object, valid_system_object, valid_options_object
+):
     return Parameters(
         water_pool=valid_water_pool_object,
         cest_pools=[valid_cest_pool_object],
-        mt_pool=None,
+        mt_pool=valid_mt_pool_object,
         system=valid_system_object,
         options=valid_options_object,
     )
