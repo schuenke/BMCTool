@@ -8,7 +8,7 @@ from matplotlib.figure import Figure
 def calc_mtr_asym(
     m_z: np.ndarray,
     offsets: np.ndarray,
-    n_interp: int = 1000,
+    n_interp: int = 1001,
 ) -> np.ndarray:
     """Calculate MTRasym from given magnetization vector.
 
@@ -26,10 +26,18 @@ def calc_mtr_asym(
     np.ndarray
         Array containing the MTRasym values
     """
-    x_interp = np.linspace(np.min(offsets), np.max(np.absolute(offsets)), n_interp)
-    y_interp = np.interp(x_interp, offsets, m_z)
-    asym = y_interp[::-1] - y_interp
-    return np.interp(offsets, x_interp, asym)
+    # assert that m_z and offsets have the same dimensions
+    if m_z.size != offsets.size:
+        raise ValueError('m_z and offsets must have the same dimensions.')
+
+    # check if offsets are symmetric
+    if np.allclose(offsets, -offsets[::-1]):
+        return np.array(m_z[::-1] - m_z)
+    else:
+        x_interp = np.linspace(np.min(offsets), np.max(np.absolute(offsets)), n_interp)
+        y_interp = np.interp(x_interp, offsets, m_z)
+        asym = y_interp[::-1] - y_interp
+        return np.interp(offsets, x_interp, asym)
 
 
 def normalize_data(
