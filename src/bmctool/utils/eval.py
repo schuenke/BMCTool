@@ -130,6 +130,7 @@ def plot_z(
     title: str = 'spectrum',
     x_label: str = 'offsets [ppm]',
     y_label: str = 'signal',
+    show_plot: bool = True,
 ) -> Figure:
     """Plot Z-spectrum according to the given parameters.
 
@@ -153,6 +154,8 @@ def plot_z(
         Label of x-axis, by default "offsets [ppm]"
     y_label : str, optional
         Label of y-axis, by default "signal"
+    show_plot : bool, optional
+        Flag to show the plot, by default True
 
     Returns
     -------
@@ -185,6 +188,7 @@ def plot_z(
         fig.tight_layout()
 
     plt.title(title)
-    plt.show()
+    if show_plot:
+        plt.show()
 
     return fig

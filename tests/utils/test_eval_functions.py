@@ -2,7 +2,9 @@ import numpy as np
 import pytest
 from bmctool.utils.eval import calc_mtr_asym
 from bmctool.utils.eval import normalize_data
+from bmctool.utils.eval import plot_z
 from bmctool.utils.eval import split_data
+from matplotlib.figure import Figure
 
 
 def test_calc_mtr_asym():
@@ -31,6 +33,10 @@ def test_calc_mtr_asym():
     m_z = np.array([1, 1, 1, 1, 0.5, 1, 1, 0, 1, 1, 1, 1, 1])
     expected_asym = np.array([0, 0, 0, 0, 0.5, 0, 0, 0, 0, 0, -0.5, 0, 0], dtype=float)
     np.testing.assert_array_almost_equal(calc_mtr_asym(m_z, offsets), expected_asym)
+
+    # wrong dimensions
+    with pytest.raises(ValueError, match='m_z and offsets must have the same dimensions.'):
+        calc_mtr_asym(np.array([1, 2, 3]), np.array([1, 2, 3, 4]))
 
 
 @pytest.mark.parametrize(
@@ -116,3 +122,49 @@ def test_split_data(m_z, offsets, threshold, expected_offsets, expected_data, ex
         assert result_norm is None, f'expected None, got {result_norm}'
     else:
         assert np.array_equal(result_norm, expected_norm_data), f'expected {expected_norm_data}, got {result_norm}'  # type: ignore
+
+
+def test_split_data_raises():
+    """Test the split_data function with invalid threshold values."""
+    with pytest.raises(TypeError, match='Threshold of type'):
+        split_data(np.array([1, 2, 3]), np.array([1, 2, 3, 4]), 'str')  # type: ignore
+
+
+def test_plot_z():
+    """Test the plot_z function."""
+
+    # define offsets
+    offsets = np.linspace(-6, 6, 13)
+    m_z = np.array([1, 0.75, 0.5, 0.75, 1, 1, 0, 1, 1, 1, 1, 1, 1])
+
+    # Test case 1: Basic test case with default parameters
+    expected_fig = plot_z(m_z=m_z, show_plot=False)
+    assert isinstance(expected_fig, Figure)
+
+    # Test case 2: Test with custom offsets
+    expected_fig = plot_z(m_z=m_z, offsets=offsets, show_plot=False)
+    assert isinstance(expected_fig, Figure)
+
+    # Test case 3: Test with norm=True, but no threshold
+    normalize = True
+    expected_fig = plot_z(m_z=m_z, offsets=offsets, normalize=normalize, show_plot=False)
+    assert isinstance(expected_fig, Figure)
+
+    # Test case 4: Test with normalization and custom threshold
+    expected_fig = plot_z(m_z=m_z, offsets=offsets, normalize=normalize, norm_threshold=6, show_plot=False)
+    assert isinstance(expected_fig, Figure)
+
+    # Test case 5: Test without inverted x-axis
+    expected_fig = plot_z(m_z=m_z, offsets=offsets, invert_ax=False, show_plot=False)
+    assert isinstance(expected_fig, Figure)
+
+    # Test case 6: Test with MTRasym plot
+    expected_fig = plot_z(m_z=m_z, offsets=offsets, plot_mtr_asym=True, show_plot=False)
+    assert isinstance(expected_fig, Figure)
+
+    # Test case 7: Test with custom title, x_label, and y_label
+    title = 'Custom Title'
+    x_label = 'Custom X Label'
+    y_label = 'Custom Y Label'
+    expected_fig = plot_z(m_z=m_z, offsets=offsets, title=title, x_label=x_label, y_label=y_label, show_plot=False)
+    assert isinstance(expected_fig, Figure)
