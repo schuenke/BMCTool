@@ -1,4 +1,3 @@
-from copy import deepcopy
 from pathlib import Path
 
 import numpy as np
@@ -18,12 +17,11 @@ def test_sim_example():
     assert np.allclose(result, ref, atol=1e-12)
 
 
-def test_sim_from_fixtures(valid_parameters_object):
+def test_sim_from_fixtures(valid_parameters_object, valid_sequence_object):
     """Test that a simulation can be run using the provided fixtures."""
-    seq_file = Path(__file__).parent.parent.parent / 'src' / 'bmctool' / 'library' / 'seq-library' / 'WASABI.seq'
-    sim = BMCSim(deepcopy(valid_parameters_object), seq_file)
+    sim = BMCSim(valid_parameters_object, valid_sequence_object)
     sim.run()
     offsets, spec = sim.get_zspec()
 
-    assert len(offsets) == 32
-    assert len(spec) == 32
+    assert len(offsets) == 11
+    assert len(spec) == 11
