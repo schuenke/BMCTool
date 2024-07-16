@@ -102,14 +102,14 @@ class BMCSim:
             ph_ = ph[0]
             dtp_ = dtp * amp.size
         # shaped pulse
-        elif n_unique > max_pulse_samples:
+        elif amp.size > max_pulse_samples:
             sample_factor = int(np.ceil(amp.size / max_pulse_samples))
-            amp_ = amp[::sample_factor]
-            ph_ = ph[::sample_factor]
+            amp_ = np.squeeze(amp[::sample_factor])
+            ph_ = np.squeeze(ph[::sample_factor])
             dtp_ = dtp * sample_factor
         else:
-            amp_ = amp
-            ph_ = ph
+            amp_ = np.squeeze(amp)
+            ph_ = np.squeeze(ph)
             dtp_ = dtp
 
         return amp_, ph_, dtp_, delay_after_pulse
