@@ -59,7 +59,8 @@ def test_from_invalid_types(r1, r2, k, f, dw, t1, t2):
     [
         (1.0, 2.0, 3.0, 4.0, 5.0, None, None),  # f not between 0 and 1
         (-1.0, 2.0, 3.0, 0.5, 5.0, None, None),  # r1 negative
-        (None, 2.0, -3.0, 4.0, 5.0, -1.0, None),  # t1 negative
+        (None, 2.0, 3.0, 4.0, 5.0, -1.0, None),  # t1 negative
+        (None, 2.0, -3.0, 4.0, 5.0, 1.0, None),  # k negative
     ],
 )
 def test_from_invalid_values(r1, r2, k, f, dw, t1, t2):
@@ -94,3 +95,13 @@ def test_from_dict_classmethod():
     a = CESTPool.from_dict(d)
     b = CESTPool(**d)
     assert a == b
+
+
+def test_k_value_setter():
+    """Test that k value is set correctly."""
+    a = CESTPool(r1=1.0, r2=2.0, k=3.0, f=0.5, dw=5.0)
+    assert a.k == 3.0
+    a.k = 4.0
+    assert a.k == 4.0
+    with pytest.raises(ValueError):
+        a.k = -4.0

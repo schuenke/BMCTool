@@ -1,5 +1,18 @@
+from copy import deepcopy
+
 import pytest
 from bmctool.parameters import Parameters
+
+
+def test_properties_raise_error(valid_parameters_object):
+    """Test that m_vec and mz_loc raise an error if water_pool does not exist."""
+    p = deepcopy(valid_parameters_object)
+    del p.water_pool
+    with pytest.raises(Exception, match='No water pool defined.'):
+        _ = p.mz_loc
+
+    with pytest.raises(Exception, match='No water pool defined.'):
+        _ = p.m_vec
 
 
 def test_init_from_valid_dict(valid_config_dict):
@@ -55,10 +68,9 @@ def test_init_from_alternative_param_names(valid_config_dict):
     assert p == q
 
 
-def test_export_to_yaml(valid_config_dict, empty_config_file):
+def test_export_to_yaml(valid_parameters_object, empty_config_file):
     """Test that the Parameters class can be exported to a YAML config file."""
-    # create Parameters object from valid_config_dict
-    p = Parameters.from_dict(valid_config_dict)
+    p = deepcopy(valid_parameters_object)
 
     # export Parameters object to YAML config file
     p.to_yaml(empty_config_file)
@@ -79,12 +91,123 @@ def test_export_to_yaml(valid_config_dict, empty_config_file):
         ('f', 0.5),
     ],
 )
-def test_update_water_pool_parameter(valid_config_dict, parameter, value):
+def test_update_water_pool_parameter(valid_parameters_object, parameter, value):
     """Test that the water pool parameters are updated correctly."""
-    p = Parameters.from_dict(valid_config_dict)
+    p = deepcopy(valid_parameters_object)
 
     # call p.update_water_pool() with the parameter and value
     p.update_water_pool(**{parameter: value})
 
     # assert that the attribute was updated correctly
     assert getattr(p.water_pool, parameter) == float(value)
+
+
+@pytest.mark.parametrize(
+    ('parameter', 'value'),
+    [
+        ('f', 0.5),
+        ('t1', 3.0),
+        ('t2', 5.0),
+        ('k', 100.0),
+        ('dw', 3.0),
+    ],
+)
+def test_update_mt_pool_parameter(valid_parameters_object, parameter, value):
+    """Test that the MT pool parameters are updated correctly."""
+    p = deepcopy(valid_parameters_object)
+
+    # call p.update_mt_pool() with the parameter and value
+    p.update_mt_pool(**{parameter: value})
+
+    # assert that the attribute was updated correctly
+    assert getattr(p.mt_pool, parameter) == value
+
+
+@pytest.mark.parametrize(
+    ('parameter', 'value', 'pool_idx'),
+    [
+        ('f', 0.5, 0),
+        ('t1', 3.0, 0),
+        ('t2', 5.0, 0),
+        ('k', 100.0, 0),
+        ('dw', 3.0, 0),
+        ('f', 0.5, 1),
+    ],
+)
+def test_update_cest_pool_parameter(valid_parameters_object, valid_cest_pool_object, parameter, value, pool_idx):
+    """Test that the MT pool parameters are updated correctly."""
+    p = deepcopy(valid_parameters_object)
+    p.add_cest_pool(valid_cest_pool_object)  # add 2nd identical CEST pool
+
+    # call p.update_cest_pool() with the parameter and value
+    p.update_cest_pool(pool_idx, **{parameter: value})
+
+    # assert that the attribute was updated correctly
+    assert getattr(p.cest_pools[pool_idx], parameter) == value
+
+
+@pytest.mark.parametrize(
+    ('parameter', 'value'),
+    [
+        ('verbose', True),
+        ('reset_init_mag', False),
+        ('scale', 0.0),
+        ('max_pulse_samples', 123),
+    ],
+)
+def test_update_options(valid_parameters_object, parameter, value):
+    """Test that the options are updated correctly."""
+    p = deepcopy(valid_parameters_object)
+
+    # call p.update_options() with a new value for verbose
+    p.update_options(**{parameter: value})
+
+    # assert that the attribute was updated correctly
+    assert getattr(p.options, parameter) == value
+
+
+@pytest.mark.parametrize(
+    ('parameter', 'value'),
+    [
+        ('b0', 7.0),
+        ('gamma', 12.3456),
+        ('b0_inhom', 0.1),
+        ('rel_b1', 1.1),
+    ],
+)
+def test_update_system_parameter(valid_parameters_object, parameter, value):
+    """Test that the system parameters are updated correctly."""
+    p = deepcopy(valid_parameters_object)
+
+    # call p.update_system() with the parameter and value
+    p.update_system(**{parameter: value})
+
+    # assert that the attribute was updated correctly
+    assert getattr(p.system, parameter) == value
+
+
+def test_equality(
+    valid_parameters_object,
+    valid_water_pool_object,
+    valid_cest_pool_object,
+    valid_mt_pool_object,
+    valid_options_object,
+    valid_system_object,
+):
+    """Test that Options instances are equal if their attributes are equal."""
+    a = Parameters(
+        water_pool=valid_water_pool_object,
+        cest_pools=[valid_cest_pool_object],
+        mt_pool=valid_mt_pool_object,
+        options=valid_options_object,
+        system=valid_system_object,
+    )
+    b = deepcopy(valid_parameters_object)
+    b.options.max_pulse_samples = 10
+    c = deepcopy(valid_parameters_object)
+    c.water_pool.r1 = 2.0
+
+    assert a == valid_parameters_object
+    assert a != b
+    assert a != c
+    assert a != 'not a Parameters object'

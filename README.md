@@ -1,5 +1,9 @@
 # Bloch-McConnell (BMC) Simulation Tool
 
+![Python](https://img.shields.io/badge/python-3.11%20%7C%203.12-blue)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+![Coverage Bagde](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/schuenke/6296bce292048be38f06cc216719f558/raw/coverage.json)
+
 This repository contains a purely python-based Bloch-McConnell (BMC) simulation tool that can be used to simulate
 the evolution of the magnetization in various (exchanging) magnetic environments ('pools') under arbitrary
 radio-frequency (RF) irradiation. The tool was developed to simulate Chemical Exchange Saturation Transfer (CEST) or

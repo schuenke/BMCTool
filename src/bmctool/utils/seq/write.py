@@ -1,4 +1,8 @@
-"""write.py Auxiliary functions for writing seq files."""
+"""Auxiliary functions for writing seq files.
+
+These function are used in the pulseq-cest library to write seq files matching the MATLAB style.
+The pulseq-cest library can be found at: https://github.com/kherz/pulseq-cest-library
+"""
 
 import math
 from datetime import datetime
