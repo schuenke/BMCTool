@@ -42,10 +42,13 @@ class Parameters:
         """Check if two Parameters instances are equal."""
         if not isinstance(other, self.__class__):
             return NotImplemented
+        # Todo: check if cest_pool comparison is correct and add test(s)
         if self.__slots__ == other.__slots__:
             return (
                 self.water_pool == other.water_pool
-                and self.cest_pools == other.cest_pools
+                and all(
+                    self.cest_pools[ii] == other.cest_pools[ii] for ii in range(len(self.cest_pools)) if self.cest_pools
+                )
                 and self.mt_pool == other.mt_pool
                 and self.system == other.system
                 and self.options == other.options
@@ -60,7 +63,7 @@ class Parameters:
     @property
     def mz_loc(self) -> int:
         """Get the location of the water z-magnetization in the BMC matrix."""
-        if not self.water_pool:
+        if not hasattr(self, 'water_pool'):
             raise Exception('No water pool defined. mz_loc cannot be determined')
 
         # mz_loc is 2 for water pool and +2 for each CEST pool
@@ -69,7 +72,7 @@ class Parameters:
     @property
     def m_vec(self) -> np.ndarray:
         """Get the initial magnetization vector (fully relaxed)."""
-        if not self.water_pool:
+        if not hasattr(self, 'water_pool'):
             raise Exception('No water pool defined. m_vec cannot be determined')
 
         num_full_pools = self.num_cest_pools + 1
@@ -128,9 +131,6 @@ class Parameters:
         yaml_file
             Path to yaml config file.
         """
-        if not Path(yaml_file).exists():
-            raise FileNotFoundError(f'File {yaml_file} not found.')
-
         with Path(yaml_file).open() as file:
             config = yaml.safe_load(file)
 

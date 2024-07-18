@@ -4,6 +4,17 @@ import pytest
 from bmctool.parameters import Parameters
 
 
+def test_properties_raise_error(valid_parameters_object):
+    """Test that m_vec and mz_loc raise an error if water_pool does not exist."""
+    p = deepcopy(valid_parameters_object)
+    del p.water_pool
+    with pytest.raises(Exception, match='No water pool defined.'):
+        _ = p.mz_loc
+
+    with pytest.raises(Exception, match='No water pool defined.'):
+        _ = p.m_vec
+
+
 def test_init_from_valid_dict(valid_config_dict):
     """Test initialization of the Parameters class from a valid dictionary."""
     p = Parameters.from_dict(valid_config_dict)
@@ -199,3 +210,4 @@ def test_equality(
     assert a == valid_parameters_object
     assert a != b
     assert a != c
+    assert a != 'not a Parameters object'
