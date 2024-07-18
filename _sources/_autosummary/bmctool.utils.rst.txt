@@ -36,8 +36,8 @@
    :template: module_template.rst
    :recursive:
 
-   bmctool.utils.eval
-   bmctool.utils.misc
-   bmctool.utils.pulses
-   bmctool.utils.seq
+   eval
+   misc
+   pulses
+   seq
 

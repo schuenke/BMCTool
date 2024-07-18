@@ -28,10 +28,10 @@ bmctool.utils.pulses
    :template: module_template.rst
    :recursive:
 
-   bmctool.utils.pulses.calc_power_equivalents
-   bmctool.utils.pulses.calculate_phase
-   bmctool.utils.pulses.create_arbitrary_pulse_with_phase
-   bmctool.utils.pulses.make_hanning
-   bmctool.utils.pulses.make_hsexp
-   bmctool.utils.pulses.make_hypsec_half_passage
+   calc_power_equivalents
+   calculate_phase
+   create_arbitrary_pulse_with_phase
+   make_hanning
+   make_hsexp
+   make_hypsec_half_passage
 

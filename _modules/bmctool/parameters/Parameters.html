@@ -122,10 +122,13 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if two Parameters instances are equal.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">NotImplemented</span>
+        <span class="c1"># Todo: check if cest_pool comparison is correct and add test(s)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__slots__</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="vm">__slots__</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">water_pool</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">water_pool</span>
-                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">cest_pools</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">cest_pools</span>
+                <span class="ow">and</span> <span class="nb">all</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">cest_pools</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">cest_pools</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span> <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cest_pools</span><span class="p">))</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cest_pools</span>
+                <span class="p">)</span>
                 <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">mt_pool</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">mt_pool</span>
                 <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">system</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">system</span>
                 <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">options</span>
@@ -140,7 +143,7 @@
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">mz_loc</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the location of the water z-magnetization in the BMC matrix.&quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">water_pool</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;water_pool&#39;</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;No water pool defined. mz_loc cannot be determined&#39;</span><span class="p">)</span>
 
         <span class="c1"># mz_loc is 2 for water pool and +2 for each CEST pool</span>
@@ -149,7 +152,7 @@
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">m_vec</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the initial magnetization vector (fully relaxed).&quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">water_pool</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;water_pool&#39;</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;No water pool defined. m_vec cannot be determined&#39;</span><span class="p">)</span>
 
         <span class="n">num_full_pools</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_cest_pools</span> <span class="o">+</span> <span class="mi">1</span>
@@ -213,9 +216,6 @@
 <span class="sd">        yaml_file</span>
 <span class="sd">            Path to yaml config file.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">Path</span><span class="p">(</span><span class="n">yaml_file</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-            <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;File </span><span class="si">{</span><span class="n">yaml_file</span><span class="si">}</span><span class="s1"> not found.&#39;</span><span class="p">)</span>
-
         <span class="k">with</span> <span class="n">Path</span><span class="p">(</span><span class="n">yaml_file</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
             <span class="n">config</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
 

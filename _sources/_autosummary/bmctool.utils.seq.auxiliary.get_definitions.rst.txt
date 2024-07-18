@@ -1,6 +1,0 @@
-bmctool.utils.seq.auxiliary.get\_definitions
-============================================
-
-.. currentmodule:: bmctool.utils.seq.auxiliary
-
-.. autofunction:: get_definitions

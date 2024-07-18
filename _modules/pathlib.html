@@ -933,7 +933,7 @@
 
 
 <div class="viewcode-block" id="Path">
-<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.auxiliary.Path">[docs]</a>
+<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.write.Path">[docs]</a>
 <span class="k">class</span> <span class="nc">Path</span><span class="p">(</span><span class="n">PurePath</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;PurePath subclass that can make system calls.</span>
 
@@ -980,7 +980,7 @@
     <span class="c1"># Public API</span>
 
 <div class="viewcode-block" id="Path.cwd">
-<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.auxiliary.Path.cwd">[docs]</a>
+<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.write.Path.cwd">[docs]</a>
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">cwd</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a new path pointing to the current working directory</span>
@@ -990,7 +990,7 @@
 
 
 <div class="viewcode-block" id="Path.home">
-<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.auxiliary.Path.home">[docs]</a>
+<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.write.Path.home">[docs]</a>
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">home</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a new path pointing to the user&#39;s home directory (as</span>
@@ -1000,7 +1000,7 @@
 
 
 <div class="viewcode-block" id="Path.samefile">
-<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.auxiliary.Path.samefile">[docs]</a>
+<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.write.Path.samefile">[docs]</a>
     <span class="k">def</span> <span class="nf">samefile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other_path</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return whether other_path is the same or not as this file</span>
 <span class="sd">        (as returned by os.path.samefile()).</span>
@@ -1014,7 +1014,7 @@
 
 
 <div class="viewcode-block" id="Path.iterdir">
-<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.auxiliary.Path.iterdir">[docs]</a>
+<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.write.Path.iterdir">[docs]</a>
     <span class="k">def</span> <span class="nf">iterdir</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Iterate over the files in this directory.  Does not yield any</span>
 <span class="sd">        result for the special paths &#39;.&#39; and &#39;..&#39;.</span>
@@ -1030,7 +1030,7 @@
         <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">scandir</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Path.glob">
-<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.auxiliary.Path.glob">[docs]</a>
+<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.write.Path.glob">[docs]</a>
     <span class="k">def</span> <span class="nf">glob</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pattern</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Iterate over this subtree and yield all existing files (of any</span>
 <span class="sd">        kind, including directories) matching the given relative pattern.</span>
@@ -1049,7 +1049,7 @@
 
 
 <div class="viewcode-block" id="Path.rglob">
-<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.auxiliary.Path.rglob">[docs]</a>
+<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.write.Path.rglob">[docs]</a>
     <span class="k">def</span> <span class="nf">rglob</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pattern</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Recursively yield all existing files (of any kind, including</span>
 <span class="sd">        directories) matching the given relative pattern, anywhere in</span>
@@ -1067,7 +1067,7 @@
 
 
 <div class="viewcode-block" id="Path.absolute">
-<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.auxiliary.Path.absolute">[docs]</a>
+<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.write.Path.absolute">[docs]</a>
     <span class="k">def</span> <span class="nf">absolute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return an absolute version of this path by prepending the current</span>
 <span class="sd">        working directory. No normalization or symlink resolution is performed.</span>
@@ -1080,7 +1080,7 @@
 
 
 <div class="viewcode-block" id="Path.resolve">
-<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.auxiliary.Path.resolve">[docs]</a>
+<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.write.Path.resolve">[docs]</a>
     <span class="k">def</span> <span class="nf">resolve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Make the path absolute, resolving all symlinks on the way and also</span>
@@ -1110,7 +1110,7 @@
 
 
 <div class="viewcode-block" id="Path.stat">
-<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.auxiliary.Path.stat">[docs]</a>
+<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.write.Path.stat">[docs]</a>
     <span class="k">def</span> <span class="nf">stat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">follow_symlinks</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return the result of the stat() system call on this path, like</span>
@@ -1120,7 +1120,7 @@
 
 
 <div class="viewcode-block" id="Path.owner">
-<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.auxiliary.Path.owner">[docs]</a>
+<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.write.Path.owner">[docs]</a>
     <span class="k">def</span> <span class="nf">owner</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return the login name of the file owner.</span>
@@ -1133,7 +1133,7 @@
 
 
 <div class="viewcode-block" id="Path.group">
-<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.auxiliary.Path.group">[docs]</a>
+<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.write.Path.group">[docs]</a>
     <span class="k">def</span> <span class="nf">group</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return the group name of the file gid.</span>
@@ -1147,7 +1147,7 @@
 
 
 <div class="viewcode-block" id="Path.open">
-<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.auxiliary.Path.open">[docs]</a>
+<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.write.Path.open">[docs]</a>
     <span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">buffering</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
              <span class="n">errors</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -1160,7 +1160,7 @@
 
 
 <div class="viewcode-block" id="Path.read_bytes">
-<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.auxiliary.Path.read_bytes">[docs]</a>
+<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.write.Path.read_bytes">[docs]</a>
     <span class="k">def</span> <span class="nf">read_bytes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Open the file in bytes mode, read it, and close the file.</span>
@@ -1170,7 +1170,7 @@
 
 
 <div class="viewcode-block" id="Path.read_text">
-<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.auxiliary.Path.read_text">[docs]</a>
+<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.write.Path.read_text">[docs]</a>
     <span class="k">def</span> <span class="nf">read_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Open the file in text mode, read it, and close the file.</span>
@@ -1181,7 +1181,7 @@
 
 
 <div class="viewcode-block" id="Path.write_bytes">
-<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.auxiliary.Path.write_bytes">[docs]</a>
+<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.write.Path.write_bytes">[docs]</a>
     <span class="k">def</span> <span class="nf">write_bytes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Open the file in bytes mode, write to it, and close the file.</span>
@@ -1193,7 +1193,7 @@
 
 
 <div class="viewcode-block" id="Path.write_text">
-<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.auxiliary.Path.write_text">[docs]</a>
+<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.write.Path.write_text">[docs]</a>
     <span class="k">def</span> <span class="nf">write_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Open the file in text mode, write to it, and close the file.</span>
@@ -1207,7 +1207,7 @@
 
 
 <div class="viewcode-block" id="Path.readlink">
-<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.auxiliary.Path.readlink">[docs]</a>
+<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.write.Path.readlink">[docs]</a>
     <span class="k">def</span> <span class="nf">readlink</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return the path to which the symbolic link points.</span>
@@ -1218,7 +1218,7 @@
 
 
 <div class="viewcode-block" id="Path.touch">
-<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.auxiliary.Path.touch">[docs]</a>
+<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.write.Path.touch">[docs]</a>
     <span class="k">def</span> <span class="nf">touch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="mo">0o666</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create this file with the given access mode, if it doesn&#39;t exist.</span>
@@ -1243,7 +1243,7 @@
 
 
 <div class="viewcode-block" id="Path.mkdir">
-<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.auxiliary.Path.mkdir">[docs]</a>
+<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.write.Path.mkdir">[docs]</a>
     <span class="k">def</span> <span class="nf">mkdir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="mo">0o777</span><span class="p">,</span> <span class="n">parents</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create a new directory at this given path.</span>
@@ -1263,7 +1263,7 @@
 
 
 <div class="viewcode-block" id="Path.chmod">
-<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.auxiliary.Path.chmod">[docs]</a>
+<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.write.Path.chmod">[docs]</a>
     <span class="k">def</span> <span class="nf">chmod</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">follow_symlinks</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Change the permissions of the path, like os.chmod().</span>
@@ -1272,7 +1272,7 @@
 
 
 <div class="viewcode-block" id="Path.lchmod">
-<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.auxiliary.Path.lchmod">[docs]</a>
+<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.write.Path.lchmod">[docs]</a>
     <span class="k">def</span> <span class="nf">lchmod</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Like chmod(), except if the path points to a symlink, the symlink&#39;s</span>
@@ -1282,7 +1282,7 @@
 
 
 <div class="viewcode-block" id="Path.unlink">
-<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.auxiliary.Path.unlink">[docs]</a>
+<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.write.Path.unlink">[docs]</a>
     <span class="k">def</span> <span class="nf">unlink</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">missing_ok</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Remove this file or link.</span>
@@ -1296,7 +1296,7 @@
 
 
 <div class="viewcode-block" id="Path.rmdir">
-<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.auxiliary.Path.rmdir">[docs]</a>
+<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.write.Path.rmdir">[docs]</a>
     <span class="k">def</span> <span class="nf">rmdir</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Remove this directory.  The directory must be empty.</span>
@@ -1305,7 +1305,7 @@
 
 
 <div class="viewcode-block" id="Path.lstat">
-<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.auxiliary.Path.lstat">[docs]</a>
+<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.write.Path.lstat">[docs]</a>
     <span class="k">def</span> <span class="nf">lstat</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Like stat(), except if the path points to a symlink, the symlink&#39;s</span>
@@ -1315,7 +1315,7 @@
 
 
 <div class="viewcode-block" id="Path.rename">
-<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.auxiliary.Path.rename">[docs]</a>
+<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.write.Path.rename">[docs]</a>
     <span class="k">def</span> <span class="nf">rename</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Rename this path to the target path.</span>
@@ -1331,7 +1331,7 @@
 
 
 <div class="viewcode-block" id="Path.replace">
-<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.auxiliary.Path.replace">[docs]</a>
+<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.write.Path.replace">[docs]</a>
     <span class="k">def</span> <span class="nf">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Rename this path to the target path, overwriting if that path exists.</span>
@@ -1347,7 +1347,7 @@
 
 
 <div class="viewcode-block" id="Path.symlink_to">
-<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.auxiliary.Path.symlink_to">[docs]</a>
+<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.write.Path.symlink_to">[docs]</a>
     <span class="k">def</span> <span class="nf">symlink_to</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">target_is_directory</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Make this path a symlink pointing to the target path.</span>
@@ -1359,7 +1359,7 @@
 
 
 <div class="viewcode-block" id="Path.hardlink_to">
-<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.auxiliary.Path.hardlink_to">[docs]</a>
+<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.write.Path.hardlink_to">[docs]</a>
     <span class="k">def</span> <span class="nf">hardlink_to</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Make this path a hard link pointing to the same file as *target*.</span>
@@ -1372,7 +1372,7 @@
 
 
 <div class="viewcode-block" id="Path.link_to">
-<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.auxiliary.Path.link_to">[docs]</a>
+<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.write.Path.link_to">[docs]</a>
     <span class="k">def</span> <span class="nf">link_to</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Make the target path a hard link pointing to this path.</span>
@@ -1395,7 +1395,7 @@
     <span class="c1"># Convenience functions for querying the stat results</span>
 
 <div class="viewcode-block" id="Path.exists">
-<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.auxiliary.Path.exists">[docs]</a>
+<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.write.Path.exists">[docs]</a>
     <span class="k">def</span> <span class="nf">exists</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Whether this path exists.</span>
@@ -1413,7 +1413,7 @@
 
 
 <div class="viewcode-block" id="Path.is_dir">
-<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.auxiliary.Path.is_dir">[docs]</a>
+<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.write.Path.is_dir">[docs]</a>
     <span class="k">def</span> <span class="nf">is_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Whether this path is a directory.</span>
@@ -1432,7 +1432,7 @@
 
 
 <div class="viewcode-block" id="Path.is_file">
-<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.auxiliary.Path.is_file">[docs]</a>
+<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.write.Path.is_file">[docs]</a>
     <span class="k">def</span> <span class="nf">is_file</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Whether this path is a regular file (also True for symlinks pointing</span>
@@ -1452,7 +1452,7 @@
 
 
 <div class="viewcode-block" id="Path.is_mount">
-<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.auxiliary.Path.is_mount">[docs]</a>
+<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.write.Path.is_mount">[docs]</a>
     <span class="k">def</span> <span class="nf">is_mount</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Check if this path is a POSIX mount point</span>
@@ -1475,7 +1475,7 @@
 
 
 <div class="viewcode-block" id="Path.is_symlink">
-<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.auxiliary.Path.is_symlink">[docs]</a>
+<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.write.Path.is_symlink">[docs]</a>
     <span class="k">def</span> <span class="nf">is_symlink</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Whether this path is a symbolic link.</span>
@@ -1493,7 +1493,7 @@
 
 
 <div class="viewcode-block" id="Path.is_block_device">
-<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.auxiliary.Path.is_block_device">[docs]</a>
+<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.write.Path.is_block_device">[docs]</a>
     <span class="k">def</span> <span class="nf">is_block_device</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Whether this path is a block device.</span>
@@ -1512,7 +1512,7 @@
 
 
 <div class="viewcode-block" id="Path.is_char_device">
-<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.auxiliary.Path.is_char_device">[docs]</a>
+<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.write.Path.is_char_device">[docs]</a>
     <span class="k">def</span> <span class="nf">is_char_device</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Whether this path is a character device.</span>
@@ -1531,7 +1531,7 @@
 
 
 <div class="viewcode-block" id="Path.is_fifo">
-<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.auxiliary.Path.is_fifo">[docs]</a>
+<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.write.Path.is_fifo">[docs]</a>
     <span class="k">def</span> <span class="nf">is_fifo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Whether this path is a FIFO.</span>
@@ -1550,7 +1550,7 @@
 
 
 <div class="viewcode-block" id="Path.is_socket">
-<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.auxiliary.Path.is_socket">[docs]</a>
+<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.write.Path.is_socket">[docs]</a>
     <span class="k">def</span> <span class="nf">is_socket</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Whether this path is a socket.</span>
@@ -1569,7 +1569,7 @@
 
 
 <div class="viewcode-block" id="Path.expanduser">
-<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.auxiliary.Path.expanduser">[docs]</a>
+<a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.Path.html#bmctool.utils.seq.write.Path.expanduser">[docs]</a>
     <span class="k">def</span> <span class="nf">expanduser</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; Return a new path with expanded ~ and ~user constructs</span>
 <span class="sd">        (as returned by os.path.expanduser)</span>

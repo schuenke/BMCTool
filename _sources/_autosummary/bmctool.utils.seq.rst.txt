@@ -28,6 +28,5 @@ bmctool.utils.seq
    :template: module_template.rst
    :recursive:
 
-   bmctool.utils.seq.auxiliary
-   bmctool.utils.seq.write
+   write
 

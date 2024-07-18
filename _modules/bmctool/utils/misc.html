@@ -83,9 +83,11 @@
 <a class="viewcode-back" href="../../../_autosummary/bmctool.utils.truthy_check.html#bmctool.utils.misc.truthy_check">[docs]</a>
 <span class="k">def</span> <span class="nf">truthy_check</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">float</span> <span class="o">|</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if input value is truthy.&quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">value</span> <span class="ow">in</span> <span class="p">{</span><span class="kc">True</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s1">&#39;True&#39;</span><span class="p">}:</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">value</span> <span class="ow">in</span> <span class="p">{</span><span class="kc">True</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s1">&#39;true&#39;</span><span class="p">}:</span>
         <span class="k">return</span> <span class="kc">True</span>
-    <span class="k">elif</span> <span class="n">value</span> <span class="ow">in</span> <span class="p">{</span><span class="kc">False</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;False&#39;</span><span class="p">}:</span>
+    <span class="k">elif</span> <span class="n">value</span> <span class="ow">in</span> <span class="p">{</span><span class="kc">False</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;false&#39;</span><span class="p">}:</span>
         <span class="k">return</span> <span class="kc">False</span>
     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Input </span><span class="si">{value}</span><span class="s1"> cannot be converted to bool.&#39;</span><span class="p">)</span></div>
 

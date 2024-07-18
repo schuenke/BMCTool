@@ -1,6 +1,0 @@
-bmctool.utils.seq.auxiliary.strip\_line
-=======================================
-
-.. currentmodule:: bmctool.utils.seq.auxiliary
-
-.. autofunction:: strip_line
