@@ -205,8 +205,8 @@ class BMCSim:
         else:
             raise ValueError('The current block event cannot be handled by BMCTool. Please check you sequence.')
 
-        if self.store_dynamics == 1:
-            self.m_dyn = np.concatenate((self.m_dyn, mag[0,]), axis=1)
+        if self.store_dynamics == 1 and block.adc is None:
+            self.m_dyn = np.concatenate((self.m_dyn, mag[:, np.newaxis]), axis=1)
             self.t_dyn = np.concatenate([self.t_dyn, [self.t_dyn[-1] + pp.calc_duration(block)]])
 
         return current_adc, accum_phase, mag
@@ -278,7 +278,7 @@ class BMCSim:
             mag = self.bm_solver.solve_equation(mag=mag, dtp=dtp_)
 
             if self.store_dynamics == 2:
-                self.m_dyn = np.concatenate((self.m_dyn, mag[0,]), axis=1)
+                self.m_dyn = np.concatenate((self.m_dyn, mag[:, np.newaxis]), axis=1)
                 self.t_dyn = np.concatenate([self.t_dyn, [self.t_dyn[-1] + dtp_]])
 
         # simulate a potential delay after the RF pulse
@@ -287,7 +287,7 @@ class BMCSim:
             mag = self.bm_solver.solve_equation(mag=mag, dtp=delay_after_pulse)
 
             if self.store_dynamics == 2:
-                self.m_dyn = np.concatenate((self.m_dyn, mag[0,]), axis=1)
+                self.m_dyn = np.concatenate((self.m_dyn, mag[:, np.newaxis]), axis=1)
                 self.t_dyn = np.concatenate([self.t_dyn, [self.t_dyn[-1] + dtp_]])
 
         # update accumulated phase
@@ -317,7 +317,7 @@ class BMCSim:
         mag = self.bm_solver.solve_equation(mag=mag, dtp=_dur)
 
         if self.store_dynamics == 2:
-            self.m_dyn = np.concatenate((self.m_dyn, mag[0,]), axis=1)
+            self.m_dyn = np.concatenate((self.m_dyn, mag[:, np.newaxis]), axis=1)
             self.t_dyn = np.concatenate([self.t_dyn, [self.t_dyn[-1] + _dur]])
 
         # set x and y components of the water pool and all cest pools to zero
@@ -345,7 +345,7 @@ class BMCSim:
         mag = self.bm_solver.solve_equation(mag=mag, dtp=_dur)
 
         if self.store_dynamics == 2:
-            self.m_dyn = np.concatenate((self.m_dyn, mag[0,]), axis=1)
+            self.m_dyn = np.concatenate((self.m_dyn, mag[:, np.newaxis]), axis=1)
             self.t_dyn = np.concatenate([self.t_dyn, [self.t_dyn[-1] + _dur]])
 
         return mag
@@ -371,3 +371,9 @@ class BMCSim:
         m_z = np.abs(m_z) if return_abs else np.array(m_z)
 
         return self.offsets_ppm, m_z
+
+    def get_dynamics(self) -> tuple[np.ndarray, np.ndarray]:
+        """Return the dynamic water magnetization."""
+        if self.store_dynamics == 0:
+            raise Warning('Dynamics were not stored. Set store_dynamics to 1 or 2 and run the simulation again.')
+        return self.t_dyn, self.m_dyn[self.params.mz_loc, :]
