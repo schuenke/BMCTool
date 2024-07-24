@@ -144,6 +144,8 @@
 
 
 
+<div class="viewcode-block" id="sim_example">
+<a class="viewcode-back" href="../../../_autosummary/bmctool.simulation.sim_example.html#bmctool.simulation.sim_example">[docs]</a>
 <span class="k">def</span> <span class="nf">sim_example</span><span class="p">(</span><span class="n">show_plot</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Run an example simulation using included config and seq files.</span>
 
@@ -164,7 +166,8 @@
     <span class="p">)</span>
 
     <span class="n">offsets</span><span class="p">,</span> <span class="n">mz</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">get_zspec</span><span class="p">(</span><span class="n">return_abs</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">offsets</span><span class="p">,</span> <span class="n">mz</span>
+    <span class="k">return</span> <span class="n">offsets</span><span class="p">,</span> <span class="n">mz</span></div>
+
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>

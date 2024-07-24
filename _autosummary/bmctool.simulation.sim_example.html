@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>bmctool.simulation &mdash; BMCTool</title>
+  <title>bmctool.simulation.sim_example &mdash; BMCTool</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=16f952a1" />
@@ -22,8 +22,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="bmctool.simulation.sim_example" href="bmctool.simulation.sim_example.html" />
-    <link rel="prev" title="bmctool.parameters.WaterPool" href="bmctool.parameters.WaterPool.html" /> 
+    <link rel="next" title="bmctool.simulation.simulate" href="bmctool.simulation.simulate.html" />
+    <link rel="prev" title="bmctool.simulation" href="bmctool.simulation.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -54,8 +54,8 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../api.html">API</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../api.html#bmctool-parameters">BMCTool Parameters</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../api.html#bmctool-simulation">BMCTool Simulation</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">bmctool.simulation</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="bmctool.simulation.sim_example.html">bmctool.simulation.sim_example</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="bmctool.simulation.html">bmctool.simulation</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">bmctool.simulation.sim_example</a></li>
 <li class="toctree-l4"><a class="reference internal" href="bmctool.simulation.simulate.html">bmctool.simulation.simulate</a></li>
 <li class="toctree-l4"><a class="reference internal" href="bmctool.simulation.BMCSim.html">bmctool.simulation.BMCSim</a></li>
 <li class="toctree-l4"><a class="reference internal" href="bmctool.simulation.BlochMcConnellSolver.html">bmctool.simulation.BlochMcConnellSolver</a></li>
@@ -83,9 +83,10 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../api.html">API</a></li>
-      <li class="breadcrumb-item active">bmctool.simulation</li>
+          <li class="breadcrumb-item"><a href="bmctool.simulation.html">bmctool.simulation</a></li>
+      <li class="breadcrumb-item active">bmctool.simulation.sim_example</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../_sources/_autosummary/bmctool.simulation.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/_autosummary/bmctool.simulation.sim_example.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -93,38 +94,30 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="module-bmctool.simulation">
-<span id="bmctool-simulation"></span><h1>bmctool.simulation<a class="headerlink" href="#module-bmctool.simulation" title="Link to this heading"></a></h1>
-<p class="rubric">Functions</p>
-<table class="autosummary longtable docutils align-default">
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="bmctool.simulation.sim_example.html#bmctool.simulation.sim_example" title="bmctool.simulation.sim_example"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sim_example</span></code></a>([show_plot])</p></td>
-<td><p>Run an example simulation using included config and seq files.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="bmctool.simulation.simulate.html#bmctool.simulation.simulate" title="bmctool.simulation.simulate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">simulate</span></code></a>(config_file, seq_file[, show_plot])</p></td>
-<td><p>Run BMCTool simulation based on given seq-file and config file.</p></td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Classes</p>
-<table class="autosummary longtable docutils align-default">
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="bmctool.simulation.BMCSim.html#bmctool.simulation.BMCSim" title="bmctool.simulation.BMCSim"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BMCSim</span></code></a>(params, seq[, verbose])</p></td>
-<td><p>Class for Bloch-McConnell simulations using Pulseq sequences.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="bmctool.simulation.BlochMcConnellSolver.html#bmctool.simulation.BlochMcConnellSolver" title="bmctool.simulation.BlochMcConnellSolver"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BlochMcConnellSolver</span></code></a>(params, n_offsets)</p></td>
-<td><p>Solver class for Bloch-McConnell equations.</p></td>
-</tr>
-</tbody>
-</table>
+  <section id="bmctool-simulation-sim-example">
+<h1>bmctool.simulation.sim_example<a class="headerlink" href="#bmctool-simulation-sim-example" title="Link to this heading"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="bmctool.simulation.sim_example">
+<span class="sig-prename descclassname"><span class="pre">bmctool.simulation.</span></span><span class="sig-name descname"><span class="pre">sim_example</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">show_plot</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/bmctool/simulation/simulate.html#sim_example"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bmctool.simulation.sim_example" title="Link to this definition"></a></dt>
+<dd><p>Run an example simulation using included config and seq files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>show_plot</strong> – Flag to activate plotting of simulated data, by default True</p></li>
+<li><p><strong>optional</strong> – Flag to activate plotting of simulated data, by default True</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="bmctool.parameters.WaterPool.html" class="btn btn-neutral float-left" title="bmctool.parameters.WaterPool" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="bmctool.simulation.sim_example.html" class="btn btn-neutral float-right" title="bmctool.simulation.sim_example" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="bmctool.simulation.html" class="btn btn-neutral float-left" title="bmctool.simulation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="bmctool.simulation.simulate.html" class="btn btn-neutral float-right" title="bmctool.simulation.simulate" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
