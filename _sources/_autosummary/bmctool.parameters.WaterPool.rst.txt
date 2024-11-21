@@ -18,6 +18,7 @@ bmctool.parameters.WaterPool
    
       ~WaterPool.__init__
       ~WaterPool.from_dict
+      ~WaterPool.to_dict
    
    
 

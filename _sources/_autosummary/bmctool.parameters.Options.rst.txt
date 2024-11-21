@@ -18,6 +18,7 @@ bmctool.parameters.Options
    
       ~Options.__init__
       ~Options.from_dict
+      ~Options.to_dict
    
    
 

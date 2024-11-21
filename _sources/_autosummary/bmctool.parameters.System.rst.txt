@@ -17,6 +17,7 @@ bmctool.parameters.System
    .. autosummary::
    
       ~System.__init__
+      ~System.to_dict
    
    
 

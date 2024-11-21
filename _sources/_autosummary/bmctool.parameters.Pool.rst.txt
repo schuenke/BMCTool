@@ -18,6 +18,7 @@ bmctool.parameters.Pool
    
       ~Pool.__init__
       ~Pool.from_dict
+      ~Pool.to_dict
    
    
 

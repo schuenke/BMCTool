@@ -18,6 +18,7 @@ bmctool.parameters.MTPool
    
       ~MTPool.__init__
       ~MTPool.from_dict
+      ~MTPool.to_dict
    
    
 

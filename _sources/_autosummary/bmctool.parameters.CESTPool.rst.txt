@@ -18,6 +18,7 @@ bmctool.parameters.CESTPool
    
       ~CESTPool.__init__
       ~CESTPool.from_dict
+      ~CESTPool.to_dict
    
    
 
