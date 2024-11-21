@@ -68,6 +68,10 @@ class Pool(ABC):
             return all(getter(self) == getter(other) for getter in attr_getters)
         return False
 
+    def to_dict(self) -> dict:
+        """Return dictionary representation with leading underscores removed."""
+        return {slot.lstrip('_'): getattr(self, slot) for slot in self.__slots__}
+
     @property
     def r1(self) -> float:
         """R1 relaxation rate [Hz] (1/T1)."""

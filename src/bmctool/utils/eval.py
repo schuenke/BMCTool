@@ -183,7 +183,7 @@ def plot_z(
         ax2 = ax1.twinx()
         ax2.set_ylim((round(min(mtr_asym) - 0.01, 2), round(max(mtr_asym) + 0.01, 2)))
         ax2.set_ylabel('$MTR_{asym}$', color='y')
-        ax2.plot(offsets, mtr_asym, label='$MTR_{asym}$', color='y')  # type: ignore
+        ax2.plot(offsets, mtr_asym, label='$MTR_{asym}$', color='y')
         ax2.tick_params(axis='y', labelcolor='y')
         fig.tight_layout()
 

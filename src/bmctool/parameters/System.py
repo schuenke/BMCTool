@@ -43,14 +43,9 @@ class System:
             return all(getter(self) == getter(other) for getter in attr_getters)
         return False
 
-    def __dict__(self):
-        """Return dictionary representation of System."""
-        return {
-            'b0': self.b0,
-            'gamma': self.gamma,
-            'b0_inhom': self.b0_inhom,
-            'rel_b1': self.rel_b1,
-        }
+    def to_dict(self) -> dict:
+        """Return dictionary representation with leading underscores removed."""
+        return {slot.lstrip('_'): getattr(self, slot) for slot in self.__slots__}
 
     @property
     def b0(self) -> float:

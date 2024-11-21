@@ -3,7 +3,7 @@ default_language_version:
 
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.6.0
+    rev: v5.0.0
     hooks:
       - id: check-docstring-first
       - id: check-merge-conflict
@@ -14,19 +14,19 @@ repos:
       - id: mixed-line-ending
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.4.7
+    rev: v0.7.4
     hooks:
       - id: ruff # linter
         args: [--fix]
       - id: ruff-format # formatter
 
   - repo: https://github.com/crate-ci/typos
-    rev: v1.21.0
+    rev: typos-dict-v0.11.35
     hooks:
       - id: typos
 
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.10.0
+    rev: v1.13.0
     hooks:
       - id: mypy
         pass_filenames: false
@@ -38,3 +38,13 @@ repos:
           - pypulseq>=1.4.2
           - types-pyyaml
           - types-tqdm
+
+ci:
+  autofix_commit_msg: |
+    [pre-commit] auto fixes from pre-commit hooks
+  autofix_prs: true
+  autoupdate_branch: ""
+  autoupdate_commit_msg: "[pre-commit] pre-commit autoupdate"
+  autoupdate_schedule: monthly
+  skip: [mypy]
+  submodules: false
