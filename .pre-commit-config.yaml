@@ -38,3 +38,13 @@ repos:
           - pypulseq>=1.4.2
           - types-pyyaml
           - types-tqdm
+
+ci:
+  autofix_commit_msg: |
+    [pre-commit] auto fixes from pre-commit hooks
+  autofix_prs: true
+  autoupdate_branch: ""
+  autoupdate_commit_msg: "[pre-commit] pre-commit autoupdate"
+  autoupdate_schedule: monthly
+  skip: [mypy]
+  submodules: false
