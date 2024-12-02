@@ -6,7 +6,7 @@ from bmctool.parameters.Pool import Pool
 class WaterPool(Pool):
     """Class to store WaterPool parameters."""
 
-    __slots__ = ['_f', '_dw', '_r1', '_r2']
+    __slots__ = ['_dw', '_f', '_r1', '_r2']
 
     def __init__(
         self,

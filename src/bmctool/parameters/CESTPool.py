@@ -6,7 +6,7 @@ from bmctool.parameters.Pool import Pool
 class CESTPool(Pool):
     """Class to store CESTPool parameters."""
 
-    __slots__ = ['_r1', '_r2', '_k', '_f', '_dw']
+    __slots__ = ['_dw', '_f', '_k', '_r1', '_r2']
 
     def __init__(
         self,

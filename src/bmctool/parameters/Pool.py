@@ -8,7 +8,7 @@ from typing import Self
 class Pool(ABC):
     """Base Class for Pools."""
 
-    __slots__ = ['_r1', '_r2', '_f', '_dw']
+    __slots__ = ['_dw', '_f', '_r1', '_r2']
 
     def __init__(
         self,
