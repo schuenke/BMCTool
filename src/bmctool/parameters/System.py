@@ -6,7 +6,7 @@ import operator
 class System:
     """Class to store system parameters."""
 
-    __slots__ = ['_b0', '_gamma', '_b0_inhom', '_rel_b1']
+    __slots__ = ['_b0', '_b0_inhom', '_gamma', '_rel_b1']
 
     def __init__(
         self,
