@@ -8,7 +8,7 @@ from bmctool.utils import truthy_check
 class Options:
     """Class to store simulation options."""
 
-    __slots__ = ['_verbose', '_reset_init_mag', '_scale', '_max_pulse_samples']
+    __slots__ = ['_max_pulse_samples', '_reset_init_mag', '_scale', '_verbose']
 
     def __init__(
         self,
