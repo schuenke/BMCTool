@@ -38,19 +38,19 @@ def simulate(
     FileNotFoundError
         If the config_file or seq_file not found.
     """
-   #if not Path(config_file).exists():
-   #    raise FileNotFoundError(f'File {config_file} not found.')
+    # if not Path(config_file).exists():
+    #    raise FileNotFoundError(f'File {config_file} not found.')
 
     if not Path(seq_file).exists():
         raise FileNotFoundError(f'File {seq_file} not found.')
-    
+
     if isinstance(config_file, (str, Path)):
         if not Path(config_file).exists():
-            raise FileNotFoundError(f"File {config_file} not found.")
+            raise FileNotFoundError(f'File {config_file} not found.')
         sim_params = Parameters.from_yaml(config_file)
-        
+
     else:
-        sim_params = config_file        
+        sim_params = config_file
 
     # create BMCTool object and run simulation
     sim = BMCSim(sim_params, seq_file)
