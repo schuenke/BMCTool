@@ -69,6 +69,10 @@ class Parameters:
         # mz_loc is 2 for water pool and +2 for each CEST pool
         return 2 + 2 * len(self.cest_pools)
 
+    def to_dict(self) -> dict:
+        """Return dictionary representation with leading underscores removed."""
+        return {slot.lstrip('_'): getattr(self, slot) for slot in self.__slots__}
+
     @property
     def m_vec(self) -> np.ndarray:
         """Get the initial magnetization vector (fully relaxed)."""
