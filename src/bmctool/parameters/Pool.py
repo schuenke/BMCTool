@@ -8,7 +8,7 @@ from typing import Self
 class Pool(ABC):
     """Base Class for Pools."""
 
-    __slots__ = ['_r1', '_r2', '_f', '_dw']
+    __slots__ = ['_dw', '_f', '_r1', '_r2']
 
     def __init__(
         self,
@@ -67,6 +67,10 @@ class Pool(ABC):
             attr_getters = [operator.attrgetter(attr) for attr in self.__slots__]
             return all(getter(self) == getter(other) for getter in attr_getters)
         return False
+
+    def to_dict(self) -> dict:
+        """Return dictionary representation with leading underscores removed."""
+        return {slot.lstrip('_'): getattr(self, slot) for slot in self.__slots__}
 
     @property
     def r1(self) -> float:

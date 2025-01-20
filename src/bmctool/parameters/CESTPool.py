@@ -6,7 +6,7 @@ from bmctool.parameters.Pool import Pool
 class CESTPool(Pool):
     """Class to store CESTPool parameters."""
 
-    __slots__ = ['_r1', '_r2', '_k', '_f', '_dw']
+    __slots__ = ['_dw', '_f', '_k', '_r1', '_r2']
 
     def __init__(
         self,
@@ -43,16 +43,6 @@ class CESTPool(Pool):
         """
         super().__init__(f=f, dw=dw, r1=r1, r2=r2, t1=t1, t2=t2)
         self.k = k
-
-    def __dict__(self):
-        """Return dictionary representation of CESTPool."""
-        return {
-            'f': self.f,
-            'r1': self.r1,
-            'r2': self.r2,
-            'k': self.k,
-            'dw': self.dw,
-        }
 
     @property
     def k(self) -> float:

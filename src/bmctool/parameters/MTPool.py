@@ -9,7 +9,7 @@ class MTPool(Pool):
     """Class to store MTPool parameters."""
 
     valid_lineshapes: typing.ClassVar[list[str]] = ['lorentzian', 'superlorentzian']
-    __slots__ = ['_r1', '_r2', '_k', '_f', '_dw', '_lineshape']
+    __slots__ = ['_dw', '_f', '_k', '_lineshape', '_r1', '_r2']
 
     def __init__(
         self,
@@ -51,17 +51,6 @@ class MTPool(Pool):
 
         self.k = k
         self.lineshape = lineshape
-
-    def __dict__(self):
-        """Return dictionary representation of MTPool."""
-        return {
-            'f': self.f,
-            'r1': self.r1,
-            'r2': self.r2,
-            'k': self.k,
-            'dw': self.dw,
-            'lineshape': self.lineshape,
-        }
 
     @property
     def k(self) -> float:

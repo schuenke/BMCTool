@@ -8,7 +8,7 @@ from bmctool.utils import truthy_check
 class Options:
     """Class to store simulation options."""
 
-    __slots__ = ['_verbose', '_reset_init_mag', '_scale', '_max_pulse_samples']
+    __slots__ = ['_max_pulse_samples', '_reset_init_mag', '_scale', '_verbose']
 
     def __init__(
         self,
@@ -45,14 +45,9 @@ class Options:
             return all(getter(self) == getter(other) for getter in attr_getters)
         return False
 
-    def __dict__(self):
-        """Return dictionary representation of Options."""
-        return {
-            'verbose': self.verbose,
-            'reset_init_mag': self.reset_init_mag,
-            'scale': self.scale,
-            'max_pulse_samples': self.max_pulse_samples,
-        }
+    def to_dict(self) -> dict:
+        """Return dictionary representation with leading underscores removed."""
+        return {slot.lstrip('_'): getattr(self, slot) for slot in self.__slots__}
 
     @property
     def verbose(self) -> bool:

@@ -51,5 +51,5 @@ def make_gauss_hanning(
     rf_pulse = pp.make_gauss_pulse(flip_angle=flip_angle, duration=pulse_duration, system=system, phase_offset=0)
     n_signal = rf_pulse.signal.size
     hanning_shape = hanning(n_signal)
-    rf_pulse.signal = hanning_shape / np.trapz(hanning_shape, x=rf_pulse.t) * (flip_angle / (2 * np.pi))
+    rf_pulse.signal = hanning_shape / np.trapz(hanning_shape, x=rf_pulse.t) * (flip_angle / (2 * np.pi))  # noqa: NPY201
     return rf_pulse  # type: ignore

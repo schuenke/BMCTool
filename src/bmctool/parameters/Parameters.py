@@ -120,6 +120,7 @@ class Parameters:
         system = System(
             **{rename.get(key, key): value for key, value in config.items() if rename.get(key, key) in sys_keys}
         )
+
         options = Options(
             **{rename.get(key, key): value for key, value in config.items() if rename.get(key, key) in opt_keys}
         )
@@ -149,16 +150,16 @@ class Parameters:
             Path to yaml file.
         """
         if self.cest_pools:
-            cest_dict = {f'cest_{ii + 1}': pool.__dict__() for ii, pool in enumerate(self.cest_pools)}
+            cest_dict = {f'cest_{ii + 1}': pool.to_dict() for ii, pool in enumerate(self.cest_pools)}
 
         with Path(yaml_file).open('w') as file:
-            yaml.dump({'water_pool': self.water_pool.__dict__()}, file)
+            yaml.dump({'water_pool': self.water_pool.to_dict()}, file)
             if self.mt_pool:
-                yaml.dump({'mt_pool': self.mt_pool.__dict__()}, file)
+                yaml.dump({'mt_pool': self.mt_pool.to_dict()}, file)
             if self.cest_pools:
                 yaml.dump({'cest_pool': cest_dict}, file)
-            yaml.dump(self.system.__dict__(), file)
-            yaml.dump(self.options.__dict__(), file)
+            yaml.dump(self.system.to_dict(), file)
+            yaml.dump(self.options.to_dict(), file)
 
         file.close()
 
