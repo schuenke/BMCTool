@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>bmctool.utils.pulses.make_hsexp &mdash; BMCTool</title>
-      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css?v=16f952a1" />
 
@@ -73,20 +73,20 @@
   <h1>Source code for bmctool.utils.pulses.make_hsexp</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;Functions to create Hyperbolic Secant Exponential (HSExp) RF pulses.&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">types</span> <span class="kn">import</span> <span class="n">SimpleNamespace</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">types</span><span class="w"> </span><span class="kn">import</span> <span class="n">SimpleNamespace</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pypulseq</span> <span class="k">as</span> <span class="nn">pp</span>  <span class="c1"># type: ignore</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pypulseq</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pp</span>  <span class="c1"># type: ignore</span>
 
-<span class="kn">from</span> <span class="nn">bmctool</span> <span class="kn">import</span> <span class="n">GAMMA_HZ</span>
-<span class="kn">from</span> <span class="nn">bmctool.utils.pulses.calculate_phase</span> <span class="kn">import</span> <span class="n">calculate_phase</span>
-<span class="kn">from</span> <span class="nn">bmctool.utils.pulses.create_arbitrary_pulse_with_phase</span> <span class="kn">import</span> <span class="n">create_arbitrary_pulse_with_phase</span>
-<span class="kn">from</span> <span class="nn">bmctool.utils.pulses.make_hypsec_half_passage</span> <span class="kn">import</span> <span class="n">calculate_amplitude</span> <span class="k">as</span> <span class="n">hypsec_amp</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">bmctool</span><span class="w"> </span><span class="kn">import</span> <span class="n">GAMMA_HZ</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">bmctool.utils.pulses.calculate_phase</span><span class="w"> </span><span class="kn">import</span> <span class="n">calculate_phase</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">bmctool.utils.pulses.create_arbitrary_pulse_with_phase</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_arbitrary_pulse_with_phase</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">bmctool.utils.pulses.make_hypsec_half_passage</span><span class="w"> </span><span class="kn">import</span> <span class="n">calculate_amplitude</span> <span class="k">as</span> <span class="n">hypsec_amp</span>
 
 
 <div class="viewcode-block" id="calculate_window_modulation">
 <a class="viewcode-back" href="../../../../_autosummary/bmctool.utils.pulses.make_hsexp.calculate_window_modulation.html#bmctool.utils.pulses.make_hsexp.calculate_window_modulation">[docs]</a>
-<span class="k">def</span> <span class="nf">calculate_window_modulation</span><span class="p">(</span><span class="n">t</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">t0</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_window_modulation</span><span class="p">(</span><span class="n">t</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">t0</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate modulation function for HSExp pulses.</span>
 
 <span class="sd">    Parameter</span>
@@ -107,7 +107,7 @@
 
 <div class="viewcode-block" id="calculate_frequency">
 <a class="viewcode-back" href="../../../../_autosummary/bmctool.utils.pulses.make_hsexp.calculate_frequency.html#bmctool.utils.pulses.make_hsexp.calculate_frequency">[docs]</a>
-<span class="k">def</span> <span class="nf">calculate_frequency</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_frequency</span><span class="p">(</span>
     <span class="n">t</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
     <span class="n">t0</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="n">bandwidth</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
@@ -140,7 +140,7 @@
 
 <div class="viewcode-block" id="make_hsexp">
 <a class="viewcode-back" href="../../../../_autosummary/bmctool.utils.pulses.make_hsexp.make_hsexp.html#bmctool.utils.pulses.make_hsexp.make_hsexp">[docs]</a>
-<span class="k">def</span> <span class="nf">make_hsexp</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">make_hsexp</span><span class="p">(</span>
     <span class="n">amp</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
     <span class="n">t_p</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">12e-3</span><span class="p">,</span>
     <span class="n">mu</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">65</span><span class="p">,</span>
@@ -230,7 +230,7 @@
 
 <div class="viewcode-block" id="generate_hsexp_dict">
 <a class="viewcode-back" href="../../../../_autosummary/bmctool.utils.pulses.make_hsexp.generate_hsexp_dict.html#bmctool.utils.pulses.make_hsexp.generate_hsexp_dict">[docs]</a>
-<span class="k">def</span> <span class="nf">generate_hsexp_dict</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">generate_hsexp_dict</span><span class="p">(</span>
     <span class="n">amp</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
     <span class="n">t_p</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">12e-3</span><span class="p">,</span>
     <span class="n">mu</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">65</span><span class="p">,</span>

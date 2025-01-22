@@ -155,8 +155,10 @@ bmctool.utils.eval.Figure
    
       ~Figure.axes
       ~Figure.dpi
+      ~Figure.figure
       ~Figure.frameon
       ~Figure.mouseover
+      ~Figure.number
       ~Figure.stale
       ~Figure.sticky_edges
       ~Figure.zorder

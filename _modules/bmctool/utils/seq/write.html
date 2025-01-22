@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>bmctool.utils.seq.write &mdash; BMCTool</title>
-      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css?v=16f952a1" />
 
@@ -77,20 +77,20 @@
 <span class="sd">The pulseq-cest library can be found at: https://github.com/kherz/pulseq-cest-library</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">math</span>
-<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
-<span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">fdopen</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span> <span class="nn">shutil</span> <span class="kn">import</span> <span class="n">move</span>
-<span class="kn">from</span> <span class="nn">tempfile</span> <span class="kn">import</span> <span class="n">mkstemp</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">os</span><span class="w"> </span><span class="kn">import</span> <span class="n">fdopen</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">shutil</span><span class="w"> </span><span class="kn">import</span> <span class="n">move</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tempfile</span><span class="w"> </span><span class="kn">import</span> <span class="n">mkstemp</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">pypulseq</span> <span class="kn">import</span> <span class="n">Sequence</span>  <span class="c1"># type: ignore</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pypulseq</span><span class="w"> </span><span class="kn">import</span> <span class="n">Sequence</span>  <span class="c1"># type: ignore</span>
 
 
 <div class="viewcode-block" id="round_number">
 <a class="viewcode-back" href="../../../../_autosummary/bmctool.utils.seq.write.round_number.html#bmctool.utils.seq.write.round_number">[docs]</a>
-<span class="k">def</span> <span class="nf">round_number</span><span class="p">(</span><span class="n">number</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">significant_digits</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">round_number</span><span class="p">(</span><span class="n">number</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">significant_digits</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Round a number to the specified number of significant digits.</span>
 
 <span class="sd">    Parameter</span>
@@ -113,7 +113,7 @@
 
 <div class="viewcode-block" id="insert_seq_file_header">
 <a class="viewcode-back" href="../../../../_autosummary/bmctool.utils.seq.write.insert_seq_file_header.html#bmctool.utils.seq.write.insert_seq_file_header">[docs]</a>
-<span class="k">def</span> <span class="nf">insert_seq_file_header</span><span class="p">(</span><span class="n">filepath</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span><span class="p">,</span> <span class="n">author</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">insert_seq_file_header</span><span class="p">(</span><span class="n">filepath</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span><span class="p">,</span> <span class="n">author</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Insert header information into seq-file.</span>
 
 <span class="sd">    Parameter</span>
@@ -154,7 +154,7 @@
 
 <div class="viewcode-block" id="write_seq_defs">
 <a class="viewcode-back" href="../../../../_autosummary/bmctool.utils.seq.write.write_seq_defs.html#bmctool.utils.seq.write.write_seq_defs">[docs]</a>
-<span class="k">def</span> <span class="nf">write_seq_defs</span><span class="p">(</span><span class="n">seq</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">seq_defs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">use_matlab_names</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">write_seq_defs</span><span class="p">(</span><span class="n">seq</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">seq_defs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">use_matlab_names</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Write seq-file &#39;Definitions&#39; from dictionary.</span>
 
 <span class="sd">    Parameter</span>
@@ -213,7 +213,7 @@
 
 <div class="viewcode-block" id="write_seq">
 <a class="viewcode-back" href="../../../../_autosummary/bmctool.utils.seq.write.write_seq.html#bmctool.utils.seq.write.write_seq">[docs]</a>
-<span class="k">def</span> <span class="nf">write_seq</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">write_seq</span><span class="p">(</span>
     <span class="n">seq</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">,</span>
     <span class="n">seq_defs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
     <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span><span class="p">,</span>

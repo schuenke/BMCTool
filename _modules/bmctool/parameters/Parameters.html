@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>bmctool.parameters.Parameters &mdash; BMCTool</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=16f952a1" />
 
@@ -73,24 +73,24 @@
   <h1>Source code for bmctool.parameters.Parameters</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;Definition of Params dataclass.&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">dataclasses</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Self</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">dataclasses</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Self</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">yaml</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">yaml</span>
 
-<span class="kn">from</span> <span class="nn">bmctool.parameters.CESTPool</span> <span class="kn">import</span> <span class="n">CESTPool</span>
-<span class="kn">from</span> <span class="nn">bmctool.parameters.MTPool</span> <span class="kn">import</span> <span class="n">MTPool</span>
-<span class="kn">from</span> <span class="nn">bmctool.parameters.Options</span> <span class="kn">import</span> <span class="n">Options</span>
-<span class="kn">from</span> <span class="nn">bmctool.parameters.System</span> <span class="kn">import</span> <span class="n">System</span>
-<span class="kn">from</span> <span class="nn">bmctool.parameters.WaterPool</span> <span class="kn">import</span> <span class="n">WaterPool</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">bmctool.parameters.CESTPool</span><span class="w"> </span><span class="kn">import</span> <span class="n">CESTPool</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">bmctool.parameters.MTPool</span><span class="w"> </span><span class="kn">import</span> <span class="n">MTPool</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">bmctool.parameters.Options</span><span class="w"> </span><span class="kn">import</span> <span class="n">Options</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">bmctool.parameters.System</span><span class="w"> </span><span class="kn">import</span> <span class="n">System</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">bmctool.parameters.WaterPool</span><span class="w"> </span><span class="kn">import</span> <span class="n">WaterPool</span>
 
 
 <div class="viewcode-block" id="Parameters">
 <a class="viewcode-back" href="../../../_autosummary/bmctool.parameters.Parameters.html#bmctool.parameters.Parameters">[docs]</a>
 <span class="nd">@dataclasses</span><span class="o">.</span><span class="n">dataclass</span><span class="p">(</span><span class="n">slots</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="k">class</span> <span class="nc">Parameters</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Parameters</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Class to store simulation parameters.</span>
 
 <span class="sd">    Parameters</span>
@@ -113,7 +113,7 @@
     <span class="n">system</span><span class="p">:</span> <span class="n">System</span>
     <span class="n">options</span><span class="p">:</span> <span class="n">Options</span>
 
-    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if two Parameters instances are equal.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">NotImplemented</span>
@@ -131,12 +131,12 @@
         <span class="k">return</span> <span class="kc">False</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">num_cest_pools</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">num_cest_pools</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the number of pools.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cest_pools</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cest_pools</span> <span class="k">else</span> <span class="mi">0</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">mz_loc</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">mz_loc</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the location of the water z-magnetization in the BMC matrix.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;water_pool&#39;</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;No water pool defined. mz_loc cannot be determined&#39;</span><span class="p">)</span>
@@ -145,7 +145,7 @@
         <span class="k">return</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cest_pools</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">m_vec</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">m_vec</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the initial magnetization vector (fully relaxed).&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;water_pool&#39;</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;No water pool defined. m_vec cannot be determined&#39;</span><span class="p">)</span>
@@ -166,7 +166,7 @@
 <div class="viewcode-block" id="Parameters.from_dict">
 <a class="viewcode-back" href="../../../_autosummary/bmctool.parameters.Parameters.html#bmctool.parameters.Parameters.from_dict">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a Parameters instance from a dictionary.</span>
 
 <span class="sd">        Parameters</span>
@@ -204,7 +204,7 @@
 <div class="viewcode-block" id="Parameters.from_yaml">
 <a class="viewcode-back" href="../../../_autosummary/bmctool.parameters.Parameters.html#bmctool.parameters.Parameters.from_yaml">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">from_yaml</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">yaml_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_yaml</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">yaml_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a Parameters instance from a yaml config file.</span>
 
 <span class="sd">        Parameters</span>
@@ -220,7 +220,7 @@
 
 <div class="viewcode-block" id="Parameters.to_yaml">
 <a class="viewcode-back" href="../../../_autosummary/bmctool.parameters.Parameters.html#bmctool.parameters.Parameters.to_yaml">[docs]</a>
-    <span class="k">def</span> <span class="nf">to_yaml</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">yaml_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_yaml</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">yaml_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Export parameters to yaml file.</span>
 
 <span class="sd">        Parameters</span>
@@ -245,14 +245,14 @@
 
 <div class="viewcode-block" id="Parameters.add_cest_pool">
 <a class="viewcode-back" href="../../../_autosummary/bmctool.parameters.Parameters.html#bmctool.parameters.Parameters.add_cest_pool">[docs]</a>
-    <span class="k">def</span> <span class="nf">add_cest_pool</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cest_pool</span><span class="p">:</span> <span class="n">CESTPool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_cest_pool</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cest_pool</span><span class="p">:</span> <span class="n">CESTPool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Add a CESTPool object to the cest_pools list.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cest_pools</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cest_pool</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Parameters.update_cest_pool">
 <a class="viewcode-back" href="../../../_autosummary/bmctool.parameters.Parameters.html#bmctool.parameters.Parameters.update_cest_pool">[docs]</a>
-    <span class="k">def</span> <span class="nf">update_cest_pool</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_cest_pool</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Update parameters for CEST pool with index idx.</span>
 
 <span class="sd">        Available parameters are: r1 or t1, r2 or t2, k, f, dw.</span>
@@ -270,7 +270,7 @@
 
 <div class="viewcode-block" id="Parameters.update_mt_pool">
 <a class="viewcode-back" href="../../../_autosummary/bmctool.parameters.Parameters.html#bmctool.parameters.Parameters.update_mt_pool">[docs]</a>
-    <span class="k">def</span> <span class="nf">update_mt_pool</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_mt_pool</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Update MT pool parameters.</span>
 
 <span class="sd">        Available parameters are: r1 or t1, r2 or t2, f, k, dw.</span>
@@ -281,7 +281,7 @@
 
 <div class="viewcode-block" id="Parameters.update_options">
 <a class="viewcode-back" href="../../../_autosummary/bmctool.parameters.Parameters.html#bmctool.parameters.Parameters.update_options">[docs]</a>
-    <span class="k">def</span> <span class="nf">update_options</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_options</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Update options parameters.</span>
 
 <span class="sd">        Available parameters are: verbose, reset_init_mag, scale, max_pulse_samples.</span>
@@ -292,7 +292,7 @@
 
 <div class="viewcode-block" id="Parameters.update_system">
 <a class="viewcode-back" href="../../../_autosummary/bmctool.parameters.Parameters.html#bmctool.parameters.Parameters.update_system">[docs]</a>
-    <span class="k">def</span> <span class="nf">update_system</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_system</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Update scanner parameters.</span>
 
 <span class="sd">        Available parameters are: b0, gamma, b0_inhom, rel_b1.</span>
@@ -303,7 +303,7 @@
 
 <div class="viewcode-block" id="Parameters.update_water_pool">
 <a class="viewcode-back" href="../../../_autosummary/bmctool.parameters.Parameters.html#bmctool.parameters.Parameters.update_water_pool">[docs]</a>
-    <span class="k">def</span> <span class="nf">update_water_pool</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_water_pool</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Update water pool parameters.</span>
 
 <span class="sd">        Available parameters are: r1 or t1, r2 or t2, f.</span>

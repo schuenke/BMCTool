@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>bmctool.utils.pulses.make_hypsec_half_passage &mdash; BMCTool</title>
-      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css?v=16f952a1" />
 
@@ -73,18 +73,18 @@
   <h1>Source code for bmctool.utils.pulses.make_hypsec_half_passage</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;Functions to create hyperbolic secant half passage pulse.&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">types</span> <span class="kn">import</span> <span class="n">SimpleNamespace</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">types</span><span class="w"> </span><span class="kn">import</span> <span class="n">SimpleNamespace</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pypulseq</span> <span class="k">as</span> <span class="nn">pp</span>  <span class="c1"># type: ignore</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pypulseq</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pp</span>  <span class="c1"># type: ignore</span>
 
-<span class="kn">from</span> <span class="nn">bmctool.utils.pulses.calculate_phase</span> <span class="kn">import</span> <span class="n">calculate_phase</span>
-<span class="kn">from</span> <span class="nn">bmctool.utils.pulses.create_arbitrary_pulse_with_phase</span> <span class="kn">import</span> <span class="n">create_arbitrary_pulse_with_phase</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">bmctool.utils.pulses.calculate_phase</span><span class="w"> </span><span class="kn">import</span> <span class="n">calculate_phase</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">bmctool.utils.pulses.create_arbitrary_pulse_with_phase</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_arbitrary_pulse_with_phase</span>
 
 
 <div class="viewcode-block" id="calculate_amplitude">
 <a class="viewcode-back" href="../../../../_autosummary/bmctool.utils.pulses.make_hypsec_half_passage.calculate_amplitude.html#bmctool.utils.pulses.make_hypsec_half_passage.calculate_amplitude">[docs]</a>
-<span class="k">def</span> <span class="nf">calculate_amplitude</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_amplitude</span><span class="p">(</span>
     <span class="n">t</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
     <span class="n">t_0</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="n">amp</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
@@ -117,7 +117,7 @@
 
 <div class="viewcode-block" id="calculate_frequency">
 <a class="viewcode-back" href="../../../../_autosummary/bmctool.utils.pulses.make_hypsec_half_passage.calculate_frequency.html#bmctool.utils.pulses.make_hypsec_half_passage.calculate_frequency">[docs]</a>
-<span class="k">def</span> <span class="nf">calculate_frequency</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_frequency</span><span class="p">(</span>
     <span class="n">t</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
     <span class="n">t_0</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="n">mu</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
@@ -148,7 +148,7 @@
 
 <div class="viewcode-block" id="make_hypsec_half_passage_rf">
 <a class="viewcode-back" href="../../../../_autosummary/bmctool.utils.pulses.make_hypsec_half_passage.make_hypsec_half_passage_rf.html#bmctool.utils.pulses.make_hypsec_half_passage.make_hypsec_half_passage_rf">[docs]</a>
-<span class="k">def</span> <span class="nf">make_hypsec_half_passage_rf</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">make_hypsec_half_passage_rf</span><span class="p">(</span>
     <span class="n">amp</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="n">pulse_duration</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">8e-3</span><span class="p">,</span>
     <span class="n">mu</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">6</span><span class="p">,</span>

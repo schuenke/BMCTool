@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>bmctool.simulation.simulate &mdash; BMCTool</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=16f952a1" />
 
@@ -73,20 +73,21 @@
   <h1>Source code for bmctool.simulation.simulate</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;Functions to run BMCTool simulations based on given seq-file and config file.&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pypulseq</span><span class="w"> </span><span class="kn">import</span> <span class="n">Sequence</span>  <span class="c1"># type: ignore</span>
 
-<span class="kn">from</span> <span class="nn">bmctool.parameters.Parameters</span> <span class="kn">import</span> <span class="n">Parameters</span>
-<span class="kn">from</span> <span class="nn">bmctool.simulation.BMCSim</span> <span class="kn">import</span> <span class="n">BMCSim</span>
-<span class="kn">from</span> <span class="nn">bmctool.utils.eval</span> <span class="kn">import</span> <span class="n">plot_z</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">bmctool.parameters.Parameters</span><span class="w"> </span><span class="kn">import</span> <span class="n">Parameters</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">bmctool.simulation.BMCSim</span><span class="w"> </span><span class="kn">import</span> <span class="n">BMCSim</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">bmctool.utils.eval</span><span class="w"> </span><span class="kn">import</span> <span class="n">plot_z</span>
 
 
 <div class="viewcode-block" id="simulate">
 <a class="viewcode-back" href="../../../_autosummary/bmctool.simulation.simulate.html#bmctool.simulation.simulate">[docs]</a>
-<span class="k">def</span> <span class="nf">simulate</span><span class="p">(</span>
-    <span class="n">config_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span><span class="p">,</span>
-    <span class="n">seq_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span><span class="p">,</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">simulate</span><span class="p">(</span>
+    <span class="n">config</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span> <span class="o">|</span> <span class="n">Parameters</span><span class="p">,</span>
+    <span class="n">seq</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">,</span>
     <span class="n">show_plot</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BMCSim</span><span class="p">:</span>
@@ -94,10 +95,10 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    config_file</span>
-<span class="sd">        Path to the YAML config file</span>
-<span class="sd">    seq_file</span>
-<span class="sd">        Path to the pulseq sequence file</span>
+<span class="sd">    config</span>
+<span class="sd">        Path to the YAML config file or Parameters object</span>
+<span class="sd">    seq</span>
+<span class="sd">        Path to the Pulseq sequence file or PyPulseq Sequence object</span>
 <span class="sd">    show_plot, optional</span>
 <span class="sd">        Flag to activate plotting of simulated data, by default False</span>
 <span class="sd">    **kwargs</span>
@@ -113,17 +114,19 @@
 <span class="sd">    FileNotFoundError</span>
 <span class="sd">        If the config_file or seq_file not found.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">Path</span><span class="p">(</span><span class="n">config_file</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-        <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;File </span><span class="si">{</span><span class="n">config_file</span><span class="si">}</span><span class="s1"> not found.&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">Parameters</span><span class="p">):</span>
+        <span class="n">sim_params</span> <span class="o">=</span> <span class="n">config</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">Path</span><span class="p">(</span><span class="n">config</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;File </span><span class="si">{</span><span class="n">config</span><span class="si">}</span><span class="s1"> not found.&#39;</span><span class="p">)</span>
+        <span class="c1"># load config file(s)</span>
+        <span class="n">sim_params</span> <span class="o">=</span> <span class="n">Parameters</span><span class="o">.</span><span class="n">from_yaml</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">Path</span><span class="p">(</span><span class="n">seq_file</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-        <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;File </span><span class="si">{</span><span class="n">seq_file</span><span class="si">}</span><span class="s1"> not found.&#39;</span><span class="p">)</span>
-
-    <span class="c1"># load config file(s)</span>
-    <span class="n">sim_params</span> <span class="o">=</span> <span class="n">Parameters</span><span class="o">.</span><span class="n">from_yaml</span><span class="p">(</span><span class="n">config_file</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">seq</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">Path</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;File </span><span class="si">{</span><span class="n">seq</span><span class="si">}</span><span class="s1"> not found.&#39;</span><span class="p">)</span>
 
     <span class="c1"># create BMCTool object and run simulation</span>
-    <span class="n">sim</span> <span class="o">=</span> <span class="n">BMCSim</span><span class="p">(</span><span class="n">sim_params</span><span class="p">,</span> <span class="n">seq_file</span><span class="p">)</span>
+    <span class="n">sim</span> <span class="o">=</span> <span class="n">BMCSim</span><span class="p">(</span><span class="n">sim_params</span><span class="p">,</span> <span class="n">seq</span><span class="p">)</span>
     <span class="n">sim</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="n">show_plot</span><span class="p">:</span>
@@ -141,7 +144,7 @@
 
 <div class="viewcode-block" id="sim_example">
 <a class="viewcode-back" href="../../../_autosummary/bmctool.simulation.sim_example.html#bmctool.simulation.sim_example">[docs]</a>
-<span class="k">def</span> <span class="nf">sim_example</span><span class="p">(</span><span class="n">show_plot</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">sim_example</span><span class="p">(</span><span class="n">show_plot</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Run an example simulation using included config and seq files.</span>
 
 <span class="sd">    Parameters</span>
@@ -153,8 +156,8 @@
     <span class="n">config_file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s1">&#39;library&#39;</span> <span class="o">/</span> <span class="s1">&#39;sim-library&#39;</span> <span class="o">/</span> <span class="s1">&#39;config_1pool.yaml&#39;</span>
 
     <span class="n">sim</span> <span class="o">=</span> <span class="n">simulate</span><span class="p">(</span>
-        <span class="n">config_file</span><span class="o">=</span><span class="n">config_file</span><span class="p">,</span>
-        <span class="n">seq_file</span><span class="o">=</span><span class="n">seq_file</span><span class="p">,</span>
+        <span class="n">config</span><span class="o">=</span><span class="n">config_file</span><span class="p">,</span>
+        <span class="n">seq</span><span class="o">=</span><span class="n">seq_file</span><span class="p">,</span>
         <span class="n">show_plot</span><span class="o">=</span><span class="n">show_plot</span><span class="p">,</span>
         <span class="n">title</span><span class="o">=</span><span class="s1">&#39;WASABI example spectrum&#39;</span><span class="p">,</span>
         <span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>

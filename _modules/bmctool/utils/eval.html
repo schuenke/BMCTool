@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>bmctool.utils.eval &mdash; BMCTool</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=16f952a1" />
 
@@ -73,14 +73,14 @@
   <h1>Source code for bmctool.utils.eval</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;Evaluation module for the bmctool package.&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">matplotlib.figure</span> <span class="kn">import</span> <span class="n">Figure</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.figure</span><span class="w"> </span><span class="kn">import</span> <span class="n">Figure</span>
 
 
 <div class="viewcode-block" id="calc_mtr_asym">
 <a class="viewcode-back" href="../../../_autosummary/bmctool.utils.eval.calc_mtr_asym.html#bmctool.utils.eval.calc_mtr_asym">[docs]</a>
-<span class="k">def</span> <span class="nf">calc_mtr_asym</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">calc_mtr_asym</span><span class="p">(</span>
     <span class="n">m_z</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
     <span class="n">offsets</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
     <span class="n">n_interp</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1001</span><span class="p">,</span>
@@ -118,7 +118,7 @@
 
 <div class="viewcode-block" id="normalize_data">
 <a class="viewcode-back" href="../../../_autosummary/bmctool.utils.eval.normalize_data.html#bmctool.utils.eval.normalize_data">[docs]</a>
-<span class="k">def</span> <span class="nf">normalize_data</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">normalize_data</span><span class="p">(</span>
     <span class="n">m_z</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
     <span class="n">offsets</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
     <span class="n">threshold</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">float</span> <span class="o">|</span> <span class="nb">list</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
@@ -150,7 +150,7 @@
 
 <div class="viewcode-block" id="split_data">
 <a class="viewcode-back" href="../../../_autosummary/bmctool.utils.eval.split_data.html#bmctool.utils.eval.split_data">[docs]</a>
-<span class="k">def</span> <span class="nf">split_data</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">split_data</span><span class="p">(</span>
     <span class="n">m_z</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
     <span class="n">offsets</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
     <span class="n">threshold</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">float</span> <span class="o">|</span> <span class="nb">list</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
@@ -204,7 +204,7 @@
 
 <div class="viewcode-block" id="plot_z">
 <a class="viewcode-back" href="../../../_autosummary/bmctool.utils.plot_z.html#bmctool.utils.eval.plot_z">[docs]</a>
-<span class="k">def</span> <span class="nf">plot_z</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">plot_z</span><span class="p">(</span>
     <span class="n">m_z</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
     <span class="n">offsets</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">normalize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>

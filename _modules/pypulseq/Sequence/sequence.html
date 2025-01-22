@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>pypulseq.Sequence.sequence &mdash; BMCTool</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=16f952a1" />
 
@@ -71,49 +71,49 @@
            <div itemprop="articleBody">
              
   <h1>Source code for pypulseq.Sequence.sequence</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">itertools</span>
-<span class="kn">import</span> <span class="nn">math</span>
-<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
-<span class="kn">from</span> <span class="nn">types</span> <span class="kn">import</span> <span class="n">SimpleNamespace</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">List</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
-<span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
-<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">itertools</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">OrderedDict</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">types</span><span class="w"> </span><span class="kn">import</span> <span class="n">SimpleNamespace</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">List</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">warnings</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">deepcopy</span>
 
 <span class="k">try</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Self</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Self</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TypeVar</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TypeVar</span>
     <span class="n">Self</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;Self&#39;</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="s1">&#39;Sequence&#39;</span><span class="p">)</span>
 
-<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="kn">import</span> <span class="n">PPoly</span>
-<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mpl</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.interpolate</span><span class="w"> </span><span class="kn">import</span> <span class="n">PPoly</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
 
-<span class="kn">from</span> <span class="nn">pypulseq</span> <span class="kn">import</span> <span class="n">eps</span>
-<span class="kn">from</span> <span class="nn">pypulseq.Sequence</span> <span class="kn">import</span> <span class="n">block</span><span class="p">,</span> <span class="n">parula</span>
-<span class="kn">from</span> <span class="nn">pypulseq.Sequence.ext_test_report</span> <span class="kn">import</span> <span class="n">ext_test_report</span>
-<span class="kn">from</span> <span class="nn">pypulseq.Sequence.read_seq</span> <span class="kn">import</span> <span class="n">read</span>
-<span class="kn">from</span> <span class="nn">pypulseq.Sequence.write_seq</span> <span class="kn">import</span> <span class="n">write</span> <span class="k">as</span> <span class="n">write_seq</span>
-<span class="kn">from</span> <span class="nn">pypulseq.Sequence.calc_pns</span> <span class="kn">import</span> <span class="n">calc_pns</span>
-<span class="kn">from</span> <span class="nn">pypulseq.Sequence.calc_grad_spectrum</span> <span class="kn">import</span> <span class="n">calculate_gradient_spectrum</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pypulseq</span><span class="w"> </span><span class="kn">import</span> <span class="n">eps</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pypulseq.Sequence</span><span class="w"> </span><span class="kn">import</span> <span class="n">block</span><span class="p">,</span> <span class="n">parula</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pypulseq.Sequence.ext_test_report</span><span class="w"> </span><span class="kn">import</span> <span class="n">ext_test_report</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pypulseq.Sequence.read_seq</span><span class="w"> </span><span class="kn">import</span> <span class="n">read</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pypulseq.Sequence.write_seq</span><span class="w"> </span><span class="kn">import</span> <span class="n">write</span> <span class="k">as</span> <span class="n">write_seq</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pypulseq.Sequence.calc_pns</span><span class="w"> </span><span class="kn">import</span> <span class="n">calc_pns</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pypulseq.Sequence.calc_grad_spectrum</span><span class="w"> </span><span class="kn">import</span> <span class="n">calculate_gradient_spectrum</span>
 
-<span class="kn">from</span> <span class="nn">pypulseq.calc_rf_center</span> <span class="kn">import</span> <span class="n">calc_rf_center</span>
-<span class="kn">from</span> <span class="nn">pypulseq.check_timing</span> <span class="kn">import</span> <span class="n">check_timing</span> <span class="k">as</span> <span class="n">ext_check_timing</span>
-<span class="kn">from</span> <span class="nn">pypulseq.decompress_shape</span> <span class="kn">import</span> <span class="n">decompress_shape</span>
-<span class="kn">from</span> <span class="nn">pypulseq.event_lib</span> <span class="kn">import</span> <span class="n">EventLibrary</span>
-<span class="kn">from</span> <span class="nn">pypulseq.opts</span> <span class="kn">import</span> <span class="n">Opts</span>
-<span class="kn">from</span> <span class="nn">pypulseq.supported_labels_rf_use</span> <span class="kn">import</span> <span class="n">get_supported_labels</span>
-<span class="kn">from</span> <span class="nn">pypulseq.utils.cumsum</span> <span class="kn">import</span> <span class="n">cumsum</span>
-<span class="kn">from</span> <span class="nn">pypulseq.block_to_events</span> <span class="kn">import</span> <span class="n">block_to_events</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pypulseq.calc_rf_center</span><span class="w"> </span><span class="kn">import</span> <span class="n">calc_rf_center</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pypulseq.check_timing</span><span class="w"> </span><span class="kn">import</span> <span class="n">check_timing</span> <span class="k">as</span> <span class="n">ext_check_timing</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pypulseq.decompress_shape</span><span class="w"> </span><span class="kn">import</span> <span class="n">decompress_shape</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pypulseq.event_lib</span><span class="w"> </span><span class="kn">import</span> <span class="n">EventLibrary</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pypulseq.opts</span><span class="w"> </span><span class="kn">import</span> <span class="n">Opts</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pypulseq.supported_labels_rf_use</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_supported_labels</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pypulseq.utils.cumsum</span><span class="w"> </span><span class="kn">import</span> <span class="n">cumsum</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pypulseq.block_to_events</span><span class="w"> </span><span class="kn">import</span> <span class="n">block_to_events</span>
 
-<span class="kn">from</span> <span class="nn">version</span> <span class="kn">import</span> <span class="n">major</span><span class="p">,</span> <span class="n">minor</span><span class="p">,</span> <span class="n">revision</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">version</span><span class="w"> </span><span class="kn">import</span> <span class="n">major</span><span class="p">,</span> <span class="n">minor</span><span class="p">,</span> <span class="n">revision</span>
 
 
 <div class="viewcode-block" id="Sequence">
 <a class="viewcode-back" href="../../../_autosummary/bmctool.utils.seq.write.Sequence.html#bmctool.utils.seq.write.Sequence">[docs]</a>
-<span class="k">class</span> <span class="nc">Sequence</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Sequence</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generate sequences and read/write sequence files. This class defines properties and methods to define a complete MR</span>
 <span class="sd">    sequence including RF pulses, gradients, ADC events, etc. The class provides an implementation of the open MR</span>
@@ -128,7 +128,7 @@
 
 <div class="viewcode-block" id="Sequence.__init__">
 <a class="viewcode-back" href="../../../_autosummary/bmctool.utils.seq.write.Sequence.html#bmctool.utils.seq.write.Sequence.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">use_block_cache</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">use_block_cache</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">system</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">system</span> <span class="o">=</span> <span class="n">Opts</span><span class="p">()</span>
             
@@ -185,7 +185,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">extension_string_idx</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># string IDs of the used extensions</span></div>
 
 
-    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="n">s</span> <span class="o">=</span> <span class="s2">&quot;Sequence:&quot;</span>
         <span class="n">s</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">shape_library: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shape_library</span><span class="p">)</span>
         <span class="n">s</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">rf_library: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rf_library</span><span class="p">)</span>
@@ -202,7 +202,7 @@
 
 <div class="viewcode-block" id="Sequence.adc_times">
 <a class="viewcode-back" href="../../../_autosummary/bmctool.utils.seq.write.Sequence.html#bmctool.utils.seq.write.Sequence.adc_times">[docs]</a>
-    <span class="k">def</span> <span class="nf">adc_times</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">adc_times</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">time_range</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -265,7 +265,7 @@
 
 <div class="viewcode-block" id="Sequence.add_block">
 <a class="viewcode-back" href="../../../_autosummary/bmctool.utils.seq.write.Sequence.html#bmctool.utils.seq.write.Sequence.add_block">[docs]</a>
-    <span class="k">def</span> <span class="nf">add_block</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">SimpleNamespace</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_block</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">SimpleNamespace</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Add a new block/multiple events to the sequence. Adds a sequence block with provided as a block structure</span>
 
@@ -286,7 +286,7 @@
     
 <div class="viewcode-block" id="Sequence.calculate_gradient_spectrum">
 <a class="viewcode-back" href="../../../_autosummary/bmctool.utils.seq.write.Sequence.html#bmctool.utils.seq.write.Sequence.calculate_gradient_spectrum">[docs]</a>
-    <span class="k">def</span> <span class="nf">calculate_gradient_spectrum</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">calculate_gradient_spectrum</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span> <span class="n">max_frequency</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">2000</span><span class="p">,</span>
             <span class="n">window_width</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">,</span>
             <span class="n">frequency_oversampling</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
@@ -357,7 +357,7 @@
     
 <div class="viewcode-block" id="Sequence.calculate_kspace">
 <a class="viewcode-back" href="../../../_autosummary/bmctool.utils.seq.write.Sequence.html#bmctool.utils.seq.write.Sequence.calculate_kspace">[docs]</a>
-    <span class="k">def</span> <span class="nf">calculate_kspace</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">calculate_kspace</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">trajectory_delay</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
         <span class="n">gradient_offset</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
@@ -535,7 +535,7 @@
         <span class="k">return</span> <span class="n">k_traj_adc</span><span class="p">,</span> <span class="n">k_traj</span><span class="p">,</span> <span class="n">t_excitation</span><span class="p">,</span> <span class="n">t_refocusing</span><span class="p">,</span> <span class="n">t_adc</span></div>
 
 
-    <span class="k">def</span> <span class="nf">calculate_kspacePP</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">calculate_kspacePP</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span>
             <span class="n">trajectory_delay</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
             <span class="n">gradient_offset</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
@@ -545,7 +545,7 @@
 
 <div class="viewcode-block" id="Sequence.calculate_pns">
 <a class="viewcode-back" href="../../../_autosummary/bmctool.utils.seq.write.Sequence.html#bmctool.utils.seq.write.Sequence.calculate_pns">[docs]</a>
-    <span class="k">def</span> <span class="nf">calculate_pns</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">calculate_pns</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span>
             <span class="n">hardware</span><span class="p">:</span> <span class="n">SimpleNamespace</span><span class="p">,</span>
             <span class="n">time_range</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -585,7 +585,7 @@
 
 <div class="viewcode-block" id="Sequence.check_timing">
 <a class="viewcode-back" href="../../../_autosummary/bmctool.utils.seq.write.Sequence.html#bmctool.utils.seq.write.Sequence.check_timing">[docs]</a>
-    <span class="k">def</span> <span class="nf">check_timing</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">check_timing</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Checks timing of all blocks and objects in the sequence optionally returns the detailed error log. This</span>
 <span class="sd">        function also modifies the sequence object by adding the field &quot;TotalDuration&quot; to sequence definitions.</span>
@@ -669,7 +669,7 @@
 
 <div class="viewcode-block" id="Sequence.duration">
 <a class="viewcode-back" href="../../../_autosummary/bmctool.utils.seq.write.Sequence.html#bmctool.utils.seq.write.Sequence.duration">[docs]</a>
-    <span class="k">def</span> <span class="nf">duration</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">duration</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the total duration of this sequence, and the total count of blocks and events.</span>
 
@@ -694,7 +694,7 @@
 
 <div class="viewcode-block" id="Sequence.evaluate_labels">
 <a class="viewcode-back" href="../../../_autosummary/bmctool.utils.seq.write.Sequence.html#bmctool.utils.seq.write.Sequence.evaluate_labels">[docs]</a>
-    <span class="k">def</span> <span class="nf">evaluate_labels</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">evaluate_labels</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span>
             <span class="n">init</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
             <span class="n">evolution</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;none&#39;</span>
@@ -778,7 +778,7 @@
 
 <div class="viewcode-block" id="Sequence.flip_grad_axis">
 <a class="viewcode-back" href="../../../_autosummary/bmctool.utils.seq.write.Sequence.html#bmctool.utils.seq.write.Sequence.flip_grad_axis">[docs]</a>
-    <span class="k">def</span> <span class="nf">flip_grad_axis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">flip_grad_axis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Invert all gradients along the corresponding axis/channel. The function acts on all gradient objects already</span>
 <span class="sd">        added to the sequence object.</span>
@@ -793,7 +793,7 @@
 
 <div class="viewcode-block" id="Sequence.get_block">
 <a class="viewcode-back" href="../../../_autosummary/bmctool.utils.seq.write.Sequence.html#bmctool.utils.seq.write.Sequence.get_block">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_block</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">block_index</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SimpleNamespace</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_block</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">block_index</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SimpleNamespace</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return a block of the sequence  specified by the index. The block is created from the sequence data with all</span>
 <span class="sd">        events and shapes decompressed.</span>
@@ -817,7 +817,7 @@
 
 <div class="viewcode-block" id="Sequence.get_definition">
 <a class="viewcode-back" href="../../../_autosummary/bmctool.utils.seq.write.Sequence.html#bmctool.utils.seq.write.Sequence.get_definition">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_definition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_definition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return value of the definition specified by the key. These definitions can be added manually or read from the</span>
 <span class="sd">        header of a sequence file defined in the sequence header. An empty array is returned if the key is not defined.</span>
@@ -842,7 +842,7 @@
 
 <div class="viewcode-block" id="Sequence.get_extension_type_ID">
 <a class="viewcode-back" href="../../../_autosummary/bmctool.utils.seq.write.Sequence.html#bmctool.utils.seq.write.Sequence.get_extension_type_ID">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_extension_type_ID</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">extension_string</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_extension_type_ID</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">extension_string</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get numeric extension ID for `extension_string`. Will automatically create a new ID if unknown.</span>
 
@@ -875,7 +875,7 @@
 
 <div class="viewcode-block" id="Sequence.get_extension_type_string">
 <a class="viewcode-back" href="../../../_autosummary/bmctool.utils.seq.write.Sequence.html#bmctool.utils.seq.write.Sequence.get_extension_type_string">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_extension_type_string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">extension_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_extension_type_string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">extension_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get string extension ID for `extension_id`.</span>
 
@@ -907,7 +907,7 @@
 
 <div class="viewcode-block" id="Sequence.get_gradients">
 <a class="viewcode-back" href="../../../_autosummary/bmctool.utils.seq.write.Sequence.html#bmctool.utils.seq.write.Sequence.get_gradients">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_gradients</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_gradients</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
         <span class="n">trajectory_delay</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
         <span class="n">gradient_offset</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
         <span class="n">time_range</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">PPoly</span><span class="p">]:</span>
@@ -990,7 +990,7 @@
 
 <div class="viewcode-block" id="Sequence.mod_grad_axis">
 <a class="viewcode-back" href="../../../_autosummary/bmctool.utils.seq.write.Sequence.html#bmctool.utils.seq.write.Sequence.mod_grad_axis">[docs]</a>
-    <span class="k">def</span> <span class="nf">mod_grad_axis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">modifier</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">mod_grad_axis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">modifier</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Invert or scale all gradients along the corresponding axis/channel. The function acts on all gradient objects</span>
 <span class="sd">        already added to the sequence object.</span>
@@ -1043,7 +1043,7 @@
 
 <div class="viewcode-block" id="Sequence.plot">
 <a class="viewcode-back" href="../../../_autosummary/bmctool.utils.seq.write.Sequence.html#bmctool.utils.seq.write.Sequence.plot">[docs]</a>
-    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">plot</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">label</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(),</span>
         <span class="n">show_blocks</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
@@ -1272,7 +1272,7 @@
 
 <div class="viewcode-block" id="Sequence.read">
 <a class="viewcode-back" href="../../../_autosummary/bmctool.utils.seq.write.Sequence.html#bmctool.utils.seq.write.Sequence.read">[docs]</a>
-    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">detect_rf_use</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">remove_duplicates</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">detect_rf_use</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">remove_duplicates</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Read `.seq` file from `file_path`.</span>
 
@@ -1293,23 +1293,23 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">next_free_block_ID</span> <span class="o">=</span> <span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">block_events</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_events</span> <span class="k">else</span> <span class="mi">1</span></div>
 
 
-    <span class="k">def</span> <span class="nf">register_adc_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">EventLibrary</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">register_adc_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">EventLibrary</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">block</span><span class="o">.</span><span class="n">register_adc_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">register_grad_event</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">register_grad_event</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">SimpleNamespace</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]:</span>
         <span class="k">return</span> <span class="n">block</span><span class="o">.</span><span class="n">register_grad_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">register_label_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">SimpleNamespace</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">register_label_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">SimpleNamespace</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">block</span><span class="o">.</span><span class="n">register_label_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">register_rf_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">SimpleNamespace</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">register_rf_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">SimpleNamespace</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]:</span>
         <span class="k">return</span> <span class="n">block</span><span class="o">.</span><span class="n">register_rf_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Sequence.remove_duplicates">
 <a class="viewcode-back" href="../../../_autosummary/bmctool.utils.seq.write.Sequence.html#bmctool.utils.seq.write.Sequence.remove_duplicates">[docs]</a>
-    <span class="k">def</span> <span class="nf">remove_duplicates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_place</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">remove_duplicates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_place</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Removes duplicate events from the shape and event libraries contained</span>
 <span class="sd">        in this sequence.</span>
@@ -1382,7 +1382,7 @@
 
 <div class="viewcode-block" id="Sequence.rf_from_lib_data">
 <a class="viewcode-back" href="../../../_autosummary/bmctool.utils.seq.write.Sequence.html#bmctool.utils.seq.write.Sequence.rf_from_lib_data">[docs]</a>
-    <span class="k">def</span> <span class="nf">rf_from_lib_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lib_data</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">use</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="nb">str</span><span class="p">())</span> <span class="o">-&gt;</span> <span class="n">SimpleNamespace</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">rf_from_lib_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lib_data</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">use</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="nb">str</span><span class="p">())</span> <span class="o">-&gt;</span> <span class="n">SimpleNamespace</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Construct RF object from `lib_data`.</span>
 
@@ -1447,7 +1447,7 @@
 
 <div class="viewcode-block" id="Sequence.rf_times">
 <a class="viewcode-back" href="../../../_autosummary/bmctool.utils.seq.write.Sequence.html#bmctool.utils.seq.write.Sequence.rf_times">[docs]</a>
-    <span class="k">def</span> <span class="nf">rf_times</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">rf_times</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">time_range</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -1524,7 +1524,7 @@
 
 <div class="viewcode-block" id="Sequence.set_block">
 <a class="viewcode-back" href="../../../_autosummary/bmctool.utils.seq.write.Sequence.html#bmctool.utils.seq.write.Sequence.set_block">[docs]</a>
-    <span class="k">def</span> <span class="nf">set_block</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">block_index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">SimpleNamespace</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_block</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">block_index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">SimpleNamespace</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Replace block at index with new block provided as block structure, add sequence block, or create a new block</span>
 <span class="sd">        from events and store at position specified by index. The block or events are provided in uncompressed form and</span>
@@ -1549,7 +1549,7 @@
 
 <div class="viewcode-block" id="Sequence.set_definition">
 <a class="viewcode-back" href="../../../_autosummary/bmctool.utils.seq.write.Sequence.html#bmctool.utils.seq.write.Sequence.set_definition">[docs]</a>
-    <span class="k">def</span> <span class="nf">set_definition</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_definition</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">list</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">]</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -1576,7 +1576,7 @@
 
 <div class="viewcode-block" id="Sequence.set_extension_string_ID">
 <a class="viewcode-back" href="../../../_autosummary/bmctool.utils.seq.write.Sequence.html#bmctool.utils.seq.write.Sequence.set_extension_string_ID">[docs]</a>
-    <span class="k">def</span> <span class="nf">set_extension_string_ID</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">extension_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">extension_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_extension_string_ID</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">extension_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">extension_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Set numeric ID for the given string extension ID.</span>
 
@@ -1605,7 +1605,7 @@
 
 <div class="viewcode-block" id="Sequence.test_report">
 <a class="viewcode-back" href="../../../_autosummary/bmctool.utils.seq.write.Sequence.html#bmctool.utils.seq.write.Sequence.test_report">[docs]</a>
-    <span class="k">def</span> <span class="nf">test_report</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_report</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Analyze the sequence and return a text report.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1615,7 +1615,7 @@
 
 <div class="viewcode-block" id="Sequence.waveforms">
 <a class="viewcode-back" href="../../../_autosummary/bmctool.utils.seq.write.Sequence.html#bmctool.utils.seq.write.Sequence.waveforms">[docs]</a>
-    <span class="k">def</span> <span class="nf">waveforms</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">waveforms</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">append_RF</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">time_range</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -1786,7 +1786,7 @@
 
 <div class="viewcode-block" id="Sequence.waveforms_and_times">
 <a class="viewcode-back" href="../../../_autosummary/bmctool.utils.seq.write.Sequence.html#bmctool.utils.seq.write.Sequence.waveforms_and_times">[docs]</a>
-    <span class="k">def</span> <span class="nf">waveforms_and_times</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">waveforms_and_times</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">append_RF</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">time_range</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -1826,7 +1826,7 @@
 
 <div class="viewcode-block" id="Sequence.waveforms_export">
 <a class="viewcode-back" href="../../../_autosummary/bmctool.utils.seq.write.Sequence.html#bmctool.utils.seq.write.Sequence.waveforms_export">[docs]</a>
-    <span class="k">def</span> <span class="nf">waveforms_export</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_range</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">))</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">waveforms_export</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_range</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">))</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Plot `Sequence`.</span>
 
@@ -1986,7 +1986,7 @@
 
 <div class="viewcode-block" id="Sequence.write">
 <a class="viewcode-back" href="../../../_autosummary/bmctool.utils.seq.write.Sequence.html#bmctool.utils.seq.write.Sequence.write">[docs]</a>
-    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">create_signature</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">remove_duplicates</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">create_signature</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">remove_duplicates</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Write the sequence data to the given filename using the open file format for MR sequences.</span>
 
