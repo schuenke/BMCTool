@@ -3,6 +3,7 @@
 from pathlib import Path
 
 import numpy as np
+from pypulseq import Sequence  # type: ignore
 
 from bmctool.parameters.Parameters import Parameters
 from bmctool.simulation.BMCSim import BMCSim
@@ -10,8 +11,8 @@ from bmctool.utils.eval import plot_z
 
 
 def simulate(
-    config_file: str | Path,
-    seq_file: str | Path,
+    config: str | Path | Parameters,
+    seq: str | Path | Sequence,
     show_plot: bool = False,
     **kwargs,
 ) -> BMCSim:
@@ -19,10 +20,10 @@ def simulate(
 
     Parameters
     ----------
-    config_file
-        Path to the YAML config file
-    seq_file
-        Path to the pulseq sequence file
+    config
+        Path to the YAML config file or Parameters object
+    seq
+        Path to the Pulseq sequence file or PyPulseq Sequence object
     show_plot, optional
         Flag to activate plotting of simulated data, by default False
     **kwargs
@@ -38,17 +39,19 @@ def simulate(
     FileNotFoundError
         If the config_file or seq_file not found.
     """
-    if not Path(config_file).exists():
-        raise FileNotFoundError(f'File {config_file} not found.')
+    if isinstance(config, Parameters):
+        sim_params = config
+    else:
+        if not Path(config).exists():
+            raise FileNotFoundError(f'File {config} not found.')
+        # load config file(s)
+        sim_params = Parameters.from_yaml(config)
 
-    if not Path(seq_file).exists():
-        raise FileNotFoundError(f'File {seq_file} not found.')
-
-    # load config file(s)
-    sim_params = Parameters.from_yaml(config_file)
+    if not isinstance(seq, Sequence) and not Path(seq).exists():
+        raise FileNotFoundError(f'File {seq} not found.')
 
     # create BMCTool object and run simulation
-    sim = BMCSim(sim_params, seq_file)
+    sim = BMCSim(sim_params, seq)
     sim.run()
 
     if show_plot:
@@ -75,8 +78,8 @@ def sim_example(show_plot: bool = True) -> tuple[np.ndarray, np.ndarray]:
     config_file = Path(__file__).parent.parent / 'library' / 'sim-library' / 'config_1pool.yaml'
 
     sim = simulate(
-        config_file=config_file,
-        seq_file=seq_file,
+        config=config_file,
+        seq=seq_file,
         show_plot=show_plot,
         title='WASABI example spectrum',
         normalize=True,
