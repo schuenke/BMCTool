@@ -60,7 +60,7 @@ def insert_seq_file_header(filepath: str | Path, author: str) -> None:
                     new_file.write('# Created for Pulseq-CEST\n')
                     new_file.write('# https://pulseq-cest.github.io/\n')
                     new_file.write(f'# Created by: {author}\n')
-                    new_file.write(f"# Created at: {datetime.now().strftime('%d-%b-%Y %H:%M:%S')}\n")
+                    new_file.write(f'# Created at: {datetime.now().strftime("%d-%b-%Y %H:%M:%S")}\n')
                     new_file.write('\n')
                     in_position = False
                 else:
