@@ -96,7 +96,7 @@
 <h1>bmctool.utils.seq.write.datetime<a class="headerlink" href="#bmctool-utils-seq-write-datetime" title="Link to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="bmctool.utils.seq.write.datetime">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bmctool.utils.seq.write.</span></span><span class="sig-name descname"><span class="pre">datetime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">year</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">month</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">day</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">hour</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">minute</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">second</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">microsecond</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">tzinfo</span></span></em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/datetime.html#datetime"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bmctool.utils.seq.write.datetime" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bmctool.utils.seq.write.</span></span><span class="sig-name descname"><span class="pre">datetime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">year</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">month</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">day</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">hour</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">minute</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">second</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">microsecond</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">tzinfo</span></span></em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/datetime.html#datetime"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bmctool.utils.seq.write.datetime" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#bmctool.utils.seq.write.datetime.date" title="bmctool.utils.seq.write.datetime.date"><code class="xref py py-class docutils literal notranslate"><span class="pre">date</span></code></a></p>
 <p>The year, month and day arguments are required. tzinfo may be None, or an
 instance of a tzinfo subclass. The remaining arguments may be ints.</p>
@@ -147,7 +147,7 @@ instance of a tzinfo subclass. The remaining arguments may be ints.</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="#bmctool.utils.seq.write.datetime.isoweekday" title="bmctool.utils.seq.write.datetime.isoweekday"><code class="xref py py-obj docutils literal notranslate"><span class="pre">isoweekday</span></code></a></p></td>
 <td><p>Return the day of the week represented by the date.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#bmctool.utils.seq.write.datetime.now" title="bmctool.utils.seq.write.datetime.now"><code class="xref py py-obj docutils literal notranslate"><span class="pre">now</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#bmctool.utils.seq.write.datetime.now" title="bmctool.utils.seq.write.datetime.now"><code class="xref py py-obj docutils literal notranslate"><span class="pre">now</span></code></a>([tz])</p></td>
 <td><p>Returns new datetime object representing current time local to tz.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#bmctool.utils.seq.write.datetime.replace" title="bmctool.utils.seq.write.datetime.replace"><code class="xref py py-obj docutils literal notranslate"><span class="pre">replace</span></code></a></p></td>
@@ -246,7 +246,7 @@ instance of a tzinfo subclass. The remaining arguments may be ints.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="bmctool.utils.seq.write.datetime.combine">
-<span class="sig-name descname"><span class="pre">combine</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bmctool.utils.seq.write.datetime.combine" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">combine</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bmctool.utils.seq.write.datetime.combine" title="Link to this definition"></a></dt>
 <dd><p>date, time -&gt; datetime with same date and time fields</p>
 </dd></dl>
 
@@ -270,26 +270,26 @@ instance of a tzinfo subclass. The remaining arguments may be ints.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="bmctool.utils.seq.write.datetime.fromisocalendar">
-<span class="sig-name descname"><span class="pre">fromisocalendar</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bmctool.utils.seq.write.datetime.fromisocalendar" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fromisocalendar</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bmctool.utils.seq.write.datetime.fromisocalendar" title="Link to this definition"></a></dt>
 <dd><p>int, int, int -&gt; Construct a date from the ISO year, week number and weekday.</p>
 <p>This is the inverse of the date.isocalendar() function</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="bmctool.utils.seq.write.datetime.fromisoformat">
-<span class="sig-name descname"><span class="pre">fromisoformat</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bmctool.utils.seq.write.datetime.fromisoformat" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fromisoformat</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bmctool.utils.seq.write.datetime.fromisoformat" title="Link to this definition"></a></dt>
 <dd><p>string -&gt; datetime from a string in most ISO 8601 formats</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="bmctool.utils.seq.write.datetime.fromordinal">
-<span class="sig-name descname"><span class="pre">fromordinal</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bmctool.utils.seq.write.datetime.fromordinal" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fromordinal</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bmctool.utils.seq.write.datetime.fromordinal" title="Link to this definition"></a></dt>
 <dd><p>int -&gt; date corresponding to a proleptic Gregorian ordinal.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="bmctool.utils.seq.write.datetime.fromtimestamp">
-<span class="sig-name descname"><span class="pre">fromtimestamp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bmctool.utils.seq.write.datetime.fromtimestamp" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fromtimestamp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bmctool.utils.seq.write.datetime.fromtimestamp" title="Link to this definition"></a></dt>
 <dd><p>timestamp[, tz] -&gt; tz’s local time from POSIX timestamp.</p>
 </dd></dl>
 
@@ -318,7 +318,7 @@ Monday == 1 … Sunday == 7</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="bmctool.utils.seq.write.datetime.now">
-<span class="sig-name descname"><span class="pre">now</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bmctool.utils.seq.write.datetime.now" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">now</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tz</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bmctool.utils.seq.write.datetime.now" title="Link to this definition"></a></dt>
 <dd><p>Returns new datetime object representing current time local to tz.</p>
 <blockquote>
 <div><dl class="simple">
@@ -343,7 +343,7 @@ Monday == 1 … Sunday == 7</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="bmctool.utils.seq.write.datetime.strptime">
-<span class="sig-name descname"><span class="pre">strptime</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bmctool.utils.seq.write.datetime.strptime" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">strptime</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bmctool.utils.seq.write.datetime.strptime" title="Link to this definition"></a></dt>
 <dd><p>string, format -&gt; new datetime parsed from a string (like time.strptime()).</p>
 </dd></dl>
 
@@ -373,7 +373,7 @@ Monday == 1 … Sunday == 7</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="bmctool.utils.seq.write.datetime.today">
-<span class="sig-name descname"><span class="pre">today</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bmctool.utils.seq.write.datetime.today" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">today</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bmctool.utils.seq.write.datetime.today" title="Link to this definition"></a></dt>
 <dd><p>Current date or datetime:  same as self.__class__.fromtimestamp(time.time()).</p>
 </dd></dl>
 
@@ -391,13 +391,13 @@ Monday == 1 … Sunday == 7</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="bmctool.utils.seq.write.datetime.utcfromtimestamp">
-<span class="sig-name descname"><span class="pre">utcfromtimestamp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bmctool.utils.seq.write.datetime.utcfromtimestamp" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">utcfromtimestamp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bmctool.utils.seq.write.datetime.utcfromtimestamp" title="Link to this definition"></a></dt>
 <dd><p>Construct a naive UTC datetime from a POSIX timestamp.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="bmctool.utils.seq.write.datetime.utcnow">
-<span class="sig-name descname"><span class="pre">utcnow</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bmctool.utils.seq.write.datetime.utcnow" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">utcnow</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bmctool.utils.seq.write.datetime.utcnow" title="Link to this definition"></a></dt>
 <dd><p>Return a new datetime representing UTC day and time.</p>
 </dd></dl>
 
