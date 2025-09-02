@@ -32,6 +32,7 @@ bmctool.utils.seq.write.Sequence
       ~Sequence.get_extension_type_ID
       ~Sequence.get_extension_type_string
       ~Sequence.get_gradients
+      ~Sequence.install
       ~Sequence.mod_grad_axis
       ~Sequence.plot
       ~Sequence.read
