@@ -76,7 +76,7 @@ def test_from_invalid_values(r1, r2, k, f, dw, t1, t2):
         (None, 2.0, 3.0, 0.5, 5.0, '1,0', None),  # t1 str not convertible to float
     ],
 )
-def test_from_unconvertable_strings(r1, r2, k, f, dw, t1, t2):
+def test_from_unconvertible_strings(r1, r2, k, f, dw, t1, t2):
     """Test CESTPool instantiation from invalid parameter types."""
     with pytest.raises(ValueError):
         CESTPool(r1=r1, r2=r2, k=k, f=f, dw=dw, t1=t1, t2=t2)
