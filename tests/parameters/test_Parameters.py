@@ -8,10 +8,10 @@ def test_properties_raise_error(valid_parameters_object):
     """Test that m_vec and mz_loc raise an error if water_pool does not exist."""
     p = deepcopy(valid_parameters_object)
     del p.water_pool
-    with pytest.raises(Exception, match='No water pool defined.'):
+    with pytest.raises(Exception, match='No water pool defined'):
         _ = p.mz_loc
 
-    with pytest.raises(Exception, match='No water pool defined.'):
+    with pytest.raises(Exception, match='No water pool defined'):
         _ = p.m_vec
 
 

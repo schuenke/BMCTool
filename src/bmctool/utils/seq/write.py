@@ -31,7 +31,7 @@ def round_number(number: float, significant_digits: int) -> float:
         rounded number
     """
     if number != 0:
-        return round(number, significant_digits - int(math.floor(math.log10(abs(number)))) - 1)
+        return round(number, significant_digits - math.floor(math.log10(abs(number))) - 1)
     return 0.0
 
 
