@@ -35,7 +35,7 @@ def test_calc_mtr_asym():
     np.testing.assert_array_almost_equal(calc_mtr_asym(m_z, offsets), expected_asym)
 
     # wrong dimensions
-    with pytest.raises(ValueError, match='m_z and offsets must have the same dimensions.'):
+    with pytest.raises(ValueError, match='m_z and offsets must have the same dimensions'):
         calc_mtr_asym(np.array([1, 2, 3]), np.array([1, 2, 3, 4]))
 
 

@@ -74,7 +74,7 @@ def test_from_invalid_values(r1, r2, f, dw, t1, t2):
         (None, 2.0, 0.3, 5.0, '1,0', None),  # t1 str not convertible to float
     ],
 )
-def test_from_unconvertable_strings(r1, r2, f, dw, t1, t2):
+def test_from_unconvertible_strings(r1, r2, f, dw, t1, t2):
     """Test Pool instantiation from invalid parameter types."""
     with pytest.raises(ValueError):
         Pool(r1=r1, r2=r2, f=f, dw=dw, t1=t1, t2=t2)

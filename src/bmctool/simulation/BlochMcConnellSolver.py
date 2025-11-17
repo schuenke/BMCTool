@@ -266,7 +266,7 @@ class BlochMcConnellSolver:
         w0
             Larmor frequency
         """
-        mt_line = 0
+        mt_line: float = 0
         px = np.array([-300 - w0, -100 - w0, 100 + w0, 300 + w0])
         py = np.zeros(px.size)
         for i in range(px.size):
