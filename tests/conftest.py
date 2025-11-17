@@ -133,6 +133,22 @@ def valid_sequence_object():
 
 
 @pytest.fixture(scope='session')
+def valid_sequence_with_single_gaussian_pulse():
+    seq = pp.Sequence()
+    sys = pp.Opts()
+
+    seq.set_definition('offsets_ppm', [0])
+
+    rf = pp.make_gauss_pulse(flip_angle=np.pi / 2, duration=5e-3, freq_offset=0, system=sys)
+    pseudo_adc = pp.make_adc(num_samples=1, duration=1e-3)
+
+    seq.add_block(rf)
+    seq.add_block(pseudo_adc)
+
+    return seq
+
+
+@pytest.fixture(scope='session')
 def valid_seq_file(tmp_path_factory, valid_sequence_object):
     fn = tmp_path_factory.mktemp('valid_seq_file') / 'valid_seq_file.seq'
     valid_sequence_object.write(fn)
