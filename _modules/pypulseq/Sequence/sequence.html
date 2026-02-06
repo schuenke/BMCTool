@@ -7,15 +7,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>pypulseq.Sequence.sequence &mdash; BMCTool</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=16f952a1" />
 
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
-      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
-      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -71,8 +71,7 @@
            <div itemprop="articleBody">
              
   <h1>Source code for pypulseq.Sequence.sequence</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">itertools</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">OrderedDict</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">deepcopy</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">types</span><span class="w"> </span><span class="kn">import</span> <span class="n">SimpleNamespace</span>
@@ -86,9 +85,7 @@
 
     <span class="n">Self</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;Self&#39;</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="s1">&#39;Sequence&#39;</span><span class="p">)</span>
 
-<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mpl</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">scipy.interpolate</span><span class="w"> </span><span class="kn">import</span> <span class="n">PPoly</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">pypulseq</span><span class="w"> </span><span class="kn">import</span> <span class="n">__version__</span><span class="p">,</span> <span class="n">eps</span>
@@ -98,15 +95,17 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">pypulseq.decompress_shape</span><span class="w"> </span><span class="kn">import</span> <span class="n">decompress_shape</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pypulseq.event_lib</span><span class="w"> </span><span class="kn">import</span> <span class="n">EventLibrary</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pypulseq.opts</span><span class="w"> </span><span class="kn">import</span> <span class="n">Opts</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pypulseq.Sequence</span><span class="w"> </span><span class="kn">import</span> <span class="n">block</span><span class="p">,</span> <span class="n">parula</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pypulseq.Sequence</span><span class="w"> </span><span class="kn">import</span> <span class="n">block</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pypulseq.Sequence.calc_grad_spectrum</span><span class="w"> </span><span class="kn">import</span> <span class="n">calculate_gradient_spectrum</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pypulseq.Sequence.calc_pns</span><span class="w"> </span><span class="kn">import</span> <span class="n">calc_pns</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pypulseq.Sequence.ext_test_report</span><span class="w"> </span><span class="kn">import</span> <span class="n">ext_test_report</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pypulseq.Sequence.install</span><span class="w"> </span><span class="kn">import</span> <span class="n">detect_scanner</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pypulseq.Sequence.read_seq</span><span class="w"> </span><span class="kn">import</span> <span class="n">read</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pypulseq.Sequence.write_seq</span><span class="w"> </span><span class="kn">import</span> <span class="n">write</span> <span class="k">as</span> <span class="n">write_seq</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pypulseq.supported_labels_rf_use</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_supported_labels</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pypulseq.Sequence.write_seq</span><span class="w"> </span><span class="kn">import</span> <span class="n">write_v141</span> <span class="k">as</span> <span class="n">write_seq_v141</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pypulseq.utils.cumsum</span><span class="w"> </span><span class="kn">import</span> <span class="n">cumsum</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pypulseq.utils.paper_plot</span><span class="w"> </span><span class="kn">import</span> <span class="n">paper_plot</span> <span class="k">as</span> <span class="n">ext_paper_plot</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pypulseq.utils.seq_plot</span><span class="w"> </span><span class="kn">import</span> <span class="n">SeqPlot</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pypulseq.utils.tracing</span><span class="w"> </span><span class="kn">import</span> <span class="n">format_trace</span><span class="p">,</span> <span class="n">trace</span><span class="p">,</span> <span class="n">trace_enabled</span>
 
 <span class="n">major</span><span class="p">,</span> <span class="n">minor</span><span class="p">,</span> <span class="n">revision</span> <span class="o">=</span> <span class="n">__version__</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[:</span><span class="mi">3</span><span class="p">]</span>
@@ -145,6 +144,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">rf_library</span> <span class="o">=</span> <span class="n">EventLibrary</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">shape_library</span> <span class="o">=</span> <span class="n">EventLibrary</span><span class="p">(</span><span class="n">numpy_data</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">trigger_library</span> <span class="o">=</span> <span class="n">EventLibrary</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">soft_delay_library</span> <span class="o">=</span> <span class="n">EventLibrary</span><span class="p">()</span>
 
         <span class="c1"># =========</span>
         <span class="c1"># OTHER</span>
@@ -169,10 +169,14 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">signature_type</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">signature_file</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">signature_value</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rf_id_to_name_map</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">adc_id_to_name_map</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grad_id_to_name_map</span> <span class="o">=</span> <span class="p">{}</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">block_durations</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">extension_numeric_idx</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">extension_string_idx</span> <span class="o">=</span> <span class="p">[]</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">extension_string_idx</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">soft_delay_hints</span> <span class="o">=</span> <span class="p">{}</span></div>
 
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
@@ -248,20 +252,29 @@
 <a class="viewcode-back" href="../../../_autosummary/bmctool.utils.seq.write.Sequence.html#bmctool.utils.seq.write.Sequence.add_block">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">add_block</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">SimpleNamespace</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Add a new block/multiple events to the sequence. Adds a sequence block with provided as a block structure</span>
-
-<span class="sd">        See Also</span>
-<span class="sd">        --------</span>
-<span class="sd">        - `pypulseq.Sequence.sequence.Sequence.set_block()`</span>
-<span class="sd">        - `pypulseq.make_adc.make_adc()`</span>
-<span class="sd">        - `pypulseq.make_trapezoid.make_trapezoid()`</span>
-<span class="sd">        - `pypulseq.make_sinc_pulse.make_sinc_pulse()`</span>
+<span class="sd">        Add a new block/multiple events to the sequence.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        args : SimpleNamespace</span>
-<span class="sd">            Block structure or events to be added as a block to `Sequence`.</span>
+<span class="sd">        *args : SimpleNamespace</span>
+<span class="sd">            Event objects to be added as a block to the sequence. For delays,</span>
+<span class="sd">            use `pypulseq.make_delay()` instead of raw float values.</span>
+
+<span class="sd">        See Also</span>
+<span class="sd">        --------</span>
+<span class="sd">        pypulseq.make_delay : Create delay events</span>
+<span class="sd">        pypulseq.make_adc : Create ADC events</span>
+<span class="sd">        pypulseq.make_trapezoid : Create trapezoid gradient events</span>
+<span class="sd">        pypulseq.make_sinc_pulse : Create sinc RF pulse events</span>
+<span class="sd">        pypulseq.make_soft_delay : Create soft delay events</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Validate that no raw floats are passed directly by users</span>
+        <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s1">&#39;Raw float values are not allowed in add_block(). Use pp.make_delay(</span><span class="si">{</span><span class="n">arg</span><span class="si">}</span><span class="s1">) for delays.&#39;</span>
+                <span class="p">)</span>
+
         <span class="k">if</span> <span class="n">trace_enabled</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">block_trace</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">next_free_block_ID</span><span class="p">]</span> <span class="o">=</span> <span class="n">SimpleNamespace</span><span class="p">(</span><span class="n">block</span><span class="o">=</span><span class="n">trace</span><span class="p">())</span>
 
@@ -273,9 +286,9 @@
 <a class="viewcode-back" href="../../../_autosummary/bmctool.utils.seq.write.Sequence.html#bmctool.utils.seq.write.Sequence.calculate_gradient_spectrum">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">calculate_gradient_spectrum</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">max_frequency</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">2000</span><span class="p">,</span>
+        <span class="n">max_frequency</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">2000.0</span><span class="p">,</span>
         <span class="n">window_width</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">,</span>
-        <span class="n">frequency_oversampling</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
+        <span class="n">frequency_oversampling</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">3.0</span><span class="p">,</span>
         <span class="n">time_range</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">plot</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="n">combine_mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;max&#39;</span><span class="p">,</span>
@@ -351,18 +364,24 @@
 <a class="viewcode-back" href="../../../_autosummary/bmctool.utils.seq.write.Sequence.html#bmctool.utils.seq.write.Sequence.calculate_kspace">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">calculate_kspace</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">trajectory_delay</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
-        <span class="n">gradient_offset</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="n">trajectory_delay</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">gradient_offset</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Calculates the k-space trajectory of the entire pulse sequence.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        trajectory_delay : float or list, default=0</span>
+<span class="sd">        trajectory_delay : float or list or numpy.ndarray, default=0</span>
 <span class="sd">            Compensation factor in seconds (s) to align ADC and gradients in the reconstruction.</span>
-<span class="sd">        gradient_offset : float or list, default=0</span>
+<span class="sd">            If trajectory_delay is a single value, this value will be used for all gradient channels.</span>
+<span class="sd">            If trajectory_delay is a list or array, it is expected to have the same length as the number of gradient</span>
+<span class="sd">            channels and the first element is applied to the first gradient channel, the second to the second, and so on.</span>
+<span class="sd">        gradient_offset : float or list or numpy.ndarray, default=0</span>
 <span class="sd">            Simulates background gradients (specified in Hz/m)</span>
+<span class="sd">            If gradient_offset is a single value, this value will be used for all gradient channels.</span>
+<span class="sd">            If gradient_offset is a list or array, it is expected to have the same length as the number of gradient</span>
+<span class="sd">            channels and the first element is applied to the first gradient channel, the second to the second, and so on.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -699,6 +718,36 @@
         <span class="k">return</span> <span class="n">labels</span></div>
 
 
+    <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<div class="viewcode-block" id="Sequence.find_block_by_time">
+<a class="viewcode-back" href="../../../_autosummary/bmctool.utils.seq.write.Sequence.html#bmctool.utils.seq.write.Sequence.find_block_by_time">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">find_block_by_time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Find the index of the block containing time `t`.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        t : float</span>
+<span class="sd">            Time (in seconds) to locate within the sequence.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int or None</span>
+<span class="sd">            Index of the block that contains the given time, or None if out of range.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cumsum_durations</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">block_durations</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
+        <span class="n">block_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">searchsorted</span><span class="p">(</span><span class="n">cumsum_durations</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">side</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">block_index</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">block_durations</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_durations</span><span class="p">[</span><span class="n">block_index</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Block duration cannot be negative&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">block_index</span></div>
+
+
 <div class="viewcode-block" id="Sequence.flip_grad_axis">
 <a class="viewcode-back" href="../../../_autosummary/bmctool.utils.seq.write.Sequence.html#bmctool.utils.seq.write.Sequence.flip_grad_axis">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">flip_grad_axis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -712,6 +761,31 @@
 <span class="sd">            Gradients to invert or scale. Must be one of &#39;x&#39;, &#39;y&#39; or &#39;z&#39;.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mod_grad_axis</span><span class="p">(</span><span class="n">axis</span><span class="p">,</span> <span class="n">modifier</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Sequence.get_raw_block_content_IDs">
+<a class="viewcode-back" href="../../../_autosummary/bmctool.utils.seq.write.Sequence.html#bmctool.utils.seq.write.Sequence.get_raw_block_content_IDs">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_raw_block_content_IDs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">block_index</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SimpleNamespace</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns PyPulseq block content IDs at `block_index` position in `self.block_events`.</span>
+
+<span class="sd">        No block events are created, only the IDs of the objects are returned.</span>
+
+<span class="sd">        See Also</span>
+<span class="sd">        --------</span>
+<span class="sd">        - `pypulseq.Sequence.sequence.Sequence.get_block()`.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        block_index : int</span>
+<span class="sd">            Index of block to be retrieved from `Sequence`.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        SimpleNamespace</span>
+<span class="sd">            PyPulseq block content IDs at &#39;block_index&#39; position in `self.block_events`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">block</span><span class="o">.</span><span class="n">get_raw_block_content_IDs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">block_index</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Sequence.get_block">
@@ -844,10 +918,16 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        trajectory_delay : float or list, default=0</span>
+<span class="sd">        trajectory_delay : float or list or numpy.ndarray, default=0</span>
 <span class="sd">            Compensation factor in seconds (s) to align ADC and gradients in the reconstruction.</span>
-<span class="sd">        gradient_offset : float or list, default=0</span>
+<span class="sd">            If trajectory_delay is a single value, this value will be used for all gradient channels.</span>
+<span class="sd">            If trajectory_delay is a list or array, it is expected to have the same length as the number of gradient</span>
+<span class="sd">            channels and the first element is applied to the first gradient channel, the second to the second, and so on.</span>
+<span class="sd">        gradient_offset : float or list or numpy.ndarray, default=0</span>
 <span class="sd">            Simulates background gradients (specified in Hz/m)</span>
+<span class="sd">            If gradient_offset is a single value, this value will be used for all gradient channels.</span>
+<span class="sd">            If gradient_offset is a list or array, it is expected to have the same length as the number of gradient</span>
+<span class="sd">            channels and the first element is applied to the first gradient channel, the second to the second, and so on.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -868,7 +948,7 @@
             <span class="n">gradient_delays</span> <span class="o">=</span> <span class="p">[</span><span class="n">trajectory_delay</span><span class="p">]</span> <span class="o">*</span> <span class="n">ng</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">trajectory_delay</span><span class="p">)</span> <span class="o">==</span> <span class="n">ng</span>  <span class="c1"># Need to have same number of gradient channels</span>
-            <span class="n">gradient_delays</span> <span class="o">=</span> <span class="n">trajectory_delay</span> <span class="o">*</span> <span class="n">ng</span>
+            <span class="n">gradient_delays</span> <span class="o">=</span> <span class="n">trajectory_delay</span>
 
         <span class="c1"># Gradient offset handling</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">gradient_offset</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)):</span>
@@ -950,16 +1030,20 @@
 
 <div class="viewcode-block" id="Sequence.mod_grad_axis">
 <a class="viewcode-back" href="../../../_autosummary/bmctool.utils.seq.write.Sequence.html#bmctool.utils.seq.write.Sequence.mod_grad_axis">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">mod_grad_axis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">modifier</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">mod_grad_axis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">modifier</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Invert or scale all gradients along the corresponding axis/channel. The function acts on all gradient objects</span>
-<span class="sd">        already added to the sequence object.</span>
+<span class="sd">        Invert or scale all gradients along the corresponding axis/channel.</span>
+
+<span class="sd">        The function acts on all gradient objects already added to the sequence object.</span>
+<span class="sd">        This modifies the amplitude of gradients while preserving timing parameters</span>
+<span class="sd">        (rise_time, flat_time, fall_time, delay). The gradient area scales proportionally</span>
+<span class="sd">        with the amplitude.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        axis : str</span>
 <span class="sd">            Gradients to invert or scale. Must be one of &#39;x&#39;, &#39;y&#39; or &#39;z&#39;.</span>
-<span class="sd">        modifier : int</span>
+<span class="sd">        modifier : float</span>
 <span class="sd">            Scaling value.</span>
 
 <span class="sd">        Raises</span>
@@ -968,6 +1052,32 @@
 <span class="sd">            If invalid `axis` is passed. Must be one of &#39;x&#39;, &#39;y&#39;,&#39;z&#39;.</span>
 <span class="sd">        RuntimeError</span>
 <span class="sd">            If same gradient event is used on multiple axes.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Disable phase encoding gradients (y-axis):</span>
+
+<span class="sd">        &gt;&gt;&gt; seq.mod_grad_axis(&#39;y&#39;, 0.0)</span>
+
+<span class="sd">        Invert readout gradients (x-axis):</span>
+
+<span class="sd">        &gt;&gt;&gt; seq.mod_grad_axis(&#39;x&#39;, -1.0)</span>
+
+<span class="sd">        Reduce slice selection gradients by half (z-axis):</span>
+
+<span class="sd">        &gt;&gt;&gt; seq.mod_grad_axis(&#39;z&#39;, 0.5)</span>
+
+<span class="sd">        Double all gradients on x-axis:</span>
+
+<span class="sd">        &gt;&gt;&gt; seq.mod_grad_axis(&#39;x&#39;, 2.0)</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        - Only amplitude-related parameters are modified (amplitude, area, first, last)</span>
+<span class="sd">        - Timing parameters remain unchanged (rise_time, flat_time, fall_time, delay)</span>
+<span class="sd">        - For arbitrary gradients, the entire waveform is scaled</span>
+<span class="sd">        - For trapezoid gradients, only the amplitude is scaled</span>
+<span class="sd">        - Setting modifier to 0.0 effectively disables gradients on that axis</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">axis</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">]:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid axis. Must be one of &#39;x&#39;, &#39;y&#39;,&#39;z&#39;. Passed: </span><span class="si">{</span><span class="n">axis</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -977,6 +1087,10 @@
         <span class="n">other_channels</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">channel_num</span><span class="p">)</span>
 
         <span class="c1"># Go through all event table entries and list gradient objects in the library</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">block_events</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># Empty sequence - nothing to modify</span>
+            <span class="k">return</span>
+
         <span class="n">all_grad_events</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">block_events</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
         <span class="n">all_grad_events</span> <span class="o">=</span> <span class="n">all_grad_events</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">:</span><span class="mi">5</span><span class="p">]</span>
 
@@ -987,11 +1101,67 @@
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;mod_grad_axis does not yet support the same gradient event used on multiple axes.&#39;</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">selected_events</span><span class="p">)):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">grad_library</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">selected_events</span><span class="p">[</span><span class="n">i</span><span class="p">]][</span><span class="mi">0</span><span class="p">]</span> <span class="o">*=</span> <span class="n">modifier</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">grad_library</span><span class="o">.</span><span class="n">type</span><span class="p">[</span><span class="n">selected_events</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">==</span> <span class="s1">&#39;g&#39;</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">grad_library</span><span class="o">.</span><span class="n">lengths</span><span class="p">[</span><span class="n">selected_events</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>
-                <span class="c1"># Need to update first and last fields</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">grad_library</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">selected_events</span><span class="p">[</span><span class="n">i</span><span class="p">]][</span><span class="mi">3</span><span class="p">]</span> <span class="o">*=</span> <span class="n">modifier</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">grad_library</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">selected_events</span><span class="p">[</span><span class="n">i</span><span class="p">]][</span><span class="mi">4</span><span class="p">]</span> <span class="o">*=</span> <span class="n">modifier</span></div>
+            <span class="n">event_id</span> <span class="o">=</span> <span class="n">selected_events</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">old_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grad_library</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">event_id</span><span class="p">]</span>
+            <span class="n">grad_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grad_library</span><span class="o">.</span><span class="n">type</span><span class="p">[</span><span class="n">event_id</span><span class="p">]</span>
+
+            <span class="c1"># Convert tuple to list for modification</span>
+            <span class="n">grad_data</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">old_data</span><span class="p">)</span>
+            <span class="n">grad_data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*=</span> <span class="n">modifier</span>
+
+            <span class="k">if</span> <span class="n">grad_type</span> <span class="o">==</span> <span class="s1">&#39;g&#39;</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">grad_data</span><span class="p">)</span> <span class="o">==</span> <span class="mi">6</span><span class="p">:</span>
+                <span class="c1"># Need to update first and last fields for arbitrary gradients</span>
+                <span class="c1"># Data structure: (amplitude, first, last, shape_ID1, shape_ID2, delay) # changed in v1.5.x</span>
+                <span class="n">grad_data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*=</span> <span class="n">modifier</span>  <span class="c1"># first # changed in v1.5.x</span>
+                <span class="n">grad_data</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*=</span> <span class="n">modifier</span>  <span class="c1"># last # changed in v1.5.x</span>
+
+            <span class="c1"># Use EventLibrary.update() to properly maintain keymap integrity</span>
+            <span class="n">new_data</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">grad_data</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">grad_library</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">event_id</span><span class="p">,</span> <span class="n">old_data</span><span class="p">,</span> <span class="n">new_data</span><span class="p">,</span> <span class="n">grad_type</span><span class="p">)</span>
+
+        <span class="c1"># Clear block cache to ensure get_block() uses the modified gradient data</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_block_cache</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">block_cache</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Sequence.paper_plot">
+<a class="viewcode-back" href="../../../_autosummary/bmctool.utils.seq.write.Sequence.html#bmctool.utils.seq.write.Sequence.paper_plot">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">paper_plot</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">time_range</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">),</span>
+        <span class="n">line_width</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.2</span><span class="p">,</span>
+        <span class="n">axes_color</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span>
+        <span class="n">rf_color</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;black&#39;</span><span class="p">,</span>
+        <span class="n">gx_color</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span>
+        <span class="n">gy_color</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span>
+        <span class="n">gz_color</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">),</span>
+        <span class="n">rf_plot</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;abs&#39;</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Plot sequence using paper-style formatting (minimalist, high-contrast layout).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        time_range : iterable, default=(0, np.inf)</span>
+<span class="sd">            Time range (x-axis limits) for plotting the sequence.</span>
+<span class="sd">            Default is 0 to infinity (entire sequence).</span>
+<span class="sd">        line_width : float, default=1.2</span>
+<span class="sd">            Line width used in plots.</span>
+<span class="sd">        axes_color : color, default=(0.5, 0.5, 0.5)</span>
+<span class="sd">            Color of horizontal zero axes (e.g., gray).</span>
+<span class="sd">        rf_color : color, default=&#39;black&#39;</span>
+<span class="sd">            Color for RF and ADC events.</span>
+<span class="sd">        gx_color : color, default=&#39;blue&#39;</span>
+<span class="sd">            Color for gradient X waveform.</span>
+<span class="sd">        gy_color : color, default=&#39;red&#39;</span>
+<span class="sd">            Color for gradient Y waveform.</span>
+<span class="sd">        gz_color : color, default=(0, 0.5, 0.3)</span>
+<span class="sd">            Color for gradient Z waveform.</span>
+<span class="sd">        rf_plot : {&#39;abs&#39;, &#39;real&#39;, &#39;imag&#39;}, default=&#39;abs&#39;</span>
+<span class="sd">            Determines how to plot RF waveforms (magnitude, real or imaginary part).</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ext_paper_plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_range</span><span class="p">,</span> <span class="n">line_width</span><span class="p">,</span> <span class="n">axes_color</span><span class="p">,</span> <span class="n">rf_color</span><span class="p">,</span> <span class="n">gx_color</span><span class="p">,</span> <span class="n">gy_color</span><span class="p">,</span> <span class="n">gz_color</span><span class="p">,</span> <span class="n">rf_plot</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Sequence.plot">
@@ -1005,202 +1175,63 @@
         <span class="n">time_disp</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;s&#39;</span><span class="p">,</span>
         <span class="n">grad_disp</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;kHz/m&#39;</span><span class="p">,</span>
         <span class="n">plot_now</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">clear</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">overlay</span><span class="p">:</span> <span class="n">SeqPlot</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">stacked</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">show_guides</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SeqPlot</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Plot `Sequence`.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        label : str, default=str()</span>
-<span class="sd">            Plot label values for ADC events: in this example for LIN and REP labels; other valid labes are accepted as</span>
+<span class="sd">            Plot label values for ADC events: in this example for LIN and REP labels; other valid labels are accepted as</span>
 <span class="sd">            a comma-separated list.</span>
+<span class="sd">        show_blocks : bool, default=False</span>
+<span class="sd">            Boolean flag to indicate if grid and tick labels at the block boundaries are to be plotted.</span>
 <span class="sd">        save : bool, default=False</span>
 <span class="sd">            Boolean flag indicating if plots should be saved. The two figures will be saved as JPG with numerical</span>
 <span class="sd">            suffixes to the filename &#39;seq_plot&#39;.</span>
-<span class="sd">        show_blocks : bool, default=False</span>
-<span class="sd">            Boolean flag to indicate if grid and tick labels at the block boundaries are to be plotted.</span>
 <span class="sd">        time_range : iterable, default=(0, np.inf)</span>
 <span class="sd">            Time range (x-axis limits) for plotting the sequence. Default is 0 to infinity (entire sequence).</span>
 <span class="sd">        time_disp : str, default=&#39;s&#39;</span>
-<span class="sd">            Time display type, must be one of `s`, `ms` or `us`.</span>
-<span class="sd">        grad_disp : str, default=&#39;s&#39;</span>
-<span class="sd">            Gradient display unit, must be one of `kHz/m` or `mT/m`.</span>
+<span class="sd">            Time display type, must be one of &#39;s&#39;, &#39;ms&#39; or &#39;us&#39;.</span>
+<span class="sd">        grad_disp : str, default=&#39;kHz/m&#39;</span>
+<span class="sd">            Gradient display unit, must be one of &#39;kHz/m&#39; or &#39;mT/m&#39;.</span>
 <span class="sd">        plot_now : bool, default=True</span>
-<span class="sd">            If true, function immediately shows the plots, blocking the rest of the code until plots are exited.</span>
-<span class="sd">            If false, plots are shown when plt.show() is called. Useful if plots are to be modified.</span>
-<span class="sd">        plot_type : str, default=&#39;Gradient&#39;</span>
-<span class="sd">            Gradients display type, must be one of either &#39;Gradient&#39; or &#39;Kspace&#39;.</span>
+<span class="sd">            If True, function immediately shows the plots, blocking the rest of the code until plots are exited.</span>
+<span class="sd">            If False, plots are shown when plt.show() is called. Useful if plots are to be modified.</span>
+<span class="sd">        clear : bool, default=True</span>
+<span class="sd">            If True, clear existing figures before plotting (default behavior).</span>
+<span class="sd">            If False, overlay on existing figures 1 and 2 for sequence comparison.</span>
+<span class="sd">        overlay : SeqPlot or None, default=None</span>
+<span class="sd">            If provided, overlay this plot on the figures from the given SeqPlot object. Overrides fig1, fig2, and sets clear=False.</span>
+<span class="sd">        stacked : bool, default=False</span>
+<span class="sd">            If True, plot all channels (ADC, RF mag, RF phase, Gx, Gy, Gz) in a single stacked figure (MATLAB Pulseq style).</span>
+<span class="sd">            If False, use separate figures for RF/ADC and gradients.</span>
+<span class="sd">        show_guides : bool, default=False</span>
+<span class="sd">            If True, enable dynamic vertical hairline guides that follow the cursor. Requires `mplcursors`.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        SeqPlot</span>
+<span class="sd">            SeqPlot handle.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;lines.linewidth&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.75</span>  <span class="c1"># Set default Matplotlib linewidth</span>
-
-        <span class="n">valid_time_units</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;s&#39;</span><span class="p">,</span> <span class="s1">&#39;ms&#39;</span><span class="p">,</span> <span class="s1">&#39;us&#39;</span><span class="p">]</span>
-        <span class="n">valid_grad_units</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;kHz/m&#39;</span><span class="p">,</span> <span class="s1">&#39;mT/m&#39;</span><span class="p">]</span>
-        <span class="n">valid_labels</span> <span class="o">=</span> <span class="n">get_supported_labels</span><span class="p">()</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">time_range</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">time_range</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Invalid time range&#39;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">time_disp</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">valid_time_units</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Unsupported time unit&#39;</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="n">grad_disp</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">valid_grad_units</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Unsupported gradient unit. Supported gradient units are: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">valid_grad_units</span><span class="p">))</span>
-
-        <span class="n">fig1</span><span class="p">,</span> <span class="n">fig2</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(),</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-        <span class="n">sp11</span> <span class="o">=</span> <span class="n">fig1</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">311</span><span class="p">)</span>
-        <span class="n">sp12</span> <span class="o">=</span> <span class="n">fig1</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">312</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="n">sp11</span><span class="p">)</span>
-        <span class="n">sp13</span> <span class="o">=</span> <span class="n">fig1</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">313</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="n">sp11</span><span class="p">)</span>
-        <span class="n">fig2_subplots</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="n">fig2</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">311</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="n">sp11</span><span class="p">),</span>
-            <span class="n">fig2</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">312</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="n">sp11</span><span class="p">),</span>
-            <span class="n">fig2</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">313</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="n">sp11</span><span class="p">),</span>
-        <span class="p">]</span>
-
-        <span class="n">t_factor_list</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mf">1e3</span><span class="p">,</span> <span class="mf">1e6</span><span class="p">]</span>
-        <span class="n">t_factor</span> <span class="o">=</span> <span class="n">t_factor_list</span><span class="p">[</span><span class="n">valid_time_units</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">time_disp</span><span class="p">)]</span>
-
-        <span class="n">g_factor_list</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1e-3</span><span class="p">,</span> <span class="mf">1e3</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">gamma</span><span class="p">]</span>
-        <span class="n">g_factor</span> <span class="o">=</span> <span class="n">g_factor_list</span><span class="p">[</span><span class="n">valid_grad_units</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">grad_disp</span><span class="p">)]</span>
-
-        <span class="n">t0</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="n">label_defined</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="n">label_idx_to_plot</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">label_legend_to_plot</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">label_store</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">valid_labels</span><span class="p">)):</span>
-            <span class="n">label_store</span><span class="p">[</span><span class="n">valid_labels</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">0</span>
-            <span class="k">if</span> <span class="n">valid_labels</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">in</span> <span class="n">label</span><span class="o">.</span><span class="n">upper</span><span class="p">():</span>
-                <span class="n">label_idx_to_plot</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-                <span class="n">label_legend_to_plot</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">valid_labels</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">label_idx_to_plot</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">p</span> <span class="o">=</span> <span class="n">parula</span><span class="o">.</span><span class="n">main</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">label_idx_to_plot</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-            <span class="n">label_colors_to_plot</span> <span class="o">=</span> <span class="n">p</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">label_idx_to_plot</span><span class="p">)))</span>
-            <span class="n">cycler</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">cycler</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">label_colors_to_plot</span><span class="p">)</span>
-            <span class="n">sp11</span><span class="o">.</span><span class="n">set_prop_cycle</span><span class="p">(</span><span class="n">cycler</span><span class="p">)</span>
-
-        <span class="c1"># Block timings</span>
-        <span class="n">block_edges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">([</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">block_durations</span><span class="o">.</span><span class="n">items</span><span class="p">())])</span>
-        <span class="n">block_edges_in_range</span> <span class="o">=</span> <span class="n">block_edges</span><span class="p">[(</span><span class="n">block_edges</span> <span class="o">&gt;=</span> <span class="n">time_range</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="n">block_edges</span> <span class="o">&lt;=</span> <span class="n">time_range</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span>
-        <span class="k">if</span> <span class="n">show_blocks</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">sp</span> <span class="ow">in</span> <span class="p">[</span><span class="n">sp11</span><span class="p">,</span> <span class="n">sp12</span><span class="p">,</span> <span class="n">sp13</span><span class="p">,</span> <span class="o">*</span><span class="n">fig2_subplots</span><span class="p">]:</span>
-                <span class="n">sp</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">t_factor</span> <span class="o">*</span> <span class="n">block_edges_in_range</span><span class="p">)</span>
-                <span class="n">sp</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">sp</span><span class="o">.</span><span class="n">get_xticklabels</span><span class="p">(),</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>
-
-        <span class="k">for</span> <span class="n">block_counter</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_events</span><span class="p">:</span>
-            <span class="n">block</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_block</span><span class="p">(</span><span class="n">block_counter</span><span class="p">)</span>
-            <span class="n">is_valid</span> <span class="o">=</span> <span class="n">time_range</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">t0</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_durations</span><span class="p">[</span><span class="n">block_counter</span><span class="p">]</span> <span class="ow">and</span> <span class="n">t0</span> <span class="o">&lt;=</span> <span class="n">time_range</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-            <span class="k">if</span> <span class="n">is_valid</span><span class="p">:</span>
-                <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">block</span><span class="p">,</span> <span class="s1">&#39;label&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">block</span><span class="o">.</span><span class="n">label</span><span class="p">)):</span>
-                        <span class="k">if</span> <span class="n">block</span><span class="o">.</span><span class="n">label</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;labelinc&#39;</span><span class="p">:</span>
-                            <span class="n">label_store</span><span class="p">[</span><span class="n">block</span><span class="o">.</span><span class="n">label</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">label</span><span class="p">]</span> <span class="o">+=</span> <span class="n">block</span><span class="o">.</span><span class="n">label</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
-                        <span class="k">else</span><span class="p">:</span>
-                            <span class="n">label_store</span><span class="p">[</span><span class="n">block</span><span class="o">.</span><span class="n">label</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="n">block</span><span class="o">.</span><span class="n">label</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
-                    <span class="n">label_defined</span> <span class="o">=</span> <span class="kc">True</span>
-
-                <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">block</span><span class="p">,</span> <span class="s1">&#39;adc&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># ADC</span>
-                    <span class="n">adc</span> <span class="o">=</span> <span class="n">block</span><span class="o">.</span><span class="n">adc</span>
-                    <span class="c1"># From Pulseq: According to the information from Klaus Scheffler and indirectly from Siemens this</span>
-                    <span class="c1"># is the present convention - the samples are shifted by 0.5 dwell</span>
-                    <span class="n">t</span> <span class="o">=</span> <span class="n">adc</span><span class="o">.</span><span class="n">delay</span> <span class="o">+</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">adc</span><span class="o">.</span><span class="n">num_samples</span><span class="p">))</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="n">adc</span><span class="o">.</span><span class="n">dwell</span>
-                    <span class="n">sp11</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t_factor</span> <span class="o">*</span> <span class="p">(</span><span class="n">t0</span> <span class="o">+</span> <span class="n">t</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)),</span> <span class="s1">&#39;rx&#39;</span><span class="p">)</span>
-                    <span class="n">sp13</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
-                        <span class="n">t_factor</span> <span class="o">*</span> <span class="p">(</span><span class="n">t0</span> <span class="o">+</span> <span class="n">t</span><span class="p">),</span>
-                        <span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">adc</span><span class="o">.</span><span class="n">phase_offset</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">t</span> <span class="o">*</span> <span class="n">adc</span><span class="o">.</span><span class="n">freq_offset</span><span class="p">)),</span>
-                        <span class="s1">&#39;b.&#39;</span><span class="p">,</span>
-                        <span class="n">markersize</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span>
-                    <span class="p">)</span>
-
-                    <span class="k">if</span> <span class="n">label_defined</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">label_idx_to_plot</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-                        <span class="n">arr_label_store</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">label_store</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
-                        <span class="n">lbl_vals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="n">arr_label_store</span><span class="p">,</span> <span class="n">label_idx_to_plot</span><span class="p">)</span>
-                        <span class="n">t</span> <span class="o">=</span> <span class="n">t0</span> <span class="o">+</span> <span class="n">adc</span><span class="o">.</span><span class="n">delay</span> <span class="o">+</span> <span class="p">(</span><span class="n">adc</span><span class="o">.</span><span class="n">num_samples</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">adc</span><span class="o">.</span><span class="n">dwell</span>
-                        <span class="n">_t</span> <span class="o">=</span> <span class="p">[</span><span class="n">t_factor</span> <span class="o">*</span> <span class="n">t</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">lbl_vals</span><span class="p">)</span>
-                        <span class="c1"># Plot each label individually to retrieve each corresponding Line2D object</span>
-                        <span class="n">p</span> <span class="o">=</span> <span class="n">itertools</span><span class="o">.</span><span class="n">chain</span><span class="o">.</span><span class="n">from_iterable</span><span class="p">(</span>
-                            <span class="p">[</span><span class="n">sp11</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">__t</span><span class="p">,</span> <span class="n">_lbl_vals</span><span class="p">,</span> <span class="s1">&#39;.&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">__t</span><span class="p">,</span> <span class="n">_lbl_vals</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">_t</span><span class="p">,</span> <span class="n">lbl_vals</span><span class="p">)]</span>
-                        <span class="p">)</span>
-                        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">label_legend_to_plot</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-                            <span class="n">sp11</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">label_legend_to_plot</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper left&#39;</span><span class="p">)</span>
-                            <span class="n">label_legend_to_plot</span> <span class="o">=</span> <span class="p">[]</span>
-
-                <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">block</span><span class="p">,</span> <span class="s1">&#39;rf&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># RF</span>
-                    <span class="n">rf</span> <span class="o">=</span> <span class="n">block</span><span class="o">.</span><span class="n">rf</span>
-                    <span class="n">tc</span><span class="p">,</span> <span class="n">ic</span> <span class="o">=</span> <span class="n">calc_rf_center</span><span class="p">(</span><span class="n">rf</span><span class="p">)</span>
-                    <span class="n">time</span> <span class="o">=</span> <span class="n">rf</span><span class="o">.</span><span class="n">t</span>
-                    <span class="n">signal</span> <span class="o">=</span> <span class="n">rf</span><span class="o">.</span><span class="n">signal</span>
-                    <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">signal</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-                        <span class="n">signal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(([</span><span class="mi">0</span><span class="p">],</span> <span class="n">signal</span><span class="p">))</span>
-                        <span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(([</span><span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="n">time</span><span class="p">))</span>
-                        <span class="n">ic</span> <span class="o">+=</span> <span class="mi">1</span>
-
-                    <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">signal</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-                        <span class="n">signal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">signal</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
-                        <span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">time</span><span class="p">,</span> <span class="p">[</span><span class="n">time</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]))</span>
-
-                    <span class="n">sp12</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t_factor</span> <span class="o">*</span> <span class="p">(</span><span class="n">t0</span> <span class="o">+</span> <span class="n">time</span> <span class="o">+</span> <span class="n">rf</span><span class="o">.</span><span class="n">delay</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">signal</span><span class="p">))</span>
-                    <span class="n">sp13</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
-                        <span class="n">t_factor</span> <span class="o">*</span> <span class="p">(</span><span class="n">t0</span> <span class="o">+</span> <span class="n">time</span> <span class="o">+</span> <span class="n">rf</span><span class="o">.</span><span class="n">delay</span><span class="p">),</span>
-                        <span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span>
-                            <span class="n">signal</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">rf</span><span class="o">.</span><span class="n">phase_offset</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">time</span> <span class="o">*</span> <span class="n">rf</span><span class="o">.</span><span class="n">freq_offset</span><span class="p">)</span>
-                        <span class="p">),</span>
-                        <span class="n">t_factor</span> <span class="o">*</span> <span class="p">(</span><span class="n">t0</span> <span class="o">+</span> <span class="n">tc</span> <span class="o">+</span> <span class="n">rf</span><span class="o">.</span><span class="n">delay</span><span class="p">),</span>
-                        <span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span>
-                            <span class="n">signal</span><span class="p">[</span><span class="n">ic</span><span class="p">]</span>
-                            <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">rf</span><span class="o">.</span><span class="n">phase_offset</span><span class="p">)</span>
-                            <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">time</span><span class="p">[</span><span class="n">ic</span><span class="p">]</span> <span class="o">*</span> <span class="n">rf</span><span class="o">.</span><span class="n">freq_offset</span><span class="p">)</span>
-                        <span class="p">),</span>
-                        <span class="s1">&#39;xb&#39;</span><span class="p">,</span>
-                    <span class="p">)</span>
-
-                <span class="n">grad_channels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;gx&#39;</span><span class="p">,</span> <span class="s1">&#39;gy&#39;</span><span class="p">,</span> <span class="s1">&#39;gz&#39;</span><span class="p">]</span>
-                <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">grad_channels</span><span class="p">)):</span>  <span class="c1"># Gradients</span>
-                    <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">block</span><span class="p">,</span> <span class="n">grad_channels</span><span class="p">[</span><span class="n">x</span><span class="p">],</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                        <span class="n">grad</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">block</span><span class="p">,</span> <span class="n">grad_channels</span><span class="p">[</span><span class="n">x</span><span class="p">])</span>
-                        <span class="k">if</span> <span class="n">grad</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;grad&#39;</span><span class="p">:</span>
-                            <span class="c1"># We extend the shape by adding the first and the last points in an effort of making the</span>
-                            <span class="c1"># display a bit less confusing...</span>
-                            <span class="n">time</span> <span class="o">=</span> <span class="n">grad</span><span class="o">.</span><span class="n">delay</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="o">*</span><span class="n">grad</span><span class="o">.</span><span class="n">tt</span><span class="p">,</span> <span class="n">grad</span><span class="o">.</span><span class="n">shape_dur</span><span class="p">])</span>
-                            <span class="n">waveform</span> <span class="o">=</span> <span class="n">g_factor</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">grad</span><span class="o">.</span><span class="n">first</span><span class="p">,</span> <span class="o">*</span><span class="n">grad</span><span class="o">.</span><span class="n">waveform</span><span class="p">,</span> <span class="n">grad</span><span class="o">.</span><span class="n">last</span><span class="p">))</span>
-                        <span class="k">else</span><span class="p">:</span>
-                            <span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
-                                <span class="n">cumsum</span><span class="p">(</span>
-                                    <span class="mi">0</span><span class="p">,</span>
-                                    <span class="n">grad</span><span class="o">.</span><span class="n">delay</span><span class="p">,</span>
-                                    <span class="n">grad</span><span class="o">.</span><span class="n">rise_time</span><span class="p">,</span>
-                                    <span class="n">grad</span><span class="o">.</span><span class="n">flat_time</span><span class="p">,</span>
-                                    <span class="n">grad</span><span class="o">.</span><span class="n">fall_time</span><span class="p">,</span>
-                                <span class="p">)</span>
-                            <span class="p">)</span>
-                            <span class="n">waveform</span> <span class="o">=</span> <span class="n">g_factor</span> <span class="o">*</span> <span class="n">grad</span><span class="o">.</span><span class="n">amplitude</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
-                        <span class="n">fig2_subplots</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t_factor</span> <span class="o">*</span> <span class="p">(</span><span class="n">t0</span> <span class="o">+</span> <span class="n">time</span><span class="p">),</span> <span class="n">waveform</span><span class="p">)</span>
-            <span class="n">t0</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_durations</span><span class="p">[</span><span class="n">block_counter</span><span class="p">]</span>
-
-        <span class="n">grad_plot_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">]</span>
-        <span class="n">sp11</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;ADC&#39;</span><span class="p">)</span>
-        <span class="n">sp12</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;RF mag (Hz)&#39;</span><span class="p">)</span>
-        <span class="n">sp13</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;RF/ADC phase (rad)&#39;</span><span class="p">)</span>
-        <span class="n">sp13</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;t (</span><span class="si">{</span><span class="n">time_disp</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
-            <span class="n">_label</span> <span class="o">=</span> <span class="n">grad_plot_labels</span><span class="p">[</span><span class="n">x</span><span class="p">]</span>
-            <span class="n">fig2_subplots</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;G</span><span class="si">{</span><span class="n">_label</span><span class="si">}</span><span class="s1"> (</span><span class="si">{</span><span class="n">grad_disp</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">)</span>
-        <span class="n">fig2_subplots</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;t (</span><span class="si">{</span><span class="n">time_disp</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">)</span>
-
-        <span class="c1"># Setting display limits</span>
-        <span class="n">disp_range</span> <span class="o">=</span> <span class="n">t_factor</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">time_range</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">min</span><span class="p">(</span><span class="n">t0</span><span class="p">,</span> <span class="n">time_range</span><span class="p">[</span><span class="mi">1</span><span class="p">])])</span>
-        <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">disp_range</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="n">sp11</span><span class="p">,</span> <span class="n">sp12</span><span class="p">,</span> <span class="n">sp13</span><span class="p">,</span> <span class="o">*</span><span class="n">fig2_subplots</span><span class="p">]]</span>
-
-        <span class="c1"># Grid on</span>
-        <span class="k">for</span> <span class="n">sp</span> <span class="ow">in</span> <span class="p">[</span><span class="n">sp11</span><span class="p">,</span> <span class="n">sp12</span><span class="p">,</span> <span class="n">sp13</span><span class="p">,</span> <span class="o">*</span><span class="n">fig2_subplots</span><span class="p">]:</span>
-            <span class="n">sp</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
-
-        <span class="n">fig1</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-        <span class="n">fig2</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">save</span><span class="p">:</span>
-            <span class="n">fig1</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;seq_plot1.jpg&#39;</span><span class="p">)</span>
-            <span class="n">fig2</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;seq_plot2.jpg&#39;</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="n">plot_now</span><span class="p">:</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+        <span class="k">return</span> <span class="n">SeqPlot</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">label</span><span class="p">,</span>
+            <span class="n">show_blocks</span><span class="p">,</span>
+            <span class="n">save</span><span class="p">,</span>
+            <span class="n">time_range</span><span class="p">,</span>
+            <span class="n">time_disp</span><span class="p">,</span>
+            <span class="n">grad_disp</span><span class="p">,</span>
+            <span class="n">plot_now</span><span class="p">,</span>
+            <span class="n">clear</span><span class="p">,</span>
+            <span class="n">overlay</span><span class="p">,</span>
+            <span class="n">stacked</span><span class="p">,</span>
+            <span class="n">show_guides</span><span class="p">,</span>
+        <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Sequence.read">
@@ -1238,9 +1269,12 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">register_rf_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">SimpleNamespace</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]:</span>
         <span class="k">return</span> <span class="n">block</span><span class="o">.</span><span class="n">register_rf_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">)</span>
 
+    <span class="k">def</span><span class="w"> </span><span class="nf">register_soft_delay_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">SimpleNamespace</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">block</span><span class="o">.</span><span class="n">register_soft_delay_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">)</span>
+
 <div class="viewcode-block" id="Sequence.remove_duplicates">
 <a class="viewcode-back" href="../../../_autosummary/bmctool.utils.seq.write.Sequence.html#bmctool.utils.seq.write.Sequence.remove_duplicates">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">remove_duplicates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_place</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">remove_duplicates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_place</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;Sequence&#39;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Removes duplicate events from the shape and event libraries contained</span>
 <span class="sd">        in this sequence.</span>
@@ -1273,14 +1307,14 @@
         <span class="k">for</span> <span class="n">grad_id</span> <span class="ow">in</span> <span class="n">seq_copy</span><span class="o">.</span><span class="n">grad_library</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">seq_copy</span><span class="o">.</span><span class="n">grad_library</span><span class="o">.</span><span class="n">type</span><span class="p">[</span><span class="n">grad_id</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;g&#39;</span><span class="p">:</span>
                 <span class="n">data</span> <span class="o">=</span> <span class="n">seq_copy</span><span class="o">.</span><span class="n">grad_library</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">grad_id</span><span class="p">]</span>
-                <span class="n">new_data</span> <span class="o">=</span> <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">],)</span> <span class="o">+</span> <span class="p">(</span><span class="n">mapping</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span> <span class="n">mapping</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="mi">2</span><span class="p">]])</span> <span class="o">+</span> <span class="n">data</span><span class="p">[</span><span class="mi">3</span><span class="p">:]</span>
+                <span class="n">new_data</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">],</span> <span class="n">mapping</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="mi">3</span><span class="p">]],</span> <span class="n">mapping</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="mi">4</span><span class="p">]],</span> <span class="n">data</span><span class="p">[</span><span class="mi">5</span><span class="p">])</span>
                 <span class="k">if</span> <span class="n">data</span> <span class="o">!=</span> <span class="n">new_data</span><span class="p">:</span>
                     <span class="n">seq_copy</span><span class="o">.</span><span class="n">grad_library</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">grad_id</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">new_data</span><span class="p">)</span>
 
         <span class="c1"># Remap shape IDs of RF events</span>
         <span class="k">for</span> <span class="n">rf_id</span> <span class="ow">in</span> <span class="n">seq_copy</span><span class="o">.</span><span class="n">rf_library</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
             <span class="n">data</span> <span class="o">=</span> <span class="n">seq_copy</span><span class="o">.</span><span class="n">rf_library</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">rf_id</span><span class="p">]</span>
-            <span class="n">new_data</span> <span class="o">=</span> <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">],)</span> <span class="o">+</span> <span class="p">(</span><span class="n">mapping</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span> <span class="n">mapping</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="mi">2</span><span class="p">]],</span> <span class="n">mapping</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="mi">3</span><span class="p">]])</span> <span class="o">+</span> <span class="n">data</span><span class="p">[</span><span class="mi">4</span><span class="p">:]</span>
+            <span class="n">new_data</span> <span class="o">=</span> <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">mapping</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span> <span class="n">mapping</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="mi">2</span><span class="p">]],</span> <span class="n">mapping</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="mi">3</span><span class="p">]],</span> <span class="o">*</span><span class="n">data</span><span class="p">[</span><span class="mi">4</span><span class="p">:])</span>
             <span class="k">if</span> <span class="n">data</span> <span class="o">!=</span> <span class="n">new_data</span><span class="p">:</span>
                 <span class="n">seq_copy</span><span class="o">.</span><span class="n">rf_library</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">rf_id</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">new_data</span><span class="p">)</span>
 
@@ -1294,14 +1328,14 @@
             <span class="n">seq_copy</span><span class="o">.</span><span class="n">block_events</span><span class="p">[</span><span class="n">block_id</span><span class="p">][</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapping</span><span class="p">[</span><span class="n">seq_copy</span><span class="o">.</span><span class="n">block_events</span><span class="p">[</span><span class="n">block_id</span><span class="p">][</span><span class="mi">4</span><span class="p">]]</span>
 
         <span class="c1"># Filter duplicates in RF library</span>
-        <span class="n">seq_copy</span><span class="o">.</span><span class="n">rf_library</span><span class="p">,</span> <span class="n">mapping</span> <span class="o">=</span> <span class="n">seq_copy</span><span class="o">.</span><span class="n">rf_library</span><span class="o">.</span><span class="n">remove_duplicates</span><span class="p">((</span><span class="mi">6</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+        <span class="n">seq_copy</span><span class="o">.</span><span class="n">rf_library</span><span class="p">,</span> <span class="n">mapping</span> <span class="o">=</span> <span class="n">seq_copy</span><span class="o">.</span><span class="n">rf_library</span><span class="o">.</span><span class="n">remove_duplicates</span><span class="p">((</span><span class="mi">6</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
 
         <span class="c1"># Remap RF event IDs</span>
         <span class="k">for</span> <span class="n">block_id</span> <span class="ow">in</span> <span class="n">seq_copy</span><span class="o">.</span><span class="n">block_events</span><span class="p">:</span>
             <span class="n">seq_copy</span><span class="o">.</span><span class="n">block_events</span><span class="p">[</span><span class="n">block_id</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapping</span><span class="p">[</span><span class="n">seq_copy</span><span class="o">.</span><span class="n">block_events</span><span class="p">[</span><span class="n">block_id</span><span class="p">][</span><span class="mi">1</span><span class="p">]]</span>
 
         <span class="c1"># Filter duplicates in ADC library</span>
-        <span class="n">seq_copy</span><span class="o">.</span><span class="n">adc_library</span><span class="p">,</span> <span class="n">mapping</span> <span class="o">=</span> <span class="n">seq_copy</span><span class="o">.</span><span class="n">adc_library</span><span class="o">.</span><span class="n">remove_duplicates</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">9</span><span class="p">,</span> <span class="o">-</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+        <span class="n">seq_copy</span><span class="o">.</span><span class="n">adc_library</span><span class="p">,</span> <span class="n">mapping</span> <span class="o">=</span> <span class="n">seq_copy</span><span class="o">.</span><span class="n">adc_library</span><span class="o">.</span><span class="n">remove_duplicates</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">9</span><span class="p">,</span> <span class="o">-</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
 
         <span class="c1"># Remap ADC event IDs</span>
         <span class="k">for</span> <span class="n">block_id</span> <span class="ow">in</span> <span class="n">seq_copy</span><span class="o">.</span><span class="n">block_events</span><span class="p">:</span>
@@ -1312,7 +1346,7 @@
 
 <div class="viewcode-block" id="Sequence.rf_from_lib_data">
 <a class="viewcode-back" href="../../../_autosummary/bmctool.utils.seq.write.Sequence.html#bmctool.utils.seq.write.Sequence.rf_from_lib_data">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">rf_from_lib_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lib_data</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">use</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="nb">str</span><span class="p">())</span> <span class="o">-&gt;</span> <span class="n">SimpleNamespace</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">rf_from_lib_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lib_data</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">use</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SimpleNamespace</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Construct RF object from `lib_data`.</span>
 
@@ -1320,7 +1354,7 @@
 <span class="sd">        ----------</span>
 <span class="sd">        lib_data : list</span>
 <span class="sd">            RF envelope.</span>
-<span class="sd">        use : str, default=str()</span>
+<span class="sd">        use : str, default=&#39;&#39;</span>
 <span class="sd">            RF event use.</span>
 
 <span class="sd">        Returns</span>
@@ -1341,7 +1375,7 @@
         <span class="n">compressed</span><span class="o">.</span><span class="n">num_samples</span> <span class="o">=</span> <span class="n">shape_data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">compressed</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">shape_data</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
         <span class="n">phase</span> <span class="o">=</span> <span class="n">decompress_shape</span><span class="p">(</span><span class="n">compressed</span><span class="p">)</span>
-        <span class="n">rf</span><span class="o">.</span><span class="n">signal</span> <span class="o">=</span> <span class="n">amplitude</span> <span class="o">*</span> <span class="n">mag</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">phase</span><span class="p">)</span>
+        <span class="n">rf</span><span class="o">.</span><span class="n">signal</span> <span class="o">=</span> <span class="n">amplitude</span> <span class="o">*</span> <span class="n">mag</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">phase</span><span class="p">)</span>
         <span class="n">time_shape</span> <span class="o">=</span> <span class="n">lib_data</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">time_shape</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">shape_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape_library</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">time_shape</span><span class="p">]</span>
@@ -1353,22 +1387,26 @@
             <span class="n">rf</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">rf</span><span class="o">.</span><span class="n">signal</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">rf_raster_time</span>
             <span class="n">rf</span><span class="o">.</span><span class="n">shape_dur</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">rf</span><span class="o">.</span><span class="n">signal</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">rf_raster_time</span>
 
-        <span class="n">rf</span><span class="o">.</span><span class="n">delay</span> <span class="o">=</span> <span class="n">lib_data</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
-        <span class="n">rf</span><span class="o">.</span><span class="n">freq_offset</span> <span class="o">=</span> <span class="n">lib_data</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
-        <span class="n">rf</span><span class="o">.</span><span class="n">phase_offset</span> <span class="o">=</span> <span class="n">lib_data</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span>
+        <span class="n">rf</span><span class="o">.</span><span class="n">center</span> <span class="o">=</span> <span class="n">lib_data</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>  <span class="c1"># v150: new field</span>
+        <span class="n">rf</span><span class="o">.</span><span class="n">delay</span> <span class="o">=</span> <span class="n">lib_data</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>  <span class="c1"># v150: changed from lib_data[4] to lib_data[5]</span>
+        <span class="n">rf</span><span class="o">.</span><span class="n">freq_ppm</span> <span class="o">=</span> <span class="n">lib_data</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span>  <span class="c1"># v150: new field</span>
+        <span class="n">rf</span><span class="o">.</span><span class="n">phase_ppm</span> <span class="o">=</span> <span class="n">lib_data</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span>  <span class="c1"># v150: new field</span>
+        <span class="n">rf</span><span class="o">.</span><span class="n">freq_offset</span> <span class="o">=</span> <span class="n">lib_data</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span>  <span class="c1"># v150: changed from lib_data[5] to lib_data[8]</span>
+        <span class="n">rf</span><span class="o">.</span><span class="n">phase_offset</span> <span class="o">=</span> <span class="n">lib_data</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span>  <span class="c1"># v150: changed from lib_data[6] to lib_data[9]</span>
 
         <span class="n">rf</span><span class="o">.</span><span class="n">dead_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">rf_dead_time</span>
         <span class="n">rf</span><span class="o">.</span><span class="n">ringdown_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">rf_ringdown_time</span>
 
-        <span class="k">if</span> <span class="n">use</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
-            <span class="n">use_cases</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="s1">&#39;e&#39;</span><span class="p">:</span> <span class="s1">&#39;excitation&#39;</span><span class="p">,</span>
-                <span class="s1">&#39;r&#39;</span><span class="p">:</span> <span class="s1">&#39;refocusing&#39;</span><span class="p">,</span>
-                <span class="s1">&#39;i&#39;</span><span class="p">:</span> <span class="s1">&#39;inversion&#39;</span><span class="p">,</span>
-                <span class="s1">&#39;s&#39;</span><span class="p">:</span> <span class="s1">&#39;saturation&#39;</span><span class="p">,</span>
-                <span class="s1">&#39;p&#39;</span><span class="p">:</span> <span class="s1">&#39;preparation&#39;</span><span class="p">,</span>
-            <span class="p">}</span>
-            <span class="n">rf</span><span class="o">.</span><span class="n">use</span> <span class="o">=</span> <span class="n">use_cases</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">use</span><span class="p">,</span> <span class="s1">&#39;undefined&#39;</span><span class="p">)</span>
+        <span class="c1"># TODO: fixme : use map built from pp.get_supported_rf_uses()</span>
+        <span class="n">use_cases</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;e&#39;</span><span class="p">:</span> <span class="s1">&#39;excitation&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;r&#39;</span><span class="p">:</span> <span class="s1">&#39;refocusing&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;i&#39;</span><span class="p">:</span> <span class="s1">&#39;inversion&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;s&#39;</span><span class="p">:</span> <span class="s1">&#39;saturation&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;p&#39;</span><span class="p">:</span> <span class="s1">&#39;preparation&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;o&#39;</span><span class="p">:</span> <span class="s1">&#39;other&#39;</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="n">rf</span><span class="o">.</span><span class="n">use</span> <span class="o">=</span> <span class="n">use_cases</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">use</span><span class="p">,</span> <span class="s1">&#39;undefined&#39;</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">rf</span></div>
 
@@ -1422,16 +1460,23 @@
 
             <span class="k">if</span> <span class="n">block</span><span class="o">.</span><span class="n">rf</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">rf</span> <span class="o">=</span> <span class="n">block</span><span class="o">.</span><span class="n">rf</span>
-                <span class="n">t</span> <span class="o">=</span> <span class="n">rf</span><span class="o">.</span><span class="n">delay</span> <span class="o">+</span> <span class="n">calc_rf_center</span><span class="p">(</span><span class="n">rf</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+                <span class="n">tc</span> <span class="o">=</span> <span class="n">calc_rf_center</span><span class="p">(</span><span class="n">rf</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">t</span> <span class="o">=</span> <span class="n">rf</span><span class="o">.</span><span class="n">delay</span> <span class="o">+</span> <span class="n">tc</span>
+
+                <span class="n">full_freq_offset</span> <span class="o">=</span> <span class="n">rf</span><span class="o">.</span><span class="n">freq_offset</span> <span class="o">+</span> <span class="n">rf</span><span class="o">.</span><span class="n">freq_ppm</span> <span class="o">*</span> <span class="mf">1e-6</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">gamma</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">B0</span>
+                <span class="n">full_phase_offset</span> <span class="o">=</span> <span class="n">rf</span><span class="o">.</span><span class="n">phase_offset</span> <span class="o">+</span> <span class="n">rf</span><span class="o">.</span><span class="n">phase_ppm</span> <span class="o">*</span> <span class="mf">1e-6</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">gamma</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">B0</span>
+                <span class="n">full_phase_offset</span> <span class="o">=</span> <span class="n">full_phase_offset</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">full_freq_offset</span> <span class="o">*</span> <span class="n">tc</span>
+
                 <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">rf</span><span class="p">,</span> <span class="s1">&#39;use&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">block</span><span class="o">.</span><span class="n">rf</span><span class="o">.</span><span class="n">use</span> <span class="ow">in</span> <span class="p">[</span>
                     <span class="s1">&#39;excitation&#39;</span><span class="p">,</span>
                     <span class="s1">&#39;undefined&#39;</span><span class="p">,</span>
                 <span class="p">]:</span>
                     <span class="n">t_excitation</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">curr_dur</span> <span class="o">+</span> <span class="n">t</span><span class="p">)</span>
-                    <span class="n">fp_excitation</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">block</span><span class="o">.</span><span class="n">rf</span><span class="o">.</span><span class="n">freq_offset</span><span class="p">,</span> <span class="n">block</span><span class="o">.</span><span class="n">rf</span><span class="o">.</span><span class="n">phase_offset</span><span class="p">])</span>
+                    <span class="n">fp_excitation</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">full_freq_offset</span><span class="p">,</span> <span class="n">full_phase_offset</span><span class="p">])</span>
                 <span class="k">elif</span> <span class="n">block</span><span class="o">.</span><span class="n">rf</span><span class="o">.</span><span class="n">use</span> <span class="o">==</span> <span class="s1">&#39;refocusing&#39;</span><span class="p">:</span>
                     <span class="n">t_refocusing</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">curr_dur</span> <span class="o">+</span> <span class="n">t</span><span class="p">)</span>
-                    <span class="n">fp_refocusing</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">block</span><span class="o">.</span><span class="n">rf</span><span class="o">.</span><span class="n">freq_offset</span><span class="p">,</span> <span class="n">block</span><span class="o">.</span><span class="n">rf</span><span class="o">.</span><span class="n">phase_offset</span><span class="p">])</span>
+                    <span class="n">fp_refocusing</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">full_freq_offset</span><span class="p">,</span> <span class="n">full_phase_offset</span><span class="p">])</span>
 
             <span class="n">curr_dur</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_durations</span><span class="p">[</span><span class="n">block_counter</span><span class="p">]</span>
 
@@ -1525,6 +1570,116 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">extension_numeric_idx</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">extension_id</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">extension_string_idx</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">extension_str</span><span class="p">)</span>
         <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">extension_numeric_idx</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">extension_string_idx</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Sequence.apply_soft_delay">
+<a class="viewcode-back" href="../../../_autosummary/bmctool.utils.seq.write.Sequence.html#bmctool.utils.seq.write.Sequence.apply_soft_delay">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">apply_soft_delay</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Apply soft delay values to modify block durations in the sequence.</span>
+
+<span class="sd">        This method updates the durations of blocks containing soft delay events</span>
+<span class="sd">        based on the provided values. The new block duration is calculated using</span>
+<span class="sd">        the formula: duration = (input_value / factor) + offset.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        **kwargs : dict</span>
+<span class="sd">            Keyword arguments where keys are soft delay hint strings and values</span>
+<span class="sd">            are the desired delay values in seconds. Not all soft delays in the</span>
+<span class="sd">            sequence need to be specified.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If a specified soft delay hint does not exist in the sequence.</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the calculated block duration would be negative.</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If soft delay hint and numeric ID mapping is inconsistent.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Apply single soft delay:</span>
+
+<span class="sd">        &gt;&gt;&gt; seq.apply_soft_delay(TE=40e-3)  # Set TE to 40ms</span>
+
+<span class="sd">        Apply multiple soft delays:</span>
+
+<span class="sd">        &gt;&gt;&gt; seq.apply_soft_delay(TE=50e-3, TR=2.0)  # Set TE to 50ms, TR to 2s</span>
+
+<span class="sd">        See Also</span>
+<span class="sd">        --------</span>
+<span class="sd">        pypulseq.make_soft_delay : Create soft delay events</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        - Only soft delays present in the sequence can be modified</span>
+<span class="sd">        - Block durations are automatically rounded to the block duration raster</span>
+<span class="sd">        - A warning is issued if substantial rounding occurs</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Go through all the blocks and update durations, at the same time checking the consistency of the soft delays</span>
+        <span class="n">sd_str2numID</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">sd_numID2hint</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">sd_warns</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">block_counters</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_events</span><span class="p">:</span>
+            <span class="n">block</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_block</span><span class="p">(</span><span class="n">block_counters</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">block</span><span class="o">.</span><span class="n">soft_delay</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="c1"># Check the numeric ID consistency</span>
+                <span class="k">if</span> <span class="n">block</span><span class="o">.</span><span class="n">soft_delay</span><span class="o">.</span><span class="n">hint</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sd_str2numID</span><span class="p">:</span>
+                    <span class="n">sd_str2numID</span><span class="p">[</span><span class="n">block</span><span class="o">.</span><span class="n">soft_delay</span><span class="o">.</span><span class="n">hint</span><span class="p">]</span> <span class="o">=</span> <span class="n">block</span><span class="o">.</span><span class="n">soft_delay</span><span class="o">.</span><span class="n">numID</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">sd_str2numID</span><span class="p">[</span><span class="n">block</span><span class="o">.</span><span class="n">soft_delay</span><span class="o">.</span><span class="n">hint</span><span class="p">]</span> <span class="o">!=</span> <span class="n">block</span><span class="o">.</span><span class="n">soft_delay</span><span class="o">.</span><span class="n">numID</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                            <span class="sa">f</span><span class="s2">&quot;Soft delay in block </span><span class="si">{</span><span class="n">block_counters</span><span class="si">}</span><span class="s2"> with numeric ID </span><span class="si">{</span><span class="n">block</span><span class="o">.</span><span class="n">soft_delay</span><span class="o">.</span><span class="n">numID</span><span class="si">}</span><span class="s2"> and string hint &#39;</span><span class="si">{</span><span class="n">block</span><span class="o">.</span><span class="n">soft_delay</span><span class="o">.</span><span class="n">hint</span><span class="si">}</span><span class="s2">&#39; is inconsistent with the previous occurrences of the same string hint&quot;</span>
+                        <span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">block</span><span class="o">.</span><span class="n">soft_delay</span><span class="o">.</span><span class="n">numID</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sd_numID2hint</span><span class="p">:</span>
+                    <span class="n">sd_numID2hint</span><span class="p">[</span><span class="n">block</span><span class="o">.</span><span class="n">soft_delay</span><span class="o">.</span><span class="n">numID</span><span class="p">]</span> <span class="o">=</span> <span class="n">block</span><span class="o">.</span><span class="n">soft_delay</span><span class="o">.</span><span class="n">hint</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">sd_numID2hint</span><span class="p">[</span><span class="n">block</span><span class="o">.</span><span class="n">soft_delay</span><span class="o">.</span><span class="n">numID</span><span class="p">]</span> <span class="o">!=</span> <span class="n">block</span><span class="o">.</span><span class="n">soft_delay</span><span class="o">.</span><span class="n">hint</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                            <span class="sa">f</span><span class="s2">&quot;Soft delay in block </span><span class="si">{</span><span class="n">block_counters</span><span class="si">}</span><span class="s2"> with numeric ID </span><span class="si">{</span><span class="n">block</span><span class="o">.</span><span class="n">soft_delay</span><span class="o">.</span><span class="n">numID</span><span class="si">}</span><span class="s2"> and string hint &#39;</span><span class="si">{</span><span class="n">block</span><span class="o">.</span><span class="n">soft_delay</span><span class="o">.</span><span class="n">hint</span><span class="si">}</span><span class="s2">&#39; is inconsistent with the previous occurrences of the same numeric ID&quot;</span>
+                        <span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">block</span><span class="o">.</span><span class="n">soft_delay</span><span class="o">.</span><span class="n">hint</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                    <span class="c1"># Calculate the new block duration</span>
+                    <span class="n">new_dur_ru</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="n">kwargs</span><span class="p">[</span><span class="n">block</span><span class="o">.</span><span class="n">soft_delay</span><span class="o">.</span><span class="n">hint</span><span class="p">]</span> <span class="o">/</span> <span class="n">block</span><span class="o">.</span><span class="n">soft_delay</span><span class="o">.</span><span class="n">factor</span> <span class="o">+</span> <span class="n">block</span><span class="o">.</span><span class="n">soft_delay</span><span class="o">.</span><span class="n">offset</span>
+                    <span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">block_duration_raster</span>
+                    <span class="n">new_dur</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">new_dur_ru</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">block_duration_raster</span>
+                    <span class="c1"># Check if rounding error is significant (threshold: 0.5 microseconds)</span>
+                    <span class="n">rounding_threshold</span> <span class="o">=</span> <span class="mf">0.5e-6</span>
+                    <span class="n">rounding_error</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">new_dur</span> <span class="o">-</span> <span class="n">new_dur_ru</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">block_duration_raster</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">rounding_error</span> <span class="o">&gt;</span> <span class="n">rounding_threshold</span> <span class="ow">and</span> <span class="n">block</span><span class="o">.</span><span class="n">soft_delay</span><span class="o">.</span><span class="n">numID</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sd_warns</span><span class="p">:</span>
+                        <span class="n">warn</span><span class="p">(</span>
+                            <span class="sa">f</span><span class="s2">&quot;Soft delay &#39;</span><span class="si">{</span><span class="n">block</span><span class="o">.</span><span class="n">soft_delay</span><span class="o">.</span><span class="n">hint</span><span class="si">}</span><span class="s2">&#39; in block </span><span class="si">{</span><span class="n">block_counters</span><span class="si">}</span><span class="s2">: &quot;</span>
+                            <span class="sa">f</span><span class="s1">&#39;Duration rounded by </span><span class="si">{</span><span class="n">rounding_error</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">1e6</span><span class="si">:</span><span class="s1">.1f</span><span class="si">}</span><span class="s1"> μs to align with raster time &#39;</span>
+                            <span class="sa">f</span><span class="s1">&#39;(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">block_duration_raster</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">1e6</span><span class="si">:</span><span class="s1">.1f</span><span class="si">}</span><span class="s1"> μs). &#39;</span>
+                            <span class="sa">f</span><span class="s1">&#39;This warning is shown only once per soft delay ID.&#39;</span>
+                        <span class="p">)</span>
+                        <span class="n">sd_warns</span><span class="p">[</span><span class="n">block</span><span class="o">.</span><span class="n">soft_delay</span><span class="o">.</span><span class="n">numID</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+
+                    <span class="k">if</span> <span class="n">new_dur</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                            <span class="sa">f</span><span class="s2">&quot;Soft delay &#39;</span><span class="si">{</span><span class="n">block</span><span class="o">.</span><span class="n">soft_delay</span><span class="o">.</span><span class="n">hint</span><span class="si">}</span><span class="s2">&#39; in block </span><span class="si">{</span><span class="n">block_counters</span><span class="si">}</span><span class="s2">: &quot;</span>
+                            <span class="sa">f</span><span class="s1">&#39;Calculated duration is negative (</span><span class="si">{</span><span class="n">new_dur</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">1e6</span><span class="si">:</span><span class="s1">.1f</span><span class="si">}</span><span class="s1"> μs). &#39;</span>
+                            <span class="sa">f</span><span class="s1">&#39;Check the offset (</span><span class="si">{</span><span class="n">block</span><span class="o">.</span><span class="n">soft_delay</span><span class="o">.</span><span class="n">offset</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">1e6</span><span class="si">:</span><span class="s1">.1f</span><span class="si">}</span><span class="s1"> μs) and factor &#39;</span>
+                            <span class="sa">f</span><span class="s1">&#39;(</span><span class="si">{</span><span class="n">block</span><span class="o">.</span><span class="n">soft_delay</span><span class="o">.</span><span class="n">factor</span><span class="si">}</span><span class="s1">) parameters.&#39;</span>
+                        <span class="p">)</span>
+
+                    <span class="bp">self</span><span class="o">.</span><span class="n">block_durations</span><span class="p">[</span><span class="n">block_counters</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_dur</span>
+
+        <span class="c1"># Now check if there are some input soft delays which haven&#39;t been found in the sequence</span>
+        <span class="n">all_input_hints</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">hint</span> <span class="ow">in</span> <span class="n">all_input_hints</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">hint</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sd_str2numID</span><span class="p">:</span>
+                <span class="n">available_hints</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">sd_str2numID</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Soft delay &#39;</span><span class="si">{</span><span class="n">hint</span><span class="si">}</span><span class="s2">&#39; not found in sequence. &quot;</span>
+                    <span class="sa">f</span><span class="s1">&#39;Available soft delays: </span><span class="si">{</span><span class="n">available_hints</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">available_hints</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s2">&quot;none&quot;</span><span class="si">}</span><span class="s1">&#39;</span>
+                <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Sequence.test_report">
@@ -1659,11 +1814,13 @@
 
             <span class="k">if</span> <span class="n">block</span><span class="o">.</span><span class="n">rf</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># RF</span>
                 <span class="n">rf</span> <span class="o">=</span> <span class="n">block</span><span class="o">.</span><span class="n">rf</span>
+                <span class="n">full_freq_offset</span> <span class="o">=</span> <span class="n">rf</span><span class="o">.</span><span class="n">freq_offset</span> <span class="o">+</span> <span class="n">rf</span><span class="o">.</span><span class="n">freq_ppm</span> <span class="o">*</span> <span class="mf">1e-6</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">gamma</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">B0</span>
+                <span class="n">full_phase_offset</span> <span class="o">=</span> <span class="n">rf</span><span class="o">.</span><span class="n">phase_offset</span> <span class="o">+</span> <span class="n">rf</span><span class="o">.</span><span class="n">phase_ppm</span> <span class="o">*</span> <span class="mf">1e-6</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">gamma</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">B0</span>
                 <span class="k">if</span> <span class="n">append_RF</span><span class="p">:</span>
                     <span class="n">rf_piece</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
                         <span class="p">[</span>
                             <span class="n">curr_dur</span> <span class="o">+</span> <span class="n">rf</span><span class="o">.</span><span class="n">delay</span> <span class="o">+</span> <span class="n">rf</span><span class="o">.</span><span class="n">t</span><span class="p">,</span>
-                            <span class="n">rf</span><span class="o">.</span><span class="n">signal</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="p">(</span><span class="n">rf</span><span class="o">.</span><span class="n">phase_offset</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">rf</span><span class="o">.</span><span class="n">freq_offset</span> <span class="o">*</span> <span class="n">rf</span><span class="o">.</span><span class="n">t</span><span class="p">)),</span>
+                            <span class="n">rf</span><span class="o">.</span><span class="n">signal</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="p">(</span><span class="n">full_phase_offset</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">full_freq_offset</span> <span class="o">*</span> <span class="n">rf</span><span class="o">.</span><span class="n">t</span><span class="p">)),</span>
                         <span class="p">]</span>
                     <span class="p">)</span>
                     <span class="n">out_len</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">rf</span><span class="o">.</span><span class="n">t</span><span class="p">)</span>
@@ -1695,7 +1852,7 @@
             <span class="c1"># element of the next shape.</span>
             <span class="n">shape_pieces</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">shape_pieces</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">0</span><span class="p">]]</span> <span class="o">+</span> <span class="p">[</span>
                 <span class="n">cur</span> <span class="k">if</span> <span class="n">prev</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">eps</span> <span class="o">&lt;</span> <span class="n">cur</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="k">else</span> <span class="n">cur</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:]</span>
-                <span class="k">for</span> <span class="n">prev</span><span class="p">,</span> <span class="n">cur</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">shape_pieces</span><span class="p">[</span><span class="n">j</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">shape_pieces</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">1</span><span class="p">:])</span>
+                <span class="k">for</span> <span class="n">prev</span><span class="p">,</span> <span class="n">cur</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">shape_pieces</span><span class="p">[</span><span class="n">j</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">shape_pieces</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">1</span><span class="p">:],</span> <span class="n">strict</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
             <span class="p">]</span>
 
             <span class="n">wave_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">shape_pieces</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
@@ -1746,155 +1903,15 @@
         <span class="k">return</span> <span class="n">wave_data</span><span class="p">,</span> <span class="n">tfp_excitation</span><span class="p">,</span> <span class="n">tfp_refocusing</span><span class="p">,</span> <span class="n">t_adc</span><span class="p">,</span> <span class="n">fp_adc</span></div>
 
 
-<div class="viewcode-block" id="Sequence.waveforms_export">
-<a class="viewcode-back" href="../../../_autosummary/bmctool.utils.seq.write.Sequence.html#bmctool.utils.seq.write.Sequence.waveforms_export">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">waveforms_export</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_range</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">))</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Plot `Sequence`.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        time_range : iterable, default=(0, np.inf)</span>
-<span class="sd">            Time range (x-axis limits) for all waveforms. Default is 0 to infinity (entire sequence).</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        all_waveforms: dict</span>
-<span class="sd">            Dictionary containing the following sequence waveforms and time array(s):</span>
-<span class="sd">            - `t_adc` - ADC timing array [seconds]</span>
-<span class="sd">            - `t_rf` - RF timing array [seconds]</span>
-<span class="sd">            - `t_rf_centers`: `rf_t_centers`,</span>
-<span class="sd">            - `t_gx`: x gradient timing array,</span>
-<span class="sd">            - `t_gy`: y gradient timing array,</span>
-<span class="sd">            - `t_gz`: z gradient timing array,</span>
-<span class="sd">            - `adc` - ADC complex signal (amplitude=1, phase=adc phase) [a.u.]</span>
-<span class="sd">            - `rf` - RF complex signal</span>
-<span class="sd">            - `rf_centers`: RF centers array,</span>
-<span class="sd">            - `gx` - x gradient</span>
-<span class="sd">            - `gy` - y gradient</span>
-<span class="sd">            - `gz` - z gradient</span>
-<span class="sd">            - `grad_unit`: [kHz/m],</span>
-<span class="sd">            - `rf_unit`: [Hz],</span>
-<span class="sd">            - `time_unit`: [seconds],</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># Check time range validity</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">time_range</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">time_range</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Invalid time range&#39;</span><span class="p">)</span>
-
-        <span class="n">t0</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="n">adc_t_all</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
-        <span class="n">adc_signal_all</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
-        <span class="n">rf_t_all</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
-        <span class="n">rf_signal_all</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
-        <span class="n">rf_t_centers</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
-        <span class="n">rf_signal_centers</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
-        <span class="n">gx_t_all</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
-        <span class="n">gy_t_all</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
-        <span class="n">gz_t_all</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
-        <span class="n">gx_all</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
-        <span class="n">gy_all</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
-        <span class="n">gz_all</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
-
-        <span class="k">for</span> <span class="n">block_counter</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_events</span><span class="p">:</span>  <span class="c1"># For each block</span>
-            <span class="n">block</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_block</span><span class="p">(</span><span class="n">block_counter</span><span class="p">)</span>  <span class="c1"># Retrieve it</span>
-            <span class="n">is_valid</span> <span class="o">=</span> <span class="n">time_range</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">t0</span> <span class="o">&lt;=</span> <span class="n">time_range</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># Check if &quot;current time&quot; is within requested range.</span>
-            <span class="k">if</span> <span class="n">is_valid</span><span class="p">:</span>
-                <span class="c1"># Case 1: ADC</span>
-                <span class="k">if</span> <span class="n">block</span><span class="o">.</span><span class="n">adc</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">adc</span> <span class="o">=</span> <span class="n">block</span><span class="o">.</span><span class="n">adc</span>  <span class="c1"># Get adc info</span>
-                    <span class="c1"># From Pulseq: According to the information from Klaus Scheffler and indirectly from Siemens this</span>
-                    <span class="c1"># is the present convention - the samples are shifted by 0.5 dwell</span>
-                    <span class="n">t</span> <span class="o">=</span> <span class="n">adc</span><span class="o">.</span><span class="n">delay</span> <span class="o">+</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">adc</span><span class="o">.</span><span class="n">num_samples</span><span class="p">))</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="n">adc</span><span class="o">.</span><span class="n">dwell</span>
-                    <span class="n">adc_t</span> <span class="o">=</span> <span class="n">t0</span> <span class="o">+</span> <span class="n">t</span>
-                    <span class="n">adc_signal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">adc</span><span class="o">.</span><span class="n">phase_offset</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">t</span> <span class="o">*</span> <span class="n">adc</span><span class="o">.</span><span class="n">freq_offset</span><span class="p">)</span>
-                    <span class="n">adc_t_all</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">adc_t_all</span><span class="p">,</span> <span class="n">adc_t</span><span class="p">))</span>
-                    <span class="n">adc_signal_all</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">adc_signal_all</span><span class="p">,</span> <span class="n">adc_signal</span><span class="p">))</span>
-
-                <span class="k">if</span> <span class="n">block</span><span class="o">.</span><span class="n">rf</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">rf</span> <span class="o">=</span> <span class="n">block</span><span class="o">.</span><span class="n">rf</span>
-                    <span class="n">tc</span><span class="p">,</span> <span class="n">ic</span> <span class="o">=</span> <span class="n">calc_rf_center</span><span class="p">(</span><span class="n">rf</span><span class="p">)</span>
-                    <span class="n">t</span> <span class="o">=</span> <span class="n">rf</span><span class="o">.</span><span class="n">t</span> <span class="o">+</span> <span class="n">rf</span><span class="o">.</span><span class="n">delay</span>
-                    <span class="n">tc</span> <span class="o">=</span> <span class="n">tc</span> <span class="o">+</span> <span class="n">rf</span><span class="o">.</span><span class="n">delay</span>
-
-                    <span class="c1"># Debug - visualize</span>
-                    <span class="c1"># sp12.plot(t_factor * (t0 + t), np.abs(rf.signal))</span>
-                    <span class="c1"># sp13.plot(t_factor * (t0 + t), np.angle(rf.signal * np.exp(1j * rf.phase_offset)</span>
-                    <span class="c1">#                                         * np.exp(1j * 2 * math.pi * rf.t * rf.freq_offset)),</span>
-                    <span class="c1">#           t_factor * (t0 + tc), np.angle(rf.signal[ic] * np.exp(1j * rf.phase_offset)</span>
-                    <span class="c1">#                                          * np.exp(1j * 2 * math.pi * rf.t[ic] * rf.freq_offset)),</span>
-                    <span class="c1">#           &#39;xb&#39;)</span>
-
-                    <span class="n">rf_t</span> <span class="o">=</span> <span class="n">t0</span> <span class="o">+</span> <span class="n">t</span>
-                    <span class="n">rf</span> <span class="o">=</span> <span class="n">rf</span><span class="o">.</span><span class="n">signal</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">rf</span><span class="o">.</span><span class="n">phase_offset</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">rf</span><span class="o">.</span><span class="n">t</span> <span class="o">*</span> <span class="n">rf</span><span class="o">.</span><span class="n">freq_offset</span><span class="p">)</span>
-                    <span class="n">rf_t_all</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">rf_t_all</span><span class="p">,</span> <span class="n">rf_t</span><span class="p">))</span>
-                    <span class="n">rf_signal_all</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">rf_signal_all</span><span class="p">,</span> <span class="n">rf</span><span class="p">))</span>
-                    <span class="n">rf_t_centers</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">rf_t_centers</span><span class="p">,</span> <span class="p">[</span><span class="n">rf_t</span><span class="p">[</span><span class="n">ic</span><span class="p">]]))</span>
-                    <span class="n">rf_signal_centers</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">rf_signal_centers</span><span class="p">,</span> <span class="p">[</span><span class="n">rf</span><span class="p">[</span><span class="n">ic</span><span class="p">]]))</span>
-
-                <span class="n">grad_channels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;gx&#39;</span><span class="p">,</span> <span class="s1">&#39;gy&#39;</span><span class="p">,</span> <span class="s1">&#39;gz&#39;</span><span class="p">]</span>
-                <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">grad_channels</span><span class="p">)):</span>  <span class="c1"># Check each gradient channel: x, y, and z</span>
-                    <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">block</span><span class="p">,</span> <span class="n">grad_channels</span><span class="p">[</span><span class="n">x</span><span class="p">])</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                        <span class="c1"># If this channel is on in current block</span>
-                        <span class="n">grad</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">block</span><span class="p">,</span> <span class="n">grad_channels</span><span class="p">[</span><span class="n">x</span><span class="p">])</span>
-                        <span class="k">if</span> <span class="n">grad</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;grad&#39;</span><span class="p">:</span>  <span class="c1"># Arbitrary gradient option</span>
-                            <span class="c1"># In place unpacking of grad.t with the starred expression</span>
-                            <span class="n">g_t</span> <span class="o">=</span> <span class="p">(</span>
-                                <span class="n">t0</span>
-                                <span class="o">+</span> <span class="n">grad</span><span class="o">.</span><span class="n">delay</span>
-                                <span class="o">+</span> <span class="p">[</span>
-                                    <span class="mi">0</span><span class="p">,</span>
-                                    <span class="o">*</span><span class="p">(</span><span class="n">grad</span><span class="o">.</span><span class="n">t</span> <span class="o">+</span> <span class="p">(</span><span class="n">grad</span><span class="o">.</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">grad</span><span class="o">.</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="mi">2</span><span class="p">),</span>
-                                    <span class="n">grad</span><span class="o">.</span><span class="n">t</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">grad</span><span class="o">.</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">grad</span><span class="o">.</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-                                <span class="p">]</span>
-                            <span class="p">)</span>
-                            <span class="n">g</span> <span class="o">=</span> <span class="mf">1e-3</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">grad</span><span class="o">.</span><span class="n">first</span><span class="p">,</span> <span class="o">*</span><span class="n">grad</span><span class="o">.</span><span class="n">waveform</span><span class="p">,</span> <span class="n">grad</span><span class="o">.</span><span class="n">last</span><span class="p">))</span>
-                        <span class="k">else</span><span class="p">:</span>  <span class="c1"># Trapezoid gradient option</span>
-                            <span class="n">g_t</span> <span class="o">=</span> <span class="n">cumsum</span><span class="p">(</span>
-                                <span class="n">t0</span><span class="p">,</span>
-                                <span class="n">grad</span><span class="o">.</span><span class="n">delay</span><span class="p">,</span>
-                                <span class="n">grad</span><span class="o">.</span><span class="n">rise_time</span><span class="p">,</span>
-                                <span class="n">grad</span><span class="o">.</span><span class="n">flat_time</span><span class="p">,</span>
-                                <span class="n">grad</span><span class="o">.</span><span class="n">fall_time</span><span class="p">,</span>
-                            <span class="p">)</span>
-                            <span class="n">g</span> <span class="o">=</span> <span class="mf">1e-3</span> <span class="o">*</span> <span class="n">grad</span><span class="o">.</span><span class="n">amplitude</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
-
-                        <span class="k">if</span> <span class="n">grad</span><span class="o">.</span><span class="n">channel</span> <span class="o">==</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span>
-                            <span class="n">gx_t_all</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">gx_t_all</span><span class="p">,</span> <span class="n">g_t</span><span class="p">))</span>
-                            <span class="n">gx_all</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">gx_all</span><span class="p">,</span> <span class="n">g</span><span class="p">))</span>
-                        <span class="k">elif</span> <span class="n">grad</span><span class="o">.</span><span class="n">channel</span> <span class="o">==</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span>
-                            <span class="n">gy_t_all</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">gy_t_all</span><span class="p">,</span> <span class="n">g_t</span><span class="p">))</span>
-                            <span class="n">gy_all</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">gy_all</span><span class="p">,</span> <span class="n">g</span><span class="p">))</span>
-                        <span class="k">elif</span> <span class="n">grad</span><span class="o">.</span><span class="n">channel</span> <span class="o">==</span> <span class="s1">&#39;z&#39;</span><span class="p">:</span>
-                            <span class="n">gz_t_all</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">gz_t_all</span><span class="p">,</span> <span class="n">g_t</span><span class="p">))</span>
-                            <span class="n">gz_all</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">gz_all</span><span class="p">,</span> <span class="n">g</span><span class="p">))</span>
-
-            <span class="n">t0</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_durations</span><span class="p">[</span><span class="n">block_counter</span><span class="p">]</span>  <span class="c1"># &quot;Current time&quot; gets updated to end of block just examined</span>
-
-        <span class="n">all_waveforms</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s1">&#39;t_adc&#39;</span><span class="p">:</span> <span class="n">adc_t_all</span><span class="p">,</span>
-            <span class="s1">&#39;t_rf&#39;</span><span class="p">:</span> <span class="n">rf_t_all</span><span class="p">,</span>
-            <span class="s1">&#39;t_rf_centers&#39;</span><span class="p">:</span> <span class="n">rf_t_centers</span><span class="p">,</span>
-            <span class="s1">&#39;t_gx&#39;</span><span class="p">:</span> <span class="n">gx_t_all</span><span class="p">,</span>
-            <span class="s1">&#39;t_gy&#39;</span><span class="p">:</span> <span class="n">gy_t_all</span><span class="p">,</span>
-            <span class="s1">&#39;t_gz&#39;</span><span class="p">:</span> <span class="n">gz_t_all</span><span class="p">,</span>
-            <span class="s1">&#39;adc&#39;</span><span class="p">:</span> <span class="n">adc_signal_all</span><span class="p">,</span>
-            <span class="s1">&#39;rf&#39;</span><span class="p">:</span> <span class="n">rf_signal_all</span><span class="p">,</span>
-            <span class="s1">&#39;rf_centers&#39;</span><span class="p">:</span> <span class="n">rf_signal_centers</span><span class="p">,</span>
-            <span class="s1">&#39;gx&#39;</span><span class="p">:</span> <span class="n">gx_all</span><span class="p">,</span>
-            <span class="s1">&#39;gy&#39;</span><span class="p">:</span> <span class="n">gy_all</span><span class="p">,</span>
-            <span class="s1">&#39;gz&#39;</span><span class="p">:</span> <span class="n">gz_all</span><span class="p">,</span>
-            <span class="s1">&#39;grad_unit&#39;</span><span class="p">:</span> <span class="s1">&#39;[kHz/m]&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;rf_unit&#39;</span><span class="p">:</span> <span class="s1">&#39;[Hz]&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;time_unit&#39;</span><span class="p">:</span> <span class="s1">&#39;[seconds]&#39;</span><span class="p">,</span>
-        <span class="p">}</span>
-
-        <span class="k">return</span> <span class="n">all_waveforms</span></div>
-
-
 <div class="viewcode-block" id="Sequence.write">
 <a class="viewcode-back" href="../../../_autosummary/bmctool.utils.seq.write.Sequence.html#bmctool.utils.seq.write.Sequence.write">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">write</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">create_signature</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">remove_duplicates</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">check_timing</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">create_signature</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">remove_duplicates</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">check_timing</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">v141_compat</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Write the sequence data to the given filename using the open file format for MR sequences.</span>
@@ -1909,6 +1926,8 @@
 <span class="sd">            Boolean flag to indicate if the file has to be signed.</span>
 <span class="sd">        remove_duplicates : bool, default=True</span>
 <span class="sd">            Remove duplicate events from the sequence before writing</span>
+<span class="sd">        v141_compat: bool, default=False</span>
+<span class="sd">            Write the sequence in v1.4.1 compatible file format.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -1928,7 +1947,7 @@
         <span class="c1"># Check whether all gradients in the last block are ramped down properly</span>
         <span class="n">last_block_id</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">block_events</span><span class="p">))</span>
         <span class="n">last_block</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_block</span><span class="p">(</span><span class="n">last_block_id</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">channel</span><span class="p">,</span> <span class="n">event</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">((</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">),</span> <span class="p">(</span><span class="n">last_block</span><span class="o">.</span><span class="n">gx</span><span class="p">,</span> <span class="n">last_block</span><span class="o">.</span><span class="n">gy</span><span class="p">,</span> <span class="n">last_block</span><span class="o">.</span><span class="n">gz</span><span class="p">)):</span>
+        <span class="k">for</span> <span class="n">channel</span><span class="p">,</span> <span class="n">event</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">((</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">),</span> <span class="p">(</span><span class="n">last_block</span><span class="o">.</span><span class="n">gx</span><span class="p">,</span> <span class="n">last_block</span><span class="o">.</span><span class="n">gy</span><span class="p">,</span> <span class="n">last_block</span><span class="o">.</span><span class="n">gz</span><span class="p">),</span> <span class="n">strict</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
             <span class="k">if</span> <span class="p">(</span>
                 <span class="n">event</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
                 <span class="ow">and</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;grad&#39;</span>
@@ -1947,7 +1966,10 @@
                 <span class="n">warn</span><span class="p">(</span><span class="n">warn_msg</span><span class="p">,</span> <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
         <span class="c1"># Write the sequence</span>
-        <span class="n">signature</span> <span class="o">=</span> <span class="n">write_seq</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">create_signature</span><span class="p">,</span> <span class="n">remove_duplicates</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">v141_compat</span><span class="p">:</span>
+            <span class="n">signature</span> <span class="o">=</span> <span class="n">write_seq_v141</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">create_signature</span><span class="p">,</span> <span class="n">remove_duplicates</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">signature</span> <span class="o">=</span> <span class="n">write_seq</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">create_signature</span><span class="p">,</span> <span class="n">remove_duplicates</span><span class="p">)</span>
 
         <span class="c1"># Return the sequence md5 signature if requested</span>
         <span class="k">if</span> <span class="n">signature</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>

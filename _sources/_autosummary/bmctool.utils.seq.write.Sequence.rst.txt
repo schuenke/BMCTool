@@ -19,6 +19,7 @@ bmctool.utils.seq.write.Sequence
       ~Sequence.__init__
       ~Sequence.adc_times
       ~Sequence.add_block
+      ~Sequence.apply_soft_delay
       ~Sequence.calculate_gradient_spectrum
       ~Sequence.calculate_kspace
       ~Sequence.calculate_kspacePP
@@ -26,20 +27,24 @@ bmctool.utils.seq.write.Sequence
       ~Sequence.check_timing
       ~Sequence.duration
       ~Sequence.evaluate_labels
+      ~Sequence.find_block_by_time
       ~Sequence.flip_grad_axis
       ~Sequence.get_block
       ~Sequence.get_definition
       ~Sequence.get_extension_type_ID
       ~Sequence.get_extension_type_string
       ~Sequence.get_gradients
+      ~Sequence.get_raw_block_content_IDs
       ~Sequence.install
       ~Sequence.mod_grad_axis
+      ~Sequence.paper_plot
       ~Sequence.plot
       ~Sequence.read
       ~Sequence.register_adc_event
       ~Sequence.register_grad_event
       ~Sequence.register_label_event
       ~Sequence.register_rf_event
+      ~Sequence.register_soft_delay_event
       ~Sequence.remove_duplicates
       ~Sequence.rf_from_lib_data
       ~Sequence.rf_times
@@ -49,7 +54,6 @@ bmctool.utils.seq.write.Sequence
       ~Sequence.test_report
       ~Sequence.waveforms
       ~Sequence.waveforms_and_times
-      ~Sequence.waveforms_export
       ~Sequence.write
    
    
