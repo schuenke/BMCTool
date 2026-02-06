@@ -1,3 +1,4 @@
+import warnings
 from pathlib import Path
 
 import numpy as np
@@ -10,8 +11,10 @@ def test_sim_example():
     # load reference results from txt file
     ref = np.loadtxt(Path(__file__).parent / 'example_results.txt')
 
-    # run example simulation
-    _, result = sim_example(show_plot=False)
+    # run example simulation and ignore UserWarning
+    with warnings.catch_warnings():
+        warnings.filterwarnings('ignore', category=UserWarning)
+        _, result = sim_example(show_plot=False)
 
     # compare results
     assert np.allclose(result, ref, atol=1e-12)
