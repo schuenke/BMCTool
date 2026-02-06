@@ -37,7 +37,7 @@ def calc_mtr_asym(
         x_interp = np.linspace(np.min(offsets), np.max(np.absolute(offsets)), n_interp)
         y_interp = np.interp(x_interp, offsets, m_z)
         asym = y_interp[::-1] - y_interp
-        return np.interp(offsets, x_interp, asym)
+        return np.array(np.interp(offsets, x_interp, asym))
 
 
 def normalize_data(

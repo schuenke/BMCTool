@@ -36,7 +36,7 @@ def calculate_amplitude(
     np.ndarray
         Calculated amplitude modulation.
     """
-    return np.divide(amp, np.cosh((bandwidth * np.pi / mu) * (t - t_0)))  # type: ignore
+    return np.divide(amp, np.cosh((bandwidth * np.pi / mu) * (t - t_0)))
 
 
 def calculate_frequency(
