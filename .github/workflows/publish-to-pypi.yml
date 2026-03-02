@@ -42,7 +42,7 @@ jobs:
 
     environment:
       name: pypi
-      url: https://pypi.org/p/pypulseq
+      url: https://pypi.org/p/bmctool
 
     permissions:
       id-token: write
