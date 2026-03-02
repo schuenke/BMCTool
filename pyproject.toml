@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "BMCTool"
-version = "1.0.1"
+version = "1.0.2"
 description = "A python tool to perform Bloch-McConnell (BMC) simulations."
 readme = "README.md"
 requires-python = ">=3.11"
@@ -19,7 +19,7 @@ classifiers = [
     "Programming Language :: Python :: 3.14",
     "Programming Language :: Python :: 3 :: Only",
 ]
-dependencies = ["numpy>=1.23,<3.0", "matplotlib", "tqdm", "PyYAML", "pypulseq"]
+dependencies = ["numpy>=2.0", "matplotlib", "tqdm", "PyYAML", "pypulseq"]
 
 [project.optional-dependencies]
 test = [

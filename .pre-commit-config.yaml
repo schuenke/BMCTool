@@ -14,7 +14,7 @@ repos:
       - id: mixed-line-ending
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.14.14
+    rev: v0.15.0
     hooks:
       - id: ruff # linter
         args: [--fix]
@@ -33,7 +33,6 @@ repos:
         always_run: true
         args: [src, tests, --python-version=3.11]
         additional_dependencies:
-          - numpy<2.0
           - pytest
           - pypulseq>=1.4.2
           - types-pyyaml
