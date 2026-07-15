@@ -449,9 +449,16 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">suplab</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
             <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span> <span class="n">suplab</span><span class="p">)</span>
+            <span class="n">suplab</span><span class="o">.</span><span class="n">_remove_method</span> <span class="o">=</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_remove_suplabel</span><span class="p">,</span>
+                                                      <span class="n">name</span><span class="o">=</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span>
+
         <span class="n">suplab</span><span class="o">.</span><span class="n">_autopos</span> <span class="o">=</span> <span class="n">autopos</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">stale</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">return</span> <span class="n">suplab</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_remove_suplabel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">texts</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
     <span class="nd">@_docstring</span><span class="o">.</span><span class="n">Substitution</span><span class="p">(</span><span class="n">x0</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">y0</span><span class="o">=</span><span class="mf">0.98</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;super title&#39;</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span>
                              <span class="n">va</span><span class="o">=</span><span class="s1">&#39;top&#39;</span><span class="p">,</span> <span class="n">rc</span><span class="o">=</span><span class="s1">&#39;title&#39;</span><span class="p">)</span>
@@ -1020,7 +1027,7 @@
 
         <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">ax</span><span class="o">.</span><span class="n">_axis_names</span><span class="p">:</span>  <span class="c1"># Break link between any shared Axes</span>
             <span class="n">grouper</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">_shared_axes</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
-            <span class="n">siblings</span> <span class="o">=</span> <span class="p">[</span><span class="n">other</span> <span class="k">for</span> <span class="n">other</span> <span class="ow">in</span> <span class="n">grouper</span><span class="o">.</span><span class="n">get_siblings</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span> <span class="k">if</span> <span class="n">other</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">ax</span><span class="p">]</span>
+            <span class="n">siblings</span> <span class="o">=</span> <span class="n">grouper</span><span class="o">.</span><span class="n">get_siblings</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">include_self</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">siblings</span><span class="p">:</span>  <span class="c1"># Axes was not shared along this axis; we&#39;re done.</span>
                 <span class="k">continue</span>
             <span class="n">grouper</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
@@ -1062,6 +1069,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">texts</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">images</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">legends</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">subplotpars</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">keep_observers</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_axobservers</span> <span class="o">=</span> <span class="n">cbook</span><span class="o">.</span><span class="n">CallbackRegistry</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_suptitle</span> <span class="o">=</span> <span class="kc">None</span>
@@ -1272,17 +1280,18 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        mappable</span>
-<span class="sd">            The `matplotlib.cm.ScalarMappable` (i.e., `.AxesImage`,</span>
+<span class="sd">            The `matplotlib.colorizer.ColorizingArtist` (i.e., `.AxesImage`,</span>
 <span class="sd">            `.ContourSet`, etc.) described by this colorbar.  This argument is</span>
 <span class="sd">            mandatory for the `.Figure.colorbar` method but optional for the</span>
 <span class="sd">            `.pyplot.colorbar` function, which sets the default to the current</span>
 <span class="sd">            image.</span>
 
-<span class="sd">            Note that one can create a `.ScalarMappable` &quot;on-the-fly&quot; to</span>
-<span class="sd">            generate colorbars not attached to a previously drawn artist, e.g.</span>
+<span class="sd">            Note that one can create a `.colorizer.ColorizingArtist` &quot;on-the-fly&quot;</span>
+<span class="sd">            to generate colorbars not attached to a previously drawn artist, e.g.</span>
 <span class="sd">            ::</span>
 
-<span class="sd">                fig.colorbar(cm.ScalarMappable(norm=norm, cmap=cmap), ax=ax)</span>
+<span class="sd">                cr = colorizer.Colorizer(norm=norm, cmap=cmap)</span>
+<span class="sd">                fig.colorbar(colorizer.ColorizingArtist(cr), ax=ax)</span>
 
 <span class="sd">        cax : `~matplotlib.axes.Axes`, optional</span>
 <span class="sd">            Axes into which the colorbar will be drawn.  If `None`, then a new</span>
@@ -1463,8 +1472,7 @@
 <span class="sd">        Example with rotated xtick labels::</span>
 
 <span class="sd">            fig, axs = plt.subplots(1, 2)</span>
-<span class="sd">            for tick in axs[0].get_xticklabels():</span>
-<span class="sd">                tick.set_rotation(55)</span>
+<span class="sd">            axs[0].tick_params(axis=&#39;x&#39;, rotation=55)</span>
 <span class="sd">            axs[0].set_xlabel(&#39;XLabel 0&#39;)</span>
 <span class="sd">            axs[1].set_xlabel(&#39;XLabel 1&#39;)</span>
 <span class="sd">            fig.align_xlabels()</span>
@@ -2196,9 +2204,9 @@
             <span class="c1"># go through the unique keys,</span>
             <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">unique_ids</span><span class="p">:</span>
                 <span class="c1"># sort out where each axes starts/ends</span>
-                <span class="n">indx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">mosaic</span> <span class="o">==</span> <span class="n">name</span><span class="p">)</span>
-                <span class="n">start_row</span><span class="p">,</span> <span class="n">start_col</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">indx</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-                <span class="n">end_row</span><span class="p">,</span> <span class="n">end_col</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">indx</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="n">index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">mosaic</span> <span class="o">==</span> <span class="n">name</span><span class="p">)</span>
+                <span class="n">start_row</span><span class="p">,</span> <span class="n">start_col</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+                <span class="n">end_row</span><span class="p">,</span> <span class="n">end_col</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
                 <span class="c1"># and construct the slice object</span>
                 <span class="n">slc</span> <span class="o">=</span> <span class="p">(</span><span class="nb">slice</span><span class="p">(</span><span class="n">start_row</span><span class="p">,</span> <span class="n">end_row</span><span class="p">),</span> <span class="nb">slice</span><span class="p">(</span><span class="n">start_col</span><span class="p">,</span> <span class="n">end_col</span><span class="p">))</span>
                 <span class="c1"># some light error checking</span>
@@ -2343,10 +2351,8 @@
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">facecolor</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">facecolor</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
-        <span class="k">if</span> <span class="n">edgecolor</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">edgecolor</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.edgecolor&#39;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">frameon</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">frameon</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.frameon&#39;</span><span class="p">]</span>
+        <span class="n">edgecolor</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">_val_or_rc</span><span class="p">(</span><span class="n">edgecolor</span><span class="p">,</span> <span class="s1">&#39;figure.edgecolor&#39;</span><span class="p">)</span>
+        <span class="n">frameon</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">_val_or_rc</span><span class="p">(</span><span class="n">frameon</span><span class="p">,</span> <span class="s1">&#39;figure.frameon&#39;</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_subplotspec</span> <span class="o">=</span> <span class="n">subplotspec</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_parent</span> <span class="o">=</span> <span class="n">parent</span>
@@ -2555,8 +2561,16 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        figsize : 2-tuple of floats, default: :rc:`figure.figsize`</span>
-<span class="sd">            Figure dimension ``(width, height)`` in inches.</span>
+<span class="sd">        figsize : (float, float) or (float, float, str), default: :rc:`figure.figsize`</span>
+<span class="sd">            The figure dimensions. This can be</span>
+
+<span class="sd">            - a tuple ``(width, height, unit)``, where *unit* is one of &quot;in&quot; (inch),</span>
+<span class="sd">              &quot;cm&quot; (centimenter), &quot;px&quot; (pixel).</span>
+<span class="sd">            - a tuple ``(width, height)``, which is interpreted in inches, i.e. as</span>
+<span class="sd">              ``(width, height, &quot;in&quot;)``.</span>
+
+<span class="sd">            One of *width* or *height* may be ``None``; the respective value is</span>
+<span class="sd">            taken from :rc:`figure.figsize`.</span>
 
 <span class="sd">        dpi : float, default: :rc:`figure.dpi`</span>
 <span class="sd">            Dots per inch.</span>
@@ -2686,16 +2700,13 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_button_pick_id</span> <span class="o">=</span> <span class="n">connect</span><span class="p">(</span><span class="s1">&#39;button_press_event&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pick</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_scroll_pick_id</span> <span class="o">=</span> <span class="n">connect</span><span class="p">(</span><span class="s1">&#39;scroll_event&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pick</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">figsize</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">figsize</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.figsize&#39;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">dpi</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">dpi</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.dpi&#39;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">facecolor</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">facecolor</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.facecolor&#39;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">edgecolor</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">edgecolor</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.edgecolor&#39;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">frameon</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">frameon</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.frameon&#39;</span><span class="p">]</span>
+        <span class="n">figsize</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">_val_or_rc</span><span class="p">(</span><span class="n">figsize</span><span class="p">,</span> <span class="s1">&#39;figure.figsize&#39;</span><span class="p">)</span>
+        <span class="n">dpi</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">_val_or_rc</span><span class="p">(</span><span class="n">dpi</span><span class="p">,</span> <span class="s1">&#39;figure.dpi&#39;</span><span class="p">)</span>
+        <span class="n">facecolor</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">_val_or_rc</span><span class="p">(</span><span class="n">facecolor</span><span class="p">,</span> <span class="s1">&#39;figure.facecolor&#39;</span><span class="p">)</span>
+        <span class="n">edgecolor</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">_val_or_rc</span><span class="p">(</span><span class="n">edgecolor</span><span class="p">,</span> <span class="s1">&#39;figure.edgecolor&#39;</span><span class="p">)</span>
+        <span class="n">frameon</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">_val_or_rc</span><span class="p">(</span><span class="n">frameon</span><span class="p">,</span> <span class="s1">&#39;figure.frameon&#39;</span><span class="p">)</span>
+
+        <span class="n">figsize</span> <span class="o">=</span> <span class="n">_parse_figsize</span><span class="p">(</span><span class="n">figsize</span><span class="p">,</span> <span class="n">dpi</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">figsize</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span> <span class="ow">or</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">figsize</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;figure size must be positive finite not &#39;</span>
@@ -2718,7 +2729,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_set_artist_props</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">patch</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">patch</span><span class="o">.</span><span class="n">set_antialiased</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
 
-        <span class="n">FigureCanvasBase</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>  <span class="c1"># Set self.canvas.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_base_canvas</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="n">subplotpars</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">subplotpars</span> <span class="o">=</span> <span class="n">SubplotParams</span><span class="p">()</span>
@@ -2851,7 +2862,7 @@
 
 <span class="sd">        .. warning::</span>
 
-<span class="sd">            This does not manage an GUI event loop. Consequently, the figure</span>
+<span class="sd">            This does not manage a GUI event loop. Consequently, the figure</span>
 <span class="sd">            may only be shown briefly or not shown at all if you or your</span>
 <span class="sd">            environment are not managing an event loop.</span>
 
@@ -2983,8 +2994,7 @@
 <span class="sd">            If a dict, pass it as kwargs to `.Figure.tight_layout`, overriding the</span>
 <span class="sd">            default paddings.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">tight</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">tight</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.autolayout&#39;</span><span class="p">]</span>
+        <span class="n">tight</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">_val_or_rc</span><span class="p">(</span><span class="n">tight</span><span class="p">,</span> <span class="s1">&#39;figure.autolayout&#39;</span><span class="p">)</span>
         <span class="n">_tight</span> <span class="o">=</span> <span class="s1">&#39;tight&#39;</span> <span class="k">if</span> <span class="nb">bool</span><span class="p">(</span><span class="n">tight</span><span class="p">)</span> <span class="k">else</span> <span class="s1">&#39;none&#39;</span>
         <span class="n">_tight_parameters</span> <span class="o">=</span> <span class="n">tight</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tight</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="k">else</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_layout_engine</span><span class="p">(</span><span class="n">_tight</span><span class="p">,</span> <span class="o">**</span><span class="n">_tight_parameters</span><span class="p">)</span>
@@ -3021,8 +3031,7 @@
 <span class="sd">        ----------</span>
 <span class="sd">        constrained : bool or dict or None</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">constrained</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">constrained</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.constrained_layout.use&#39;</span><span class="p">]</span>
+        <span class="n">constrained</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">_val_or_rc</span><span class="p">(</span><span class="n">constrained</span><span class="p">,</span> <span class="s1">&#39;figure.constrained_layout.use&#39;</span><span class="p">)</span>
         <span class="n">_constrained</span> <span class="o">=</span> <span class="s1">&#39;constrained&#39;</span> <span class="k">if</span> <span class="nb">bool</span><span class="p">(</span><span class="n">constrained</span><span class="p">)</span> <span class="k">else</span> <span class="s1">&#39;none&#39;</span>
         <span class="n">_parameters</span> <span class="o">=</span> <span class="n">constrained</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">constrained</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="k">else</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_layout_engine</span><span class="p">(</span><span class="n">_constrained</span><span class="p">,</span> <span class="o">**</span><span class="n">_parameters</span><span class="p">)</span>
@@ -3101,6 +3110,18 @@
 
         <span class="k">return</span> <span class="n">w_pad</span><span class="p">,</span> <span class="n">h_pad</span><span class="p">,</span> <span class="n">wspace</span><span class="p">,</span> <span class="n">hspace</span></div>
 
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_set_base_canvas</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize self.canvas with a FigureCanvasBase instance.</span>
+
+<span class="sd">        This is used upon initialization of the Figure, but also</span>
+<span class="sd">        to reset the canvas when decoupling from pyplot.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">FigureCanvasBase</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>  <span class="c1"># Set self.canvas as a side-effect</span>
+        <span class="c1"># undo any high-dpi scaling</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dpi</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_original_dpi</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dpi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_original_dpi</span>
 
 <div class="viewcode-block" id="Figure.set_canvas">
 <a class="viewcode-back" href="../../_autosummary/bmctool.utils.eval.Figure.html#bmctool.utils.eval.Figure.set_canvas">[docs]</a>
@@ -3250,6 +3271,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">h</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># Got called with a single pair as argument.</span>
             <span class="n">w</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="n">w</span>
+        <span class="k">if</span> <span class="n">w</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">h</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Figure.set_size_inches does not accept None; provide both &quot;</span>
+                <span class="s2">&quot;width and height explicitly&quot;</span><span class="p">)</span>
         <span class="n">size</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">])</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">size</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span> <span class="ow">or</span> <span class="p">(</span><span class="n">size</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;figure size must be positive finite not </span><span class="si">{</span><span class="n">size</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
@@ -3457,8 +3482,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span> <span class="o">=</span> <span class="n">state</span>
 
         <span class="c1"># re-initialise some of the unstored state information</span>
-        <span class="n">FigureCanvasBase</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>  <span class="c1"># Set self.canvas.</span>
-
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_base_canvas</span><span class="p">()</span>
+        <span class="c1"># force the bounding boxes to respect current dpi</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dpi_scale_trans</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dpi</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">restore_to_pylab</span><span class="p">:</span>
             <span class="c1"># lazy import to avoid circularity</span>
             <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
@@ -3603,8 +3629,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">kwargs</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;dpi&#39;</span><span class="p">,</span> <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;savefig.dpi&#39;</span><span class="p">])</span>
-        <span class="k">if</span> <span class="n">transparent</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">transparent</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;savefig.transparent&#39;</span><span class="p">]</span>
+        <span class="n">transparent</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">_val_or_rc</span><span class="p">(</span><span class="n">transparent</span><span class="p">,</span> <span class="s1">&#39;savefig.transparent&#39;</span><span class="p">)</span>
 
         <span class="k">with</span> <span class="n">ExitStack</span><span class="p">()</span> <span class="k">as</span> <span class="n">stack</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">transparent</span><span class="p">:</span>
@@ -3845,7 +3870,7 @@
 
 <span class="sd">        w, h = figaspect(2.)</span>
 <span class="sd">        fig = Figure(figsize=(w, h))</span>
-<span class="sd">        ax = fig.add_axes([0.1, 0.1, 0.8, 0.8])</span>
+<span class="sd">        ax = fig.add_axes((0.1, 0.1, 0.8, 0.8))</span>
 <span class="sd">        ax.imshow(A, **kwargs)</span>
 
 <span class="sd">    Make a figure with the proper aspect for an array::</span>
@@ -3853,7 +3878,7 @@
 <span class="sd">        A = rand(5, 3)</span>
 <span class="sd">        w, h = figaspect(A)</span>
 <span class="sd">        fig = Figure(figsize=(w, h))</span>
-<span class="sd">        ax = fig.add_axes([0.1, 0.1, 0.8, 0.8])</span>
+<span class="sd">        ax = fig.add_axes((0.1, 0.1, 0.8, 0.8))</span>
 <span class="sd">        ax.imshow(A, **kwargs)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -3887,6 +3912,64 @@
     <span class="c1"># the min/max dimensions (we don&#39;t want figures 10 feet tall!)</span>
     <span class="n">newsize</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">newsize</span><span class="p">,</span> <span class="n">figsize_min</span><span class="p">,</span> <span class="n">figsize_max</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">newsize</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_parse_figsize</span><span class="p">(</span><span class="n">figsize</span><span class="p">,</span> <span class="n">dpi</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert a figsize expression to (width, height) in inches.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    figsize : (float, float) or (float, float, str)</span>
+<span class="sd">        This can be</span>
+
+<span class="sd">        - a tuple ``(width, height, unit)``, where *unit* is one of &quot;in&quot; (inch),</span>
+<span class="sd">          &quot;cm&quot; (centimenter), &quot;px&quot; (pixel).</span>
+<span class="sd">        - a tuple ``(width, height)``, which is interpreted in inches, i.e. as</span>
+<span class="sd">          ``(width, height, &quot;in&quot;)``.</span>
+
+<span class="sd">    dpi : float</span>
+<span class="sd">        The dots-per-inch; used for converting &#39;px&#39; to &#39;in&#39;.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">num_parts</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">figsize</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">num_parts</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">figsize</span>
+    <span class="k">elif</span> <span class="n">num_parts</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">unit</span> <span class="o">=</span> <span class="n">figsize</span>
+        <span class="k">if</span> <span class="n">unit</span> <span class="o">==</span> <span class="s1">&#39;in&#39;</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">elif</span> <span class="n">unit</span> <span class="o">==</span> <span class="s1">&#39;cm&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">x</span> <span class="o">/=</span> <span class="mf">2.54</span>
+            <span class="k">if</span> <span class="n">y</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">y</span> <span class="o">/=</span> <span class="mf">2.54</span>
+        <span class="k">elif</span> <span class="n">unit</span> <span class="o">==</span> <span class="s1">&#39;px&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">x</span> <span class="o">/=</span> <span class="n">dpi</span>
+            <span class="k">if</span> <span class="n">y</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">y</span> <span class="o">/=</span> <span class="n">dpi</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Invalid unit </span><span class="si">{</span><span class="n">unit</span><span class="si">!r}</span><span class="s2"> in &#39;figsize&#39;; &quot;</span>
+                <span class="s2">&quot;supported units are &#39;in&#39;, &#39;cm&#39;, &#39;px&#39;&quot;</span>
+            <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;Invalid figsize format, expected (x, y) or (x, y, unit) but got &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">figsize</span><span class="si">!r}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">y</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;figsize=(None, None) is invalid; at least one of width or &quot;</span>
+            <span class="s2">&quot;height must be provided&quot;</span><span class="p">)</span>
+
+    <span class="n">default_width</span><span class="p">,</span> <span class="n">default_height</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;figure.figsize&quot;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">default_width</span>
+    <span class="k">if</span> <span class="n">y</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">default_height</span>
+    <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span>
 </pre></div>
 
            </div>

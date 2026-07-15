@@ -120,16 +120,25 @@ depending on the renderer option_image_nocomposite function.  If
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>figsize</strong> (2-tuple of floats, default: <a href="#id1"><span class="problematic" id="id2">:rc:`figure.figsize`</span></a>) – Figure dimension <code class="docutils literal notranslate"><span class="pre">(width,</span> <span class="pre">height)</span></code> in inches.</p></li>
-<li><p><strong>dpi</strong> (float, default: <a href="#id3"><span class="problematic" id="id4">:rc:`figure.dpi`</span></a>) – Dots per inch.</p></li>
-<li><p><strong>facecolor</strong> (default: <a href="#id5"><span class="problematic" id="id6">:rc:`figure.facecolor`</span></a>) – The figure patch facecolor.</p></li>
-<li><p><strong>edgecolor</strong> (default: <a href="#id7"><span class="problematic" id="id8">:rc:`figure.edgecolor`</span></a>) – The figure patch edge color.</p></li>
+<li><p><strong>figsize</strong> ((float, float) or (float, float, str), default: <a href="#id3"><span class="problematic" id="id4">:rc:`figure.figsize`</span></a>) – <p>The figure dimensions. This can be</p>
+<ul>
+<li><p>a tuple <code class="docutils literal notranslate"><span class="pre">(width,</span> <span class="pre">height,</span> <span class="pre">unit)</span></code>, where <em>unit</em> is one of “in” (inch),
+“cm” (centimenter), “px” (pixel).</p></li>
+<li><p>a tuple <code class="docutils literal notranslate"><span class="pre">(width,</span> <span class="pre">height)</span></code>, which is interpreted in inches, i.e. as
+<code class="docutils literal notranslate"><span class="pre">(width,</span> <span class="pre">height,</span> <span class="pre">&quot;in&quot;)</span></code>.</p></li>
+</ul>
+<p>One of <em>width</em> or <em>height</em> may be <code class="docutils literal notranslate"><span class="pre">None</span></code>; the respective value is
+taken from <a href="#id1"><span class="problematic" id="id2">:rc:`figure.figsize`</span></a>.</p>
+</p></li>
+<li><p><strong>dpi</strong> (float, default: <a href="#id5"><span class="problematic" id="id6">:rc:`figure.dpi`</span></a>) – Dots per inch.</p></li>
+<li><p><strong>facecolor</strong> (default: <a href="#id7"><span class="problematic" id="id8">:rc:`figure.facecolor`</span></a>) – The figure patch facecolor.</p></li>
+<li><p><strong>edgecolor</strong> (default: <a href="#id9"><span class="problematic" id="id10">:rc:`figure.edgecolor`</span></a>) – The figure patch edge color.</p></li>
 <li><p><strong>linewidth</strong> (<em>float</em>) – The linewidth of the frame (i.e. the edge linewidth of the figure
 patch).</p></li>
-<li><p><strong>frameon</strong> (bool, default: <a href="#id9"><span class="problematic" id="id10">:rc:`figure.frameon`</span></a>) – If <code class="docutils literal notranslate"><span class="pre">False</span></code>, suppress drawing the figure background patch.</p></li>
+<li><p><strong>frameon</strong> (bool, default: <a href="#id11"><span class="problematic" id="id12">:rc:`figure.frameon`</span></a>) – If <code class="docutils literal notranslate"><span class="pre">False</span></code>, suppress drawing the figure background patch.</p></li>
 <li><p><strong>subplotpars</strong> (<cite>~matplotlib.gridspec.SubplotParams</cite>) – Subplot parameters. If not given, the default subplot
-parameters <a href="#id11"><span class="problematic" id="id12">:rc:`figure.subplot.*`</span></a> are used.</p></li>
-<li><p><strong>tight_layout</strong> (bool or dict, default: <a href="#id13"><span class="problematic" id="id14">:rc:`figure.autolayout`</span></a>) – <p>Whether to use the tight layout mechanism. See <cite>.set_tight_layout</cite>.</p>
+parameters <a href="#id13"><span class="problematic" id="id14">:rc:`figure.subplot.*`</span></a> are used.</p></li>
+<li><p><strong>tight_layout</strong> (bool or dict, default: <a href="#id15"><span class="problematic" id="id16">:rc:`figure.autolayout`</span></a>) – <p>Whether to use the tight layout mechanism. See <cite>.set_tight_layout</cite>.</p>
 <div class="admonition-discouraged admonition">
 <p class="admonition-title">Discouraged</p>
 <p>The use of this parameter is discouraged. Please use
@@ -137,7 +146,7 @@ parameters <a href="#id11"><span class="problematic" id="id12">:rc:`figure.subpl
 <code class="docutils literal notranslate"><span class="pre">tight_layout=True</span></code> and use <cite>.set_tight_layout</cite> otherwise.</p>
 </div>
 </p></li>
-<li><p><strong>constrained_layout</strong> (bool, default: <a href="#id15"><span class="problematic" id="id16">:rc:`figure.constrained_layout.use`</span></a>) – <p>This is equal to <code class="docutils literal notranslate"><span class="pre">layout='constrained'</span></code>.</p>
+<li><p><strong>constrained_layout</strong> (bool, default: <a href="#id17"><span class="problematic" id="id18">:rc:`figure.constrained_layout.use`</span></a>) – <p>This is equal to <code class="docutils literal notranslate"><span class="pre">layout='constrained'</span></code>.</p>
 <div class="admonition-discouraged admonition">
 <p class="admonition-title">Discouraged</p>
 <p>The use of this parameter is discouraged. Please use
@@ -169,7 +178,7 @@ allows third parties to provide their own layout engine.</p></li>
 </ul>
 <p>If not given, fall back to using the parameters <em>tight_layout</em> and
 <em>constrained_layout</em>, including their config defaults
-<a href="#id17"><span class="problematic" id="id18">:rc:`figure.autolayout`</span></a> and <a href="#id19"><span class="problematic" id="id20">:rc:`figure.constrained_layout.use`</span></a>.</p>
+<a href="#id19"><span class="problematic" id="id20">:rc:`figure.autolayout`</span></a> and <a href="#id21"><span class="problematic" id="id22">:rc:`figure.constrained_layout.use`</span></a>.</p>
 </p></li>
 <li><p><strong>**kwargs</strong> (<cite>.Figure</cite> properties, optional) – Properties:
 agg_filter: a filter function, which takes a (m, n, 3) float array and a dpi value, and returns a (m, n, 3) array and two offsets from the bottom left corner of the image
@@ -182,8 +191,8 @@ clip_path: Patch or (Path, Transform) or None
 constrained_layout: unknown
 constrained_layout_pads: unknown
 dpi: float
-edgecolor: <a href="#id21"><span class="problematic" id="id22">:mpltype:`color`</span></a>
-facecolor: <a href="#id23"><span class="problematic" id="id24">:mpltype:`color`</span></a>
+edgecolor: <a href="#id23"><span class="problematic" id="id24">:mpltype:`color`</span></a>
+facecolor: <a href="#id25"><span class="problematic" id="id26">:mpltype:`color`</span></a>
 figheight: float
 figure: unknown
 figwidth: float
@@ -415,7 +424,7 @@ zorder: float</p></li>
 <td><p>Return the visibility.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#bmctool.utils.eval.Figure.get_window_extent" title="bmctool.utils.eval.Figure.get_window_extent"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_window_extent</span></code></a>([renderer])</p></td>
-<td><p>Get the artist's bounding box in display space.</p></td>
+<td><p>Get the artist's bounding box in display space, ignoring clipping.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#bmctool.utils.eval.Figure.get_zorder" title="bmctool.utils.eval.Figure.get_zorder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_zorder</span></code></a>()</p></td>
 <td><p>Return the artist's zorder.</p></td>
@@ -589,7 +598,7 @@ zorder: float</p></li>
 <td><p>Adjust the padding between and around subplots.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#bmctool.utils.eval.Figure.update" title="bmctool.utils.eval.Figure.update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code></a>(props)</p></td>
-<td><p>Update this artist's properties from the dict <em>props</em>.</p></td>
+<td><p>[<em>Discouraged</em>] Update this artist's properties from the dictionary <em>props</em>.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#bmctool.utils.eval.Figure.update_from" title="bmctool.utils.eval.Figure.update_from"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_from</span></code></a>(other)</p></td>
 <td><p>Copy properties from <em>other</em> to <em>self</em>.</p></td>
@@ -707,7 +716,7 @@ box_aspect: float or None
 clip_box: <cite>~matplotlib.transforms.BboxBase</cite> or None
 clip_on: bool
 clip_path: Patch or (Path, Transform) or None
-facecolor or fc: <a href="#id25"><span class="problematic" id="id26">:mpltype:`color`</span></a>
+facecolor or fc: <a href="#id27"><span class="problematic" id="id28">:mpltype:`color`</span></a>
 figure: <cite>~matplotlib.figure.Figure</cite> or <cite>~matplotlib.figure.SubFigure</cite>
 forward_navigation_events: bool or “auto”
 frame_on: bool
@@ -731,6 +740,7 @@ transform: <cite>~matplotlib.transforms.Transform</cite>
 url: str
 visible: bool
 xbound: (lower: float, upper: float)
+xinverted: unknown
 xlabel: str
 xlim: (left: float, right: float)
 xmargin: float greater than -0.5
@@ -738,6 +748,7 @@ xscale: unknown
 xticklabels: unknown
 xticks: unknown
 ybound: (lower: float, upper: float)
+yinverted: unknown
 ylabel: str
 ylim: (bottom: float, top: float)
 ymargin: float greater than -0.5
@@ -941,7 +952,7 @@ box_aspect: float or None
 clip_box: <cite>~matplotlib.transforms.BboxBase</cite> or None
 clip_on: bool
 clip_path: Patch or (Path, Transform) or None
-facecolor or fc: <a href="#id27"><span class="problematic" id="id28">:mpltype:`color`</span></a>
+facecolor or fc: <a href="#id29"><span class="problematic" id="id30">:mpltype:`color`</span></a>
 figure: <cite>~matplotlib.figure.Figure</cite> or <cite>~matplotlib.figure.SubFigure</cite>
 forward_navigation_events: bool or “auto”
 frame_on: bool
@@ -965,6 +976,7 @@ transform: <cite>~matplotlib.transforms.Transform</cite>
 url: str
 visible: bool
 xbound: (lower: float, upper: float)
+xinverted: unknown
 xlabel: str
 xlim: (left: float, right: float)
 xmargin: float greater than -0.5
@@ -972,6 +984,7 @@ xscale: unknown
 xticklabels: unknown
 xticks: unknown
 ybound: (lower: float, upper: float)
+yinverted: unknown
 ylabel: str
 ylim: (bottom: float, top: float)
 ymargin: float greater than -0.5
@@ -1095,8 +1108,7 @@ so that their <cite>.SubplotSpec</cite> positions correspond to figure positions
 <p class="rubric">Examples</p>
 <p>Example with rotated xtick labels:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">tick</span> <span class="ow">in</span> <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_xticklabels</span><span class="p">():</span>
-    <span class="n">tick</span><span class="o">.</span><span class="n">set_rotation</span><span class="p">(</span><span class="mi">55</span><span class="p">)</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">55</span><span class="p">)</span>
 <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;XLabel 0&#39;</span><span class="p">)</span>
 <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;XLabel 1&#39;</span><span class="p">)</span>
 <span class="n">fig</span><span class="o">.</span><span class="n">align_xlabels</span><span class="p">()</span>
@@ -1207,14 +1219,15 @@ a gui widget is tracking the Axes in the figure.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>mappable</strong> – <p>The <cite>matplotlib.cm.ScalarMappable</cite> (i.e., <cite>.AxesImage</cite>,
+<li><p><strong>mappable</strong> – <p>The <cite>matplotlib.colorizer.ColorizingArtist</cite> (i.e., <cite>.AxesImage</cite>,
 <cite>.ContourSet</cite>, etc.) described by this colorbar.  This argument is
 mandatory for the <cite>.Figure.colorbar</cite> method but optional for the
 <cite>.pyplot.colorbar</cite> function, which sets the default to the current
 image.</p>
-<p>Note that one can create a <cite>.ScalarMappable</cite> “on-the-fly” to
-generate colorbars not attached to a previously drawn artist, e.g.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">cm</span><span class="o">.</span><span class="n">ScalarMappable</span><span class="p">(</span><span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">),</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<p>Note that one can create a <cite>.colorizer.ColorizingArtist</cite> “on-the-fly”
+to generate colorbars not attached to a previously drawn artist, e.g.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cr</span> <span class="o">=</span> <span class="n">colorizer</span><span class="o">.</span><span class="n">Colorizer</span><span class="p">(</span><span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">colorizer</span><span class="o">.</span><span class="n">ColorizingArtist</span><span class="p">(</span><span class="n">cr</span><span class="p">),</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 </pre></div>
 </div>
 </p></li>
@@ -1407,7 +1420,7 @@ i.e. including transparency.</p></li>
 <li><p><strong>xo</strong> (<em>int</em>) – The <em>x</em>/<em>y</em> image offset in pixels.</p></li>
 <li><p><strong>yo</strong> (<em>int</em>) – The <em>x</em>/<em>y</em> image offset in pixels.</p></li>
 <li><p><strong>alpha</strong> (<em>None</em><em> or </em><em>float</em>) – The alpha blending value.</p></li>
-<li><p><strong>cmap</strong> (str or <cite>~matplotlib.colors.Colormap</cite>, default: <a href="#id29"><span class="problematic" id="id30">:rc:`image.cmap`</span></a>) – <p>The Colormap instance or registered colormap name used to map scalar data
+<li><p><strong>cmap</strong> (str or <cite>~matplotlib.colors.Colormap</cite>, default: <a href="#id31"><span class="problematic" id="id32">:rc:`image.cmap`</span></a>) – <p>The Colormap instance or registered colormap name used to map scalar data
 to colors.</p>
 <p>This parameter is ignored if <em>X</em> is RGB(A).</p>
 </p></li>
@@ -1439,7 +1452,7 @@ the complete value range of the supplied data. It is an error to use
 name together with <em>vmin</em>/<em>vmax</em> is acceptable).</p>
 <p>This parameter is ignored if <em>X</em> is RGB(A).</p>
 </p></li>
-<li><p><strong>origin</strong> ({‘upper’, ‘lower’}, default: <a href="#id31"><span class="problematic" id="id32">:rc:`image.origin`</span></a>) – Indicates where the [0, 0] index of the array is in the upper left
+<li><p><strong>origin</strong> ({‘upper’, ‘lower’}, default: <a href="#id33"><span class="problematic" id="id34">:rc:`image.origin`</span></a>) – Indicates where the [0, 0] index of the array is in the upper left
 or lower left corner of the Axes.</p></li>
 <li><p><strong>resize</strong> (<em>bool</em>) – If <em>True</em>, resize the figure to match the given image size.</p></li>
 <li><p><strong>colorizer</strong> (<cite>~matplotlib.colorizer.Colorizer</cite> or None, default: None) – <p>The Colorizer object used to map color to data. If None, a Colorizer
@@ -1892,18 +1905,35 @@ transformation.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="bmctool.utils.eval.Figure.get_window_extent">
 <span class="sig-name descname"><span class="pre">get_window_extent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">renderer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bmctool.utils.eval.Figure.get_window_extent" title="Link to this definition"></a></dt>
-<dd><p>Get the artist’s bounding box in display space.</p>
-<p>The bounding box’ width and height are nonnegative.</p>
-<p>Subclasses should override for inclusion in the bounding box
-“tight” calculation. Default is to return an empty bounding
-box at 0, 0.</p>
-<p>Be careful when using this function, the results will not update
-if the artist window extent of the artist changes.  The extent
-can change due to any changes in the transform stack, such as
-changing the Axes limits, the figure size, or the canvas used
-(as is done when saving a figure).  This can lead to unexpected
-behavior where interactive figures will look fine on the screen,
-but will save incorrectly.</p>
+<dd><p>Get the artist’s bounding box in display space, ignoring clipping.</p>
+<p>The bounding box’s width and height are non-negative.</p>
+<p>Subclasses should override for inclusion in the bounding box “tight”
+calculation.  Default is to return an empty bounding box at 0, 0.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The extent can change due to any changes in the transform stack, such
+as changing the Axes limits, the figure size, the canvas used (as is
+done when saving a figure), or the DPI.</p>
+<p>Relying on a once-retrieved window extent can lead to unexpected
+behavior in various cases such as interactive figures being resized or
+moved to a screen with different dpi, or figures that look fine on
+screen render incorrectly when saved to file.</p>
+<p>To get accurate results you may need to manually call
+<cite>~.Figure.savefig</cite> or <cite>~.Figure.draw_without_rendering</cite> to have
+Matplotlib compute the rendered size.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>renderer</strong> (<cite>~matplotlib.backend_bases.RendererBase</cite>, optional) – Renderer used to draw the figure (i.e. <code class="docutils literal notranslate"><span class="pre">fig.canvas.get_renderer()</span></code>).</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">Artist.get_tightbbox</span></code></dt><dd><p>Get the artist bounding box, taking clipping into account.</p>
+</dd>
+</dl>
+</div>
 </dd></dl>
 
 <dl class="py method">
@@ -2046,13 +2076,19 @@ Use this together with <em>handles</em>, if you need full control on what
 is shown in the legend and the automatic mechanism described above
 is not sufficient.</p></li>
 <li><p><strong>loc</strong> (<em>str</em><em> or </em><em>pair</em><em> of </em><em>floats</em><em>, </em><em>default: 'upper right'</em>) – <p>The location of the legend.</p>
-<p>The strings <code class="docutils literal notranslate"><span class="pre">'upper</span> <span class="pre">left'</span></code>, <code class="docutils literal notranslate"><span class="pre">'upper</span> <span class="pre">right'</span></code>, <code class="docutils literal notranslate"><span class="pre">'lower</span> <span class="pre">left'</span></code>,
-<code class="docutils literal notranslate"><span class="pre">'lower</span> <span class="pre">right'</span></code> place the legend at the corresponding corner of the
-figure.</p>
-<p>The strings <code class="docutils literal notranslate"><span class="pre">'upper</span> <span class="pre">center'</span></code>, <code class="docutils literal notranslate"><span class="pre">'lower</span> <span class="pre">center'</span></code>, <code class="docutils literal notranslate"><span class="pre">'center</span> <span class="pre">left'</span></code>,
-<code class="docutils literal notranslate"><span class="pre">'center</span> <span class="pre">right'</span></code> place the legend at the center of the corresponding edge
-of the figure.</p>
-<p>The string <code class="docutils literal notranslate"><span class="pre">'center'</span></code> places the legend at the center of the figure.</p>
+<p>The string locations place the legend at the corresponding position
+within the bounding box, which by default is the full figure area.
+The bounding box can be changed via <em>bbox_to_anchor</em>.</p>
+<p>The positions are visualized below:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">+--------------+--------------+---------------+</span>
+<span class="o">|</span> <span class="s1">&#39;upper left&#39;</span> <span class="o">|</span><span class="s1">&#39;upper center&#39;</span><span class="o">|</span> <span class="s1">&#39;upper right&#39;</span> <span class="o">|</span>
+<span class="o">+--------------+--------------+---------------+</span>
+<span class="o">|</span><span class="s1">&#39;center left&#39;</span> <span class="o">|</span>   <span class="s1">&#39;center&#39;</span>   <span class="o">|</span><span class="s1">&#39;center right&#39;</span> <span class="o">|</span>
+<span class="o">+--------------+--------------+---------------+</span>
+<span class="o">|</span> <span class="s1">&#39;lower left&#39;</span> <span class="o">|</span><span class="s1">&#39;lower center&#39;</span><span class="o">|</span> <span class="s1">&#39;lower right&#39;</span> <span class="o">|</span>
+<span class="o">+--------------+--------------+---------------+</span>
+</pre></div>
+</div>
 <p>The location can also be a 2-tuple giving the coordinates of the lower-left
 corner of the legend in figure coordinates (in which case <em>bbox_to_anchor</em>
 will be ignored).</p>
@@ -2112,9 +2148,10 @@ listed above, we have ‘outside right upper’, ‘outside right lower’,
 <span class="xref std std-ref">legend_guide</span> for more details.</p>
 </p></li>
 <li><p><strong>bbox_to_anchor</strong> (<cite>.BboxBase</cite>, 2-tuple, or 4-tuple of floats) – <p>Box that is used to position the legend in conjunction with <em>loc</em>.
-Defaults to <code class="docutils literal notranslate"><span class="pre">axes.bbox</span></code> (if called as a method to <cite>.Axes.legend</cite>) or
-<code class="docutils literal notranslate"><span class="pre">figure.bbox</span></code> (if <code class="docutils literal notranslate"><span class="pre">figure.legend</span></code>).  This argument allows arbitrary
-placement of the legend.</p>
+This is an advanced option for free placement of the legend. For
+most use cases, <em>loc</em> alone is sufficient.</p>
+<p>Defaults to <code class="docutils literal notranslate"><span class="pre">axes.bbox</span></code> (if called as a method to <cite>.Axes.legend</cite>) or
+<code class="docutils literal notranslate"><span class="pre">figure.bbox</span></code> (if <code class="docutils literal notranslate"><span class="pre">figure.legend</span></code>).</p>
 <p>Bbox coordinates are interpreted in the coordinate system given by
 <em>bbox_transform</em>, with the default transform
 Axes or Figure coordinates, depending on which <code class="docutils literal notranslate"><span class="pre">legend</span></code> is called.</p>
@@ -2131,6 +2168,8 @@ center of the Axes (or figure) the following keywords can be used:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper right&#39;</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
 </pre></div>
 </div>
+<p>For more details on legend positioning, see the
+<span class="xref std std-ref">legend_guide</span>.</p>
 </p></li>
 <li><p><strong>ncols</strong> (<em>int</em><em>, </em><em>default: 1</em>) – <p>The number of columns that the legend has.</p>
 <p>For backward compatibility, the spelling <em>ncol</em> is also supported
@@ -2141,22 +2180,22 @@ but it is discouraged. If both are given, <em>ncols</em> takes precedence.</p>
 <li><p><strong>fontsize</strong> (<em>int</em><em> or </em><em>{'xx-small'</em><em>, </em><em>'x-small'</em><em>, </em><em>'small'</em><em>, </em><em>'medium'</em><em>, </em><em>'large'</em><em>, </em><em>'x-large'</em><em>, </em><em>'xx-large'}</em>) – The font size of the legend. If the value is numeric the size will be the
 absolute font size in points. String values are relative to the current
 default font size. This argument is only used if <em>prop</em> is not specified.</p></li>
-<li><p><strong>labelcolor</strong> (str or list, default: <a href="#id37"><span class="problematic" id="id38">:rc:`legend.labelcolor`</span></a>) – <p>The color of the text in the legend. Either a valid color string
+<li><p><strong>labelcolor</strong> (str or list, default: <a href="#id39"><span class="problematic" id="id40">:rc:`legend.labelcolor`</span></a>) – <p>The color of the text in the legend. Either a valid color string
 (for example, ‘red’), or a list of color strings. The labelcolor can
 also be made to match the color of the line or marker using ‘linecolor’,
 ‘markerfacecolor’ (or ‘mfc’), or ‘markeredgecolor’ (or ‘mec’).</p>
-<p>Labelcolor can be set globally using <a href="#id33"><span class="problematic" id="id34">:rc:`legend.labelcolor`</span></a>. If None,
-use <a href="#id35"><span class="problematic" id="id36">:rc:`text.color`</span></a>.</p>
+<p>Labelcolor can be set globally using <a href="#id35"><span class="problematic" id="id36">:rc:`legend.labelcolor`</span></a>. If None,
+use <a href="#id37"><span class="problematic" id="id38">:rc:`text.color`</span></a>.</p>
 </p></li>
-<li><p><strong>numpoints</strong> (int, default: <a href="#id39"><span class="problematic" id="id40">:rc:`legend.numpoints`</span></a>) – The number of marker points in the legend when creating a legend
+<li><p><strong>numpoints</strong> (int, default: <a href="#id41"><span class="problematic" id="id42">:rc:`legend.numpoints`</span></a>) – The number of marker points in the legend when creating a legend
 entry for a <cite>.Line2D</cite> (line).</p></li>
-<li><p><strong>scatterpoints</strong> (int, default: <a href="#id41"><span class="problematic" id="id42">:rc:`legend.scatterpoints`</span></a>) – The number of marker points in the legend when creating
+<li><p><strong>scatterpoints</strong> (int, default: <a href="#id43"><span class="problematic" id="id44">:rc:`legend.scatterpoints`</span></a>) – The number of marker points in the legend when creating
 a legend entry for a <cite>.PathCollection</cite> (scatter plot).</p></li>
 <li><p><strong>scatteryoffsets</strong> (iterable of floats, default: <code class="docutils literal notranslate"><span class="pre">[0.375,</span> <span class="pre">0.5,</span> <span class="pre">0.3125]</span></code>) – The vertical offset (relative to the font size) for the markers
 created for a scatter plot legend entry. 0.0 is at the base the
 legend text, and 1.0 is at the top. To draw all markers at the
 same height, set to <code class="docutils literal notranslate"><span class="pre">[0.5]</span></code>.</p></li>
-<li><p><strong>markerscale</strong> (float, default: <a href="#id43"><span class="problematic" id="id44">:rc:`legend.markerscale`</span></a>) – The relative size of legend markers compared to the originally drawn ones.</p></li>
+<li><p><strong>markerscale</strong> (float, default: <a href="#id45"><span class="problematic" id="id46">:rc:`legend.markerscale`</span></a>) – The relative size of legend markers compared to the originally drawn ones.</p></li>
 <li><p><strong>markerfirst</strong> (<em>bool</em><em>, </em><em>default: True</em>) – If <em>True</em>, legend marker is placed to the left of the legend label.
 If <em>False</em>, legend marker is placed to the right of the legend label.</p></li>
 <li><p><strong>reverse</strong> (<em>bool</em><em>, </em><em>default: False</em>) – <p>If <em>True</em>, the legend labels are displayed in reverse order from the input.
@@ -2165,42 +2204,48 @@ If <em>False</em>, the legend labels are displayed in the same order as the inpu
 <p><span class="versionmodified added">Added in version 3.7.</span></p>
 </div>
 </p></li>
-<li><p><strong>frameon</strong> (bool, default: <a href="#id45"><span class="problematic" id="id46">:rc:`legend.frameon`</span></a>) – Whether the legend should be drawn on a patch (frame).</p></li>
-<li><p><strong>fancybox</strong> (bool, default: <a href="#id47"><span class="problematic" id="id48">:rc:`legend.fancybox`</span></a>) – Whether round edges should be enabled around the <cite>.FancyBboxPatch</cite> which
+<li><p><strong>frameon</strong> (bool, default: <a href="#id47"><span class="problematic" id="id48">:rc:`legend.frameon`</span></a>) – Whether the legend should be drawn on a patch (frame).</p></li>
+<li><p><strong>fancybox</strong> (bool, default: <a href="#id49"><span class="problematic" id="id50">:rc:`legend.fancybox`</span></a>) – Whether round edges should be enabled around the <cite>.FancyBboxPatch</cite> which
 makes up the legend’s background.</p></li>
-<li><p><strong>shadow</strong> (None, bool or dict, default: <a href="#id51"><span class="problematic" id="id52">:rc:`legend.shadow`</span></a>) – Whether to draw a shadow behind the legend.
+<li><p><strong>shadow</strong> (None, bool or dict, default: <a href="#id53"><span class="problematic" id="id54">:rc:`legend.shadow`</span></a>) – Whether to draw a shadow behind the legend.
 The shadow can be configured using <cite>.Patch</cite> keywords.
-Customization via <a href="#id49"><span class="problematic" id="id50">:rc:`legend.shadow`</span></a> is currently not supported.</p></li>
-<li><p><strong>framealpha</strong> (float, default: <a href="#id53"><span class="problematic" id="id54">:rc:`legend.framealpha`</span></a>) – The alpha transparency of the legend’s background.
+Customization via <a href="#id51"><span class="problematic" id="id52">:rc:`legend.shadow`</span></a> is currently not supported.</p></li>
+<li><p><strong>framealpha</strong> (float, default: <a href="#id55"><span class="problematic" id="id56">:rc:`legend.framealpha`</span></a>) – The alpha transparency of the legend’s background.
 If <em>shadow</em> is activated and <em>framealpha</em> is <code class="docutils literal notranslate"><span class="pre">None</span></code>, the default value is
 ignored.</p></li>
-<li><p><strong>facecolor</strong> (“inherit” or color, default: <a href="#id57"><span class="problematic" id="id58">:rc:`legend.facecolor`</span></a>) – The legend’s background color.
-If <code class="docutils literal notranslate"><span class="pre">&quot;inherit&quot;</span></code>, use <a href="#id55"><span class="problematic" id="id56">:rc:`axes.facecolor`</span></a>.</p></li>
-<li><p><strong>edgecolor</strong> (“inherit” or color, default: <a href="#id61"><span class="problematic" id="id62">:rc:`legend.edgecolor`</span></a>) – The legend’s background patch edge color.
-If <code class="docutils literal notranslate"><span class="pre">&quot;inherit&quot;</span></code>, use <a href="#id59"><span class="problematic" id="id60">:rc:`axes.edgecolor`</span></a>.</p></li>
+<li><p><strong>facecolor</strong> (“inherit” or color, default: <a href="#id59"><span class="problematic" id="id60">:rc:`legend.facecolor`</span></a>) – The legend’s background color.
+If <code class="docutils literal notranslate"><span class="pre">&quot;inherit&quot;</span></code>, use <a href="#id57"><span class="problematic" id="id58">:rc:`axes.facecolor`</span></a>.</p></li>
+<li><p><strong>edgecolor</strong> (“inherit” or color, default: <a href="#id63"><span class="problematic" id="id64">:rc:`legend.edgecolor`</span></a>) – The legend’s background patch edge color.
+If <code class="docutils literal notranslate"><span class="pre">&quot;inherit&quot;</span></code>, use <a href="#id61"><span class="problematic" id="id62">:rc:`axes.edgecolor`</span></a>.</p></li>
+<li><p><strong>linewidth</strong> (float or None, default: <a href="#id67"><span class="problematic" id="id68">:rc:`legend.linewidth`</span></a>) – <p>The legend’s background patch edge linewidth.
+If <code class="docutils literal notranslate"><span class="pre">None</span></code>, use <a href="#id65"><span class="problematic" id="id66">:rc:`patch.linewidth`</span></a>.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.11.</span></p>
+</div>
+</p></li>
 <li><p><strong>mode</strong> (<em>{&quot;expand&quot;</em><em>, </em><em>None}</em>) – If <em>mode</em> is set to <code class="docutils literal notranslate"><span class="pre">&quot;expand&quot;</span></code> the legend will be horizontally
 expanded to fill the Axes area (or <em>bbox_to_anchor</em> if defines
 the legend’s size).</p></li>
 <li><p><strong>bbox_transform</strong> (None or <cite>~matplotlib.transforms.Transform</cite>) – The transform for the bounding box (<em>bbox_to_anchor</em>). For a value
 of <code class="docutils literal notranslate"><span class="pre">None</span></code> (default) the Axes’
-<code class="xref py py-data docutils literal notranslate"><span class="pre">transAxes</span></code> transform will be used.</p></li>
+<code class="xref py py-data docutils literal notranslate"><span class="pre">matplotlib.axes.Axes.transAxes</span></code> transform will be used.</p></li>
 <li><p><strong>title</strong> (<em>str</em><em> or </em><em>None</em>) – The legend’s title. Default is no title (<code class="docutils literal notranslate"><span class="pre">None</span></code>).</p></li>
 <li><p><strong>title_fontproperties</strong> (None or <cite>~matplotlib.font_manager.FontProperties</cite> or dict) – The font properties of the legend’s title. If None (default), the
 <em>title_fontsize</em> argument will be used if present; if <em>title_fontsize</em> is
-also None, the current <a href="#id63"><span class="problematic" id="id64">:rc:`legend.title_fontsize`</span></a> will be used.</p></li>
-<li><p><strong>title_fontsize</strong> (int or {‘xx-small’, ‘x-small’, ‘small’, ‘medium’, ‘large’, ‘x-large’, ‘xx-large’}, default: <a href="#id65"><span class="problematic" id="id66">:rc:`legend.title_fontsize`</span></a>) – The font size of the legend’s title.
+also None, the current <a href="#id69"><span class="problematic" id="id70">:rc:`legend.title_fontsize`</span></a> will be used.</p></li>
+<li><p><strong>title_fontsize</strong> (int or {‘xx-small’, ‘x-small’, ‘small’, ‘medium’, ‘large’, ‘x-large’, ‘xx-large’}, default: <a href="#id71"><span class="problematic" id="id72">:rc:`legend.title_fontsize`</span></a>) – The font size of the legend’s title.
 Note: This cannot be combined with <em>title_fontproperties</em>. If you want
 to set the fontsize alongside other font properties, use the <em>size</em>
 parameter in <em>title_fontproperties</em>.</p></li>
 <li><p><strong>alignment</strong> (<em>{'center'</em><em>, </em><em>'left'</em><em>, </em><em>'right'}</em><em>, </em><em>default: 'center'</em>) – The alignment of the legend title and the box of entries. The entries
 are aligned as a single block, so that markers always lined up.</p></li>
-<li><p><strong>borderpad</strong> (float, default: <a href="#id67"><span class="problematic" id="id68">:rc:`legend.borderpad`</span></a>) – The fractional whitespace inside the legend border, in font-size units.</p></li>
-<li><p><strong>labelspacing</strong> (float, default: <a href="#id69"><span class="problematic" id="id70">:rc:`legend.labelspacing`</span></a>) – The vertical space between the legend entries, in font-size units.</p></li>
-<li><p><strong>handlelength</strong> (float, default: <a href="#id71"><span class="problematic" id="id72">:rc:`legend.handlelength`</span></a>) – The length of the legend handles, in font-size units.</p></li>
-<li><p><strong>handleheight</strong> (float, default: <a href="#id73"><span class="problematic" id="id74">:rc:`legend.handleheight`</span></a>) – The height of the legend handles, in font-size units.</p></li>
-<li><p><strong>handletextpad</strong> (float, default: <a href="#id75"><span class="problematic" id="id76">:rc:`legend.handletextpad`</span></a>) – The pad between the legend handle and text, in font-size units.</p></li>
-<li><p><strong>borderaxespad</strong> (float, default: <a href="#id77"><span class="problematic" id="id78">:rc:`legend.borderaxespad`</span></a>) – The pad between the Axes and legend border, in font-size units.</p></li>
-<li><p><strong>columnspacing</strong> (float, default: <a href="#id79"><span class="problematic" id="id80">:rc:`legend.columnspacing`</span></a>) – The spacing between columns, in font-size units.</p></li>
+<li><p><strong>borderpad</strong> (float, default: <a href="#id73"><span class="problematic" id="id74">:rc:`legend.borderpad`</span></a>) – The fractional whitespace inside the legend border, in font-size units.</p></li>
+<li><p><strong>labelspacing</strong> (float, default: <a href="#id75"><span class="problematic" id="id76">:rc:`legend.labelspacing`</span></a>) – The vertical space between the legend entries, in font-size units.</p></li>
+<li><p><strong>handlelength</strong> (float, default: <a href="#id77"><span class="problematic" id="id78">:rc:`legend.handlelength`</span></a>) – The length of the legend handles, in font-size units.</p></li>
+<li><p><strong>handleheight</strong> (float, default: <a href="#id79"><span class="problematic" id="id80">:rc:`legend.handleheight`</span></a>) – The height of the legend handles, in font-size units.</p></li>
+<li><p><strong>handletextpad</strong> (float, default: <a href="#id81"><span class="problematic" id="id82">:rc:`legend.handletextpad`</span></a>) – The pad between the legend handle and text, in font-size units.</p></li>
+<li><p><strong>borderaxespad</strong> (float, default: <a href="#id83"><span class="problematic" id="id84">:rc:`legend.borderaxespad`</span></a>) – The pad between the Axes and legend border, in font-size units.</p></li>
+<li><p><strong>columnspacing</strong> (float, default: <a href="#id85"><span class="problematic" id="id86">:rc:`legend.columnspacing`</span></a>) – The spacing between columns, in font-size units.</p></li>
 <li><p><strong>handler_map</strong> (<em>dict</em><em> or </em><em>None</em>) – The custom dictionary mapping instances or types to a legend
 handler. This <em>handler_map</em> updates the default handler map
 found at <cite>matplotlib.legend.Legend.get_legend_handler_map</cite>.</p></li>
@@ -2279,8 +2324,6 @@ the artist and the artist has picker set.</p>
 <p>The effect will not be visible until the figure is redrawn, e.g.,
 with <cite>.FigureCanvasBase.draw_idle</cite>.  Call <cite>~.axes.Axes.relim</cite> to
 update the Axes limits if desired.</p>
-<p>Note: <cite>~.axes.Axes.relim</cite> will not see collections even if the
-collection was added to the Axes with <em>autolim</em> = True.</p>
 <p>Note: there is no support for removing the artist’s legend entry.</p>
 </dd></dl>
 
@@ -2320,10 +2363,10 @@ is no attempt to make the extension, if any, of <em>fname</em> match
 <p>If <em>format</em> is not set, then the format is inferred from the
 extension of <em>fname</em>, if there is one.  If <em>format</em> is not
 set and <em>fname</em> has no extension, then the file is saved with
-<a href="#id81"><span class="problematic" id="id82">:rc:`savefig.format`</span></a> and the appropriate extension is appended to
+<a href="#id87"><span class="problematic" id="id88">:rc:`savefig.format`</span></a> and the appropriate extension is appended to
 <em>fname</em>.</p>
 </p></li>
-<li><p><strong>transparent</strong> (bool, default: <a href="#id83"><span class="problematic" id="id84">:rc:`savefig.transparent`</span></a>) – <p>If <em>True</em>, the Axes patches will all be transparent; the
+<li><p><strong>transparent</strong> (bool, default: <a href="#id89"><span class="problematic" id="id90">:rc:`savefig.transparent`</span></a>) – <p>If <em>True</em>, the Axes patches will all be transparent; the
 Figure patch will also be transparent unless <em>facecolor</em>
 and/or <em>edgecolor</em> are specified via kwargs.</p>
 <p>If <em>False</em> has no effect and the color of the Axes and
@@ -2335,7 +2378,7 @@ original values upon exit of this function.</p>
 <p>This is useful, for example, for displaying
 a plot on top of a colored background on a web page.</p>
 </p></li>
-<li><p><strong>dpi</strong> (float or ‘figure’, default: <a href="#id85"><span class="problematic" id="id86">:rc:`savefig.dpi`</span></a>) – The resolution in dots per inch.  If ‘figure’, use the figure’s
+<li><p><strong>dpi</strong> (float or ‘figure’, default: <a href="#id91"><span class="problematic" id="id92">:rc:`savefig.dpi`</span></a>) – The resolution in dots per inch.  If ‘figure’, use the figure’s
 dpi value.</p></li>
 <li><p><strong>format</strong> (<em>str</em>) – The file format, e.g. ‘png’, ‘pdf’, ‘svg’, … The behavior when
 this is unset is documented under <em>fname</em>.</p></li>
@@ -2355,15 +2398,15 @@ embedding metadata.
 Does not currently support ‘jpg’, ‘tiff’, or ‘webp’, but may include
 embedding EXIF metadata in the future.</p>
 </p></li>
-<li><p><strong>bbox_inches</strong> (str or <cite>.Bbox</cite>, default: <a href="#id87"><span class="problematic" id="id88">:rc:`savefig.bbox`</span></a>) – Bounding box in inches: only the given portion of the figure is
+<li><p><strong>bbox_inches</strong> (str or <cite>.Bbox</cite>, default: <a href="#id93"><span class="problematic" id="id94">:rc:`savefig.bbox`</span></a>) – Bounding box in inches: only the given portion of the figure is
 saved.  If ‘tight’, try to figure out the tight bbox of the figure.</p></li>
-<li><p><strong>pad_inches</strong> (float or ‘layout’, default: <a href="#id89"><span class="problematic" id="id90">:rc:`savefig.pad_inches`</span></a>) – Amount of padding in inches around the figure when bbox_inches is
+<li><p><strong>pad_inches</strong> (float or ‘layout’, default: <a href="#id95"><span class="problematic" id="id96">:rc:`savefig.pad_inches`</span></a>) – Amount of padding in inches around the figure when bbox_inches is
 ‘tight’. If ‘layout’ use the padding from the constrained or
 compressed layout engine; ignored if one of those engines is not in
 use.</p></li>
-<li><p><strong>facecolor</strong> (<a href="#id91"><span class="problematic" id="id92">:mpltype:`color`</span></a> or ‘auto’, default: <a href="#id93"><span class="problematic" id="id94">:rc:`savefig.facecolor`</span></a>) – The facecolor of the figure.  If ‘auto’, use the current figure
+<li><p><strong>facecolor</strong> (<a href="#id97"><span class="problematic" id="id98">:mpltype:`color`</span></a> or ‘auto’, default: <a href="#id99"><span class="problematic" id="id100">:rc:`savefig.facecolor`</span></a>) – The facecolor of the figure.  If ‘auto’, use the current figure
 facecolor.</p></li>
-<li><p><strong>edgecolor</strong> (<a href="#id95"><span class="problematic" id="id96">:mpltype:`color`</span></a> or ‘auto’, default: <a href="#id97"><span class="problematic" id="id98">:rc:`savefig.edgecolor`</span></a>) – The edgecolor of the figure.  If ‘auto’, use the current figure
+<li><p><strong>edgecolor</strong> (<a href="#id101"><span class="problematic" id="id102">:mpltype:`color`</span></a> or ‘auto’, default: <a href="#id103"><span class="problematic" id="id104">:rc:`savefig.edgecolor`</span></a>) – The edgecolor of the figure.  If ‘auto’, use the current figure
 edgecolor.</p></li>
 <li><p><strong>backend</strong> (<em>str</em><em>, </em><em>optional</em>) – Use a non-default backend to render the file, e.g. to render a
 png file with the “cairo” backend rather than the default “agg”,
@@ -2394,6 +2437,21 @@ tight bbox is calculated.</p></li>
 <dt class="sig sig-object py" id="bmctool.utils.eval.Figure.set">
 <span class="sig-name descname"><span class="pre">set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agg_filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;UNSET&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;UNSET&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">animated</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;UNSET&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">canvas</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;UNSET&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clip_box</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;UNSET&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clip_on</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;UNSET&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clip_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;UNSET&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">constrained_layout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;UNSET&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">constrained_layout_pads</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;UNSET&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;UNSET&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edgecolor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;UNSET&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">facecolor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;UNSET&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figheight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;UNSET&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figwidth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;UNSET&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frameon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;UNSET&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;UNSET&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_layout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;UNSET&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;UNSET&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layout_engine</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;UNSET&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">linewidth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;UNSET&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mouseover</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;UNSET&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_effects</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;UNSET&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">picker</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;UNSET&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rasterized</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;UNSET&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size_inches</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;UNSET&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sketch_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;UNSET&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">snap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;UNSET&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tight_layout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;UNSET&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;UNSET&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;UNSET&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">visible</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;UNSET&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zorder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;UNSET&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bmctool.utils.eval.Figure.set" title="Link to this definition"></a></dt>
 <dd><p>Set multiple properties at once.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">a</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">A</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="n">B</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">C</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>is equivalent to</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">a</span><span class="o">.</span><span class="n">set_a</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+<span class="n">a</span><span class="o">.</span><span class="n">set_b</span><span class="p">(</span><span class="n">B</span><span class="p">)</span>
+<span class="n">a</span><span class="o">.</span><span class="n">set_c</span><span class="p">(</span><span class="n">C</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In addition to the full property names, aliases are also supported, e.g.
+<code class="docutils literal notranslate"><span class="pre">set(lw=2)</span></code> is equivalent to <code class="docutils literal notranslate"><span class="pre">set(linewidth=2)</span></code>, but it is an error
+to pass both simultaneously.</p>
+<p>The order of the individual setter calls matches the order of parameters
+in <code class="docutils literal notranslate"><span class="pre">set()</span></code>. However, most properties do not depend on each other so
+that order is rarely relevant.</p>
 <p>Supported properties are</p>
 <dl class="simple">
 <dt>Properties:</dt><dd><p>agg_filter: a filter function, which takes a (m, n, 3) float array and a dpi value, and returns a (m, n, 3) array and two offsets from the bottom left corner of the image
@@ -2406,8 +2464,8 @@ clip_path: Patch or (Path, Transform) or None
 constrained_layout: unknown
 constrained_layout_pads: unknown
 dpi: float
-edgecolor: <a href="#id99"><span class="problematic" id="id100">:mpltype:`color`</span></a>
-facecolor: <a href="#id101"><span class="problematic" id="id102">:mpltype:`color`</span></a>
+edgecolor: <a href="#id105"><span class="problematic" id="id106">:mpltype:`color`</span></a>
+facecolor: <a href="#id107"><span class="problematic" id="id108">:mpltype:`color`</span></a>
 figheight: float
 figure: unknown
 figwidth: float
@@ -2539,7 +2597,7 @@ parameter.</p>
 <dt class="sig sig-object py" id="bmctool.utils.eval.Figure.set_constrained_layout">
 <span class="sig-name descname"><span class="pre">set_constrained_layout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">constrained</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/matplotlib/figure.html#Figure.set_constrained_layout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bmctool.utils.eval.Figure.set_constrained_layout" title="Link to this definition"></a></dt>
 <dd><p>[<em>Deprecated</em>] Set whether <code class="docutils literal notranslate"><span class="pre">constrained_layout</span></code> is used upon drawing.</p>
-<p>If None, <a href="#id103"><span class="problematic" id="id104">:rc:`figure.constrained_layout.use`</span></a> value will be used.</p>
+<p>If None, <a href="#id109"><span class="problematic" id="id110">:rc:`figure.constrained_layout.use`</span></a> value will be used.</p>
 <p>When providing a dict containing the keys <code class="docutils literal notranslate"><span class="pre">w_pad</span></code>, <code class="docutils literal notranslate"><span class="pre">h_pad</span></code>
 the default <code class="docutils literal notranslate"><span class="pre">constrained_layout</span></code> paddings will be
 overridden.  These pads are in inches and default to 3.0/72.0.
@@ -2565,13 +2623,13 @@ overridden.  These pads are in inches and default to 3.0/72.0.
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>w_pad</strong> (float, default: <a href="#id105"><span class="problematic" id="id106">:rc:`figure.constrained_layout.w_pad`</span></a>) – Width padding in inches.  This is the pad around Axes
+<li><p><strong>w_pad</strong> (float, default: <a href="#id111"><span class="problematic" id="id112">:rc:`figure.constrained_layout.w_pad`</span></a>) – Width padding in inches.  This is the pad around Axes
 and is meant to make sure there is enough room for fonts to
 look good.  Defaults to 3 pts = 0.04167 inches</p></li>
-<li><p><strong>h_pad</strong> (float, default: <a href="#id107"><span class="problematic" id="id108">:rc:`figure.constrained_layout.h_pad`</span></a>) – Height padding in inches. Defaults to 3 pts.</p></li>
-<li><p><strong>wspace</strong> (float, default: <a href="#id109"><span class="problematic" id="id110">:rc:`figure.constrained_layout.wspace`</span></a>) – Width padding between subplots, expressed as a fraction of the
+<li><p><strong>h_pad</strong> (float, default: <a href="#id113"><span class="problematic" id="id114">:rc:`figure.constrained_layout.h_pad`</span></a>) – Height padding in inches. Defaults to 3 pts.</p></li>
+<li><p><strong>wspace</strong> (float, default: <a href="#id115"><span class="problematic" id="id116">:rc:`figure.constrained_layout.wspace`</span></a>) – Width padding between subplots, expressed as a fraction of the
 subplot width.  The total padding ends up being w_pad + wspace.</p></li>
-<li><p><strong>hspace</strong> (float, default: <a href="#id111"><span class="problematic" id="id112">:rc:`figure.constrained_layout.hspace`</span></a>) – Height padding between subplots, expressed as a fraction of the
+<li><p><strong>hspace</strong> (float, default: <a href="#id117"><span class="problematic" id="id118">:rc:`figure.constrained_layout.hspace`</span></a>) – Height padding between subplots, expressed as a fraction of the
 subplot width. The total padding ends up being h_pad + hspace.</p></li>
 </ul>
 </dd>
@@ -2599,7 +2657,7 @@ subplot width. The total padding ends up being h_pad + hspace.</p></li>
 <dd><p>Set the edge color of the Figure rectangle.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>color</strong> (<a href="#id113"><span class="problematic" id="id114">:mpltype:`color`</span></a>)</p>
+<dd class="field-odd"><p><strong>color</strong> (<a href="#id119"><span class="problematic" id="id120">:mpltype:`color`</span></a>)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2610,7 +2668,7 @@ subplot width. The total padding ends up being h_pad + hspace.</p></li>
 <dd><p>Set the face color of the Figure rectangle.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>color</strong> (<a href="#id115"><span class="problematic" id="id116">:mpltype:`color`</span></a>)</p>
+<dd class="field-odd"><p><strong>color</strong> (<a href="#id121"><span class="problematic" id="id122">:mpltype:`color`</span></a>)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2726,11 +2784,11 @@ ratio Axes.</p></li>
 <li><p>’none’ removes layout engine.</p></li>
 </ul>
 <p>If a <cite>.LayoutEngine</cite> instance, that instance will be used.</p>
-<p>If <cite>None</cite>, the behavior is controlled by <a href="#id117"><span class="problematic" id="id118">:rc:`figure.autolayout`</span></a>
+<p>If <cite>None</cite>, the behavior is controlled by <a href="#id123"><span class="problematic" id="id124">:rc:`figure.autolayout`</span></a>
 (which if <cite>True</cite> behaves as if ‘tight’ was passed) and
-<a href="#id119"><span class="problematic" id="id120">:rc:`figure.constrained_layout.use`</span></a> (which if <cite>True</cite> behaves as if
+<a href="#id125"><span class="problematic" id="id126">:rc:`figure.constrained_layout.use`</span></a> (which if <cite>True</cite> behaves as if
 ‘constrained’ was passed).  If both are <cite>True</cite>,
-<a href="#id121"><span class="problematic" id="id122">:rc:`figure.autolayout`</span></a> takes priority.</p>
+<a href="#id127"><span class="problematic" id="id128">:rc:`figure.autolayout`</span></a> takes priority.</p>
 <p>Users and libraries can define their own layout engines and pass
 the instance directly as well.</p>
 </p></li>
@@ -2914,7 +2972,7 @@ segments, round to the nearest pixel center.</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>tight</strong> (<em>bool</em><em> or </em><em>dict with keys &quot;pad&quot;</em><em>, </em><em>&quot;w_pad&quot;</em><em>, </em><em>&quot;h_pad&quot;</em><em>, </em><em>&quot;rect&quot;</em><em> or </em><em>None</em>) – If a bool, sets whether to call <cite>.Figure.tight_layout</cite> upon drawing.
-If <code class="docutils literal notranslate"><span class="pre">None</span></code>, use <a href="#id123"><span class="problematic" id="id124">:rc:`figure.autolayout`</span></a> instead.
+If <code class="docutils literal notranslate"><span class="pre">None</span></code>, use <a href="#id129"><span class="problematic" id="id130">:rc:`figure.autolayout`</span></a> instead.
 If a dict, pass it as kwargs to <cite>.Figure.tight_layout</cite>, overriding the
 default paddings.</p>
 </dd>
@@ -2979,7 +3037,7 @@ a <cite>~.backend_bases.FigureManagerBase</cite>, and this method will raise an
 AttributeError.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>This does not manage an GUI event loop. Consequently, the figure
+<p>This does not manage a GUI event loop. Consequently, the figure
 may only be shown briefly or not shown at all if you or your
 environment are not managing an event loop.</p>
 <p>Use cases for <cite>.Figure.show</cite> include running this from a GUI
@@ -3299,7 +3357,7 @@ above.</p>
 <span class="sig-name descname"><span class="pre">subplots_adjust</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">left</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bottom</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">right</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wspace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hspace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bmctool.utils.eval.Figure.subplots_adjust" title="Link to this definition"></a></dt>
 <dd><p>Adjust the subplot layout parameters.</p>
 <p>Unset parameters are left unmodified; initial values are given by
-<a href="#id125"><span class="problematic" id="id126">:rc:`figure.subplot.[name]`</span></a>.</p>
+<a href="#id131"><span class="problematic" id="id132">:rc:`figure.subplot.[name]`</span></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -3334,18 +3392,18 @@ as a fraction of the average Axes height.</p></li>
 <li><p><strong>ha</strong> (<em>{'center'</em><em>, </em><em>'left'</em><em>, </em><em>'right'}</em><em>, </em><em>default: center</em>) – The horizontal alignment of the text relative to (<em>x</em>, <em>y</em>).</p></li>
 <li><p><strong>verticalalignment</strong> (<em>{'top'</em><em>, </em><em>'center'</em><em>, </em><em>'bottom'</em><em>, </em><em>'baseline'}</em><em>, </em><em>default: top</em>) – The vertical alignment of the text relative to (<em>x</em>, <em>y</em>).</p></li>
 <li><p><strong>va</strong> (<em>{'top'</em><em>, </em><em>'center'</em><em>, </em><em>'bottom'</em><em>, </em><em>'baseline'}</em><em>, </em><em>default: top</em>) – The vertical alignment of the text relative to (<em>x</em>, <em>y</em>).</p></li>
-<li><p><strong>fontsize</strong> (default: <a href="#id127"><span class="problematic" id="id128">:rc:`figure.titlesize`</span></a>) – The font size of the text. See <cite>.Text.set_size</cite> for possible
+<li><p><strong>fontsize</strong> (default: <a href="#id133"><span class="problematic" id="id134">:rc:`figure.titlesize`</span></a>) – The font size of the text. See <cite>.Text.set_size</cite> for possible
 values.</p></li>
-<li><p><strong>size</strong> (default: <a href="#id129"><span class="problematic" id="id130">:rc:`figure.titlesize`</span></a>) – The font size of the text. See <cite>.Text.set_size</cite> for possible
+<li><p><strong>size</strong> (default: <a href="#id135"><span class="problematic" id="id136">:rc:`figure.titlesize`</span></a>) – The font size of the text. See <cite>.Text.set_size</cite> for possible
 values.</p></li>
-<li><p><strong>fontweight</strong> (default: <a href="#id131"><span class="problematic" id="id132">:rc:`figure.titleweight`</span></a>) – The font weight of the text. See <cite>.Text.set_weight</cite> for possible
+<li><p><strong>fontweight</strong> (default: <a href="#id137"><span class="problematic" id="id138">:rc:`figure.titleweight`</span></a>) – The font weight of the text. See <cite>.Text.set_weight</cite> for possible
 values.</p></li>
-<li><p><strong>weight</strong> (default: <a href="#id133"><span class="problematic" id="id134">:rc:`figure.titleweight`</span></a>) – The font weight of the text. See <cite>.Text.set_weight</cite> for possible
+<li><p><strong>weight</strong> (default: <a href="#id139"><span class="problematic" id="id140">:rc:`figure.titleweight`</span></a>) – The font weight of the text. See <cite>.Text.set_weight</cite> for possible
 values.</p></li>
 <li><p><strong>fontproperties</strong> (<em>None</em><em> or </em><em>dict</em><em>, </em><em>optional</em>) – A dict of font properties. If <em>fontproperties</em> is given the
 default values for font size and weight are taken from the
-<cite>.FontProperties</cite> defaults. <a href="#id135"><span class="problematic" id="id136">:rc:`figure.titlesize`</span></a> and
-<a href="#id137"><span class="problematic" id="id138">:rc:`figure.titleweight`</span></a> are ignored in this case.</p></li>
+<cite>.FontProperties</cite> defaults. <a href="#id141"><span class="problematic" id="id142">:rc:`figure.titlesize`</span></a> and
+<a href="#id143"><span class="problematic" id="id144">:rc:`figure.titleweight`</span></a> are ignored in this case.</p></li>
 <li><p><strong>**kwargs</strong> – Additional kwargs are <cite>matplotlib.text.Text</cite> properties.</p></li>
 </ul>
 </dd>
@@ -3372,18 +3430,18 @@ default values for font size and weight are taken from the
 <li><p><strong>ha</strong> (<em>{'center'</em><em>, </em><em>'left'</em><em>, </em><em>'right'}</em><em>, </em><em>default: center</em>) – The horizontal alignment of the text relative to (<em>x</em>, <em>y</em>).</p></li>
 <li><p><strong>verticalalignment</strong> (<em>{'top'</em><em>, </em><em>'center'</em><em>, </em><em>'bottom'</em><em>, </em><em>'baseline'}</em><em>, </em><em>default: bottom</em>) – The vertical alignment of the text relative to (<em>x</em>, <em>y</em>).</p></li>
 <li><p><strong>va</strong> (<em>{'top'</em><em>, </em><em>'center'</em><em>, </em><em>'bottom'</em><em>, </em><em>'baseline'}</em><em>, </em><em>default: bottom</em>) – The vertical alignment of the text relative to (<em>x</em>, <em>y</em>).</p></li>
-<li><p><strong>fontsize</strong> (default: <a href="#id139"><span class="problematic" id="id140">:rc:`figure.labelsize`</span></a>) – The font size of the text. See <cite>.Text.set_size</cite> for possible
+<li><p><strong>fontsize</strong> (default: <a href="#id145"><span class="problematic" id="id146">:rc:`figure.labelsize`</span></a>) – The font size of the text. See <cite>.Text.set_size</cite> for possible
 values.</p></li>
-<li><p><strong>size</strong> (default: <a href="#id141"><span class="problematic" id="id142">:rc:`figure.labelsize`</span></a>) – The font size of the text. See <cite>.Text.set_size</cite> for possible
+<li><p><strong>size</strong> (default: <a href="#id147"><span class="problematic" id="id148">:rc:`figure.labelsize`</span></a>) – The font size of the text. See <cite>.Text.set_size</cite> for possible
 values.</p></li>
-<li><p><strong>fontweight</strong> (default: <a href="#id143"><span class="problematic" id="id144">:rc:`figure.labelweight`</span></a>) – The font weight of the text. See <cite>.Text.set_weight</cite> for possible
+<li><p><strong>fontweight</strong> (default: <a href="#id149"><span class="problematic" id="id150">:rc:`figure.labelweight`</span></a>) – The font weight of the text. See <cite>.Text.set_weight</cite> for possible
 values.</p></li>
-<li><p><strong>weight</strong> (default: <a href="#id145"><span class="problematic" id="id146">:rc:`figure.labelweight`</span></a>) – The font weight of the text. See <cite>.Text.set_weight</cite> for possible
+<li><p><strong>weight</strong> (default: <a href="#id151"><span class="problematic" id="id152">:rc:`figure.labelweight`</span></a>) – The font weight of the text. See <cite>.Text.set_weight</cite> for possible
 values.</p></li>
 <li><p><strong>fontproperties</strong> (<em>None</em><em> or </em><em>dict</em><em>, </em><em>optional</em>) – A dict of font properties. If <em>fontproperties</em> is given the
 default values for font size and weight are taken from the
-<cite>.FontProperties</cite> defaults. <a href="#id147"><span class="problematic" id="id148">:rc:`figure.labelsize`</span></a> and
-<a href="#id149"><span class="problematic" id="id150">:rc:`figure.labelweight`</span></a> are ignored in this case.</p></li>
+<cite>.FontProperties</cite> defaults. <a href="#id153"><span class="problematic" id="id154">:rc:`figure.labelsize`</span></a> and
+<a href="#id155"><span class="problematic" id="id156">:rc:`figure.labelweight`</span></a> are ignored in this case.</p></li>
 <li><p><strong>**kwargs</strong> – Additional kwargs are <cite>matplotlib.text.Text</cite> properties.</p></li>
 </ul>
 </dd>
@@ -3410,18 +3468,18 @@ default values for font size and weight are taken from the
 <li><p><strong>ha</strong> (<em>{'center'</em><em>, </em><em>'left'</em><em>, </em><em>'right'}</em><em>, </em><em>default: left</em>) – The horizontal alignment of the text relative to (<em>x</em>, <em>y</em>).</p></li>
 <li><p><strong>verticalalignment</strong> (<em>{'top'</em><em>, </em><em>'center'</em><em>, </em><em>'bottom'</em><em>, </em><em>'baseline'}</em><em>, </em><em>default: center</em>) – The vertical alignment of the text relative to (<em>x</em>, <em>y</em>).</p></li>
 <li><p><strong>va</strong> (<em>{'top'</em><em>, </em><em>'center'</em><em>, </em><em>'bottom'</em><em>, </em><em>'baseline'}</em><em>, </em><em>default: center</em>) – The vertical alignment of the text relative to (<em>x</em>, <em>y</em>).</p></li>
-<li><p><strong>fontsize</strong> (default: <a href="#id151"><span class="problematic" id="id152">:rc:`figure.labelsize`</span></a>) – The font size of the text. See <cite>.Text.set_size</cite> for possible
+<li><p><strong>fontsize</strong> (default: <a href="#id157"><span class="problematic" id="id158">:rc:`figure.labelsize`</span></a>) – The font size of the text. See <cite>.Text.set_size</cite> for possible
 values.</p></li>
-<li><p><strong>size</strong> (default: <a href="#id153"><span class="problematic" id="id154">:rc:`figure.labelsize`</span></a>) – The font size of the text. See <cite>.Text.set_size</cite> for possible
+<li><p><strong>size</strong> (default: <a href="#id159"><span class="problematic" id="id160">:rc:`figure.labelsize`</span></a>) – The font size of the text. See <cite>.Text.set_size</cite> for possible
 values.</p></li>
-<li><p><strong>fontweight</strong> (default: <a href="#id155"><span class="problematic" id="id156">:rc:`figure.labelweight`</span></a>) – The font weight of the text. See <cite>.Text.set_weight</cite> for possible
+<li><p><strong>fontweight</strong> (default: <a href="#id161"><span class="problematic" id="id162">:rc:`figure.labelweight`</span></a>) – The font weight of the text. See <cite>.Text.set_weight</cite> for possible
 values.</p></li>
-<li><p><strong>weight</strong> (default: <a href="#id157"><span class="problematic" id="id158">:rc:`figure.labelweight`</span></a>) – The font weight of the text. See <cite>.Text.set_weight</cite> for possible
+<li><p><strong>weight</strong> (default: <a href="#id163"><span class="problematic" id="id164">:rc:`figure.labelweight`</span></a>) – The font weight of the text. See <cite>.Text.set_weight</cite> for possible
 values.</p></li>
 <li><p><strong>fontproperties</strong> (<em>None</em><em> or </em><em>dict</em><em>, </em><em>optional</em>) – A dict of font properties. If <em>fontproperties</em> is given the
 default values for font size and weight are taken from the
-<cite>.FontProperties</cite> defaults. <a href="#id159"><span class="problematic" id="id160">:rc:`figure.labelsize`</span></a> and
-<a href="#id161"><span class="problematic" id="id162">:rc:`figure.labelweight`</span></a> are ignored in this case.</p></li>
+<cite>.FontProperties</cite> defaults. <a href="#id165"><span class="problematic" id="id166">:rc:`figure.labelsize`</span></a> and
+<a href="#id167"><span class="problematic" id="id168">:rc:`figure.labelweight`</span></a> are ignored in this case.</p></li>
 <li><p><strong>**kwargs</strong> – Additional kwargs are <cite>matplotlib.text.Text</cite> properties.</p></li>
 </ul>
 </dd>
@@ -3449,7 +3507,7 @@ coordinates, floats in [0, 1]. The coordinate system can be changed
 using the <em>transform</em> keyword.</p></li>
 <li><p><strong>s</strong> (<em>str</em>) – The text string.</p></li>
 <li><p><strong>fontdict</strong> (<em>dict</em><em>, </em><em>optional</em>) – A dictionary to override the default text properties. If not given,
-the defaults are determined by <a href="#id163"><span class="problematic" id="id164">:rc:`font.*`</span></a>. Properties passed as
+the defaults are determined by <a href="#id169"><span class="problematic" id="id170">:rc:`font.*`</span></a>. Properties passed as
 <em>kwargs</em> override the corresponding ones given in <em>fontdict</em>.</p></li>
 <li><p><strong>**kwargs</strong> (<cite>~matplotlib.text.Text</cite> properties) – <p>Other miscellaneous text parameters.</p>
 <p>Properties:
@@ -3457,14 +3515,15 @@ agg_filter: a filter function, which takes a (m, n, 3) float array and a dpi val
 alpha: float or None
 animated: bool
 antialiased: bool
-backgroundcolor: <a href="#id165"><span class="problematic" id="id166">:mpltype:`color`</span></a>
-bbox: dict with properties for <cite>.patches.FancyBboxPatch</cite>
+backgroundcolor: <a href="#id171"><span class="problematic" id="id172">:mpltype:`color`</span></a>
+bbox: dict with properties for <cite>.FancyBboxPatch</cite> or None
 clip_box: unknown
 clip_on: unknown
 clip_path: unknown
-color or c: <a href="#id167"><span class="problematic" id="id168">:mpltype:`color`</span></a>
+color or c: <a href="#id173"><span class="problematic" id="id174">:mpltype:`color`</span></a>
 figure: <cite>~matplotlib.figure.Figure</cite> or <cite>~matplotlib.figure.SubFigure</cite>
 fontfamily or family or fontname: {FONTNAME, ‘serif’, ‘sans-serif’, ‘cursive’, ‘fantasy’, ‘monospace’}
+fontfeatures: list of str, or tuple of str, or None
 fontproperties or font or font_properties: <cite>.font_manager.FontProperties</cite> or <cite>str</cite> or <cite>pathlib.Path</cite>
 fontsize or size: float or {‘xx-small’, ‘x-small’, ‘small’, ‘medium’, ‘large’, ‘x-large’, ‘xx-large’}
 fontstretch or stretch: {a numeric value in range 0-1000, ‘ultra-condensed’, ‘extra-condensed’, ‘condensed’, ‘semi-condensed’, ‘normal’, ‘semi-expanded’, ‘expanded’, ‘extra-expanded’, ‘ultra-expanded’}
@@ -3475,7 +3534,8 @@ gid: str
 horizontalalignment or ha: {‘left’, ‘center’, ‘right’}
 in_layout: bool
 label: object
-linespacing: float (multiple of font size)
+language: str or None
+linespacing: ‘normal’ or float, default: ‘normal’
 math_fontfamily: str
 mouseover: bool
 multialignment or ma: {‘left’, ‘right’, ‘center’}
@@ -3485,14 +3545,14 @@ picker: None or bool or float or callable
 position: (float, float)
 rasterized: bool
 rotation: float or {‘vertical’, ‘horizontal’}
-rotation_mode: {None, ‘default’, ‘anchor’}
+rotation_mode: {None, ‘default’, ‘anchor’, ‘xtick’, ‘ytick’}
 sketch_params: (scale: float, length: float, randomness: float)
 snap: bool or None
 text: object
 transform: <cite>~matplotlib.transforms.Transform</cite>
 transform_rotates_text: bool
 url: str
-usetex: bool, default: <a href="#id169"><span class="problematic" id="id170">:rc:`text.usetex`</span></a>
+usetex: bool, default: <a href="#id175"><span class="problematic" id="id176">:rc:`text.usetex`</span></a>
 verticalalignment or va: {‘baseline’, ‘bottom’, ‘center’, ‘center_baseline’, ‘top’}
 visible: bool
 wrap: bool
@@ -3542,10 +3602,24 @@ subplots area (including labels) will fit.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="bmctool.utils.eval.Figure.update">
 <span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">props</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bmctool.utils.eval.Figure.update" title="Link to this definition"></a></dt>
-<dd><p>Update this artist’s properties from the dict <em>props</em>.</p>
+<dd><p>[<em>Discouraged</em>] Update this artist’s properties from the dictionary <em>props</em>.</p>
+<div class="admonition-discouraged admonition">
+<p class="admonition-title">Discouraged</p>
+<p>This method exists for historic reasons. Please use <cite>.Artist.set</cite> instead.
+<code class="docutils literal notranslate"><span class="pre">artist.update(props)</span></code> is nowadays almost identical to
+<code class="docutils literal notranslate"><span class="pre">artist.set(**props)</span></code> with the only difference that <code class="docutils literal notranslate"><span class="pre">set</span></code> will
+additionally check that a property is not specified multiple times
+through aliases.</p>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>props</strong> (<em>dict</em>)</p>
+<dd class="field-odd"><p><strong>props</strong> (<em>dict</em>) – Dictionary of properties (keys) and their new values.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A list of return values from the configured setters.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
 </dd>
 </dl>
 </dd></dl>
