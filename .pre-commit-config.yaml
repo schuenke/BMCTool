@@ -14,7 +14,7 @@ repos:
       - id: mixed-line-ending
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.15.0
+    rev: v0.15.21
     hooks:
       - id: ruff # linter
         args: [--fix]
@@ -26,12 +26,12 @@ repos:
       - id: typos
 
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.19.1
+    rev: v2.3.0
     hooks:
       - id: mypy
         pass_filenames: false
         always_run: true
-        args: [src, tests, --python-version=3.11]
+        args: [src, tests, --python-version=3.12]
         additional_dependencies:
           - pytest
           - pypulseq>=1.4.2
