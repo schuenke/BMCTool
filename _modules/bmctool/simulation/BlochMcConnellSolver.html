@@ -177,6 +177,13 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">update_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Parameters</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Update matrix self.arr_a according to given Parameters.</span>
 
+<span class="sd">        Information on unit convention:</span>
+<span class="sd">        Field strength (params.system.b0) is provided in [T].</span>
+<span class="sd">        Gyromagnetic ratio (params.system.gamma) is provided in [rad/s/µT] (i.e. gamma_rad_per_s_per_T * 1e-6).</span>
+<span class="sd">        Therefore, w0 = b0 * gamma yields the angular Larmor frequency scaled by 1e-6, i.e. w0 has units [rad/s/ppm].</span>
+<span class="sd">        This is intentional so that pool chemical shifts (dw) and B0 inhomogeneity (b0_inhom), both specified in [ppm],</span>
+<span class="sd">        can be applied directly without an explicit scaling by 1e-6.</span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        params</span>
@@ -235,6 +242,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">arr_a</span><span class="p">[</span><span class="mi">1</span> <span class="o">+</span> <span class="n">n_p</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">-=</span> <span class="n">rf_freq_2pi</span>
 
         <span class="c1"># set off-resonance terms for cest pools</span>
+        <span class="c1"># pool.dw is specified in [ppm] and w0 is [rad/s/ppm] (see update_params), hence</span>
+        <span class="c1"># pool.dw * w0 directly yields an angular frequency offset in [rad/s].</span>
         <span class="n">dwi_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">pool</span><span class="o">.</span><span class="n">dw</span> <span class="k">for</span> <span class="n">pool</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">cest_pools</span><span class="p">])</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">w0</span> <span class="o">-</span> <span class="p">(</span><span class="n">rf_freq_2pi</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dw0</span><span class="p">)</span>
         <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_p</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">arr_a</span><span class="p">[</span><span class="n">indices</span><span class="p">,</span> <span class="n">indices</span> <span class="o">+</span> <span class="n">n_p</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">dwi_values</span>

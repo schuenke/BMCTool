@@ -215,6 +215,12 @@
 <dt class="sig sig-object py" id="bmctool.simulation.BlochMcConnellSolver.update_params">
 <span class="sig-name descname"><span class="pre">update_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="bmctool.parameters.Parameters.html#bmctool.parameters.Parameters" title="bmctool.parameters.Parameters.Parameters"><span class="pre">Parameters</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/bmctool/simulation/BlochMcConnellSolver.html#BlochMcConnellSolver.update_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bmctool.simulation.BlochMcConnellSolver.update_params" title="Link to this definition"></a></dt>
 <dd><p>Update matrix self.arr_a according to given Parameters.</p>
+<p>Information on unit convention:
+Field strength (params.system.b0) is provided in [T].
+Gyromagnetic ratio (params.system.gamma) is provided in [rad/s/µT] (i.e. gamma_rad_per_s_per_T * 1e-6).
+Therefore, w0 = b0 * gamma yields the angular Larmor frequency scaled by 1e-6, i.e. w0 has units [rad/s/ppm].
+This is intentional so that pool chemical shifts (dw) and B0 inhomogeneity (b0_inhom), both specified in [ppm],
+can be applied directly without an explicit scaling by 1e-6.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>params</strong> – Parameters object with updated parameters</p>
