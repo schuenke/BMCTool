@@ -8,7 +8,7 @@ from bmctool.parameters.Pool import Pool
 class MTPool(Pool):
     """Class to store MTPool parameters."""
 
-    valid_lineshapes: typing.ClassVar[list[str]] = ['lorentzian', 'superlorentzian']
+    valid_lineshapes: typing.ClassVar[list[str]] = ['lorentzian', 'gaussian', 'superlorentzian']
     __slots__ = ['_dw', '_f', '_k', '_lineshape', '_r1', '_r2']
 
     def __init__(
@@ -33,7 +33,7 @@ class MTPool(Pool):
         dw
             chemical shift from water [ppm]
         lineshape
-            lineshape of the MT pool ("Lorentzian", "SuperLorentzian")
+            lineshape of the MT pool ("Lorentzian", "Gaussian", "SuperLorentzian")
         r1
             R1 relaxation rate [Hz] (1/T1)
             either r1 or t1 must be given, but not both
