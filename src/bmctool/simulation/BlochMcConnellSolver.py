@@ -161,7 +161,7 @@ class BlochMcConnellSolver:
         # set off-resonance terms for cest pools
         # pool.dw is specified in [ppm] and w0 is [rad/s/ppm] (see update_params), hence
         # pool.dw * w0 directly yields an angular frequency offset in [rad/s].
-        dwi_values = np.array([pool.dw for pool in self.params.cest_pools]) * self.w0 - (rf_freq_2pi + self.dw0)
+        dwi_values = np.array([pool.dw for pool in self.params.cest_pools]) * self.w0 - (rf_freq_2pi - self.dw0)
         indices = np.arange(1, n_p + 1)
         self.arr_a[indices, indices + n_p + 1] = -dwi_values
         self.arr_a[indices + n_p + 1, indices] = dwi_values
@@ -171,7 +171,7 @@ class BlochMcConnellSolver:
             self.arr_a[3 * (n_p + 1), 3 * (n_p + 1)] = (
                 -self.params.mt_pool.r1
                 - self.params.mt_pool.k
-                - rf_amp_2pi**2 * self.get_mt_shape_at_offset(rf_freq_2pi + self.dw0, self.w0)
+                - rf_amp_2pi**2 * self.get_mt_shape_at_offset(rf_freq_2pi - self.dw0, self.w0)
             )
 
     def solve_equation(self, mag: np.ndarray, dtp: float, n_iter: int = 6) -> np.ndarray:
