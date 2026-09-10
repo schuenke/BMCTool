@@ -71,7 +71,7 @@
            <div itemprop="articleBody">
              
   <h1>Source code for bmctool.parameters.MTPool</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Definition of MTPool class.&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""Definition of MTPool class."""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">typing</span>
 
@@ -81,10 +81,10 @@
 <div class="viewcode-block" id="MTPool">
 <a class="viewcode-back" href="../../../_autosummary/bmctool.parameters.MTPool.html#bmctool.parameters.MTPool">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">MTPool</span><span class="p">(</span><span class="n">Pool</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class to store MTPool parameters.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Class to store MTPool parameters."""</span>
 
-    <span class="n">valid_lineshapes</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">ClassVar</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;lorentzian&#39;</span><span class="p">,</span> <span class="s1">&#39;superlorentzian&#39;</span><span class="p">]</span>
-    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;_dw&#39;</span><span class="p">,</span> <span class="s1">&#39;_f&#39;</span><span class="p">,</span> <span class="s1">&#39;_k&#39;</span><span class="p">,</span> <span class="s1">&#39;_lineshape&#39;</span><span class="p">,</span> <span class="s1">&#39;_r1&#39;</span><span class="p">,</span> <span class="s1">&#39;_r2&#39;</span><span class="p">]</span>
+    <span class="n">valid_lineshapes</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">ClassVar</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'lorentzian'</span><span class="p">,</span> <span class="s1">'superlorentzian'</span><span class="p">]</span>
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'_dw'</span><span class="p">,</span> <span class="s1">'_f'</span><span class="p">,</span> <span class="s1">'_k'</span><span class="p">,</span> <span class="s1">'_lineshape'</span><span class="p">,</span> <span class="s1">'_r1'</span><span class="p">,</span> <span class="s1">'_r2'</span><span class="p">]</span>
 
 <div class="viewcode-block" id="MTPool.__init__">
 <a class="viewcode-back" href="../../../_autosummary/bmctool.parameters.MTPool.html#bmctool.parameters.MTPool.__init__">[docs]</a>
@@ -99,7 +99,7 @@
         <span class="n">t1</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">t2</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize MTPool object.</span>
+<span class="w">        </span><span class="sd">"""Initialize MTPool object.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -110,7 +110,7 @@
 <span class="sd">        dw</span>
 <span class="sd">            chemical shift from water [ppm]</span>
 <span class="sd">        lineshape</span>
-<span class="sd">            lineshape of the MT pool (&quot;Lorentzian&quot;, &quot;SuperLorentzian&quot;)</span>
+<span class="sd">            lineshape of the MT pool ("Lorentzian", "SuperLorentzian")</span>
 <span class="sd">        r1</span>
 <span class="sd">            R1 relaxation rate [Hz] (1/T1)</span>
 <span class="sd">            either r1 or t1 must be given, but not both</span>
@@ -123,7 +123,7 @@
 <span class="sd">        t2</span>
 <span class="sd">            T2 relaxation time [s] (1/R2)</span>
 <span class="sd">            either t2 or r2 must be given, but not both</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">f</span><span class="o">=</span><span class="n">f</span><span class="p">,</span> <span class="n">dw</span><span class="o">=</span><span class="n">dw</span><span class="p">,</span> <span class="n">r1</span><span class="o">=</span><span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="o">=</span><span class="n">r2</span><span class="p">,</span> <span class="n">t1</span><span class="o">=</span><span class="n">t1</span><span class="p">,</span> <span class="n">t2</span><span class="o">=</span><span class="n">t2</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">k</span> <span class="o">=</span> <span class="n">k</span>
@@ -132,25 +132,25 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">k</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Exchange rate [Hz].&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Exchange rate [Hz]."""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_k</span>
 
     <span class="nd">@k</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">k</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">value</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;k must be positive.&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">'k must be positive.'</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_k</span> <span class="o">=</span> <span class="n">value</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">lineshape</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Lineshape of the MT pool.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Lineshape of the MT pool."""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lineshape</span>
 
     <span class="nd">@lineshape</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">lineshape</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">value</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">valid_lineshapes</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;lineshape must be one of </span><span class="si">{self.valid_lineshapes}</span><span class="s1">.&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">'lineshape must be one of </span><span class="si">{self.valid_lineshapes}</span><span class="s1">.'</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_lineshape</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span></div>
 
 </pre></div>

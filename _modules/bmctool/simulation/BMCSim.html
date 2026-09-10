@@ -71,7 +71,7 @@
            <div itemprop="articleBody">
              
   <h1>Source code for bmctool.simulation.BMCSim</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;BMCSim class for Bloch-McConnell simulations using Pulseq sequences.&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""BMCSim class for Bloch-McConnell simulations using Pulseq sequences."""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">types</span><span class="w"> </span><span class="kn">import</span> <span class="n">SimpleNamespace</span>
@@ -87,7 +87,7 @@
 <div class="viewcode-block" id="BMCSim">
 <a class="viewcode-back" href="../../../_autosummary/bmctool.simulation.BMCSim.html#bmctool.simulation.BMCSim">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">BMCSim</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class for Bloch-McConnell simulations using Pulseq sequences.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Class for Bloch-McConnell simulations using Pulseq sequences."""</span>
 
 <div class="viewcode-block" id="BMCSim.__init__">
 <a class="viewcode-back" href="../../../_autosummary/bmctool.simulation.BMCSim.html#bmctool.simulation.BMCSim.__init__">[docs]</a>
@@ -97,7 +97,7 @@
         <span class="n">seq</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span> <span class="o">|</span> <span class="n">pp</span><span class="o">.</span><span class="n">Sequence</span><span class="p">,</span>
         <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize BMCSim object.</span>
+<span class="w">        </span><span class="sd">"""Initialize BMCSim object.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -107,7 +107,7 @@
 <span class="sd">            Path to the pulseq seq-file or PyPulseq sequence object</span>
 <span class="sd">        verbose, optional</span>
 <span class="sd">            Flag to activate detailed outputs, by default True</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">params</span> <span class="o">=</span> <span class="n">params</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span>
 
@@ -120,7 +120,7 @@
 
         <span class="c1"># get offsets from pypulseq definitions</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">defs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">seq</span><span class="o">.</span><span class="n">definitions</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">offsets_ppm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">defs</span><span class="p">[</span><span class="s1">&#39;offsets_ppm&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">offsets_ppm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">defs</span><span class="p">[</span><span class="s1">'offsets_ppm'</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_measure</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">offsets_ppm</span><span class="o">.</span><span class="n">size</span>
 
         <span class="c1"># extract initial magnetization vector and create output array</span>
@@ -138,7 +138,7 @@
         <span class="n">block</span><span class="p">:</span> <span class="n">SimpleNamespace</span><span class="p">,</span>
         <span class="n">max_pulse_samples</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Resample amplitude and phase of an RF event within given block.</span>
+<span class="w">        </span><span class="sd">"""Resample amplitude and phase of an RF event within given block.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -151,7 +151,7 @@
 <span class="sd">        -------</span>
 <span class="sd">        Tuple[np.ndarray, np.ndarray, float, float]</span>
 <span class="sd">            Tuple of resampled amplitude, phase, time step and delay after pulse</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="c1"># get amplitude and phase of RF pulse</span>
         <span class="n">amp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">block</span><span class="o">.</span><span class="n">rf</span><span class="o">.</span><span class="n">signal</span><span class="p">)</span>
         <span class="n">ph</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">block</span><span class="o">.</span><span class="n">rf</span><span class="o">.</span><span class="n">signal</span><span class="p">)</span>
@@ -198,7 +198,7 @@
 <div class="viewcode-block" id="BMCSim.update_params">
 <a class="viewcode-back" href="../../../_autosummary/bmctool.simulation.BMCSim.html#bmctool.simulation.BMCSim.update_params">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">update_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Parameters</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Update Params and BlochMcConnellSolver.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Update Params and BlochMcConnellSolver."""</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">params</span> <span class="o">=</span> <span class="n">params</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bm_solver</span><span class="o">.</span><span class="n">update_params</span><span class="p">(</span><span class="n">params</span><span class="p">)</span></div>
 
@@ -206,7 +206,7 @@
 <div class="viewcode-block" id="BMCSim.run">
 <a class="viewcode-back" href="../../../_autosummary/bmctool.simulation.BMCSim.html#bmctool.simulation.BMCSim.run">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Start simulation process.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Start simulation process."""</span>
         <span class="n">current_adc</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">accum_phase</span> <span class="o">=</span> <span class="mf">0.0</span>
 
@@ -218,7 +218,7 @@
 
         <span class="c1"># create loop with or w/o tqdm status bar depending on verbose settings</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">block_event</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">block_events</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;BMCTool simulation&#39;</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">block_event</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">block_events</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="s1">'BMCTool simulation'</span><span class="p">):</span>
                 <span class="n">block</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">seq</span><span class="o">.</span><span class="n">get_block</span><span class="p">(</span><span class="n">block_event</span><span class="p">)</span>
                 <span class="n">current_adc</span><span class="p">,</span> <span class="n">accum_phase</span><span class="p">,</span> <span class="n">mag</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_simulate_block</span><span class="p">(</span><span class="n">block</span><span class="p">,</span> <span class="n">current_adc</span><span class="p">,</span> <span class="n">accum_phase</span><span class="p">,</span> <span class="n">mag</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
@@ -234,7 +234,7 @@
         <span class="n">accum_phase</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
         <span class="n">mag</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Run BMC simulation for given block containing different events.</span>
+<span class="w">        </span><span class="sd">"""Run BMC simulation for given block containing different events.</span>
 
 <span class="sd">        The BMCTool distinguishes between the following cases:</span>
 <span class="sd">        1) block contains an ADC: proceeding to next offset, all other events are neglected.</span>
@@ -262,7 +262,7 @@
 <span class="sd">        ------</span>
 <span class="sd">        ValueError</span>
 <span class="sd">            If the current block event cannot be handled by BMCTool</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="c1"># Pseudo ADC event</span>
         <span class="k">if</span> <span class="n">block</span><span class="o">.</span><span class="n">adc</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">current_adc</span><span class="p">,</span> <span class="n">accum_phase</span><span class="p">,</span> <span class="n">mag</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle_adc_event</span><span class="p">(</span><span class="n">current_adc</span><span class="p">,</span> <span class="n">accum_phase</span><span class="p">,</span> <span class="n">mag</span><span class="p">)</span>
@@ -276,17 +276,17 @@
             <span class="n">mag</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle_spoiler_gradient</span><span class="p">(</span><span class="n">block</span><span class="p">,</span> <span class="n">mag</span><span class="p">)</span>
 
         <span class="c1"># Delay or gradient(s) in x and/or y-direction</span>
-        <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">block</span><span class="p">,</span> <span class="s1">&#39;block_duration&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">block</span><span class="o">.</span><span class="n">block_duration</span> <span class="o">!=</span> <span class="s1">&#39;0&#39;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">block</span><span class="p">,</span> <span class="s1">'block_duration'</span><span class="p">)</span> <span class="ow">and</span> <span class="n">block</span><span class="o">.</span><span class="n">block_duration</span> <span class="o">!=</span> <span class="s1">'0'</span><span class="p">:</span>
             <span class="n">mag</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle_delay_or_gradient</span><span class="p">(</span><span class="n">block</span><span class="p">,</span> <span class="n">mag</span><span class="p">)</span>
 
         <span class="c1"># This should not happen</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The current block event cannot be handled by BMCTool. Please check you sequence.&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">'The current block event cannot be handled by BMCTool. Please check you sequence.'</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">current_adc</span><span class="p">,</span> <span class="n">accum_phase</span><span class="p">,</span> <span class="n">mag</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_handle_adc_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">current_adc</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">accum_phase</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">mag</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Handle ADC event: write current mag to output, reset phase and increase ADC counter.</span>
+<span class="w">        </span><span class="sd">"""Handle ADC event: write current mag to output, reset phase and increase ADC counter.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -301,7 +301,7 @@
 <span class="sd">        -------</span>
 <span class="sd">        Tuple[int, float, np.ndarray]</span>
 <span class="sd">            Tuple of ADC counter, accumulated phase and updated magnetization vector</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="c1"># write current magnetization to output</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">m_out</span><span class="p">[:,</span> <span class="n">current_adc</span><span class="p">]</span> <span class="o">=</span> <span class="n">mag</span>
 
@@ -321,7 +321,7 @@
         <span class="n">accum_phase</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
         <span class="n">mag</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Handle RF pulse: simulate all steps of RF pulse and update phase.</span>
+<span class="w">        </span><span class="sd">"""Handle RF pulse: simulate all steps of RF pulse and update phase.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -338,7 +338,7 @@
 <span class="sd">        -------</span>
 <span class="sd">        Tuple[int, float, np.ndarray]</span>
 <span class="sd">            Tuple of ADC counter, accumulated phase and updated magnetization vector</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="c1"># resample amplitude and phase of RF pulse according to max_pulse_samples</span>
         <span class="n">amp_</span><span class="p">,</span> <span class="n">ph_</span><span class="p">,</span> <span class="n">dtp_</span><span class="p">,</span> <span class="n">delay_after_pulse</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prep_rf_simulation</span><span class="p">(</span><span class="n">block</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">max_pulse_samples</span><span class="p">)</span>
 
@@ -364,7 +364,7 @@
         <span class="k">return</span> <span class="n">current_adc</span><span class="p">,</span> <span class="n">accum_phase</span><span class="p">,</span> <span class="n">mag</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_handle_spoiler_gradient</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">block</span><span class="p">:</span> <span class="n">SimpleNamespace</span><span class="p">,</span> <span class="n">mag</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Handle spoiler gradient: assume complete spoiling.</span>
+<span class="w">        </span><span class="sd">"""Handle spoiler gradient: assume complete spoiling.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -377,7 +377,7 @@
 <span class="sd">        -------</span>
 <span class="sd">        np.ndarray</span>
 <span class="sd">            Updated magnetization vector</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">_dur</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">calc_duration</span><span class="p">(</span><span class="n">block</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bm_solver</span><span class="o">.</span><span class="n">update_matrix</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
         <span class="n">mag</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bm_solver</span><span class="o">.</span><span class="n">solve_equation</span><span class="p">(</span><span class="n">mag</span><span class="o">=</span><span class="n">mag</span><span class="p">,</span> <span class="n">dtp</span><span class="o">=</span><span class="n">_dur</span><span class="p">)</span>
@@ -388,7 +388,7 @@
         <span class="k">return</span> <span class="n">mag</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_handle_delay_or_gradient</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">block</span><span class="p">:</span> <span class="n">SimpleNamespace</span><span class="p">,</span> <span class="n">mag</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Handle delay or gradient(s): simulate delay.</span>
+<span class="w">        </span><span class="sd">"""Handle delay or gradient(s): simulate delay.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -401,7 +401,7 @@
 <span class="sd">        -------</span>
 <span class="sd">        np.ndarray</span>
 <span class="sd">            Updated magnetization vector</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">_dur</span> <span class="o">=</span> <span class="n">block</span><span class="o">.</span><span class="n">block_duration</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bm_solver</span><span class="o">.</span><span class="n">update_matrix</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
         <span class="n">mag</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bm_solver</span><span class="o">.</span><span class="n">solve_equation</span><span class="p">(</span><span class="n">mag</span><span class="o">=</span><span class="n">mag</span><span class="p">,</span> <span class="n">dtp</span><span class="o">=</span><span class="n">_dur</span><span class="p">)</span>
@@ -411,7 +411,7 @@
 <div class="viewcode-block" id="BMCSim.get_zspec">
 <a class="viewcode-back" href="../../../_autosummary/bmctool.simulation.BMCSim.html#bmctool.simulation.BMCSim.get_zspec">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_zspec</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">return_abs</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Calculate/extract the Z-spectrum.</span>
+<span class="w">        </span><span class="sd">"""Calculate/extract the Z-spectrum.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -422,7 +422,7 @@
 <span class="sd">        -------</span>
 <span class="sd">        Tuple[np.ndarray, np.ndarray]</span>
 <span class="sd">            Tuple of offsets and Z-spectrum</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">m_z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">m_out</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">mz_loc</span><span class="p">,</span> <span class="p">:]</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">offsets_ppm</span><span class="o">.</span><span class="n">size</span> <span class="o">!=</span> <span class="n">m_z</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>

@@ -71,7 +71,7 @@
            <div itemprop="articleBody">
              
   <h1>Source code for bmctool.utils.pulses.calculate_phase</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Function to calculate phase modulation for a given frequency modulation.&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""Function to calculate phase modulation for a given frequency modulation."""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
@@ -85,13 +85,13 @@
     <span class="n">shift_idx</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
     <span class="n">pos_offsets</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate phase modulation for a given frequency modulation.</span>
+<span class="w">    </span><span class="sd">"""Calculate phase modulation for a given frequency modulation.</span>
 
 <span class="sd">    Return</span>
 <span class="sd">    ------</span>
 <span class="sd">    phase : np.ndarray</span>
 <span class="sd">        Calculated phase modulation.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">phase</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">frequency</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">samples</span><span class="p">):</span>
         <span class="n">phase</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">phase</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">frequency</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">duration</span> <span class="o">/</span> <span class="n">samples</span><span class="p">)</span>

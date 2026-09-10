@@ -71,7 +71,7 @@
            <div itemprop="articleBody">
              
   <h1>Source code for bmctool.parameters.WaterPool</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Definition of WaterPool class.&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""Definition of WaterPool class."""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">bmctool.parameters.Pool</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pool</span>
 
@@ -79,9 +79,9 @@
 <div class="viewcode-block" id="WaterPool">
 <a class="viewcode-back" href="../../../_autosummary/bmctool.parameters.WaterPool.html#bmctool.parameters.WaterPool">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">WaterPool</span><span class="p">(</span><span class="n">Pool</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class to store WaterPool parameters.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Class to store WaterPool parameters."""</span>
 
-    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;_dw&#39;</span><span class="p">,</span> <span class="s1">&#39;_f&#39;</span><span class="p">,</span> <span class="s1">&#39;_r1&#39;</span><span class="p">,</span> <span class="s1">&#39;_r2&#39;</span><span class="p">]</span>
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'_dw'</span><span class="p">,</span> <span class="s1">'_f'</span><span class="p">,</span> <span class="s1">'_r1'</span><span class="p">,</span> <span class="s1">'_r2'</span><span class="p">]</span>
 
 <div class="viewcode-block" id="WaterPool.__init__">
 <a class="viewcode-back" href="../../../_autosummary/bmctool.parameters.WaterPool.html#bmctool.parameters.WaterPool.__init__">[docs]</a>
@@ -93,7 +93,7 @@
         <span class="n">t1</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">t2</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize WaterPool object.</span>
+<span class="w">        </span><span class="sd">"""Initialize WaterPool object.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -111,25 +111,25 @@
 <span class="sd">        t2</span>
 <span class="sd">            T2 relaxation time [s] (1/R2)</span>
 <span class="sd">            either t2 or r2 must be given, but not both</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">f</span><span class="o">=</span><span class="n">f</span><span class="p">,</span> <span class="n">dw</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">r1</span><span class="o">=</span><span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="o">=</span><span class="n">r2</span><span class="p">,</span> <span class="n">t1</span><span class="o">=</span><span class="n">t1</span><span class="p">,</span> <span class="n">t2</span><span class="o">=</span><span class="n">t2</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="WaterPool.to_dict">
 <a class="viewcode-back" href="../../../_autosummary/bmctool.parameters.WaterPool.html#bmctool.parameters.WaterPool.to_dict">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return dictionary representation with leading underscores removed.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="p">{</span><span class="n">slot</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">):</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">slot</span><span class="p">)</span> <span class="k">for</span> <span class="n">slot</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__slots__</span> <span class="k">if</span> <span class="n">slot</span> <span class="o">!=</span> <span class="s1">&#39;_dw&#39;</span><span class="p">}</span></div>
+<span class="w">        </span><span class="sd">"""Return dictionary representation with leading underscores removed."""</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">slot</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s1">'_'</span><span class="p">):</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">slot</span><span class="p">)</span> <span class="k">for</span> <span class="n">slot</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__slots__</span> <span class="k">if</span> <span class="n">slot</span> <span class="o">!=</span> <span class="s1">'_dw'</span><span class="p">}</span></div>
 
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">dw</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return chemical shift of WaterPool.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Return chemical shift of WaterPool."""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dw</span>
 
     <span class="nd">@dw</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">dw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">UserWarning</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Cannot set chemical shift of WaterPool to </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s1">. Value is fixed to 0.&#39;</span><span class="p">)</span></div>
+        <span class="k">raise</span> <span class="ne">UserWarning</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Cannot set chemical shift of WaterPool to </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s1">. Value is fixed to 0.'</span><span class="p">)</span></div>
 
 </pre></div>
 

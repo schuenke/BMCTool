@@ -71,7 +71,7 @@
            <div itemprop="articleBody">
              
   <h1>Source code for bmctool.utils.pulses.make_hypsec_half_passage</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Functions to create hyperbolic secant half passage pulse.&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""Functions to create hyperbolic secant half passage pulse."""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">types</span><span class="w"> </span><span class="kn">import</span> <span class="n">SimpleNamespace</span>
 
@@ -91,7 +91,7 @@
     <span class="n">mu</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="n">bandwidth</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate amp modulation for hyperbolic secant half passage pulse.</span>
+<span class="w">    </span><span class="sd">"""Calculate amp modulation for hyperbolic secant half passage pulse.</span>
 
 <span class="sd">    Parameter</span>
 <span class="sd">    ---------</span>
@@ -110,7 +110,7 @@
 <span class="sd">    ------</span>
 <span class="sd">    np.ndarray</span>
 <span class="sd">        Calculated amplitude modulation.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">amp</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">cosh</span><span class="p">((</span><span class="n">bandwidth</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="n">mu</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">t</span> <span class="o">-</span> <span class="n">t_0</span><span class="p">)))</span></div>
 
 
@@ -123,7 +123,7 @@
     <span class="n">mu</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="n">bandwidth</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate freq modulation for hyperbolic secant half passage pulse.</span>
+<span class="w">    </span><span class="sd">"""Calculate freq modulation for hyperbolic secant half passage pulse.</span>
 
 <span class="sd">    Parameter</span>
 <span class="sd">    ---------</span>
@@ -140,7 +140,7 @@
 <span class="sd">    ------</span>
 <span class="sd">    np.ndarray</span>
 <span class="sd">        Calculated frequency modulation.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">beta</span> <span class="o">=</span> <span class="n">bandwidth</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="n">mu</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">bandwidth</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">tanh</span><span class="p">(</span><span class="n">beta</span> <span class="o">*</span> <span class="p">(</span><span class="n">t</span> <span class="o">-</span> <span class="n">t_0</span><span class="p">)))</span></div>
 
@@ -155,7 +155,7 @@
     <span class="n">bandwidth</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1200</span><span class="p">,</span>
     <span class="n">system</span><span class="p">:</span> <span class="n">pp</span><span class="o">.</span><span class="n">Opts</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SimpleNamespace</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Create pypulseq rf pulse for an hyperbolic secant half passage pulse according to DOI: 10.1002/mrm.26370.</span>
 
 <span class="sd">    Parameter</span>
@@ -175,7 +175,7 @@
 <span class="sd">    ------</span>
 <span class="sd">    SimpleNamespace</span>
 <span class="sd">        PyPulseq block event for hyperbolic secant half passage pulse.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">system</span> <span class="o">=</span> <span class="n">system</span> <span class="ow">or</span> <span class="n">pp</span><span class="o">.</span><span class="n">Opts</span><span class="p">()</span>
 
     <span class="n">samples</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">pulse_duration</span> <span class="o">*</span> <span class="mf">1e6</span><span class="p">)</span>

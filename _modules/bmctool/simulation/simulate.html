@@ -71,7 +71,7 @@
            <div itemprop="articleBody">
              
   <h1>Source code for bmctool.simulation.simulate</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Functions to run BMCTool simulations based on given seq-file and config file.&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""Functions to run BMCTool simulations based on given seq-file and config file."""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 
@@ -91,7 +91,7 @@
     <span class="n">show_plot</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BMCSim</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Run BMCTool simulation based on given seq-file and config file.</span>
+<span class="w">    </span><span class="sd">"""Run BMCTool simulation based on given seq-file and config file.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -113,25 +113,25 @@
 <span class="sd">    ------</span>
 <span class="sd">    FileNotFoundError</span>
 <span class="sd">        If the config_file or seq_file not found.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">Parameters</span><span class="p">):</span>
         <span class="n">sim_params</span> <span class="o">=</span> <span class="n">config</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">Path</span><span class="p">(</span><span class="n">config</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-            <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;File </span><span class="si">{</span><span class="n">config</span><span class="si">}</span><span class="s1"> not found.&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s1">'File </span><span class="si">{</span><span class="n">config</span><span class="si">}</span><span class="s1"> not found.'</span><span class="p">)</span>
         <span class="c1"># load config file(s)</span>
         <span class="n">sim_params</span> <span class="o">=</span> <span class="n">Parameters</span><span class="o">.</span><span class="n">from_yaml</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">seq</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">Path</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-        <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;File </span><span class="si">{</span><span class="n">seq</span><span class="si">}</span><span class="s1"> not found.&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s1">'File </span><span class="si">{</span><span class="n">seq</span><span class="si">}</span><span class="s1"> not found.'</span><span class="p">)</span>
 
     <span class="c1"># create BMCTool object and run simulation</span>
     <span class="n">sim</span> <span class="o">=</span> <span class="n">BMCSim</span><span class="p">(</span><span class="n">sim_params</span><span class="p">,</span> <span class="n">seq</span><span class="p">)</span>
     <span class="n">sim</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="n">show_plot</span><span class="p">:</span>
-        <span class="k">if</span> <span class="s1">&#39;offsets&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
-            <span class="n">offsets</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;offsets&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s1">'offsets'</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">offsets</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">'offsets'</span><span class="p">)</span>
             <span class="n">_</span><span class="p">,</span> <span class="n">m_z</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">get_zspec</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">offsets</span><span class="p">,</span> <span class="n">m_z</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">get_zspec</span><span class="p">()</span>
@@ -145,21 +145,21 @@
 <div class="viewcode-block" id="sim_example">
 <a class="viewcode-back" href="../../../_autosummary/bmctool.simulation.sim_example.html#bmctool.simulation.sim_example">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">sim_example</span><span class="p">(</span><span class="n">show_plot</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Run an example simulation using included config and seq files.</span>
+<span class="w">    </span><span class="sd">"""Run an example simulation using included config and seq files.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    show_plot, optional</span>
 <span class="sd">        Flag to activate plotting of simulated data, by default True</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">seq_file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s1">&#39;library&#39;</span> <span class="o">/</span> <span class="s1">&#39;seq-library&#39;</span> <span class="o">/</span> <span class="s1">&#39;WASABI.seq&#39;</span>
-    <span class="n">config_file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s1">&#39;library&#39;</span> <span class="o">/</span> <span class="s1">&#39;sim-library&#39;</span> <span class="o">/</span> <span class="s1">&#39;config_1pool.yaml&#39;</span>
+<span class="sd">    """</span>
+    <span class="n">seq_file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s1">'library'</span> <span class="o">/</span> <span class="s1">'seq-library'</span> <span class="o">/</span> <span class="s1">'WASABI.seq'</span>
+    <span class="n">config_file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s1">'library'</span> <span class="o">/</span> <span class="s1">'sim-library'</span> <span class="o">/</span> <span class="s1">'config_1pool.yaml'</span>
 
     <span class="n">sim</span> <span class="o">=</span> <span class="n">simulate</span><span class="p">(</span>
         <span class="n">config</span><span class="o">=</span><span class="n">config_file</span><span class="p">,</span>
         <span class="n">seq</span><span class="o">=</span><span class="n">seq_file</span><span class="p">,</span>
         <span class="n">show_plot</span><span class="o">=</span><span class="n">show_plot</span><span class="p">,</span>
-        <span class="n">title</span><span class="o">=</span><span class="s1">&#39;WASABI example spectrum&#39;</span><span class="p">,</span>
+        <span class="n">title</span><span class="o">=</span><span class="s1">'WASABI example spectrum'</span><span class="p">,</span>
         <span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="p">)</span>
 
@@ -168,7 +168,7 @@
 
 
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">'__main__'</span><span class="p">:</span>
     <span class="n">sim_example</span><span class="p">()</span>
 </pre></div>
 

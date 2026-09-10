@@ -71,21 +71,21 @@
            <div itemprop="articleBody">
              
   <h1>Source code for tempfile</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Temporary files.</span>
+<span></span><span class="sd">"""Temporary files.</span>
 
 <span class="sd">This module provides generic, low- and high-level interfaces for</span>
 <span class="sd">creating temporary files and directories.  All of the interfaces</span>
 <span class="sd">provided by this module can be used without fear of race conditions</span>
-<span class="sd">except for &#39;mktemp&#39;.  &#39;mktemp&#39; is subject to race conditions and</span>
+<span class="sd">except for 'mktemp'.  'mktemp' is subject to race conditions and</span>
 <span class="sd">should not be used; it is provided for backward compatibility only.</span>
 
 <span class="sd">The default path names are returned as str.  If you supply bytes as</span>
 <span class="sd">input, all return values will be in bytes.  Ex:</span>
 
 <span class="sd">    &gt;&gt;&gt; tempfile.mkstemp()</span>
-<span class="sd">    (4, &#39;/tmp/tmptpu9nin8&#39;)</span>
-<span class="sd">    &gt;&gt;&gt; tempfile.mkdtemp(suffix=b&#39;&#39;)</span>
-<span class="sd">    b&#39;/tmp/tmppbi8f0hy&#39;</span>
+<span class="sd">    (4, '/tmp/tmptpu9nin8')</span>
+<span class="sd">    &gt;&gt;&gt; tempfile.mkdtemp(suffix=b'')</span>
+<span class="sd">    b'/tmp/tmppbi8f0hy'</span>
 
 <span class="sd">This module also provides some data items to the user:</span>
 
@@ -94,16 +94,16 @@
 <span class="sd">  tempdir  - If this is set to a string before the first use of</span>
 <span class="sd">             any routine from this module, it will be considered as</span>
 <span class="sd">             another candidate location to store temporary files.</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s2">&quot;NamedTemporaryFile&quot;</span><span class="p">,</span> <span class="s2">&quot;TemporaryFile&quot;</span><span class="p">,</span> <span class="c1"># high level safe interfaces</span>
-    <span class="s2">&quot;SpooledTemporaryFile&quot;</span><span class="p">,</span> <span class="s2">&quot;TemporaryDirectory&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;mkstemp&quot;</span><span class="p">,</span> <span class="s2">&quot;mkdtemp&quot;</span><span class="p">,</span>                  <span class="c1"># low level safe interfaces</span>
-    <span class="s2">&quot;mktemp&quot;</span><span class="p">,</span>                              <span class="c1"># deprecated unsafe interface</span>
-    <span class="s2">&quot;TMP_MAX&quot;</span><span class="p">,</span> <span class="s2">&quot;gettempprefix&quot;</span><span class="p">,</span>            <span class="c1"># constants</span>
-    <span class="s2">&quot;tempdir&quot;</span><span class="p">,</span> <span class="s2">&quot;gettempdir&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;gettempprefixb&quot;</span><span class="p">,</span> <span class="s2">&quot;gettempdirb&quot;</span><span class="p">,</span>
+    <span class="s2">"NamedTemporaryFile"</span><span class="p">,</span> <span class="s2">"TemporaryFile"</span><span class="p">,</span> <span class="c1"># high level safe interfaces</span>
+    <span class="s2">"SpooledTemporaryFile"</span><span class="p">,</span> <span class="s2">"TemporaryDirectory"</span><span class="p">,</span>
+    <span class="s2">"mkstemp"</span><span class="p">,</span> <span class="s2">"mkdtemp"</span><span class="p">,</span>                  <span class="c1"># low level safe interfaces</span>
+    <span class="s2">"mktemp"</span><span class="p">,</span>                              <span class="c1"># deprecated unsafe interface</span>
+    <span class="s2">"TMP_MAX"</span><span class="p">,</span> <span class="s2">"gettempprefix"</span><span class="p">,</span>            <span class="c1"># constants</span>
+    <span class="s2">"tempdir"</span><span class="p">,</span> <span class="s2">"gettempdir"</span><span class="p">,</span>
+    <span class="s2">"gettempprefixb"</span><span class="p">,</span> <span class="s2">"gettempdirb"</span><span class="p">,</span>
    <span class="p">]</span>
 
 
@@ -124,14 +124,14 @@
 <span class="n">_allocate_lock</span> <span class="o">=</span> <span class="n">_thread</span><span class="o">.</span><span class="n">allocate_lock</span>
 
 <span class="n">_text_openflags</span> <span class="o">=</span> <span class="n">_os</span><span class="o">.</span><span class="n">O_RDWR</span> <span class="o">|</span> <span class="n">_os</span><span class="o">.</span><span class="n">O_CREAT</span> <span class="o">|</span> <span class="n">_os</span><span class="o">.</span><span class="n">O_EXCL</span>
-<span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">_os</span><span class="p">,</span> <span class="s1">&#39;O_NOFOLLOW&#39;</span><span class="p">):</span>
+<span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">_os</span><span class="p">,</span> <span class="s1">'O_NOFOLLOW'</span><span class="p">):</span>
     <span class="n">_text_openflags</span> <span class="o">|=</span> <span class="n">_os</span><span class="o">.</span><span class="n">O_NOFOLLOW</span>
 
 <span class="n">_bin_openflags</span> <span class="o">=</span> <span class="n">_text_openflags</span>
-<span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">_os</span><span class="p">,</span> <span class="s1">&#39;O_BINARY&#39;</span><span class="p">):</span>
+<span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">_os</span><span class="p">,</span> <span class="s1">'O_BINARY'</span><span class="p">):</span>
     <span class="n">_bin_openflags</span> <span class="o">|=</span> <span class="n">_os</span><span class="o">.</span><span class="n">O_BINARY</span>
 
-<span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">_os</span><span class="p">,</span> <span class="s1">&#39;TMP_MAX&#39;</span><span class="p">):</span>
+<span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">_os</span><span class="p">,</span> <span class="s1">'TMP_MAX'</span><span class="p">):</span>
     <span class="n">TMP_MAX</span> <span class="o">=</span> <span class="n">_os</span><span class="o">.</span><span class="n">TMP_MAX</span>
 <span class="k">else</span><span class="p">:</span>
     <span class="n">TMP_MAX</span> <span class="o">=</span> <span class="mi">10000</span>
@@ -140,7 +140,7 @@
 <span class="c1"># But as of 3.5 we actually use it at runtime so changing it would</span>
 <span class="c1"># have a possibly desirable side effect...  But we do not want to support</span>
 <span class="c1"># that as an API.  It is undocumented on purpose.  Do not depend on this.</span>
-<span class="n">template</span> <span class="o">=</span> <span class="s2">&quot;tmp&quot;</span>
+<span class="n">template</span> <span class="o">=</span> <span class="s2">"tmp"</span>
 
 <span class="c1"># Internal routines.</span>
 
@@ -157,7 +157,7 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_infer_return_type</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Look at the type of all args and divine their implied return type.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Look at the type of all args and divine their implied return type."""</span>
     <span class="n">return_type</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">arg</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -168,25 +168,25 @@
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">return_type</span> <span class="ow">is</span> <span class="nb">str</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Can&#39;t mix bytes and non-bytes in &quot;</span>
-                                <span class="s2">&quot;path components.&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">"Can't mix bytes and non-bytes in "</span>
+                                <span class="s2">"path components."</span><span class="p">)</span>
             <span class="n">return_type</span> <span class="o">=</span> <span class="nb">bytes</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">return_type</span> <span class="ow">is</span> <span class="nb">bytes</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Can&#39;t mix bytes and non-bytes in &quot;</span>
-                                <span class="s2">&quot;path components.&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">"Can't mix bytes and non-bytes in "</span>
+                                <span class="s2">"path components."</span><span class="p">)</span>
             <span class="n">return_type</span> <span class="o">=</span> <span class="nb">str</span>
     <span class="k">if</span> <span class="n">return_type</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">tempdir</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tempdir</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="k">return</span> <span class="nb">str</span>  <span class="c1"># tempfile APIs return a str by default.</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="c1"># we could check for bytes but it&#39;ll fail later on anyway</span>
+            <span class="c1"># we could check for bytes but it'll fail later on anyway</span>
             <span class="k">return</span> <span class="nb">bytes</span>
     <span class="k">return</span> <span class="n">return_type</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_sanitize_params</span><span class="p">(</span><span class="n">prefix</span><span class="p">,</span> <span class="n">suffix</span><span class="p">,</span> <span class="nb">dir</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Common parameter processing for most APIs in this module.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Common parameter processing for most APIs in this module."""</span>
     <span class="n">output_type</span> <span class="o">=</span> <span class="n">_infer_return_type</span><span class="p">(</span><span class="n">prefix</span><span class="p">,</span> <span class="n">suffix</span><span class="p">,</span> <span class="nb">dir</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">suffix</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">suffix</span> <span class="o">=</span> <span class="n">output_type</span><span class="p">()</span>
@@ -204,19 +204,19 @@
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">_RandomNameSequence</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;An instance of _RandomNameSequence generates an endless</span>
+<span class="w">    </span><span class="sd">"""An instance of _RandomNameSequence generates an endless</span>
 <span class="sd">    sequence of unpredictable strings which can safely be incorporated</span>
 <span class="sd">    into file names.  Each string is eight characters long.  Multiple</span>
 <span class="sd">    threads can safely use the same instance at the same time.</span>
 
-<span class="sd">    _RandomNameSequence is an iterator.&quot;&quot;&quot;</span>
+<span class="sd">    _RandomNameSequence is an iterator."""</span>
 
-    <span class="n">characters</span> <span class="o">=</span> <span class="s2">&quot;abcdefghijklmnopqrstuvwxyz0123456789_&quot;</span>
+    <span class="n">characters</span> <span class="o">=</span> <span class="s2">"abcdefghijklmnopqrstuvwxyz0123456789_"</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">rng</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">cur_pid</span> <span class="o">=</span> <span class="n">_os</span><span class="o">.</span><span class="n">getpid</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">cur_pid</span> <span class="o">!=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;_rng_pid&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">cur_pid</span> <span class="o">!=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">'_rng_pid'</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_rng</span> <span class="o">=</span> <span class="n">_Random</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_rng_pid</span> <span class="o">=</span> <span class="n">cur_pid</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rng</span>
@@ -225,26 +225,26 @@
         <span class="k">return</span> <span class="bp">self</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__next__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rng</span><span class="o">.</span><span class="n">choices</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">characters</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">8</span><span class="p">))</span>
+        <span class="k">return</span> <span class="s1">''</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rng</span><span class="o">.</span><span class="n">choices</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">characters</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">8</span><span class="p">))</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_candidate_tempdir_list</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate a list of candidate temporary directories which</span>
-<span class="sd">    _get_default_tempdir will try.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Generate a list of candidate temporary directories which</span>
+<span class="sd">    _get_default_tempdir will try."""</span>
 
     <span class="n">dirlist</span> <span class="o">=</span> <span class="p">[]</span>
 
     <span class="c1"># First, try the environment.</span>
-    <span class="k">for</span> <span class="n">envname</span> <span class="ow">in</span> <span class="s1">&#39;TMPDIR&#39;</span><span class="p">,</span> <span class="s1">&#39;TEMP&#39;</span><span class="p">,</span> <span class="s1">&#39;TMP&#39;</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">envname</span> <span class="ow">in</span> <span class="s1">'TMPDIR'</span><span class="p">,</span> <span class="s1">'TEMP'</span><span class="p">,</span> <span class="s1">'TMP'</span><span class="p">:</span>
         <span class="n">dirname</span> <span class="o">=</span> <span class="n">_os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="n">envname</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">dirname</span><span class="p">:</span> <span class="n">dirlist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dirname</span><span class="p">)</span>
 
     <span class="c1"># Failing that, try OS-specific locations.</span>
-    <span class="k">if</span> <span class="n">_os</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;nt&#39;</span><span class="p">:</span>
-        <span class="n">dirlist</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span> <span class="n">_os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;~\AppData\Local\Temp&#39;</span><span class="p">),</span>
-                         <span class="n">_os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expandvars</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;%SYSTEMROOT%\Temp&#39;</span><span class="p">),</span>
-                         <span class="sa">r</span><span class="s1">&#39;c:\temp&#39;</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;c:\tmp&#39;</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;\temp&#39;</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;\tmp&#39;</span> <span class="p">])</span>
+    <span class="k">if</span> <span class="n">_os</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">'nt'</span><span class="p">:</span>
+        <span class="n">dirlist</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span> <span class="n">_os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="sa">r</span><span class="s1">'~\AppData\Local\Temp'</span><span class="p">),</span>
+                         <span class="n">_os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expandvars</span><span class="p">(</span><span class="sa">r</span><span class="s1">'%SYSTEMROOT%\Temp'</span><span class="p">),</span>
+                         <span class="sa">r</span><span class="s1">'c:\temp'</span><span class="p">,</span> <span class="sa">r</span><span class="s1">'c:\tmp'</span><span class="p">,</span> <span class="sa">r</span><span class="s1">'\temp'</span><span class="p">,</span> <span class="sa">r</span><span class="s1">'\tmp'</span> <span class="p">])</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">dirlist</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span> <span class="s1">&#39;/tmp&#39;</span><span class="p">,</span> <span class="s1">&#39;/var/tmp&#39;</span><span class="p">,</span> <span class="s1">&#39;/usr/tmp&#39;</span> <span class="p">])</span>
+        <span class="n">dirlist</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span> <span class="s1">'/tmp'</span><span class="p">,</span> <span class="s1">'/var/tmp'</span><span class="p">,</span> <span class="s1">'/usr/tmp'</span> <span class="p">])</span>
 
     <span class="c1"># As a last resort, the current directory.</span>
     <span class="k">try</span><span class="p">:</span>
@@ -255,13 +255,13 @@
     <span class="k">return</span> <span class="n">dirlist</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_get_default_tempdir</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate the default directory to use for temporary files.</span>
+<span class="w">    </span><span class="sd">"""Calculate the default directory to use for temporary files.</span>
 <span class="sd">    This routine should be called exactly once.</span>
 
 <span class="sd">    We determine whether or not a candidate temp dir is usable by</span>
 <span class="sd">    trying to create and write to a file in that directory.  If this</span>
 <span class="sd">    is successful, the test file is deleted.  To prevent denial of</span>
-<span class="sd">    service, the name of the test file must be randomized.&quot;&quot;&quot;</span>
+<span class="sd">    service, the name of the test file must be randomized."""</span>
 
     <span class="n">namer</span> <span class="o">=</span> <span class="n">_RandomNameSequence</span><span class="p">()</span>
     <span class="n">dirlist</span> <span class="o">=</span> <span class="n">_candidate_tempdir_list</span><span class="p">()</span>
@@ -277,7 +277,7 @@
                 <span class="n">fd</span> <span class="o">=</span> <span class="n">_os</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">_bin_openflags</span><span class="p">,</span> <span class="mo">0o600</span><span class="p">)</span>
                 <span class="k">try</span><span class="p">:</span>
                     <span class="k">try</span><span class="p">:</span>
-                        <span class="n">_os</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="sa">b</span><span class="s1">&#39;blat&#39;</span><span class="p">)</span>
+                        <span class="n">_os</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="sa">b</span><span class="s1">'blat'</span><span class="p">)</span>
                     <span class="k">finally</span><span class="p">:</span>
                         <span class="n">_os</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fd</span><span class="p">)</span>
                 <span class="k">finally</span><span class="p">:</span>
@@ -288,20 +288,20 @@
             <span class="k">except</span> <span class="ne">PermissionError</span><span class="p">:</span>
                 <span class="c1"># This exception is thrown when a directory with the chosen name</span>
                 <span class="c1"># already exists on windows.</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">_os</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;nt&#39;</span> <span class="ow">and</span> <span class="n">_os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="nb">dir</span><span class="p">)</span> <span class="ow">and</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">_os</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">'nt'</span> <span class="ow">and</span> <span class="n">_os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="nb">dir</span><span class="p">)</span> <span class="ow">and</span>
                     <span class="n">_os</span><span class="o">.</span><span class="n">access</span><span class="p">(</span><span class="nb">dir</span><span class="p">,</span> <span class="n">_os</span><span class="o">.</span><span class="n">W_OK</span><span class="p">)):</span>
                     <span class="k">continue</span>
                 <span class="k">break</span>   <span class="c1"># no point trying more names in this directory</span>
             <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
                 <span class="k">break</span>   <span class="c1"># no point trying more names in this directory</span>
     <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="n">_errno</span><span class="o">.</span><span class="n">ENOENT</span><span class="p">,</span>
-                            <span class="s2">&quot;No usable temporary directory found in </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span>
+                            <span class="s2">"No usable temporary directory found in </span><span class="si">%s</span><span class="s2">"</span> <span class="o">%</span>
                             <span class="n">dirlist</span><span class="p">)</span>
 
 <span class="n">_name_sequence</span> <span class="o">=</span> <span class="kc">None</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_get_candidate_names</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Common setup sequence for all user-callable interfaces.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Common setup sequence for all user-callable interfaces."""</span>
 
     <span class="k">global</span> <span class="n">_name_sequence</span>
     <span class="k">if</span> <span class="n">_name_sequence</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -315,7 +315,7 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_mkstemp_inner</span><span class="p">(</span><span class="nb">dir</span><span class="p">,</span> <span class="n">pre</span><span class="p">,</span> <span class="n">suf</span><span class="p">,</span> <span class="n">flags</span><span class="p">,</span> <span class="n">output_type</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Code common to mkstemp, TemporaryFile, and NamedTemporaryFile.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Code common to mkstemp, TemporaryFile, and NamedTemporaryFile."""</span>
 
     <span class="nb">dir</span> <span class="o">=</span> <span class="n">_os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="nb">dir</span><span class="p">)</span>
     <span class="n">names</span> <span class="o">=</span> <span class="n">_get_candidate_names</span><span class="p">()</span>
@@ -325,7 +325,7 @@
     <span class="k">for</span> <span class="n">seq</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">TMP_MAX</span><span class="p">):</span>
         <span class="n">name</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">names</span><span class="p">)</span>
         <span class="n">file</span> <span class="o">=</span> <span class="n">_os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">dir</span><span class="p">,</span> <span class="n">pre</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span> <span class="n">suf</span><span class="p">)</span>
-        <span class="n">_sys</span><span class="o">.</span><span class="n">audit</span><span class="p">(</span><span class="s2">&quot;tempfile.mkstemp&quot;</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
+        <span class="n">_sys</span><span class="o">.</span><span class="n">audit</span><span class="p">(</span><span class="s2">"tempfile.mkstemp"</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">fd</span> <span class="o">=</span> <span class="n">_os</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">flags</span><span class="p">,</span> <span class="mo">0o600</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">FileExistsError</span><span class="p">:</span>
@@ -333,7 +333,7 @@
         <span class="k">except</span> <span class="ne">PermissionError</span><span class="p">:</span>
             <span class="c1"># This exception is thrown when a directory with the chosen name</span>
             <span class="c1"># already exists on windows.</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">_os</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;nt&#39;</span> <span class="ow">and</span> <span class="n">_os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="nb">dir</span><span class="p">)</span> <span class="ow">and</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">_os</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">'nt'</span> <span class="ow">and</span> <span class="n">_os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="nb">dir</span><span class="p">)</span> <span class="ow">and</span>
                 <span class="n">_os</span><span class="o">.</span><span class="n">access</span><span class="p">(</span><span class="nb">dir</span><span class="p">,</span> <span class="n">_os</span><span class="o">.</span><span class="n">W_OK</span><span class="p">)):</span>
                 <span class="k">continue</span>
             <span class="k">else</span><span class="p">:</span>
@@ -341,13 +341,13 @@
         <span class="k">return</span> <span class="n">fd</span><span class="p">,</span> <span class="n">file</span>
 
     <span class="k">raise</span> <span class="ne">FileExistsError</span><span class="p">(</span><span class="n">_errno</span><span class="o">.</span><span class="n">EEXIST</span><span class="p">,</span>
-                          <span class="s2">&quot;No usable temporary file name found&quot;</span><span class="p">)</span>
+                          <span class="s2">"No usable temporary file name found"</span><span class="p">)</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_dont_follow_symlinks</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
     <span class="c1"># Pass follow_symlinks=False, unless not supported on this platform.</span>
     <span class="k">if</span> <span class="n">func</span> <span class="ow">in</span> <span class="n">_os</span><span class="o">.</span><span class="n">supports_follow_symlinks</span><span class="p">:</span>
         <span class="n">func</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">follow_symlinks</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">_os</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;nt&#39;</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">_os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">islink</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+    <span class="k">elif</span> <span class="n">_os</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">'nt'</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">_os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">islink</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
         <span class="n">func</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_resetperms</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
@@ -363,17 +363,17 @@
 <span class="c1"># User visible interfaces.</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">gettempprefix</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The default prefix for temporary directories as string.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""The default prefix for temporary directories as string."""</span>
     <span class="k">return</span> <span class="n">_os</span><span class="o">.</span><span class="n">fsdecode</span><span class="p">(</span><span class="n">template</span><span class="p">)</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">gettempprefixb</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The default prefix for temporary directories as bytes.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""The default prefix for temporary directories as bytes."""</span>
     <span class="k">return</span> <span class="n">_os</span><span class="o">.</span><span class="n">fsencode</span><span class="p">(</span><span class="n">template</span><span class="p">)</span>
 
 <span class="n">tempdir</span> <span class="o">=</span> <span class="kc">None</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_gettempdir</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Private accessor for tempfile.tempdir.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Private accessor for tempfile.tempdir."""</span>
     <span class="k">global</span> <span class="n">tempdir</span>
     <span class="k">if</span> <span class="n">tempdir</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">_once_lock</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span>
@@ -385,33 +385,33 @@
     <span class="k">return</span> <span class="n">tempdir</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">gettempdir</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns tempfile.tempdir as str.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Returns tempfile.tempdir as str."""</span>
     <span class="k">return</span> <span class="n">_os</span><span class="o">.</span><span class="n">fsdecode</span><span class="p">(</span><span class="n">_gettempdir</span><span class="p">())</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">gettempdirb</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns tempfile.tempdir as bytes.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Returns tempfile.tempdir as bytes."""</span>
     <span class="k">return</span> <span class="n">_os</span><span class="o">.</span><span class="n">fsencode</span><span class="p">(</span><span class="n">_gettempdir</span><span class="p">())</span>
 
 <div class="viewcode-block" id="mkstemp">
 <a class="viewcode-back" href="../_autosummary/bmctool.utils.seq.write.mkstemp.html#bmctool.utils.seq.write.mkstemp">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">mkstemp</span><span class="p">(</span><span class="n">suffix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">dir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;User-callable function to create and return a unique temporary</span>
+<span class="w">    </span><span class="sd">"""User-callable function to create and return a unique temporary</span>
 <span class="sd">    file.  The return value is a pair (fd, name) where fd is the</span>
 <span class="sd">    file descriptor returned by os.open, and name is the filename.</span>
 
-<span class="sd">    If &#39;suffix&#39; is not None, the file name will end with that suffix,</span>
+<span class="sd">    If 'suffix' is not None, the file name will end with that suffix,</span>
 <span class="sd">    otherwise there will be no suffix.</span>
 
-<span class="sd">    If &#39;prefix&#39; is not None, the file name will begin with that prefix,</span>
+<span class="sd">    If 'prefix' is not None, the file name will begin with that prefix,</span>
 <span class="sd">    otherwise a default prefix is used.</span>
 
-<span class="sd">    If &#39;dir&#39; is not None, the file will be created in that directory,</span>
+<span class="sd">    If 'dir' is not None, the file will be created in that directory,</span>
 <span class="sd">    otherwise a default directory is used.</span>
 
-<span class="sd">    If &#39;text&#39; is specified and true, the file is opened in text</span>
+<span class="sd">    If 'text' is specified and true, the file is opened in text</span>
 <span class="sd">    mode.  Else (the default) the file is opened in binary mode.</span>
 
-<span class="sd">    If any of &#39;suffix&#39;, &#39;prefix&#39; and &#39;dir&#39; are not None, they must be the</span>
+<span class="sd">    If any of 'suffix', 'prefix' and 'dir' are not None, they must be the</span>
 <span class="sd">    same type.  If they are bytes, the returned name will be bytes; str</span>
 <span class="sd">    otherwise.</span>
 
@@ -421,7 +421,7 @@
 <span class="sd">    descriptor is not inherited by children of this process.</span>
 
 <span class="sd">    Caller is responsible for deleting the file when done with it.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">prefix</span><span class="p">,</span> <span class="n">suffix</span><span class="p">,</span> <span class="nb">dir</span><span class="p">,</span> <span class="n">output_type</span> <span class="o">=</span> <span class="n">_sanitize_params</span><span class="p">(</span><span class="n">prefix</span><span class="p">,</span> <span class="n">suffix</span><span class="p">,</span> <span class="nb">dir</span><span class="p">)</span>
 
@@ -435,17 +435,17 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">mkdtemp</span><span class="p">(</span><span class="n">suffix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">dir</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;User-callable function to create and return a unique temporary</span>
+<span class="w">    </span><span class="sd">"""User-callable function to create and return a unique temporary</span>
 <span class="sd">    directory.  The return value is the pathname of the directory.</span>
 
-<span class="sd">    Arguments are as for mkstemp, except that the &#39;text&#39; argument is</span>
+<span class="sd">    Arguments are as for mkstemp, except that the 'text' argument is</span>
 <span class="sd">    not accepted.</span>
 
 <span class="sd">    The directory is readable, writable, and searchable only by the</span>
 <span class="sd">    creating user.</span>
 
 <span class="sd">    Caller is responsible for deleting the directory when done with it.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">prefix</span><span class="p">,</span> <span class="n">suffix</span><span class="p">,</span> <span class="nb">dir</span><span class="p">,</span> <span class="n">output_type</span> <span class="o">=</span> <span class="n">_sanitize_params</span><span class="p">(</span><span class="n">prefix</span><span class="p">,</span> <span class="n">suffix</span><span class="p">,</span> <span class="nb">dir</span><span class="p">)</span>
 
@@ -456,7 +456,7 @@
     <span class="k">for</span> <span class="n">seq</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">TMP_MAX</span><span class="p">):</span>
         <span class="n">name</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">names</span><span class="p">)</span>
         <span class="n">file</span> <span class="o">=</span> <span class="n">_os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">dir</span><span class="p">,</span> <span class="n">prefix</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span> <span class="n">suffix</span><span class="p">)</span>
-        <span class="n">_sys</span><span class="o">.</span><span class="n">audit</span><span class="p">(</span><span class="s2">&quot;tempfile.mkdtemp&quot;</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
+        <span class="n">_sys</span><span class="o">.</span><span class="n">audit</span><span class="p">(</span><span class="s2">"tempfile.mkdtemp"</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">_os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="mo">0o700</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">FileExistsError</span><span class="p">:</span>
@@ -464,7 +464,7 @@
         <span class="k">except</span> <span class="ne">PermissionError</span><span class="p">:</span>
             <span class="c1"># This exception is thrown when a directory with the chosen name</span>
             <span class="c1"># already exists on windows.</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">_os</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;nt&#39;</span> <span class="ow">and</span> <span class="n">_os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="nb">dir</span><span class="p">)</span> <span class="ow">and</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">_os</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">'nt'</span> <span class="ow">and</span> <span class="n">_os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="nb">dir</span><span class="p">)</span> <span class="ow">and</span>
                 <span class="n">_os</span><span class="o">.</span><span class="n">access</span><span class="p">(</span><span class="nb">dir</span><span class="p">,</span> <span class="n">_os</span><span class="o">.</span><span class="n">W_OK</span><span class="p">)):</span>
                 <span class="k">continue</span>
             <span class="k">else</span><span class="p">:</span>
@@ -472,13 +472,13 @@
         <span class="k">return</span> <span class="n">file</span>
 
     <span class="k">raise</span> <span class="ne">FileExistsError</span><span class="p">(</span><span class="n">_errno</span><span class="o">.</span><span class="n">EEXIST</span><span class="p">,</span>
-                          <span class="s2">&quot;No usable temporary directory name found&quot;</span><span class="p">)</span>
+                          <span class="s2">"No usable temporary directory name found"</span><span class="p">)</span>
 
-<span class="k">def</span><span class="w"> </span><span class="nf">mktemp</span><span class="p">(</span><span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="n">template</span><span class="p">,</span> <span class="nb">dir</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;User-callable function to return a unique temporary file name.  The</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">mktemp</span><span class="p">(</span><span class="n">suffix</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="n">template</span><span class="p">,</span> <span class="nb">dir</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""User-callable function to return a unique temporary file name.  The</span>
 <span class="sd">    file is not created.</span>
 
-<span class="sd">    Arguments are similar to mkstemp, except that the &#39;text&#39; argument is</span>
+<span class="sd">    Arguments are similar to mkstemp, except that the 'text' argument is</span>
 <span class="sd">    not accepted, and suffix=None, prefix=None and bytes file names are not</span>
 <span class="sd">    supported.</span>
 
@@ -486,10 +486,10 @@
 <span class="sd">    refer to a file that did not exist at some point, but by the time</span>
 <span class="sd">    you get around to creating it, someone else may have beaten you to</span>
 <span class="sd">    the punch.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
 <span class="c1">##    from warnings import warn as _warn</span>
-<span class="c1">##    _warn(&quot;mktemp is a potential security risk to your program&quot;,</span>
+<span class="c1">##    _warn("mktemp is a potential security risk to your program",</span>
 <span class="c1">##          RuntimeWarning, stacklevel=2)</span>
 
     <span class="k">if</span> <span class="nb">dir</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -503,13 +503,13 @@
             <span class="k">return</span> <span class="n">file</span>
 
     <span class="k">raise</span> <span class="ne">FileExistsError</span><span class="p">(</span><span class="n">_errno</span><span class="o">.</span><span class="n">EEXIST</span><span class="p">,</span>
-                          <span class="s2">&quot;No usable temporary filename found&quot;</span><span class="p">)</span>
+                          <span class="s2">"No usable temporary filename found"</span><span class="p">)</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">_TemporaryFileCloser</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;A separate object allowing proper closing of a temporary file&#39;s</span>
+<span class="w">    </span><span class="sd">"""A separate object allowing proper closing of a temporary file's</span>
 <span class="sd">    underlying file object, without adding a __del__ method to the</span>
-<span class="sd">    temporary file.&quot;&quot;&quot;</span>
+<span class="sd">    temporary file."""</span>
 
     <span class="n">file</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># Set here since __del__ checks it</span>
     <span class="n">close_called</span> <span class="o">=</span> <span class="kc">False</span>
@@ -519,14 +519,14 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">delete</span> <span class="o">=</span> <span class="n">delete</span>
 
-    <span class="c1"># NT provides delete-on-close as a primitive, so we don&#39;t need</span>
+    <span class="c1"># NT provides delete-on-close as a primitive, so we don't need</span>
     <span class="c1"># the wrapper to do anything special.  We still use it so that</span>
-    <span class="c1"># file.name is useful (i.e. not &quot;(fdopen)&quot;) with NamedTemporaryFile.</span>
-    <span class="k">if</span> <span class="n">_os</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="s1">&#39;nt&#39;</span><span class="p">:</span>
-        <span class="c1"># Cache the unlinker so we don&#39;t get spurious errors at</span>
-        <span class="c1"># shutdown when the module-level &quot;os&quot; is None&#39;d out.  Note</span>
+    <span class="c1"># file.name is useful (i.e. not "(fdopen)") with NamedTemporaryFile.</span>
+    <span class="k">if</span> <span class="n">_os</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="s1">'nt'</span><span class="p">:</span>
+        <span class="c1"># Cache the unlinker so we don't get spurious errors at</span>
+        <span class="c1"># shutdown when the module-level "os" is None'd out.  Note</span>
         <span class="c1"># that this must be referenced as self.unlink, because the</span>
-        <span class="c1"># name TemporaryFileWrapper may also get None&#39;d out before</span>
+        <span class="c1"># name TemporaryFileWrapper may also get None'd out before</span>
         <span class="c1"># __del__ is called.</span>
 
         <span class="k">def</span><span class="w"> </span><span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unlink</span><span class="o">=</span><span class="n">_os</span><span class="o">.</span><span class="n">unlink</span><span class="p">):</span>
@@ -550,12 +550,12 @@
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">_TemporaryFileWrapper</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Temporary file wrapper</span>
+<span class="w">    </span><span class="sd">"""Temporary file wrapper</span>
 
 <span class="sd">    This class provides a wrapper around files opened for</span>
 <span class="sd">    temporary use.  In particular, it seeks to automatically</span>
 <span class="sd">    remove the file when it is no longer needed.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">delete</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">file</span> <span class="o">=</span> <span class="n">file</span>
@@ -567,9 +567,9 @@
         <span class="c1"># Attribute lookups are delegated to the underlying file</span>
         <span class="c1"># and cached for non-numeric results</span>
         <span class="c1"># (i.e. methods are cached, closed and friends are not)</span>
-        <span class="n">file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="s1">&#39;file&#39;</span><span class="p">]</span>
+        <span class="n">file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="s1">'file'</span><span class="p">]</span>
         <span class="n">a</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="s1">&#39;__call__&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="s1">'__call__'</span><span class="p">):</span>
             <span class="n">func</span> <span class="o">=</span> <span class="n">a</span>
             <span class="nd">@_functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
             <span class="k">def</span><span class="w"> </span><span class="nf">func_wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -596,44 +596,44 @@
         <span class="k">return</span> <span class="n">result</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Close the temporary file, possibly deleting it.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_closer</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
-    <span class="c1"># iter() doesn&#39;t use __getattr__ to find the __iter__ method</span>
+    <span class="c1"># iter() doesn't use __getattr__ to find the __iter__ method</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c1"># Don&#39;t return iter(self.file), but yield from it to avoid closing</span>
-        <span class="c1"># file as long as it&#39;s being used as iterator (see issue #23700).  We</span>
-        <span class="c1"># can&#39;t use &#39;yield from&#39; here because iter(file) returns the file</span>
+        <span class="c1"># Don't return iter(self.file), but yield from it to avoid closing</span>
+        <span class="c1"># file as long as it's being used as iterator (see issue #23700).  We</span>
+        <span class="c1"># can't use 'yield from' here because iter(file) returns the file</span>
         <span class="c1"># object itself, which has a close method, and thus the file would get</span>
         <span class="c1"># closed when the generator is finalized, due to PEP380 semantics.</span>
         <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="p">:</span>
             <span class="k">yield</span> <span class="n">line</span>
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">NamedTemporaryFile</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;w+b&#39;</span><span class="p">,</span> <span class="n">buffering</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">NamedTemporaryFile</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">'w+b'</span><span class="p">,</span> <span class="n">buffering</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                        <span class="n">newline</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                        <span class="nb">dir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">delete</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create and return a temporary file.</span>
+<span class="w">    </span><span class="sd">"""Create and return a temporary file.</span>
 <span class="sd">    Arguments:</span>
-<span class="sd">    &#39;prefix&#39;, &#39;suffix&#39;, &#39;dir&#39; -- as for mkstemp.</span>
-<span class="sd">    &#39;mode&#39; -- the mode argument to io.open (default &quot;w+b&quot;).</span>
-<span class="sd">    &#39;buffering&#39; -- the buffer size argument to io.open (default -1).</span>
-<span class="sd">    &#39;encoding&#39; -- the encoding argument to io.open (default None)</span>
-<span class="sd">    &#39;newline&#39; -- the newline argument to io.open (default None)</span>
-<span class="sd">    &#39;delete&#39; -- whether the file is deleted on close (default True).</span>
-<span class="sd">    &#39;errors&#39; -- the errors argument to io.open (default None)</span>
+<span class="sd">    'prefix', 'suffix', 'dir' -- as for mkstemp.</span>
+<span class="sd">    'mode' -- the mode argument to io.open (default "w+b").</span>
+<span class="sd">    'buffering' -- the buffer size argument to io.open (default -1).</span>
+<span class="sd">    'encoding' -- the encoding argument to io.open (default None)</span>
+<span class="sd">    'newline' -- the newline argument to io.open (default None)</span>
+<span class="sd">    'delete' -- whether the file is deleted on close (default True).</span>
+<span class="sd">    'errors' -- the errors argument to io.open (default None)</span>
 <span class="sd">    The file is created as mkstemp() would do it.</span>
 
 <span class="sd">    Returns an object with a file-like interface; the name of the file</span>
-<span class="sd">    is accessible as its &#39;name&#39; attribute.  The file will be automatically</span>
-<span class="sd">    deleted when it is closed unless the &#39;delete&#39; argument is set to False.</span>
+<span class="sd">    is accessible as its 'name' attribute.  The file will be automatically</span>
+<span class="sd">    deleted when it is closed unless the 'delete' argument is set to False.</span>
 
 <span class="sd">    On POSIX, NamedTemporaryFiles cannot be automatically deleted if</span>
 <span class="sd">    the creating process is terminated abruptly with a SIGKILL signal.</span>
 <span class="sd">    Windows can delete the file even in this case.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">prefix</span><span class="p">,</span> <span class="n">suffix</span><span class="p">,</span> <span class="nb">dir</span><span class="p">,</span> <span class="n">output_type</span> <span class="o">=</span> <span class="n">_sanitize_params</span><span class="p">(</span><span class="n">prefix</span><span class="p">,</span> <span class="n">suffix</span><span class="p">,</span> <span class="nb">dir</span><span class="p">)</span>
 
@@ -641,10 +641,10 @@
 
     <span class="c1"># Setting O_TEMPORARY in the flags causes the OS to delete</span>
     <span class="c1"># the file when it is closed.  This is only supported by Windows.</span>
-    <span class="k">if</span> <span class="n">_os</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;nt&#39;</span> <span class="ow">and</span> <span class="n">delete</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">_os</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">'nt'</span> <span class="ow">and</span> <span class="n">delete</span><span class="p">:</span>
         <span class="n">flags</span> <span class="o">|=</span> <span class="n">_os</span><span class="o">.</span><span class="n">O_TEMPORARY</span>
 
-    <span class="k">if</span> <span class="s2">&quot;b&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">mode</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">"b"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">mode</span><span class="p">:</span>
         <span class="n">encoding</span> <span class="o">=</span> <span class="n">_io</span><span class="o">.</span><span class="n">text_encoding</span><span class="p">(</span><span class="n">encoding</span><span class="p">)</span>
 
     <span class="n">name</span> <span class="o">=</span> <span class="kc">None</span>
@@ -657,19 +657,19 @@
                         <span class="n">newline</span><span class="o">=</span><span class="n">newline</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="n">errors</span><span class="p">,</span>
                         <span class="n">opener</span><span class="o">=</span><span class="n">opener</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">raw</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="s1">&#39;buffer&#39;</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
-            <span class="n">raw</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="s1">&#39;raw&#39;</span><span class="p">,</span> <span class="n">raw</span><span class="p">)</span>
+            <span class="n">raw</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="s1">'buffer'</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
+            <span class="n">raw</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="s1">'raw'</span><span class="p">,</span> <span class="n">raw</span><span class="p">)</span>
             <span class="n">raw</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
             <span class="k">return</span> <span class="n">_TemporaryFileWrapper</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">delete</span><span class="p">)</span>
         <span class="k">except</span><span class="p">:</span>
             <span class="n">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
             <span class="k">raise</span>
     <span class="k">except</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="n">_os</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;nt&#39;</span> <span class="ow">and</span> <span class="n">delete</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="n">_os</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">'nt'</span> <span class="ow">and</span> <span class="n">delete</span><span class="p">):</span>
             <span class="n">_os</span><span class="o">.</span><span class="n">unlink</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="k">raise</span>
 
-<span class="k">if</span> <span class="n">_os</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="s1">&#39;posix&#39;</span> <span class="ow">or</span> <span class="n">_sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">==</span> <span class="s1">&#39;cygwin&#39;</span><span class="p">:</span>
+<span class="k">if</span> <span class="n">_os</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="s1">'posix'</span> <span class="ow">or</span> <span class="n">_sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">==</span> <span class="s1">'cygwin'</span><span class="p">:</span>
     <span class="c1"># On non-POSIX and Cygwin systems, assume that we cannot unlink a file</span>
     <span class="c1"># while it is open.</span>
     <span class="n">TemporaryFile</span> <span class="o">=</span> <span class="n">NamedTemporaryFile</span>
@@ -678,27 +678,27 @@
     <span class="c1"># Is the O_TMPFILE flag available and does it work?</span>
     <span class="c1"># The flag is set to False if os.open(dir, os.O_TMPFILE) raises an</span>
     <span class="c1"># IsADirectoryError exception</span>
-    <span class="n">_O_TMPFILE_WORKS</span> <span class="o">=</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">_os</span><span class="p">,</span> <span class="s1">&#39;O_TMPFILE&#39;</span><span class="p">)</span>
+    <span class="n">_O_TMPFILE_WORKS</span> <span class="o">=</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">_os</span><span class="p">,</span> <span class="s1">'O_TMPFILE'</span><span class="p">)</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">TemporaryFile</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;w+b&#39;</span><span class="p">,</span> <span class="n">buffering</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">TemporaryFile</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">'w+b'</span><span class="p">,</span> <span class="n">buffering</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                       <span class="n">newline</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                       <span class="nb">dir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create and return a temporary file.</span>
+<span class="w">        </span><span class="sd">"""Create and return a temporary file.</span>
 <span class="sd">        Arguments:</span>
-<span class="sd">        &#39;prefix&#39;, &#39;suffix&#39;, &#39;dir&#39; -- as for mkstemp.</span>
-<span class="sd">        &#39;mode&#39; -- the mode argument to io.open (default &quot;w+b&quot;).</span>
-<span class="sd">        &#39;buffering&#39; -- the buffer size argument to io.open (default -1).</span>
-<span class="sd">        &#39;encoding&#39; -- the encoding argument to io.open (default None)</span>
-<span class="sd">        &#39;newline&#39; -- the newline argument to io.open (default None)</span>
-<span class="sd">        &#39;errors&#39; -- the errors argument to io.open (default None)</span>
+<span class="sd">        'prefix', 'suffix', 'dir' -- as for mkstemp.</span>
+<span class="sd">        'mode' -- the mode argument to io.open (default "w+b").</span>
+<span class="sd">        'buffering' -- the buffer size argument to io.open (default -1).</span>
+<span class="sd">        'encoding' -- the encoding argument to io.open (default None)</span>
+<span class="sd">        'newline' -- the newline argument to io.open (default None)</span>
+<span class="sd">        'errors' -- the errors argument to io.open (default None)</span>
 <span class="sd">        The file is created as mkstemp() would do it.</span>
 
 <span class="sd">        Returns an object with a file-like interface.  The file has no</span>
 <span class="sd">        name, and will cease to exist when it is closed.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">global</span> <span class="n">_O_TMPFILE_WORKS</span>
 
-        <span class="k">if</span> <span class="s2">&quot;b&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">mode</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">"b"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">mode</span><span class="p">:</span>
             <span class="n">encoding</span> <span class="o">=</span> <span class="n">_io</span><span class="o">.</span><span class="n">text_encoding</span><span class="p">(</span><span class="n">encoding</span><span class="p">)</span>
 
         <span class="n">prefix</span><span class="p">,</span> <span class="n">suffix</span><span class="p">,</span> <span class="nb">dir</span><span class="p">,</span> <span class="n">output_type</span> <span class="o">=</span> <span class="n">_sanitize_params</span><span class="p">(</span><span class="n">prefix</span><span class="p">,</span> <span class="n">suffix</span><span class="p">,</span> <span class="nb">dir</span><span class="p">)</span>
@@ -715,8 +715,8 @@
                 <span class="n">file</span> <span class="o">=</span> <span class="n">_io</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="nb">dir</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">buffering</span><span class="o">=</span><span class="n">buffering</span><span class="p">,</span>
                                 <span class="n">newline</span><span class="o">=</span><span class="n">newline</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">,</span>
                                 <span class="n">errors</span><span class="o">=</span><span class="n">errors</span><span class="p">,</span> <span class="n">opener</span><span class="o">=</span><span class="n">opener</span><span class="p">)</span>
-                <span class="n">raw</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="s1">&#39;buffer&#39;</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
-                <span class="n">raw</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="s1">&#39;raw&#39;</span><span class="p">,</span> <span class="n">raw</span><span class="p">)</span>
+                <span class="n">raw</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="s1">'buffer'</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
+                <span class="n">raw</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="s1">'raw'</span><span class="p">,</span> <span class="n">raw</span><span class="p">)</span>
                 <span class="n">raw</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">fd</span>
                 <span class="k">return</span> <span class="n">file</span>
             <span class="k">except</span> <span class="ne">IsADirectoryError</span><span class="p">:</span>
@@ -728,7 +728,7 @@
                 <span class="n">_O_TMPFILE_WORKS</span> <span class="o">=</span> <span class="kc">False</span>
             <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
                 <span class="c1"># The filesystem of the directory does not support O_TMPFILE.</span>
-                <span class="c1"># For example, OSError(95, &#39;Operation not supported&#39;).</span>
+                <span class="c1"># For example, OSError(95, 'Operation not supported').</span>
                 <span class="c1">#</span>
                 <span class="c1"># On Linux kernel older than 3.11, trying to open a regular</span>
                 <span class="c1"># file (or a symbolic link to a regular file) with O_TMPFILE</span>
@@ -750,22 +750,22 @@
         <span class="n">file</span> <span class="o">=</span> <span class="n">_io</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="nb">dir</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">buffering</span><span class="o">=</span><span class="n">buffering</span><span class="p">,</span>
                         <span class="n">newline</span><span class="o">=</span><span class="n">newline</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="n">errors</span><span class="p">,</span>
                         <span class="n">opener</span><span class="o">=</span><span class="n">opener</span><span class="p">)</span>
-        <span class="n">raw</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="s1">&#39;buffer&#39;</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
-        <span class="n">raw</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="s1">&#39;raw&#39;</span><span class="p">,</span> <span class="n">raw</span><span class="p">)</span>
+        <span class="n">raw</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="s1">'buffer'</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
+        <span class="n">raw</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="s1">'raw'</span><span class="p">,</span> <span class="n">raw</span><span class="p">)</span>
         <span class="n">raw</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">fd</span>
         <span class="k">return</span> <span class="n">file</span>
 
 <span class="k">class</span><span class="w"> </span><span class="nc">SpooledTemporaryFile</span><span class="p">(</span><span class="n">_io</span><span class="o">.</span><span class="n">IOBase</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Temporary file wrapper, specialized to switch from BytesIO</span>
+<span class="w">    </span><span class="sd">"""Temporary file wrapper, specialized to switch from BytesIO</span>
 <span class="sd">    or StringIO to a real file when it exceeds a certain size or</span>
 <span class="sd">    when a fileno is needed.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">_rolled</span> <span class="o">=</span> <span class="kc">False</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_size</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;w+b&#39;</span><span class="p">,</span> <span class="n">buffering</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_size</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">'w+b'</span><span class="p">,</span> <span class="n">buffering</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
                  <span class="n">encoding</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">suffix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">dir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="k">if</span> <span class="s1">&#39;b&#39;</span> <span class="ow">in</span> <span class="n">mode</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s1">'b'</span> <span class="ow">in</span> <span class="n">mode</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_file</span> <span class="o">=</span> <span class="n">_io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">encoding</span> <span class="o">=</span> <span class="n">_io</span><span class="o">.</span><span class="n">text_encoding</span><span class="p">(</span><span class="n">encoding</span><span class="p">)</span>
@@ -774,10 +774,10 @@
                             <span class="n">newline</span><span class="o">=</span><span class="n">newline</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_max_size</span> <span class="o">=</span> <span class="n">max_size</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_rolled</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_TemporaryFileArgs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;mode&#39;</span><span class="p">:</span> <span class="n">mode</span><span class="p">,</span> <span class="s1">&#39;buffering&#39;</span><span class="p">:</span> <span class="n">buffering</span><span class="p">,</span>
-                                   <span class="s1">&#39;suffix&#39;</span><span class="p">:</span> <span class="n">suffix</span><span class="p">,</span> <span class="s1">&#39;prefix&#39;</span><span class="p">:</span> <span class="n">prefix</span><span class="p">,</span>
-                                   <span class="s1">&#39;encoding&#39;</span><span class="p">:</span> <span class="n">encoding</span><span class="p">,</span> <span class="s1">&#39;newline&#39;</span><span class="p">:</span> <span class="n">newline</span><span class="p">,</span>
-                                   <span class="s1">&#39;dir&#39;</span><span class="p">:</span> <span class="nb">dir</span><span class="p">,</span> <span class="s1">&#39;errors&#39;</span><span class="p">:</span> <span class="n">errors</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_TemporaryFileArgs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'mode'</span><span class="p">:</span> <span class="n">mode</span><span class="p">,</span> <span class="s1">'buffering'</span><span class="p">:</span> <span class="n">buffering</span><span class="p">,</span>
+                                   <span class="s1">'suffix'</span><span class="p">:</span> <span class="n">suffix</span><span class="p">,</span> <span class="s1">'prefix'</span><span class="p">:</span> <span class="n">prefix</span><span class="p">,</span>
+                                   <span class="s1">'encoding'</span><span class="p">:</span> <span class="n">encoding</span><span class="p">,</span> <span class="s1">'newline'</span><span class="p">:</span> <span class="n">newline</span><span class="p">,</span>
+                                   <span class="s1">'dir'</span><span class="p">:</span> <span class="nb">dir</span><span class="p">,</span> <span class="s1">'errors'</span><span class="p">:</span> <span class="n">errors</span><span class="p">}</span>
 
     <span class="n">__class_getitem__</span> <span class="o">=</span> <span class="nb">classmethod</span><span class="p">(</span><span class="n">_types</span><span class="o">.</span><span class="n">GenericAlias</span><span class="p">)</span>
 
@@ -794,7 +794,7 @@
         <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_TemporaryFileArgs</span>
 
         <span class="n">pos</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">tell</span><span class="p">()</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">newfile</span><span class="p">,</span> <span class="s1">&#39;buffer&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">newfile</span><span class="p">,</span> <span class="s1">'buffer'</span><span class="p">):</span>
             <span class="n">newfile</span><span class="o">.</span><span class="n">buffer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">file</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">getvalue</span><span class="p">())</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">newfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">file</span><span class="o">.</span><span class="n">getvalue</span><span class="p">())</span>
@@ -803,14 +803,14 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_rolled</span> <span class="o">=</span> <span class="kc">True</span>
 
     <span class="c1"># The method caching trick from NamedTemporaryFile</span>
-    <span class="c1"># won&#39;t work here, because _file may change from a</span>
+    <span class="c1"># won't work here, because _file may change from a</span>
     <span class="c1"># BytesIO/StringIO instance to a real file. So we list</span>
     <span class="c1"># all the methods directly.</span>
 
     <span class="c1"># Context management protocol</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_file</span><span class="o">.</span><span class="n">closed</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot enter context with closed file&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Cannot enter context with closed file"</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">tb</span><span class="p">):</span>
@@ -823,7 +823,7 @@
     <span class="k">def</span><span class="w"> </span><span class="fm">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">closed</span><span class="p">:</span>
             <span class="n">_warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-                <span class="s2">&quot;Unclosed file </span><span class="si">{!r}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span>
+                <span class="s2">"Unclosed file </span><span class="si">{!r}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span>
                 <span class="ne">ResourceWarning</span><span class="p">,</span>
                 <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
                 <span class="n">source</span><span class="o">=</span><span class="bp">self</span>
@@ -860,7 +860,7 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_file</span><span class="o">.</span><span class="n">mode</span>
         <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_TemporaryFileArgs</span><span class="p">[</span><span class="s1">&#39;mode&#39;</span><span class="p">]</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_TemporaryFileArgs</span><span class="p">[</span><span class="s1">'mode'</span><span class="p">]</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -931,7 +931,7 @@
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">TemporaryDirectory</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create and return a temporary directory.  This has the same</span>
+<span class="w">    </span><span class="sd">"""Create and return a temporary directory.  This has the same</span>
 <span class="sd">    behavior as mkdtemp but can be used as a context manager.  For</span>
 <span class="sd">    example:</span>
 
@@ -940,7 +940,7 @@
 
 <span class="sd">    Upon exiting the context, the directory and everything contained</span>
 <span class="sd">    in it are removed.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">dir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">ignore_cleanup_errors</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
@@ -948,7 +948,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_ignore_cleanup_errors</span> <span class="o">=</span> <span class="n">ignore_cleanup_errors</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_finalizer</span> <span class="o">=</span> <span class="n">_weakref</span><span class="o">.</span><span class="n">finalize</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cleanup</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
-            <span class="n">warn_message</span><span class="o">=</span><span class="s2">&quot;Implicitly cleaning up </span><span class="si">{!r}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span>
+            <span class="n">warn_message</span><span class="o">=</span><span class="s2">"Implicitly cleaning up </span><span class="si">{!r}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span>
             <span class="n">ignore_errors</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_ignore_cleanup_errors</span><span class="p">)</span>
 
     <span class="nd">@classmethod</span>
@@ -985,7 +985,7 @@
                             <span class="k">raise</span>
                         <span class="k">if</span> <span class="p">(</span><span class="n">_stat</span><span class="o">.</span><span class="n">S_ISLNK</span><span class="p">(</span><span class="n">st</span><span class="o">.</span><span class="n">st_mode</span><span class="p">)</span> <span class="ow">or</span>
                             <span class="ow">not</span> <span class="n">_stat</span><span class="o">.</span><span class="n">S_ISDIR</span><span class="p">(</span><span class="n">st</span><span class="o">.</span><span class="n">st_mode</span><span class="p">)</span> <span class="ow">or</span>
-                            <span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">st</span><span class="p">,</span> <span class="s1">&#39;st_file_attributes&#39;</span><span class="p">)</span> <span class="ow">and</span>
+                            <span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">st</span><span class="p">,</span> <span class="s1">'st_file_attributes'</span><span class="p">)</span> <span class="ow">and</span>
                              <span class="n">st</span><span class="o">.</span><span class="n">st_file_attributes</span> <span class="o">&amp;</span> <span class="n">_stat</span><span class="o">.</span><span class="n">FILE_ATTRIBUTE_REPARSE_POINT</span> <span class="ow">and</span>
                              <span class="n">st</span><span class="o">.</span><span class="n">st_reparse_tag</span> <span class="o">==</span> <span class="n">_stat</span><span class="o">.</span><span class="n">IO_REPARSE_TAG_MOUNT_POINT</span><span class="p">)</span>
                         <span class="p">):</span>
@@ -1010,7 +1010,7 @@
         <span class="n">_warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">warn_message</span><span class="p">,</span> <span class="ne">ResourceWarning</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s2">&quot;&lt;</span><span class="si">{}</span><span class="s2"> </span><span class="si">{!r}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">"&lt;</span><span class="si">{}</span><span class="s2"> </span><span class="si">{!r}</span><span class="s2">&gt;"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
