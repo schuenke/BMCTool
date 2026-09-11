@@ -14,6 +14,7 @@ from bmctool.parameters import MTPool
         (None, 2.0, 3.0, 0.5, 5.0, '1.0', None, 'lorentzian'),  # r1 None, but t1 str
         (1.0, None, 3.0, 0.5, 5.0, None, 2.0, 'superlorentzian'),  # r2 None, but t2 float
         (1.0, 2, '3.0', '1e-1', 5.0, None, None, 'superlorentzian'),  # k str, f str (scientific notation)
+        (1.0, 2.0, 3.0, 0.5, 5.0, None, None, 'gaussian'),  # gaussian lineshape
     ],
 )
 def test_from_valid_params(r1, r2, k, f, dw, t1, t2, lineshape):

@@ -237,6 +237,8 @@ class BlochMcConnellSolver:
         t2 = 1 / self.params.mt_pool.r2
         if ls == 'lorentzian':
             mt_line = t2 / (1 + pow((offset - dw * w0) * t2, 2.0))
+        elif ls == 'gaussian':
+            mt_line = np.sqrt(np.pi / 2) * t2 * np.exp(-0.5 * pow((offset - dw * w0) * t2, 2.0))
         elif ls == 'superlorentzian':
             dw_pool = offset - dw * w0
             mt_line = self.interpolate_sl(dw_pool) if abs(dw_pool) >= w0 else self.interpolate_chs(dw_pool, w0)
